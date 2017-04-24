@@ -50,12 +50,12 @@ import org.json.JSONObject;
 
 public class NimInitUtil {
 
-    private static final String TAG = NimInitUtil.class.getName();
+    private  final String TAG = NimInitUtil.class.getName();
 
     /**
      * 初始化云信sdk相关
      */
-    public static void initNim(){
+    public  void initNim(){
         NIMClient.init(GKApplication.getInstance(), loginInfo(), options()); // 初始化
         if (inMainProcess()) {
             observeCustomNotification();
@@ -206,15 +206,15 @@ public class NimInitUtil {
         NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(new Observer<CustomNotification>() {
             @Override
             public void onEvent(CustomNotification customNotification) {
-                Log.i(TAG, "custom notification ApnsText : " + customNotification.getApnsText());
-                Log.i(TAG, "custom notification Content : " + customNotification.getContent());
-                Log.i(TAG, "custom notification FromAccount : " + customNotification.getFromAccount());
-                Log.i(TAG, "custom notification SessionId : " + customNotification.getSessionId());
-                Log.i(TAG, "custom notification Time : " + customNotification.getTime());
-                Log.i(TAG, "custom notification SessionType : " + customNotification.getSessionType());
-                // 第三方 APP 在此处理自定义通知：存储，处理，展示给用户等
-                Log.i(TAG, "receive custom notification: " + customNotification.getContent()
-                        + " from :" + customNotification.getSessionId() + "/" + customNotification.getSessionType());
+//                Log.i(TAG, "custom notification ApnsText : " + customNotification.getApnsText());
+//                Log.i(TAG, "custom notification Content : " + customNotification.getContent());
+//                Log.i(TAG, "custom notification FromAccount : " + customNotification.getFromAccount());
+//                Log.i(TAG, "custom notification SessionId : " + customNotification.getSessionId());
+//                Log.i(TAG, "custom notification Time : " + customNotification.getTime());
+//                Log.i(TAG, "custom notification SessionType : " + customNotification.getSessionType());
+//                // 第三方 APP 在此处理自定义通知：存储，处理，展示给用户等
+//                Log.i(TAG, "receive custom notification: " + customNotification.getContent()
+//                        + " from :" + customNotification.getSessionId() + "/" + customNotification.getSessionType());
                 String content = customNotification.getContent();
                 try {
                     JSONObject json=new JSONObject(content);

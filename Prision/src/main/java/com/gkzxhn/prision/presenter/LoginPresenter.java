@@ -7,7 +7,7 @@ import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.model.IBaseModel;
 import com.gkzxhn.prision.model.iml.BaseModel;
-import com.gkzxhn.prision.utils.LoginKedaUtil;
+import com.gkzxhn.prision.utils.KDInitUtil;
 import com.gkzxhn.prision.view.ILoginView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -19,7 +19,6 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
  */
 
 public class LoginPresenter extends BasePresenter<IBaseModel,ILoginView>{
-    private LoginKedaUtil mLoginKedaUtil;
     public LoginPresenter(Context context, ILoginView view) {
         super(context, new BaseModel(), view);
     }
@@ -40,8 +39,7 @@ public class LoginPresenter extends BasePresenter<IBaseModel,ILoginView>{
                         ILoginView view=mWeakView==null?null:mWeakView.get();
                         if(view!=null) {
                             //登录科达GK
-                            if(mLoginKedaUtil==null)mLoginKedaUtil=new LoginKedaUtil();
-                            mLoginKedaUtil.login();
+                            KDInitUtil.login();
                             //保存登录信息
                             SharedPreferences.Editor editor=sharedPreferences.edit();
                             editor.putString(Constants.USER_ACCOUNT,account);

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gkzxhn.prision.R;
+import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
 import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
@@ -28,7 +29,6 @@ import com.gkzxhn.prision.keda.vconf.controller.VConfAudioUI;
 import com.gkzxhn.prision.keda.vconf.controller.VConfDetailsUI;
 import com.gkzxhn.prision.keda.vconf.controller.VConfVideoUI;
 import com.gkzxhn.prision.keda.vconf.dialog.InviteVConfDialog;
-import com.gkzxhn.prision.utils.KDConstants;
 import com.google.gson.Gson;
 import com.kedacom.kdv.mt.api.Conference;
 import com.kedacom.kdv.mt.bean.EmPeerProductId;
@@ -535,7 +535,7 @@ public class VConferenceManager {
 	public static void openVConfAudioUI(Activity cucrActivity, boolean isMackCall, String vconfName, String e164) {
 		Bundle extras = new Bundle();
 		extras.putString("VconfName", vconfName);
-		extras.putString(KDConstants.E164NUM, e164);
+		extras.putString(Constants.TERMINAL_E164NUM, e164);
 		extras.putBoolean("MackCall", isMackCall);
 		extras.putBoolean("JoinConf", !isMackCall);
 
@@ -568,7 +568,7 @@ public class VConferenceManager {
 
 		Bundle extras = new Bundle();
 		extras.putString("VconfName", vconfName);
-		extras.putString(KDConstants.E164NUM, e164);
+		extras.putString(Constants.TERMINAL_E164NUM, e164);
 		extras.putBoolean("MackCall", isMackCall);
 		extras.putBoolean("JoinConf", !isMackCall);
 
@@ -657,7 +657,7 @@ public class VConferenceManager {
 	 */
 	public static void joinConfByVideo(Activity activity, String e164) {
 		Bundle pBundle = new Bundle();
-		pBundle.putString(KDConstants.E164NUM, e164);
+		pBundle.putString(Constants.TERMINAL_E164NUM, e164);
 		pBundle.putBoolean("JoinVConf", true);
 		VConferenceManager.nativeConfType = EmNativeConfType.JOINING_VIDEO;
 		ActivityUtils.openActivity(activity, VConfVideoUI.class, pBundle);
@@ -1336,7 +1336,7 @@ public class VConferenceManager {
 		Intent intent = new Intent();
 		intent.setClass(activity, VConfDetailsUI.class);
 		Bundle bundle = new Bundle();
-		bundle.putString(KDConstants.E164NUM, e164);
+		bundle.putString(Constants.TERMINAL_E164NUM, e164);
 		intent.putExtras(bundle);
 		ActivityUtils.openActivity(activity, intent);
 		// 获取会议详情

@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.audio.controller.VConfAudioContentFrame;
@@ -22,7 +23,6 @@ import com.gkzxhn.prision.keda.vconf.audio.controller.VConfAudioFrame;
 import com.gkzxhn.prision.keda.vconf.audio.controller.VConfJoinAudioFrame;
 import com.gkzxhn.prision.keda.vconf.bean.VConf;
 import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
-import com.gkzxhn.prision.utils.KDConstants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kedacom.kdv.mt.api.Conference;
@@ -83,7 +83,6 @@ public class VConfAudioUI extends ActionBarActivity {
 	}
 
 	/**
-	 * @see com.kedacom.truetouch.sky.app.TTActivity#onStart()
 	 */
 	@Override
 	protected void onStart() {
@@ -91,7 +90,6 @@ public class VConfAudioUI extends ActionBarActivity {
 	}
 
 	/**
-	 * @see com.kedacom.truetouch.sky.app.TTActivity#onRestart()
 	 */
 	@Override
 	protected void onRestart() {
@@ -99,7 +97,6 @@ public class VConfAudioUI extends ActionBarActivity {
 	}
 
 	/**
-	 * @see com.kedacom.truetouch.vconf.controller.AbsVConfActivity#onResume()
 	 */
 	@Override
 	protected void onResume() {
@@ -114,7 +111,7 @@ public class VConfAudioUI extends ActionBarActivity {
 		}
 		if (null != extra) {
 			mConfTitle = extra.getString("VconfName");
-			mE164 = extra.getString(KDConstants.E164NUM);
+			mE164 = extra.getString(Constants.TERMINAL_E164NUM);
 			mIsP2PConf = extra.getBoolean("MackCall", false);
 			mIsJoinConf = extra.getBoolean("JoinConf", false);
 		}
@@ -138,7 +135,6 @@ public class VConfAudioUI extends ActionBarActivity {
 
 	}
 	/**
-	 * @see com.kedacom.truetouch.vconf.controller.AbsVConfActivity#onViewCreated()
 	 */
 	protected void onViewCreated() {
 		mVConf = new VConf();
@@ -201,7 +197,6 @@ public class VConfAudioUI extends ActionBarActivity {
 	/**
 	 * update vconf title
 	 * 
-	 * @param confInfo
 	 */
 	public void updateVConfTitle(String confName) {
 		if (null == confName) {
@@ -233,7 +228,6 @@ public class VConfAudioUI extends ActionBarActivity {
 	}
 
 	/**
-	 * @see com.kedacom.truetouch.vconf.controller.AbsVConfActivity#onPause()
 	 */
 	@Override
 	protected void onPause() {
@@ -242,7 +236,6 @@ public class VConfAudioUI extends ActionBarActivity {
 	}
 
 	/**
-	 * @see com.kedacom.truetouch.vconf.controller.AbsVConfActivity#onStop()
 	 */
 	@Override
 	protected void onStop() {

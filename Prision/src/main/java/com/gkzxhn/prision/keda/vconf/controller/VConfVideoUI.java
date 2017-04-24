@@ -27,7 +27,6 @@ import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
 import com.gkzxhn.prision.keda.vconf.video.controller.VConfJoinVideoFrame;
 import com.gkzxhn.prision.keda.vconf.video.controller.VConfVideoFrame;
 import com.gkzxhn.prision.keda.vconf.video.controller.VConfVideoPlayFrame;
-import com.gkzxhn.prision.utils.KDConstants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kedacom.kdv.mt.bean.TMtAddr;
@@ -183,7 +182,7 @@ public class VConfVideoUI extends ActionBarActivity {
 		Bundle extra = getIntent().getExtras();
 		if (null == extra) return;
 		mConfTitle = extra.getString("VconfName");
-		mE164 = extra.getString(KDConstants.E164NUM);
+		mE164 = extra.getString(Constants.TERMINAL_E164NUM);
 		mIsP2PConf = extra.getBoolean("MackCall", false);
 		mIsJoinConf = extra.getBoolean("JoinConf", false);
 

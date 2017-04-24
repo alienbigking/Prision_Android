@@ -30,6 +30,7 @@ public interface Constants {
     final String LAST_IGNORE_VERSION="last_ignore_version";//上一个忽略的版本
     final String OTHER_CARD="other_card";//身份证信息
     final String TERMINAL_ADDRESS= "222.244.146.206";//科达服务器终端
+    final  String TERMINAL_E164NUM = "e164Num";
     /*-------------------------------request url-------------------------------------------------*/
     final String RELEASE_DOMAIN="https://www.fushuile.com";//发布正式环境
     final String DEMO_DOMAIN="";//开发环境

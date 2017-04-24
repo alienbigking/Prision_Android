@@ -23,7 +23,6 @@ import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
 import com.gkzxhn.prision.utils.KDInitUtil;
-import com.gkzxhn.prision.utils.LoginKedaUtil;
 import com.google.gson.Gson;
 import com.kedacom.kdv.mt.api.Base;
 import com.kedacom.kdv.mt.api.Configure;
@@ -492,8 +491,7 @@ public class LoginMtcCallback {
 		try {
 			long srvIp = jsonBodyObj.getLong("dwSrvIp");
 			boolean isEnable = jsonBodyObj.getBoolean("bEnable");
-			LoginKedaUtil loginKedaUtil=new LoginKedaUtil();
-			loginKedaUtil.setH323PxyCfgCmdResult(isEnable);
+			KDInitUtil.setH323PxyCfgCmdResult(isEnable);
 		} catch (Exception e) {
 
 		}

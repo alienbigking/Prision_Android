@@ -20,14 +20,12 @@ import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
 import com.gkzxhn.prision.utils.KDInitUtil;
-import com.gkzxhn.prision.utils.LoginKedaUtil;
 
 /**
  * Created by Raleigh.Luo on 17/4/12.
  */
 
 public class ConfigActivity extends SuperActivity {
-    private LoginKedaUtil mLoginKedaUtil;
     private EditText etAccount;
     private Spinner mSpinner;
     private String[] mRateArray;
@@ -49,7 +47,6 @@ public class ConfigActivity extends SuperActivity {
     private void init(){
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting));
         stopRefreshAnim();
-        mLoginKedaUtil=new LoginKedaUtil();
         mRateArray = getResources().getStringArray(R.array.rate_array);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -95,7 +92,7 @@ public class ConfigActivity extends SuperActivity {
                     editor.putString(Constants.TERMINAL_ACCOUNT,acc);
                     editor.putInt(Constants.TERMINAL_RATE,Integer.valueOf(mRate));
                     editor.commit();
-                    if(mLoginKedaUtil!=null)mLoginKedaUtil.login();
+                    KDInitUtil.login();
                 }
                 break;
         }
