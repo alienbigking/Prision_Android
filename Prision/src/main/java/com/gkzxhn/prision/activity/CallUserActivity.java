@@ -17,7 +17,7 @@ import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.customview.CustomDialog;
 import com.gkzxhn.prision.customview.ShowTerminalDialog;
-import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
+import com.gkzxhn.prision.keda.utils.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.CallUserPresenter;

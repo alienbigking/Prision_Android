@@ -1,34 +1,23 @@
 package com.gkzxhn.prision.utils;
 
-import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.gkzxhn.prision.R;
-import com.gkzxhn.prision.activity.CallUserActivity;
 import com.gkzxhn.prision.activity.MainActivity;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
-import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
-import com.gkzxhn.prision.keda.sky.app.TruetouchGlobal;
-import com.google.gson.Gson;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;

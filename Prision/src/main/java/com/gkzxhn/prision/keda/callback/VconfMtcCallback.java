@@ -458,17 +458,17 @@ public class VconfMtcCallback {
 			}
 
 			final TMTEntityInfo entityInfo = VConferenceManager.getMtInfoByTerId(tMtId.dwTerId);
-			if (null != entityInfo && null != entityInfo.tMtAlias) {
-				currActivity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						ApplyDialog ap = new ApplyDialog(currActivity, entityInfo, true);
-						ap.show();
-					}
-				});
-
-			}
+//			if (null != entityInfo && null != entityInfo.tMtAlias) {
+//				currActivity.runOnUiThread(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						ApplyDialog ap = new ApplyDialog(currActivity, entityInfo, true);
+//						ap.show();
+//					}
+//				});
+//
+//			}
 
 		} catch (Exception e) {
 		}
@@ -490,17 +490,17 @@ public class VconfMtcCallback {
 			}
 
 			final TMTEntityInfo entityInfo = VConferenceManager.getMtInfoByTerId(tMtId.dwTerId);
-			if (null != entityInfo && null != entityInfo.tMtAlias) {
-				currActivity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						ApplyDialog ap = new ApplyDialog(currActivity, entityInfo, false);
-						ap.show();
-					}
-				});
-
-			}
+//			if (null != entityInfo && null != entityInfo.tMtAlias) {
+//				currActivity.runOnUiThread(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						ApplyDialog ap = new ApplyDialog(currActivity, entityInfo, false);
+//						ap.show();
+//					}
+//				});
+//
+//			}
 		} catch (Exception e) {
 		}
 	}
