@@ -5,6 +5,8 @@
 
 package com.gkzxhn.prision.keda.callback;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.widget.Toast;
 
 import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
@@ -96,6 +98,7 @@ public class MyMtcCallback extends MtcCallback {
 	 * "SessionID": "1" }, "body":{ "basetype" : true } } }
 	 * 
 	 */
+	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	public void callback(String result) {
 		if (StringUtils.isNull(result)) {
 			return;

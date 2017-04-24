@@ -273,7 +273,7 @@ public class VConfFunctionFragment extends Fragment implements View.OnClickListe
 				break;
 			// 添加
 			case R.id.inviteVConf_text:
-				VConferenceManager.inviteVConfPersonWin();
+//				VConferenceManager.inviteVConfPersonWin();
 				break;
 			// 更多信息
 			case R.id.moreInfo_btn:

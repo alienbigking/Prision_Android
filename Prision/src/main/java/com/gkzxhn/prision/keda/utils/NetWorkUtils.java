@@ -348,24 +348,24 @@ public class NetWorkUtils {
 	 * @return
 	 */
 	public static boolean isAvailable(Context context) {
-		if (context == null) {
-			return false;
-		}
-		ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (connMgr == null) {
-			return false;
-		}
-		NetworkInfo netInfo = connMgr.getActiveNetworkInfo();
+//		if (context == null) {
+//			return false;
+//		}
+//		ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//		if (connMgr == null) {
+//			return false;
+//		}
+//		NetworkInfo netInfo = connMgr.getActiveNetworkInfo();
+//
+//		if (null == netInfo) {
+//			return false;
+//		}
+//
+//		if (netInfo.isAvailable() && netInfo.isConnected()) {
+//			return true;
+//		}
 
-		if (null == netInfo) {
-			return false;
-		}
-
-		if (netInfo.isAvailable() && netInfo.isConnected()) {
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	/**

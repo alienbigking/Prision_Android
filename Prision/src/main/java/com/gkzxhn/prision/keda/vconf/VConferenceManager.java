@@ -1231,14 +1231,6 @@ public class VConferenceManager {
 		vconfList.add(vConf);
 	}
 
-	/**
-	 *  会议中 主席邀请其他终端入会
-	 */
-
-	public static void inviteVConfPersonWin() {
-		Dialog dialog = new InviteVConfDialog(PcAppStackManager.Instance().currentActivity());
-		dialog.show();
-	}
 
 
 }
