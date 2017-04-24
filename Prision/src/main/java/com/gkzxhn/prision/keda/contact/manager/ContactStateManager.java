@@ -23,56 +23,6 @@ public class ContactStateManager {
 	private static Map<String, ContactStatus> mContactStateMap = new HashMap<String, ContactStatus>();
 
 	/**
-	 * 清除状态
-	 */
-	public synchronized static void cleanStateMap() {
-		mContactStateMap.clear();
-	}
-
-	/**
-	 * 返回状态信息
-	 * 
-	 * @param jid
-	 * @return
-	 */
-	public static ContactStatus getState(String jid) {
-		return mContactStateMap.get(jid);
-	}
-
-	/**
-	 * 最大状态
-	 * 
-	 * @param jid
-	 * @return
-	 */
-	public static int getMaxState(String jid) {
-		ContactStatus state = getState(jid);
-		return state != null ? state.getMaxState().ordinal() : EmStateLocal.offline.ordinal();
-	}
-
-	/**
-	 * 最大状态
-	 * 
-	 * @param jid
-	 * @return
-	 */
-	public static EmStateLocal getEmMaxState(String jid) {
-		ContactStatus state = getState(jid);
-		return state != null ? state.getMaxState() : EmStateLocal.offline;
-	}
-
-	/**
-	 * 最大状态
-	 * 
-	 * @param jid
-	 * @return
-	 */
-	public static EmStateLocal getEmMaxState(String jid, EmStateLocal defValue) {
-		ContactStatus state = getState(jid);
-		return state != null ? state.getMaxState() : defValue;
-	}
-
-	/**
 	 * 更新状态
 	 * 
 	 * @param state

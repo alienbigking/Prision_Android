@@ -6,6 +6,7 @@
 package com.gkzxhn.prision.keda.callback;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.kedacom.kdv.mt.bean.TMtConfInfo;
 import com.kedacom.kdv.mt.bean.TMtId;
 import com.kedacom.kdv.mt.bean.TMtSimpConfInfo;
 import com.kedacom.kdv.mt.constant.EmConfListType;
+import com.kedacom.kdv.mt.constant.EmConfProtocol;
 import com.kedacom.kdv.mt.constant.EmMtChanState;
 import com.kedacom.kdv.mt.constant.EmNativeConfType;
 
@@ -40,15 +42,15 @@ import org.json.JSONObject;
 import java.util.List;
 
 /**
-  *  音视频 callback
-  */
+ *  音视频 callback
+ */
 
 public class VconfMtcCallback {
 
 	/**
-	* 获取会议信息
-	* @param body 
-	*/
+	 * 获取会议信息
+	 * @param body
+	 */
 
 	public static void parseConfInfo(String body) {
 		final TMtConfInfo confInfo = new TMtConfInfo().fromJson(body);
@@ -68,9 +70,9 @@ public class VconfMtcCallback {
 	}
 
 	/**
-		* 会议消息simple
-		* @param body 
-		*/
+	 * 会议消息simple
+	 * @param body
+	 */
 
 	public static void parseSimpleConfInfo(String body) {
 		TMtSimpConfInfo simpConfInfo = new TMtSimpConfInfo().fromJson(body);
@@ -82,10 +84,10 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 解析呼叫状态
-	* 状态通知
-	* 
-	*/
+	 * 解析呼叫状态
+	 * 状态通知
+	 *
+	 */
 
 	public static void parseCallLinkSate(String callingSateJson) {
 		TMtCallLinkSate callLinkSate = new TMtCallLinkSate().fromJson(callingSateJson);
@@ -115,8 +117,24 @@ public class VconfMtcCallback {
 			VConferenceManager.currTMtCallLinkSate = callLinkSate;
 
 			if (GKApplication.getInstance() != null) {
-				// 跳转到应答界面
-
+				// 跳转到应答界面  自动直接应答
+//				if (VConferenceManager.currTMtCallLinkSate.isVideo()) {
+//					new Thread(new Runnable() {
+//
+//						@Override
+//						public void run() {
+//							int minCallRate = VConferenceManager.getCallRate();
+//							Conference.setCallCapPlusCmd(VConferenceManager.getSendResolutionByCallRate(minCallRate),
+//									VConferenceManager.getRecResolutionByCallRate(minCallRate),
+//									EmConfProtocol.em323.ordinal());
+//							Conference.acceptConf();
+//						}
+//					}).start();
+//				}
+				VConferenceManager.nativeConfType = EmNativeConfType.VIDEO;
+				Intent i = new Intent();
+				i.setClass(GKApplication.getInstance(), VConfVideoUI.class);
+				GKApplication.getInstance().startActivity(i);
 			}
 		} else {
 			VConferenceManager.currTMtCallLinkSate = callLinkSate;
@@ -148,11 +166,14 @@ public class VconfMtcCallback {
 		}
 	}
 
+
+
+
 	/**
-		* 多点会议中解析 发送者
-		* @param b
-		* @param jsonBodyObj 
-		*/
+	 * 多点会议中解析 发送者
+	 * @param b
+	 * @param jsonBodyObj
+	 */
 	/*
 	public static void parseAssSreamSender(JSONObject jsonBodyObj) {
 	// @吴虎， v4 不支持sender
@@ -173,11 +194,11 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 辅流状态通知
-		* 
-		* @param assSendSreamStatusNtf true:辅流发送状态通知,false:辅流接收状态通知
-		* @param jsonBodyObj
-		*/
+	 * 辅流状态通知
+	 *
+	 * @param assSendSreamStatusNtf true:辅流发送状态通知,false:辅流接收状态通知
+	 * @param jsonBodyObj
+	 */
 
 	public static void parseAssSreamStatus(boolean assSendSreamStatusNtf, JSONObject jsonBodyObj) {
 		if (null == jsonBodyObj || !jsonBodyObj.has("arrTAssVidStatus")) return;
@@ -260,9 +281,9 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 多点会议，设置本地终端信息
-	* @param body 
-	*/
+	 * 多点会议，设置本地终端信息
+	 * @param body
+	 */
 	public static void setTerLable(String body) {
 		try {
 			TMtId terLable = (TMtId) new TMtId().fromJson(body);
@@ -275,10 +296,10 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 会议设备信息
-	* 
-	* @param jsonBodyObj 
-	*/
+	 * 会议设备信息
+	 *
+	 * @param jsonBodyObj
+	 */
 
 	public static void parseOnLineTerList(JSONObject jsonBodyObj) {
 		if (null == jsonBodyObj || !jsonBodyObj.has("atMtEntitiy")) return;
@@ -310,8 +331,8 @@ public class VconfMtcCallback {
 	}
 
 	/**
-		* 会议信息界面刷新 
-		*/
+	 * 会议信息界面刷新
+	 */
 	/*
 
 	public static void vConfInfoRefresh() {
@@ -322,9 +343,9 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 终端信息结构
-		* @param body 
-		*/
+	 * 终端信息结构
+	 * @param body
+	 */
 
 	public static void setChairPos(String body) {
 		TMTEntityInfo entityInfo = new TMTEntityInfo().fromJson(body);// 主席终端信息结构
@@ -337,8 +358,8 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 申请主席返回消息处理
-	*/
+	 * 申请主席返回消息处理
+	 */
 
 	public static void parseChairToken(boolean isSuccess) {
 		// 设置本终端为主席终端
@@ -355,8 +376,8 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 申请主讲返回消息处理
-	*/
+	 * 申请主讲返回消息处理
+	 */
 	public static void parseSeenByAll() {
 		TMtId speaker = new TMtId();
 		if (null != VConferenceManager.mLabelAssign && null != VConferenceManager.mConfInfo) {
@@ -369,9 +390,9 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 当前看的视频源通知
-	* @param body 
-	*/
+	 * 当前看的视频源通知
+	 * @param body
+	 */
 	/*
 
 	public static void parseYouAreSing(String body) {
@@ -381,10 +402,10 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 设置静音
-		* 
-		* @param bQuiet 
-		*/
+	 * 设置静音
+	 *
+	 * @param bQuiet
+	 */
 
 	public static void parseCodecQuiet(boolean bQuiet) {
 		VConfFunctionFragment vconfFunctionView = getVConfFunctionFragment();
@@ -394,10 +415,10 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 设置哑音
-	* 
-	* @param bIsMute 
-	*/
+	 * 设置哑音
+	 *
+	 * @param bIsMute
+	 */
 
 	public static void parseCodecMute(boolean bIsMute) {
 		VConfFunctionFragment vconfFunctionView = getVConfFunctionFragment();
@@ -407,15 +428,15 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 向本终端申请主席（本端为主席）
-	* 
-	*  {"mtapi":{"head":{"eventid":2074,"eventname":"ApplyChairNtf","SessionID": "1"},"body":{
-	*    "dwMcuId" : 192,
-	*    "dwTerId" : 1
-	*  }
-	*  }}
-	* @param body 
-	*/
+	 * 向本终端申请主席（本端为主席）
+	 *
+	 *  {"mtapi":{"head":{"eventid":2074,"eventname":"ApplyChairNtf","SessionID": "1"},"body":{
+	 *    "dwMcuId" : 192,
+	 *    "dwTerId" : 1
+	 *  }
+	 *  }}
+	 * @param body
+	 */
 	public static void applyChair(String body) {
 		try {
 			final Activity currActivity = PcAppStackManager.Instance().currentActivity();
@@ -444,9 +465,9 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 向本终端申请发言（本端为主席）
-	* @param body 
-	*/
+	 * 向本终端申请发言（本端为主席）
+	 * @param body
+	 */
 
 	public static void applySpeakPos(String body) {
 		try {
@@ -475,10 +496,10 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 终端加入会议
-	* 
-	* @param body 
-	*/
+	 * 终端加入会议
+	 *
+	 * @param body
+	 */
 
 	public static void pareseTerJoinVconf(String body) {
 		TMTEntityInfo entityInfo = new TMTEntityInfo().fromJson(body);
@@ -497,9 +518,9 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 终端退出会议
-	* @param body 
-	*/
+	 * 终端退出会议
+	 * @param body
+	 */
 
 	public static void pareseTerLeftVconf(String body) {
 		TMtId mtId = (TMtId) new TMtId().fromJson(body);
@@ -512,9 +533,9 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 获取会议底部工具栏
-	* @return 
-	*/
+	 * 获取会议底部工具栏
+	 * @return
+	 */
 
 	public static VConfFunctionFragment getVConfFunctionFragment() {
 		Activity currActivity = PcAppStackManager.Instance().currentActivity();
@@ -529,8 +550,8 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 刷新音视频下面的工具栏 
-	*/
+	 * 刷新音视频下面的工具栏
+	 */
 
 	private static void refreshBottomFragment() {
 		VConfFunctionFragment vconfFunctionView = getVConfFunctionFragment();
@@ -546,9 +567,9 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 轮询信息
-	* @param body 
-	*/
+	 * 轮询信息
+	 * @param body
+	 */
 	/*
 
 	public static void parseTMtPollInfo(String body) {
@@ -557,21 +578,21 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* CSU服务器配置
-		* 
-		* <pre>
-		* {"mtapi":{"head":{"eventid":1066,"eventname":"SetCSUCfgNtf","SessionID": "1"},
-		* 		"body":{
-		* 			"achDomain" : "172.16.79.8",
-		* 			"achNumber" : "009", 
-		* 			"achPassword" : "",
-		* 			"bUsedCSU" : true,
-		* 			"dwIp" : 139399340
-		* 		}
-		* }}
-		* 
-		* @param jsonBodyObj 
-		*/
+	 * CSU服务器配置
+	 *
+	 * <pre>
+	 * {"mtapi":{"head":{"eventid":1066,"eventname":"SetCSUCfgNtf","SessionID": "1"},
+	 * 		"body":{
+	 * 			"achDomain" : "172.16.79.8",
+	 * 			"achNumber" : "009",
+	 * 			"achPassword" : "",
+	 * 			"bUsedCSU" : true,
+	 * 			"dwIp" : 139399340
+	 * 		}
+	 * }}
+	 *
+	 * @param jsonBodyObj
+	 */
 	/*
 
 	public static void parseCSUCfg(String body) {
@@ -580,9 +601,9 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 获取会议列表
-		* @param jsonBodyObj 
-		*/
+	 * 获取会议列表
+	 * @param jsonBodyObj
+	 */
 
 	public static void parseConfList(final JSONObject jsonBodyObj) {
 		if (jsonBodyObj == null) {
@@ -657,10 +678,10 @@ public class VconfMtcCallback {
 	}
 
 	/**
-		* H323 查询在线终端列表
-		* 
-		* @param jsonBodyObj
-		*/
+	 * H323 查询在线终端列表
+	 *
+	 * @param jsonBodyObj
+	 */
 	/*
 	public static void parseOnLineTerListRsp(JSONObject jsonBodyObj) {
 	try {
@@ -674,10 +695,10 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		*  H323 在线终端列表通知
-		*  
-		* @param jsonBodyObj
-		*/
+	 *  H323 在线终端列表通知
+	 *
+	 * @param jsonBodyObj
+	 */
 	/*
 	public static void parseOnLineTerListNtf(JSONObject jsonBodyObj) {
 	try {
@@ -688,9 +709,9 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 解析音视频统计信息
-		* @param jsonBodyObj 
-		*/
+	 * 解析音视频统计信息
+	 * @param jsonBodyObj
+	 */
 	/*
 
 	public static void parseCodecStatic(String body) {
@@ -704,9 +725,9 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* callmissed
-		* @param body 
-		*/
+	 * callmissed
+	 * @param body
+	 */
 	/*
 
 	public static void parseCallMissed(String body) {
@@ -715,9 +736,9 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 解析会议详情信息
-		* @param jsonBodyObj 
-		*/
+	 * 解析会议详情信息
+	 * @param jsonBodyObj
+	 */
 
 	public static void parseConfDetailInfo(final JSONObject jsonBodyObj) {
 		if (jsonBodyObj == null) {
@@ -742,11 +763,11 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 加入 会议创建会议成功或者失败
-	* 
-	* @param jsonBodyObj 
-	* // EmMtJoinCreateConfRsp
-	*/
+	 * 加入 会议创建会议成功或者失败
+	 *
+	 * @param jsonBodyObj
+	 * // EmMtJoinCreateConfRsp
+	 */
 
 	public static void paresJoinCreateConfResult(final JSONObject jsonBodyObj) {
 		try {
@@ -777,10 +798,10 @@ public class VconfMtcCallback {
 	}
 
 	/**
-	* 切换视频到音频
-	* 
-	* @param body 
-	*/
+	 * 切换视频到音频
+	 *
+	 * @param body
+	 */
 	/*
 	public static void parsePrimoVideoOff(String body) {
 	if (true) {
@@ -812,14 +833,14 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 会议15分钟提醒
-		* 
-		* {"mtapi":{"head":{"eventid":1039,"eventname":"ConfWillEndNtf","SessionID": "1"},"body":{
-		* "basetype" : 15
-		* }
-		* }}
-		* @param jsonBodyObj  
-		*/
+	 * 会议15分钟提醒
+	 *
+	 * {"mtapi":{"head":{"eventid":1039,"eventname":"ConfWillEndNtf","SessionID": "1"},"body":{
+	 * "basetype" : 15
+	 * }
+	 * }}
+	 * @param jsonBodyObj
+	 */
 	/*
 	public static void parseConfWillEndNtf(JSONObject jsonBodyObj) {
 	if (null == jsonBodyObj) {
@@ -852,15 +873,15 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 会议延长通知, 单位为分钟
-		* 
-		* {"mtapi":{"head":{"eventid":2063,"eventname":"ConfDelayNtf","SessionID": "1"},"body":{
-		* 		"basetype" : 1670821206
-		* }
-		* }}
-		* 
-		* @param jsonBodyObj   // 延长到
-		*/
+	 * 会议延长通知, 单位为分钟
+	 *
+	 * {"mtapi":{"head":{"eventid":2063,"eventname":"ConfDelayNtf","SessionID": "1"},"body":{
+	 * 		"basetype" : 1670821206
+	 * }
+	 * }}
+	 *
+	 * @param jsonBodyObj   // 延长到
+	 */
 	/*
 	public static void parseConfDelayNtf(JSONObject jsonBodyObj) {
 	try {
@@ -888,9 +909,9 @@ public class VconfMtcCallback {
 	}
 
 	*//**
-		* 会议密码框 
-		* @param jsonBodyObj 
-		*/
+	 * 会议密码框
+	 * @param jsonBodyObj
+	 */
 	/*
 
 	public static void paresReqTerPwdNtf(JSONObject jsonBodyObj) {

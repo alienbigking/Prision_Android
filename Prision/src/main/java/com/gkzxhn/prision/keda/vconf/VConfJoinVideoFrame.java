@@ -130,8 +130,7 @@ public class VConfJoinVideoFrame extends Fragment implements View.OnClickListene
 
 		// GK注册失败，3s之后关闭
 		if (!GKStateMannager.mRegisterGK) {
-			Toast.makeText(getActivity(), "加入视频会议室失败 ", Toast.LENGTH_LONG).show();
-
+			Toast.makeText(getActivity(), "注册GK失败，请稍候重试 ", Toast.LENGTH_LONG).show();
 			getView().postDelayed(new Runnable() {
 
 				@Override

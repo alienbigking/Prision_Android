@@ -27,8 +27,10 @@ import com.gkzxhn.prision.customview.calendar.CalendarViewAdapter;
 import com.gkzxhn.prision.customview.calendar.CustomDate;
 import com.gkzxhn.prision.entity.MeetingEntity;
 import com.gkzxhn.prision.entity.VersionEntity;
+import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.MainPresenter;
+import com.gkzxhn.prision.utils.KDInitUtil;
 import com.gkzxhn.prision.view.IMainView;
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout;
 import com.starlight.mobile.android.lib.view.dotsloading.DotsTextView;
@@ -113,8 +115,8 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         public void clickDate(CustomDate date) {
             mDate = date;
             onRefresh();
-            String phone="18163657553";
-            VConferenceManager.openVConfVideoUI(MainActivity.this, true,phone, phone);
+            openVConfVideoUI();
+
 
 //            if ((date.getYear() + "年" + date.getMonth() + "月").equals(monthText.getText().toString())) {
 //                // 点击的是当月的
@@ -134,6 +136,12 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
             tvMonth.setText(date.getYear() + getString(R.string.year) + date.getMonth() + getString(R.string.month));
         }
     };
+    public void openVConfVideoUI(){
+        String phone="18163657553";
+        if (phone==null || phone.equals(GKStateMannager.mE164))  return;
+        if (!VConferenceManager.isAvailableVCconf(true, true, true))   return;
+        VConferenceManager.openVConfVideoUI(this, true,  phone, phone);
+    }
     public void onClickListener(View view){
         switch (view.getId()){
             case R.id.main_layout_btn_last://上一个月
