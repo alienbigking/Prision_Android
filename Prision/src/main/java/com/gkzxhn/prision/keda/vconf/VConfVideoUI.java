@@ -5,9 +5,6 @@ package com.gkzxhn.prision.keda.vconf;
  * Copyright 2014  it.kedacom.com, Inc. All rights reserved.
  */
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.AudioManager;
@@ -15,12 +12,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
-import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
+import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

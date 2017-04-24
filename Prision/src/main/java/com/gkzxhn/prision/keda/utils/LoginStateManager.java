@@ -3,7 +3,7 @@
  * Copyright 2014  it.kedacom.com, Inc. All rights reserved.
  */
 
-package com.gkzxhn.prision.keda.sky.app;
+package com.gkzxhn.prision.keda.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,11 +12,6 @@ import android.util.Log;
 
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.callback.MyMtcCallback;
-import com.gkzxhn.prision.keda.utils.DNSParseUtil;
-import com.gkzxhn.prision.keda.utils.FormatTransfer;
-import com.gkzxhn.prision.keda.utils.NetWorkUtils;
-import com.gkzxhn.prision.keda.utils.StringUtils;
-import com.gkzxhn.prision.keda.utils.TerminalUtils;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.utils.KDInitUtil;
 import com.kedacom.kdv.mt.api.Base;

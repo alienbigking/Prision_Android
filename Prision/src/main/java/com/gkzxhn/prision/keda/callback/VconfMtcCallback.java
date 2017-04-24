@@ -6,19 +6,14 @@
 package com.gkzxhn.prision.keda.callback;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
-import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
-import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
-import com.gkzxhn.prision.keda.utils.ActivityUtils;
+import com.gkzxhn.prision.keda.utils.LoginStateManager;
+import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.VConf;
@@ -26,7 +21,6 @@ import com.gkzxhn.prision.keda.vconf.VConfFunctionFragment;
 import com.gkzxhn.prision.keda.vconf.VConfVideoUI;
 import com.gkzxhn.prision.keda.vconf.ApplyDialog;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
-import com.gkzxhn.prision.keda.vconf.VideoCapServiceManager;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.kedacom.kdv.mt.api.Conference;
@@ -39,7 +33,6 @@ import com.kedacom.kdv.mt.bean.TMtConfInfo;
 import com.kedacom.kdv.mt.bean.TMtId;
 import com.kedacom.kdv.mt.bean.TMtSimpConfInfo;
 import com.kedacom.kdv.mt.constant.EmConfListType;
-import com.kedacom.kdv.mt.constant.EmConfProtocol;
 import com.kedacom.kdv.mt.constant.EmMtChanState;
 import com.kedacom.kdv.mt.constant.EmNativeConfType;
 
@@ -47,7 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.logging.Handler;
 
 /**
  *  音视频 callback

@@ -6,9 +6,7 @@ package com.gkzxhn.prision.keda.vconf;
  */
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,10 +14,10 @@ import android.widget.Toast;
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
-import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
-import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
-import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
-import com.gkzxhn.prision.keda.sky.app.TruetouchGlobal;
+import com.gkzxhn.prision.keda.utils.GKStateMannager;
+import com.gkzxhn.prision.keda.utils.LoginStateManager;
+import com.gkzxhn.prision.keda.utils.PcAppStackManager;
+import com.gkzxhn.prision.keda.utils.TruetouchGlobal;
 import com.gkzxhn.prision.keda.utils.ActivityUtils;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;

@@ -17,13 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gkzxhn.prision.R;
-import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
+import com.gkzxhn.prision.keda.utils.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.utils.TerminalUtils;
-import com.gkzxhn.prision.keda.vconf.MyFacingView;
-import com.gkzxhn.prision.keda.vconf.VConfVideoUI;
-import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.kedacom.kdv.mt.api.Conference;
 import com.kedacom.kdv.mt.constant.EmMtCallDisReason;
 import com.kedacom.kdv.mt.constant.EmNativeConfType;

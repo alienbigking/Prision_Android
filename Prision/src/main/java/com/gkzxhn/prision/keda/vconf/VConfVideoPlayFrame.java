@@ -25,8 +25,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.gkzxhn.prision.R;
-import com.gkzxhn.prision.keda.layout.ISimpleTouchListener;
-import com.gkzxhn.prision.keda.layout.SimpleGestureDetectorRelative;
 import com.gkzxhn.prision.keda.utils.TerminalUtils;
 import com.kedacom.truetouch.video.player.EGLConfigChooser;
 import com.kedacom.truetouch.video.player.EGLContextFactory;

@@ -11,10 +11,10 @@ import android.util.Log;
 
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
-import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
-import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
-import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
-import com.gkzxhn.prision.keda.sky.app.TruetouchGlobal;
+import com.gkzxhn.prision.keda.utils.GKStateMannager;
+import com.gkzxhn.prision.keda.utils.LoginStateManager;
+import com.gkzxhn.prision.keda.utils.PcAppStackManager;
+import com.gkzxhn.prision.keda.utils.TruetouchGlobal;
 import com.gkzxhn.prision.keda.utils.DNSParseUtil;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;

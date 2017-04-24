@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gkzxhn.prision.keda.sky.app;
+package com.gkzxhn.prision.keda.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,8 +10,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.gkzxhn.prision.common.GKApplication;
-import com.gkzxhn.prision.keda.utils.NetWorkUtils;
-import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.utils.KDInitUtil;
 import com.google.gson.Gson;
 import com.kedacom.kdv.mt.api.Base;

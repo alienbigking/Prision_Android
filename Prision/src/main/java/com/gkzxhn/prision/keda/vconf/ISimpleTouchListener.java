@@ -3,7 +3,7 @@
  *                       rights reserved.
  */
 
-package com.gkzxhn.prision.keda.layout;
+package com.gkzxhn.prision.keda.vconf;
 
 import android.view.MotionEvent;
 import android.view.View;

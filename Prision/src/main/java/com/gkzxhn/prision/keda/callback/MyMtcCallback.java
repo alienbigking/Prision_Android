@@ -9,13 +9,12 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.widget.Toast;
 
-import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
-import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
+import com.gkzxhn.prision.keda.utils.LoginStateManager;
+import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.google.gson.Gson;
 import com.kedacom.kdv.mt.api.IM;
-import com.kedacom.kdv.mt.api.RmtContact;
 import com.kedacom.kdv.mt.bean.MtApiHead;
 import com.kedacom.kdv.mt.bean.TImSn;
 import com.kedacom.kdv.mt.constant.EmMtCallDisReason;
