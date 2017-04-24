@@ -11,7 +11,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gkzxhn.prision.common.GKApplication;
-import com.gkzxhn.prision.keda.main.VConfListActivity;
 import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
 import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
@@ -637,11 +636,11 @@ public class VconfMtcCallback {
 					}
 
 					if (confListType == EmConfListType.Book.ordinal()) {
-						// 查询结束
-						Activity ac = PcAppStackManager.Instance().currentActivity();
-						if (ac != null && (ac instanceof VConfListActivity)) {
-							((VConfListActivity) ac).showList();
-						}
+//						// 查询结束
+//						Activity ac = PcAppStackManager.Instance().currentActivity();
+//						if (ac != null && (ac instanceof VConfListActivity)) {
+//							((VConfListActivity) ac).showList();
+//						}
 					}
 					// SlidingMenuManager.refreshVConfView(EmConfListType.toEmConfListType(confListType));
 
