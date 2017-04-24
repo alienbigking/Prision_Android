@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.logging.Handler;
 
 /**
  *  音视频 callback
@@ -120,8 +122,38 @@ public class VconfMtcCallback {
 				Conference.rejectConf();
 				return;
 			}
-			VConferenceManager.currTMtCallLinkSate = callLinkSate;
-			GKApplication.getInstance().autoResponse();
+//			VConferenceManager.currTMtCallLinkSate = callLinkSate;
+//			new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
+//				@Override
+//				public void run() {
+//					try {
+//						Activity ac = PcAppStackManager.Instance().currentActivity();
+//						Toast.makeText(ac, "正在连接视频", Toast.LENGTH_LONG).show();
+//						// 跳转到应答界面  自动直接应答
+//						String alias = VConferenceManager.currTMtCallLinkSate.tPeerAlias.getAlias();
+//						String e164Num = VConferenceManager.mCallPeerE164Num;
+//						// 注册视频会议Service
+//						VideoCapServiceManager.bindService();
+//						Bundle extras = new Bundle();
+//						boolean isMackCall = false;
+//						extras.putString(Constants.TERMINAL_VCONFNAME, alias);
+//						extras.putString(Constants.TERMINAL_E164NUM, e164Num);
+//						extras.putBoolean(Constants.TERMINAL_MACKCALL, isMackCall);
+//						extras.putBoolean(Constants.TERMINAL_JOINCONF, !isMackCall);
+//						if (isMackCall) {
+//							VConferenceManager.nativeConfType = EmNativeConfType.CALLING_VIDEO;
+//						} else {
+//							VConferenceManager.nativeConfType = EmNativeConfType.JOINING_VIDEO;
+//						}
+//						if (null != e164Num) {
+//							VConferenceManager.mCallPeerE164Num = e164Num;
+//						}
+//							ac.startActivity(new Intent(ac, VConfVideoUI.class),extras);
+//					}catch (Exception e){
+//						e.printStackTrace();
+//					}
+//				}
+//			});
 		} else {
 			VConferenceManager.currTMtCallLinkSate = callLinkSate;
 

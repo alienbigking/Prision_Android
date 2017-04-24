@@ -28,6 +28,7 @@ import com.gkzxhn.prision.customview.calendar.CustomDate;
 import com.gkzxhn.prision.entity.MeetingEntity;
 import com.gkzxhn.prision.entity.VersionEntity;
 import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
+import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.MainPresenter;
 import com.gkzxhn.prision.utils.KDInitUtil;
@@ -55,6 +56,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PcAppStackManager.Instance().pushActivity(this);
         setContentView(R.layout.main_layout);
         initControls();
         init();
@@ -115,7 +117,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         public void clickDate(CustomDate date) {
             mDate = date;
             onRefresh();
-            openVConfVideoUI();
+//            openVConfVideoUI();
 
 
 //            if ((date.getYear() + "年" + date.getMonth() + "月").equals(monthText.getText().toString())) {
@@ -309,6 +311,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
 
     @Override
     protected void onDestroy() {
+        PcAppStackManager.Instance().popActivity(this);
         if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.dismiss();
         if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.dismiss();
         if(updateDialog!=null&&updateDialog.isShowing())updateDialog.dismiss();
