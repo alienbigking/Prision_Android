@@ -1,4 +1,4 @@
-package com.gkzxhn.prision.keda.vconf.controller;
+package com.gkzxhn.prision.keda.vconf;
 
 /**
  * @(#)VConfFunctionFragment.java   2014-9-5
@@ -28,7 +28,6 @@ import com.gkzxhn.prision.customview.CancelVideoDialog;
 import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
 import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
 import com.kedacom.kdv.mt.api.Conference;
 import com.kedacom.kdv.mt.constant.EmMtCallDisReason;
 

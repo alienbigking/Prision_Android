@@ -3,7 +3,7 @@
  *                          rights reserved.
  */
 
-package com.gkzxhn.prision.keda.vconf.modle.service;
+package com.gkzxhn.prision.keda.vconf;
 
 import android.app.Notification;
 import android.app.Service;

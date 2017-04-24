@@ -56,11 +56,6 @@ public final class TruetouchGlobal {
 			}
 		}).start();
 
-//		Intent intent = new Intent();
-//		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//		intent.setClass(MyApplication.getContext(), LoginUI.class);
-//		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		MyApplication.getContext().startActivity(intent);
 	}
 
 	/**

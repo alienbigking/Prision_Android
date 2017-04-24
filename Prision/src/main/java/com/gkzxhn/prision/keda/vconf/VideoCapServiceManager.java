@@ -1,4 +1,4 @@
-package com.gkzxhn.prision.keda.vconf.manager;
+package com.gkzxhn.prision.keda.vconf;
 
 /**
  * @(#)VideoCapServiceManager.java 2013-8-14 Copyright 2013 it.kedacom.com, Inc.
@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.gkzxhn.prision.common.GKApplication;
-import com.gkzxhn.prision.keda.vconf.modle.service.VideoCapService;
-import com.gkzxhn.prision.keda.vconf.modle.service.VideoCapServiceConnect;
 
 
 /**

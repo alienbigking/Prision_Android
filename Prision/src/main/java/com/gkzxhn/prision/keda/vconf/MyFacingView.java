@@ -3,7 +3,7 @@
  *                     reserved.
  */
 
-package com.gkzxhn.prision.keda.vconf.controller;
+package com.gkzxhn.prision.keda.vconf;
 
 import android.content.Context;
 import android.graphics.PixelFormat;

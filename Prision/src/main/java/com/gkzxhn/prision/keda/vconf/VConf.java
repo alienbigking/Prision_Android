@@ -3,7 +3,7 @@
  * Copyright 2014  it.kedacom.com, Inc. All rights reserved.
  */
 
-package com.gkzxhn.prision.keda.vconf.bean;
+package com.gkzxhn.prision.keda.vconf;
 
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.keda.utils.StringUtils;

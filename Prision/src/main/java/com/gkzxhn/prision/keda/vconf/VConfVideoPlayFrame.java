@@ -1,4 +1,4 @@
-package com.gkzxhn.prision.keda.vconf.video.controller;
+package com.gkzxhn.prision.keda.vconf;
 
 /**
  * @(#)VConfAudioFrame.java   2014-9-4
@@ -13,7 +13,6 @@ import android.graphics.PixelFormat;
 import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,16 +28,11 @@ import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.keda.layout.ISimpleTouchListener;
 import com.gkzxhn.prision.keda.layout.SimpleGestureDetectorRelative;
 import com.gkzxhn.prision.keda.utils.TerminalUtils;
-import com.gkzxhn.prision.keda.vconf.controller.VConfVideoUI;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
-import com.google.gson.Gson;
 import com.kedacom.truetouch.video.player.EGLConfigChooser;
 import com.kedacom.truetouch.video.player.EGLContextFactory;
 import com.kedacom.truetouch.video.player.EGLWindowSurfaceFactory;
 import com.kedacom.truetouch.video.player.Renderer;
 import com.kedacom.truetouch.video.player.VidGestureDetector;
-
-import java.io.IOException;
 
 /**
   * 视频播放界面

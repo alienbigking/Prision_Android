@@ -1,6 +1,5 @@
 package com.gkzxhn.prision.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,14 +17,12 @@ import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.customview.CustomDialog;
 import com.gkzxhn.prision.customview.ShowTerminalDialog;
-import com.gkzxhn.prision.entity.MeetingDetailEntity;
 import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
+import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.CallUserPresenter;
 import com.gkzxhn.prision.view.ICallUserView;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;

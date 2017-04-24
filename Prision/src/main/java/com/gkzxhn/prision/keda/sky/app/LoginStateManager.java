@@ -17,7 +17,7 @@ import com.gkzxhn.prision.keda.utils.FormatTransfer;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.utils.TerminalUtils;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
+import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.utils.KDInitUtil;
 import com.kedacom.kdv.mt.api.Base;
 import com.kedacom.kdv.mt.api.IM;

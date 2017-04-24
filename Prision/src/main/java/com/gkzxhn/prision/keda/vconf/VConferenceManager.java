@@ -1,4 +1,4 @@
-package com.gkzxhn.prision.keda.vconf.manager;
+package com.gkzxhn.prision.keda.vconf;
 
 /**
  * @(#)VConferenceManager.java   2014-8-15
@@ -24,11 +24,6 @@ import com.gkzxhn.prision.keda.utils.ActivityUtils;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.utils.TerminalUtils;
-import com.gkzxhn.prision.keda.vconf.bean.VConf;
-import com.gkzxhn.prision.keda.vconf.controller.VConfAudioUI;
-import com.gkzxhn.prision.keda.vconf.controller.VConfDetailsUI;
-import com.gkzxhn.prision.keda.vconf.controller.VConfVideoUI;
-import com.gkzxhn.prision.keda.vconf.dialog.InviteVConfDialog;
 import com.google.gson.Gson;
 import com.kedacom.kdv.mt.api.Conference;
 import com.kedacom.kdv.mt.bean.EmPeerProductId;
@@ -80,9 +75,6 @@ import java.util.List;
 
 public class VConferenceManager {
 
-	public static String mAccount = "";
-	public static String mPassword = "";
-	public static String mAddr = "222.244.146.206";
 
 	// 音视频码率分割值，大于分割值为视频
 	public static final int CALLRATE_SPLITLINE = 64;
@@ -524,35 +516,6 @@ public class VConferenceManager {
 		Conference.joinConf(mTMtJoinConfParam);
 	}
 
-	/**
-	 * 打开视频会议界面
-	 * 
-	 * @param cucrActivity
-	 * @param isMackCall
-	 * @param vconfName
-	 * @param e164
-	 */
-	public static void openVConfAudioUI(Activity cucrActivity, boolean isMackCall, String vconfName, String e164) {
-		Bundle extras = new Bundle();
-		extras.putString("VconfName", vconfName);
-		extras.putString(Constants.TERMINAL_E164NUM, e164);
-		extras.putBoolean("MackCall", isMackCall);
-		extras.putBoolean("JoinConf", !isMackCall);
-
-		if (VConferenceManager.nativeConfType == EmNativeConfType.AUDIO || VConferenceManager.nativeConfType == EmNativeConfType.AUDIO_AND_DOAL) {
-		} else {
-			if (isMackCall) {
-				VConferenceManager.nativeConfType = EmNativeConfType.CALLING_AUDIO;
-			} else {
-				VConferenceManager.nativeConfType = EmNativeConfType.JOINING_AUDIO;
-			}
-		}
-		if (null != e164) {
-			VConferenceManager.mCallPeerE164Num = e164;
-		}
-
-		ActivityUtils.openActivity(cucrActivity, VConfAudioUI.class, extras);
-	}
 
 	/**
 	 * 打开视频会议界面
@@ -567,10 +530,10 @@ public class VConferenceManager {
 		VideoCapServiceManager.bindService();
 
 		Bundle extras = new Bundle();
-		extras.putString("VconfName", vconfName);
+		extras.putString(Constants.TERMINAL_VCONFNAME, vconfName);
 		extras.putString(Constants.TERMINAL_E164NUM, e164);
-		extras.putBoolean("MackCall", isMackCall);
-		extras.putBoolean("JoinConf", !isMackCall);
+		extras.putBoolean(Constants.TERMINAL_MACKCALL, isMackCall);
+		extras.putBoolean(Constants.TERMINAL_JOINCONF, !isMackCall);
 
 		if (isMackCall) {
 			VConferenceManager.nativeConfType = EmNativeConfType.CALLING_VIDEO;
@@ -680,8 +643,6 @@ public class VConferenceManager {
 		}
 		if (currActivity instanceof VConfVideoUI) {
 			((VConfVideoUI) currActivity).switchVConfFragment();
-		} else if (currActivity instanceof VConfAudioUI) {
-			((VConfAudioUI) currActivity).switchVConfFragment();
 		}
 	}
 
@@ -818,13 +779,6 @@ public class VConferenceManager {
 	 * 关闭音视频相关界面
 	 */
 	public static void forceCloseVConfActivity() {
-		Activity currentActivity = PcAppStackManager.Instance().currentActivity();
-
-
-		VConfAudioUI vconfAudioUI = (VConfAudioUI) PcAppStackManager.Instance().getActivity(VConfAudioUI.class);
-		if (vconfAudioUI != null) {
-			PcAppStackManager.Instance().popActivity(vconfAudioUI);
-		}
 
 		VConfVideoUI vconfVideoUI = (VConfVideoUI) PcAppStackManager.Instance().getActivity(VConfVideoUI.class);
 		if (vconfVideoUI != null) {
@@ -1084,43 +1038,7 @@ public class VConferenceManager {
 
 	}
 
-	/**
-	 * 创建会议
-	 * @param activity
-	 * @param vconfName 会议名称
-	 *  tmplt 会议模板
-	 * @param tMtList 与会人员
-	 * @param vconfQuality 会议质量
-	 * @param duration 会议时长
-	 */
-
-	public static void createVConf2OpenAudioUI(Activity activity, String vconfName, List<TMtAddr> tMtList,
-											   int vconfQuality, int duration) {
-		if (null == tMtList) {
-			return;
-		}
-
-		// 本端
-		TMtAddr mTMAddr = new TMtAddr(EmMtAddrType.emAddrE164, null, GKStateMannager.mE164);
-		if (tMtList.contains(mTMAddr)) {// 统一不包含本端
-			tMtList.remove(mTMAddr);
-		}
-
-		Bundle extras = new Bundle();
-		extras.putString("VconfName", vconfName);
-		extras.putString("tMtList", new Gson().toJson(tMtList));
-		extras.putInt("VconfQuality", vconfQuality);
-		extras.putInt("VconfDuration", duration);
-
-		// 正在会议中
-		if (isCSVConf()) {
-			Conference.hangupConfByReason(EmMtCallDisReason.emDisconnect_PeerInConf);
-		} else {
-			VConferenceManager.nativeConfType = EmNativeConfType.CONVENEING_AUDIO;
-		}
-
-		ActivityUtils.openActivity(activity, VConfAudioUI.class, extras);
-	}
+	 
 
 	/**
 	 * 通过ras 请求创建会议  tMtList不带自己
@@ -1322,24 +1240,5 @@ public class VConferenceManager {
 		dialog.show();
 	}
 
-	/**
-	 * 打开会议详情
-	 *
-	 * @param activity
-	 * @param e164
-	 */
-	public static void openVConfDetails(Activity activity, String e164) {
-		if (activity == null) {
-			return;
-		}
 
-		Intent intent = new Intent();
-		intent.setClass(activity, VConfDetailsUI.class);
-		Bundle bundle = new Bundle();
-		bundle.putString(Constants.TERMINAL_E164NUM, e164);
-		intent.putExtras(bundle);
-		ActivityUtils.openActivity(activity, intent);
-		// 获取会议详情
-		Conference.requestConfDetailInfo(e164);
-	}
 }

@@ -27,6 +27,7 @@ import com.gkzxhn.prision.customview.calendar.CalendarViewAdapter;
 import com.gkzxhn.prision.customview.calendar.CustomDate;
 import com.gkzxhn.prision.entity.MeetingEntity;
 import com.gkzxhn.prision.entity.VersionEntity;
+import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.MainPresenter;
 import com.gkzxhn.prision.view.IMainView;
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout;
@@ -112,6 +113,9 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         public void clickDate(CustomDate date) {
             mDate = date;
             onRefresh();
+            String phone="18163657553";
+            VConferenceManager.openVConfVideoUI(MainActivity.this, true,phone, phone);
+
 //            if ((date.getYear() + "年" + date.getMonth() + "月").equals(monthText.getText().toString())) {
 //                // 点击的是当月的
 ////                scrollView.scrollTo(0, 0);// 刷新时滑到顶端

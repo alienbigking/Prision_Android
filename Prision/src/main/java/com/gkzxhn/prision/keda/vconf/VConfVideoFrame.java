@@ -1,4 +1,4 @@
-package com.gkzxhn.prision.keda.vconf.video.controller;
+package com.gkzxhn.prision.keda.vconf;
 
 /**
  * @(#)VConfVideoContentFrame.java   2014-10-11
@@ -9,7 +9,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
@@ -18,7 +17,6 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -34,10 +32,6 @@ import android.widget.LinearLayout;
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.keda.utils.TerminalUtils;
-import com.gkzxhn.prision.keda.vconf.controller.VConfFunctionFragment;
-import com.gkzxhn.prision.keda.vconf.controller.VConfVideoUI;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
-import com.gkzxhn.prision.keda.vconf.manager.VideoCapServiceManager;
 import com.kedacom.kdv.mt.api.Configure;
 import com.kedacom.kdv.mt.constant.EmNativeConfType;
 import com.kedacom.truetouch.video.capture.VideoCapture;

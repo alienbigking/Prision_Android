@@ -1,4 +1,4 @@
-package com.gkzxhn.prision.keda.vconf.controller;
+package com.gkzxhn.prision.keda.vconf;
 
 /**
  * @(#)VConfVideoUI.java   2014-8-28
@@ -17,16 +17,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.FrameLayout;
 
+import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.StringUtils;
-import com.gkzxhn.prision.keda.vconf.bean.VConf;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
-import com.gkzxhn.prision.keda.vconf.video.controller.VConfJoinVideoFrame;
-import com.gkzxhn.prision.keda.vconf.video.controller.VConfVideoFrame;
-import com.gkzxhn.prision.keda.vconf.video.controller.VConfVideoPlayFrame;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kedacom.kdv.mt.bean.TMtAddr;
@@ -44,7 +39,6 @@ import java.util.List;
 
 public class VConfVideoUI extends ActionBarActivity {
 
-	private final int id = 0x1e010011;
 	protected VConf mVConf;
 	protected String mE164;
 	protected String mConfTitle;
@@ -121,56 +115,16 @@ public class VConfVideoUI extends ActionBarActivity {
 		PcAppStackManager.Instance().pushActivity(this);
 		// 让音量键固定为媒体音量控制,其他的页面不要这样设置--只在音视频的界面加入这段代码
 		this.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
-
-		FrameLayout c = new FrameLayout(this);
-		c.setId(id);
-		setContentView(c, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+		setContentView(R.layout.vconf_video_ui_layout);
 		initExtras();
 		onViewCreated();
 //		startRecord();// 先开启录屏权限请求  授权了才开启视频
-	}
-
-	@Override
-	protected void onRestart() {
-		Log.i("VConfVideo", "VConfVideoUI-->onRestart");
-		super.onRestart();
-	}
-
-	@Override
-	protected void onStart() {
-		Log.i("VConfVideo", "VConfVideoUI-->onStart");
-		super.onStart();
-	}
-
-	@Override
-	protected void onResume() {
-		Log.i("VConfVideo", "VConfVideoUI-->onResume");
-		super.onResume();
-	}
-
-	/**
-	 * @see android.support.v4.app.FragmentActivity#onNewIntent(Intent)
-	 */
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-
-		Log.i("VConfVideo", "VConfVideoUI-->onNewIntent");
-	}
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
 	}
 
 	protected void onViewCreated() {
 		mVConf = new VConf();
 		mVConf.setAchConfE164(mE164);
 		mVConf.setAchConfName(mConfTitle);
-
-		// if (VConferenceManager.currTMtCallLinkSate != null) {
-		// mVConf.setConfName(VConferenceManager.currTMtCallLinkSate.getAlias());
-		// }
 
 		if (!StringUtils.isNull(VConferenceManager.mCallPeerE164Num)) {
 			mVConf.setAchConfE164(VConferenceManager.mCallPeerE164Num);
@@ -181,10 +135,10 @@ public class VConfVideoUI extends ActionBarActivity {
 	public void initExtras() {
 		Bundle extra = getIntent().getExtras();
 		if (null == extra) return;
-		mConfTitle = extra.getString("VconfName");
+		mConfTitle = extra.getString(Constants.TERMINAL_VCONFNAME);
 		mE164 = extra.getString(Constants.TERMINAL_E164NUM);
-		mIsP2PConf = extra.getBoolean("MackCall", false);
-		mIsJoinConf = extra.getBoolean("JoinConf", false);
+		mIsP2PConf = extra.getBoolean(Constants.TERMINAL_MACKCALL, false);
+		mIsJoinConf = extra.getBoolean(Constants.TERMINAL_JOINCONF, false);
 
 		if (null != VConferenceManager.mConfInfo) {
 			mConfTitle = VConferenceManager.mConfInfo.achConfName;
@@ -195,8 +149,8 @@ public class VConfVideoUI extends ActionBarActivity {
 		if (null != VConferenceManager.mCallPeerE164Num) {
 			mE164 = VConferenceManager.mCallPeerE164Num;
 		}
-		mVConfQuality = extra.getInt("VconfQuality"); //会议质量
-		mDuration = extra.getInt("VconfDuration");//会议时长
+		mVConfQuality = extra.getInt(Constants.TERMINAL_VCONFQUALITY); //会议质量
+		mDuration = extra.getInt(Constants.TERMINAL_VCONFDURATION);//会议时长
 		try {
 			mTMtList = new Gson().fromJson(extra.getString("tMtList"),
 					new TypeToken<List<TMtAddr>>() {
@@ -224,7 +178,7 @@ public class VConfVideoUI extends ActionBarActivity {
 			if (null == mVConfContentFrame) {
 				mVConfContentFrame = new VConfVideoFrame();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.replace(id, mVConfContentFrame);
+				ft.replace(R.id.vconf_video_ui_layout_fl_root, mVConfContentFrame);
 				ft.commitAllowingStateLoss();
 			}
 
@@ -242,7 +196,7 @@ public class VConfVideoUI extends ActionBarActivity {
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 			mVConfContentFrame = null;
 			mCurrFragmentView = new VConfJoinVideoFrame();
-			ft.replace(id, mCurrFragmentView);
+			ft.replace(R.id.vconf_video_ui_layout_fl_root, mCurrFragmentView);
 			ft.commit();
 		}
 	}
@@ -280,17 +234,7 @@ public class VConfVideoUI extends ActionBarActivity {
 		return mTMtList;
 	}
 
-	@Override
-	protected void onPause() {
-		Log.w("VConfVideo", "VConfVideoUI-->onPause");
-		super.onPause();
-	}
 
-	@Override
-	protected void onStop() {
-		Log.w("VConfVideo", "VConfVideoUI-->onStop");
-		super.onStop();
-	}
 
 	@Override
 	protected void onDestroy() {
@@ -309,20 +253,7 @@ public class VConfVideoUI extends ActionBarActivity {
 		super.onDestroy();
 	}
 
-	/**
-	 * 返回true表示监狱端用户  false相反
-	 * @return
-	 */
-	private boolean getUserType() {
-		SharedPreferences preferences=getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
 
-		String username = preferences.getString(Constants.USER_ACCOUNT,"");
-		if (!TextUtils.isEmpty(username)) {
-            Log.i("VConfVideo", username.length() + "");
-            return username.length() != 32;
-        }
-        return false;
-	}
 
 	/** @return the mE164 */
 	public String getmE164() {

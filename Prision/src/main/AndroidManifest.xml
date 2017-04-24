@@ -193,11 +193,11 @@
             android:name=".keda.main.VConfListActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".keda.vconf.controller.VConfDetailsUI"
+            android:name=".keda.vconf.VConfDetailsUI"
             android:screenOrientation="landscape" />
         <!-- vconf -->
         <activity
-            android:name=".keda.vconf.controller.VConfVideoUI"
+            android:name=".keda.vconf.VConfVideoUI"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
@@ -206,7 +206,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
-        <service android:name=".keda.vconf.modle.service.VideoCapService"/>
+        <service android:name=".keda.vconf.VideoCapService"/>
     </application>
 
 </manifest>

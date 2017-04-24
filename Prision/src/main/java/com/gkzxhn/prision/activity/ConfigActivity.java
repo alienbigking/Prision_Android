@@ -17,8 +17,6 @@ import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
-import com.gkzxhn.prision.keda.utils.StringUtils;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
 import com.gkzxhn.prision.utils.KDInitUtil;
 
 /**

@@ -1,4 +1,4 @@
-package com.gkzxhn.prision.keda.vconf.dialog;
+package com.gkzxhn.prision.keda.vconf;
 
 import android.app.Dialog;
 import android.content.Context;

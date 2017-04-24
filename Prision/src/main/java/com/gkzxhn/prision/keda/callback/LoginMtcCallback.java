@@ -8,10 +8,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.gkzxhn.prision.activity.CallUserActivity;
-import com.gkzxhn.prision.activity.ConfigActivity;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.sky.app.GKStateMannager;
@@ -21,7 +18,6 @@ import com.gkzxhn.prision.keda.sky.app.TruetouchGlobal;
 import com.gkzxhn.prision.keda.utils.DNSParseUtil;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
 import com.gkzxhn.prision.utils.KDInitUtil;
 import com.google.gson.Gson;
 import com.kedacom.kdv.mt.api.Base;

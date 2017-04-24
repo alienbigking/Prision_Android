@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
 import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.StringUtils;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
+import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.google.gson.Gson;
 import com.kedacom.kdv.mt.api.IM;
 import com.kedacom.kdv.mt.api.RmtContact;

@@ -6,7 +6,6 @@
 package com.gkzxhn.prision.keda.callback;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,12 +14,11 @@ import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
 import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
-import com.gkzxhn.prision.keda.vconf.bean.VConf;
-import com.gkzxhn.prision.keda.vconf.controller.VConfDetailsUI;
-import com.gkzxhn.prision.keda.vconf.controller.VConfFunctionFragment;
-import com.gkzxhn.prision.keda.vconf.controller.VConfVideoUI;
-import com.gkzxhn.prision.keda.vconf.dialog.ApplyDialog;
-import com.gkzxhn.prision.keda.vconf.manager.VConferenceManager;
+import com.gkzxhn.prision.keda.vconf.VConf;
+import com.gkzxhn.prision.keda.vconf.VConfFunctionFragment;
+import com.gkzxhn.prision.keda.vconf.VConfVideoUI;
+import com.gkzxhn.prision.keda.vconf.ApplyDialog;
+import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.kedacom.kdv.mt.api.Conference;
@@ -735,10 +733,6 @@ public class VconfMtcCallback {
 					TMtConfDetailInfo tmtConfDetailInfo = (TMtConfDetailInfo) new TMtConfDetailInfo().fromJson(assParamJsonObj);
 					if (null == tmtConfDetailInfo || null == tmtConfDetailInfo.tConfBaseInfo || StringUtils.isNull(tmtConfDetailInfo.tConfBaseInfo.achConfE164)) {
 						return;
-					}
-					Activity ac = PcAppStackManager.Instance().currentActivity();
-					if (ac != null && (ac instanceof VConfDetailsUI)) {
-						((VConfDetailsUI) ac).showDetails(tmtConfDetailInfo);
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

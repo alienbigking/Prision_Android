@@ -3,7 +3,7 @@
  *                                 All rights reserved.
  */
 
-package com.gkzxhn.prision.keda.vconf.modle.service;
+package com.gkzxhn.prision.keda.vconf;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
