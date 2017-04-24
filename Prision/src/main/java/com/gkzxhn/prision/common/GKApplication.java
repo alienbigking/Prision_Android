@@ -5,12 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.activity.LoginActivity;
 import com.gkzxhn.prision.keda.sky.app.TruetouchGlobal;
+import com.gkzxhn.prision.keda.vconf.VConfVideoUI;
+import com.gkzxhn.prision.keda.vconf.VConferenceManager;
+import com.gkzxhn.prision.keda.vconf.VideoCapServiceManager;
 import com.gkzxhn.prision.utils.KDInitUtil;
 import com.gkzxhn.prision.utils.NimInitUtil;
+import com.kedacom.kdv.mt.bean.TMtCallLinkSate;
+import com.kedacom.kdv.mt.constant.EmNativeConfType;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.nostra13.universalimageloader.cache.disc.impl.BaseDiskCache;
@@ -119,5 +129,40 @@ public class GKApplication extends Application{
     public String getTerminalPassword(){
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
         return sharedPreferences.getString(Constants.TERMINAL_PASSWORD,"");
+    }
+    public void autoResponse(){
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Toast.makeText(getApplicationContext(), "正在连接视频", Toast.LENGTH_LONG).show();
+                    // 跳转到应答界面  自动直接应答
+                    String alias = VConferenceManager.currTMtCallLinkSate.tPeerAlias.getAlias();
+                    String e164Num = VConferenceManager.mCallPeerE164Num;
+                    // 注册视频会议Service
+                    VideoCapServiceManager.bindService();
+                    Bundle extras = new Bundle();
+                    boolean isMackCall = false;
+                    extras.putString(Constants.TERMINAL_VCONFNAME, alias);
+                    extras.putString(Constants.TERMINAL_E164NUM, e164Num);
+                    extras.putBoolean(Constants.TERMINAL_MACKCALL, isMackCall);
+                    extras.putBoolean(Constants.TERMINAL_JOINCONF, !isMackCall);
+                    if (isMackCall) {
+                        VConferenceManager.nativeConfType = EmNativeConfType.CALLING_VIDEO;
+                    } else {
+                        VConferenceManager.nativeConfType = EmNativeConfType.JOINING_VIDEO;
+                    }
+                    if (null != e164Num) {
+                        VConferenceManager.mCallPeerE164Num = e164Num;
+                    }
+                    startActivity(new Intent(getApplicationContext(), VConfVideoUI.class));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
 }

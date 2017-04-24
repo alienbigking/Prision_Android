@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,6 +31,7 @@ public class ConfigActivity extends SuperActivity {
     private String mRate=null;
     private ProgressDialog mProgress;
     private SharedPreferences preferences;
+    private final long DOWN_TIME=20000;//倒计时 20秒
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +85,7 @@ public class ConfigActivity extends SuperActivity {
                 if (TextUtils.isEmpty(acc) ) {
                     showToast(R.string.please_input_terminal_account);
                 }else {
+                    mTimer.start();
                     startRefreshAnim();
                     //退出终端平台，如果已经注册了终端平台
                     GKStateMannager.restoreLoginState();
@@ -106,10 +109,10 @@ public class ConfigActivity extends SuperActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             stopRefreshAnim();
+            if(mTimer!=null) mTimer.cancel();
             if(intent.getAction().equals(Constants.TERMINAL_FAILED_ACTION)){//GK注册失败
                 showToast(R.string.terminal_account_not_available);
             }else if(intent.getAction().equals(Constants.TERMINAL_SUCCESS_ACTION)){// GK 注册成功
-
                 ConfigActivity.this.setResult(RESULT_OK);
                 ConfigActivity.this.finish();
             }
@@ -133,4 +136,22 @@ public class ConfigActivity extends SuperActivity {
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         super.onDestroy();
     }
+    private CountDownTimer mTimer=new CountDownTimer(DOWN_TIME, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+//            long second = millisUntilFinished / 1000;
+        }
+        @Override
+        public void onFinish() {
+            stopRefreshAnim();
+            showToast(R.string.terminal_account_not_available);
+            //注册失败，清除
+            SharedPreferences sharedPreferences=GKApplication.getInstance().getSharedPreferences(Constants.USER_TABLE,Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.putString(Constants.TERMINAL_ACCOUNT,"");
+            editor.putInt(Constants.TERMINAL_RATE,512);
+            editor.commit();
+        }
+    };
+
 }

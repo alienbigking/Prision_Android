@@ -136,7 +136,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        //开启录屏
+		//开启录屏
 //		getScreenBaseInfo();
 //		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
 //			String username = (String) SPUtil.get(getActivity(), SPKeyConstants.ACCESS_TOKEN, "");
@@ -172,12 +172,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 		initComponentValue();
 		registerListeners();
 		super.onViewCreated(view, savedInstanceState);
-
-		if (isPrisonPort()) {
-			setIdCheckData();
-		}else {
-			mLl_check_id.setVisibility(View.GONE);
-		}
+		setIdCheckData();
 		wh = TerminalUtils.terminalWH(getActivity());
 		initPreGLSurfaceView();
 		computePipViewLayoutParams();
@@ -1255,8 +1250,4 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 //		}
 	}
 
-	public boolean isPrisonPort() {
-		return true;
-
-	}
 }

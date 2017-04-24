@@ -7,12 +7,17 @@ package com.gkzxhn.prision.keda.callback;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.sky.app.LoginStateManager;
 import com.gkzxhn.prision.keda.sky.app.PcAppStackManager;
+import com.gkzxhn.prision.keda.utils.ActivityUtils;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.VConf;
@@ -20,6 +25,7 @@ import com.gkzxhn.prision.keda.vconf.VConfFunctionFragment;
 import com.gkzxhn.prision.keda.vconf.VConfVideoUI;
 import com.gkzxhn.prision.keda.vconf.ApplyDialog;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
+import com.gkzxhn.prision.keda.vconf.VideoCapServiceManager;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.kedacom.kdv.mt.api.Conference;
@@ -89,6 +95,7 @@ public class VconfMtcCallback {
 	 *
 	 */
 
+	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	public static void parseCallLinkSate(String callingSateJson) {
 		TMtCallLinkSate callLinkSate = new TMtCallLinkSate().fromJson(callingSateJson);
 		if (null == callLinkSate) {
@@ -113,29 +120,8 @@ public class VconfMtcCallback {
 				Conference.rejectConf();
 				return;
 			}
-
 			VConferenceManager.currTMtCallLinkSate = callLinkSate;
-
-			if (GKApplication.getInstance() != null) {
-				// 跳转到应答界面  自动直接应答
-//				if (VConferenceManager.currTMtCallLinkSate.isVideo()) {
-//					new Thread(new Runnable() {
-//
-//						@Override
-//						public void run() {
-//							int minCallRate = VConferenceManager.getCallRate();
-//							Conference.setCallCapPlusCmd(VConferenceManager.getSendResolutionByCallRate(minCallRate),
-//									VConferenceManager.getRecResolutionByCallRate(minCallRate),
-//									EmConfProtocol.em323.ordinal());
-//							Conference.acceptConf();
-//						}
-//					}).start();
-//				}
-				VConferenceManager.nativeConfType = EmNativeConfType.VIDEO;
-				Intent i = new Intent();
-				i.setClass(GKApplication.getInstance(), VConfVideoUI.class);
-				GKApplication.getInstance().startActivity(i);
-			}
+			GKApplication.getInstance().autoResponse();
 		} else {
 			VConferenceManager.currTMtCallLinkSate = callLinkSate;
 
