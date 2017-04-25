@@ -19,7 +19,6 @@ import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.VConf;
 import com.gkzxhn.prision.keda.vconf.VConfFunctionFragment;
 import com.gkzxhn.prision.keda.vconf.VConfVideoUI;
-import com.gkzxhn.prision.keda.vconf.ApplyDialog;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
