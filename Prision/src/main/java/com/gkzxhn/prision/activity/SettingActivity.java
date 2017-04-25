@@ -152,4 +152,12 @@ public class SettingActivity extends SuperActivity implements IMainView{
         }
         return false;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(updateDialog!=null&updateDialog.isShowing())updateDialog.measureWindow();
+        if(mCustomDialog!=null&mCustomDialog.isShowing())mCustomDialog.measureWindow();
+
+    }
 }

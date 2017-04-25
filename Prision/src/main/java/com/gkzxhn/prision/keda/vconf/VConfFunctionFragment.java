@@ -147,6 +147,7 @@ public class VConfFunctionFragment extends Fragment implements View.OnClickListe
 	 */
 	@Override
 	public void onResume() {
+		if(mCancelVideoDialog!=null&mCancelVideoDialog.isShowing())mCancelVideoDialog.measureWindow();
 		Log.i("VConfVideo", "VConfFunctionFragment-->onResume");
 		super.onResume();
 	}

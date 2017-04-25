@@ -297,6 +297,9 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     @Override
     protected void onResume() {
         super.onResume();
+        if(updateDialog!=null&updateDialog.isShowing())updateDialog.measureWindow();
+        if(mShowTerminalDialog!=null&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
+        if(mCancelVideoDialog!=null&mCancelVideoDialog.isShowing())mCancelVideoDialog.measureWindow();
         onRefresh();
     }
 

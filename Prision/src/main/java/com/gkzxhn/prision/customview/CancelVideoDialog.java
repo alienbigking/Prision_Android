@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import com.gkzxhn.prision.R;
@@ -57,15 +58,7 @@ public class CancelVideoDialog extends Dialog {
         setContentView(contentView);
         mSpinner= (Spinner) contentView.findViewById(R.id.spinner);
         init();
-        Window dialogWindow = this.getWindow();
-        WindowManager.LayoutParams params = dialogWindow.getAttributes();
-        WindowManager m = dialogWindow.getWindowManager();
-
-        Display d = m.getDefaultDisplay();
-        params.width = d.getWidth();
-        //	        params.height=d.getHeight();
-        dialogWindow.setGravity(Gravity.CENTER);
-        dialogWindow.setAttributes(params);
+        measureWindow();
     }
     public String getContent(){
         return content;
@@ -168,4 +161,16 @@ public class CancelVideoDialog extends Dialog {
 //            ToastUtil.showShortToast(context.getString(R.string.net_broken));
 //        }
     }
+    public void measureWindow(){
+        Window dialogWindow = this.getWindow();
+        WindowManager.LayoutParams params = dialogWindow.getAttributes();
+        WindowManager m = dialogWindow.getWindowManager();
+
+        Display d = m.getDefaultDisplay();
+        params.width = d.getWidth();
+        //	        params.height=d.getHeight();
+        dialogWindow.setGravity(Gravity.CENTER);
+        dialogWindow.setAttributes(params);
+    }
+
 }

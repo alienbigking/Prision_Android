@@ -34,6 +34,9 @@ public class CustomDialog extends Dialog {
         View contentView = LayoutInflater.from(getContext()).inflate(R.layout.custom_dialog_layout, null);
         setContentView(contentView);
         init();
+        measureWindow();
+    }
+    public void measureWindow(){
         Window dialogWindow = this.getWindow();
         WindowManager.LayoutParams params = dialogWindow.getAttributes();
         WindowManager m = dialogWindow.getWindowManager();

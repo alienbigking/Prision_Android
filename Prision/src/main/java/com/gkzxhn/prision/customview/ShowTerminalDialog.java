@@ -34,6 +34,9 @@ public class ShowTerminalDialog extends Dialog{
         contentView = LayoutInflater.from(getContext()).inflate(R.layout.show_terminal_dialog_layout, null);
         setContentView(contentView);
         init();
+       measureWindow();
+    }
+    public void measureWindow(){
         Window dialogWindow = this.getWindow();
         WindowManager.LayoutParams params = dialogWindow.getAttributes();
         WindowManager m = dialogWindow.getWindowManager();
@@ -44,7 +47,6 @@ public class ShowTerminalDialog extends Dialog{
         dialogWindow.setGravity(Gravity.CENTER);
         dialogWindow.setAttributes(params);
     }
-
     private void init(){
         setCanceledOnTouchOutside(false);
         contentView.findViewById(R.id.show_terminal_dialog_layout_tv_cancel).setOnClickListener(new View.OnClickListener() {

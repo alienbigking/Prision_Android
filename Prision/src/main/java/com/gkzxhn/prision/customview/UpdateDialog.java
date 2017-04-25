@@ -55,6 +55,9 @@ public class UpdateDialog extends Dialog {
 		setContentView(contentView);
 		initControls();
 		init();
+		measureWindow();
+	}
+	public void measureWindow(){
 		Window dialogWindow = this.getWindow();
 		WindowManager.LayoutParams params = dialogWindow.getAttributes();
 		WindowManager m = dialogWindow.getWindowManager();

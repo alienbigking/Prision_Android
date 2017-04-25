@@ -214,7 +214,12 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         }
     };
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mShowTerminalDialog!=null&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
+        if(mCustomDialog!=null&mCustomDialog.isShowing())mCustomDialog.measureWindow();
+    }
 
     /**
      * 注册广播监听器
@@ -233,4 +238,5 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         super.onDestroy();
     }
+
 }
