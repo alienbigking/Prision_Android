@@ -6,19 +6,20 @@
 package com.gkzxhn.prision.keda.callback;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.utils.LoginStateManager;
-import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.VConf;
-import com.gkzxhn.prision.keda.vconf.VConfFunctionFragment;
-import com.gkzxhn.prision.keda.vconf.VConfVideoUI;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -78,7 +79,13 @@ public class VconfMtcCallback {
 		if (VConferenceManager.mConfInfo != null) {
 			VConferenceManager.mConfInfo.tChairman = simpConfInfo.tChairman;
 			VConferenceManager.mConfInfo.tSpeaker = simpConfInfo.tSpeaker;
-			refreshBottomFragment();
+			//刷新音视频下面的工具栏
+			if (VConferenceManager.isChairMan()) {
+				GKApplication.getInstance().sendBroadcast(new Intent(Constants.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION));
+			}
+			if (VConferenceManager.isSpeaker()) {
+				GKApplication.getInstance().sendBroadcast(new Intent(Constants.MEETING_REMOVEREQSPEAKERHANDLER_ACTION));
+			}
 		}
 	}
 
@@ -112,38 +119,7 @@ public class VconfMtcCallback {
 				Conference.rejectConf();
 				return;
 			}
-//			VConferenceManager.currTMtCallLinkSate = callLinkSate;
-//			new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
-//				@Override
-//				public void run() {
-//					try {
-//						Activity ac = PcAppStackManager.Instance().currentActivity();
-//						Toast.makeText(ac, "正在连接视频", Toast.LENGTH_LONG).show();
-//						// 跳转到应答界面  自动直接应答
-//						String alias = VConferenceManager.currTMtCallLinkSate.tPeerAlias.getAlias();
-//						String e164Num = VConferenceManager.mCallPeerE164Num;
-//						// 注册视频会议Service
-//						VideoCapServiceManager.bindService();
-//						Bundle extras = new Bundle();
-//						boolean isMackCall = false;
-//						extras.putString(Constants.TERMINAL_VCONFNAME, alias);
-//						extras.putString(Constants.TERMINAL_E164NUM, e164Num);
-//						extras.putBoolean(Constants.TERMINAL_MACKCALL, isMackCall);
-//						extras.putBoolean(Constants.TERMINAL_JOINCONF, !isMackCall);
-//						if (isMackCall) {
-//							VConferenceManager.nativeConfType = EmNativeConfType.CALLING_VIDEO;
-//						} else {
-//							VConferenceManager.nativeConfType = EmNativeConfType.JOINING_VIDEO;
-//						}
-//						if (null != e164Num) {
-//							VConferenceManager.mCallPeerE164Num = e164Num;
-//						}
-//							ac.startActivity(new Intent(ac, VConfVideoUI.class),extras);
-//					}catch (Exception e){
-//						e.printStackTrace();
-//					}
-//				}
-//			});
+			// 跳转到应答界面
 		} else {
 			VConferenceManager.currTMtCallLinkSate = callLinkSate;
 
@@ -242,45 +218,11 @@ public class VconfMtcCallback {
 
 			// 接收双流
 			if (!assSendSreamStatusNtf) {
-				// final VConfAudioUI audioActivity = (VConfAudioUI) AppGlobal.getActivity(VConfAudioUI.class);
-				final VConfVideoUI videoActivity = (VConfVideoUI) PcAppStackManager.Instance().getActivity(VConfVideoUI.class);
-				// 音频播放界面 切换到双流
-				// if (audioActivity != null) {
-				// audioActivity.switchVConfFragment();
-				// }
-				// 视频播放界面 切换到双流
-				if (videoActivity != null) {
-					if (videoActivity.getVConfContentFrame() == null) {
-						return;
-					}
-					videoActivity.runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							videoActivity.getVConfContentFrame().switchDualStreamCtrl(VConferenceManager.isDualStream);
-						}
-					});
-				}
+				GKApplication.getInstance().sendBroadcast(new Intent(Constants.MEETING_ASSSENDSREAMSTATUSNTF_ACTION));
 				if (VConferenceManager.isDualStream) {
 				} else {
 					// 取消双流
 					VConferenceManager.dualStreamMan = null;
-					// vConfInfoRefresh();
-					// 音频播放界面
-					// if (audioActivity != null) {
-					// if (audioActivity.getVConfContentFrame().getBottomFunctionFragment() == null) {
-					// return;
-					// }
-					// audioActivity.getVConfContentFrame().getBottomFunctionFragment().cleanSecondEncryption();
-					// }
-
-					// 视频播放界面
-					if (videoActivity != null) {
-						if (videoActivity.getVConfContentFrame().getBottomFunctionFragment() == null) {
-							return;
-						}
-						// videoActivity.getVConfContentFrame().getBottomFunctionFragment().cleanSecondEncryption();
-					}
 				}
 			}
 		} else {
@@ -409,68 +351,6 @@ public class VconfMtcCallback {
 
 	}
 
-	*//**
-	 * 设置静音
-	 *
-	 * @param bQuiet
-	 */
-
-	public static void parseCodecQuiet(boolean bQuiet) {
-		VConfFunctionFragment vconfFunctionView = getVConfFunctionFragment();
-		if (null != vconfFunctionView) {
-			vconfFunctionView.setQuietImageView(bQuiet);
-		}
-	}
-
-	/**
-	 * 设置哑音
-	 *
-	 * @param bIsMute
-	 */
-
-	public static void parseCodecMute(boolean bIsMute) {
-		VConfFunctionFragment vconfFunctionView = getVConfFunctionFragment();
-		if (null != vconfFunctionView) {
-			vconfFunctionView.setMuteImageView(bIsMute);
-		}
-	}
-
-	/**
-	 * 向本终端申请主席（本端为主席）
-	 *
-	 *  {"mtapi":{"head":{"eventid":2074,"eventname":"ApplyChairNtf","SessionID": "1"},"body":{
-	 *    "dwMcuId" : 192,
-	 *    "dwTerId" : 1
-	 *  }
-	 *  }}
-	 * @param body
-	 */
-	public static void applyChair(String body) {
-		try {
-			final Activity currActivity = PcAppStackManager.Instance().currentActivity();
-			if (null == currActivity) return;
-
-			TMtId tMtId = (TMtId) new TMtId().fromJson(body);
-			if (null == tMtId) {
-				return;
-			}
-
-			final TMTEntityInfo entityInfo = VConferenceManager.getMtInfoByTerId(tMtId.dwTerId);
-//			if (null != entityInfo && null != entityInfo.tMtAlias) {
-//				currActivity.runOnUiThread(new Runnable() {
-//
-//					@Override
-//					public void run() {
-//						ApplyDialog ap = new ApplyDialog(currActivity, entityInfo, true);
-//						ap.show();
-//					}
-//				});
-//
-//			}
-
-		} catch (Exception e) {
-		}
-	}
 
 	/**
 	 * 向本终端申请发言（本端为主席）
@@ -479,8 +359,6 @@ public class VconfMtcCallback {
 
 	public static void applySpeakPos(String body) {
 		try {
-			final Activity currActivity = PcAppStackManager.Instance().currentActivity();
-			if (null == currActivity) return;
 
 			TMtId tMtId = (TMtId) new TMtId().fromJson(body);
 			if (null == tMtId) {
@@ -532,47 +410,9 @@ public class VconfMtcCallback {
 
 	public static void pareseTerLeftVconf(String body) {
 		TMtId mtId = (TMtId) new TMtId().fromJson(body);
-
-		Activity currentActivity = PcAppStackManager.Instance().currentActivity();
-		if (currentActivity == null) {
-			return;
-		}
 		VConferenceManager.delTmtInfoByTerId(mtId.dwTerId);// 删除此终端
 	}
 
-	/**
-	 * 获取会议底部工具栏
-	 * @return
-	 */
-
-	public static VConfFunctionFragment getVConfFunctionFragment() {
-		Activity currActivity = PcAppStackManager.Instance().currentActivity();
-		if (null == currActivity) {
-			return null;
-		}
-		VConfFunctionFragment vconfFunctionView = null;
-		if (currActivity instanceof VConfVideoUI && null != ((VConfVideoUI) currActivity).getVConfContentFrame()) {
-			vconfFunctionView = ((VConfVideoUI) currActivity).getVConfContentFrame().getBottomFunctionFragment();
-		}
-		return vconfFunctionView;
-	}
-
-	/**
-	 * 刷新音视频下面的工具栏
-	 */
-
-	private static void refreshBottomFragment() {
-		VConfFunctionFragment vconfFunctionView = getVConfFunctionFragment();
-		if (null != vconfFunctionView) {
-			if (VConferenceManager.isChairMan()) {
-				vconfFunctionView.removeReqChairmanHandler();
-			}
-			if (VConferenceManager.isSpeaker()) {
-				vconfFunctionView.removeReqSpeakerHandler();
-			}
-			vconfFunctionView.updateOperationView();
-		}
-	}
 
 	/**
 	 * 轮询信息
@@ -783,8 +623,9 @@ public class VconfMtcCallback {
 			if (jsonBodyObj.has(MyMtcCallback.KEY_basetype) && 0 == jsonBodyObj.getInt(MyMtcCallback.KEY_basetype)) {
 				return;
 			}
-			PcAppStackManager.Instance().currentActivity().runOnUiThread(new Runnable() {
 
+			new Handler(Looper.getMainLooper()).post(new Runnable() {
+				//
 				@Override
 				public void run() {
 					try {
@@ -793,11 +634,12 @@ public class VconfMtcCallback {
 								Toast.LENGTH_SHORT)
 								.show();
 					} catch (JSONException e) {
-						// TODO 尚未处理异常
 						e.printStackTrace();
 					}
 				}
 			});
+
+
 
 			VConferenceManager.quitConfAction(false, false);
 		} catch (JSONException e) {

@@ -5,6 +5,10 @@ package com.gkzxhn.prision.keda.vconf;
  * Copyright 2014  it.kedacom.com, Inc. All rights reserved.
  */
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.AudioManager;
@@ -16,7 +20,6 @@ import android.util.Log;
 
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
-import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -108,12 +111,12 @@ public class VConfVideoUI extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i("VConfVideo", "VConfVideoUI-->onCreate");
 		super.onCreate(savedInstanceState);
-		PcAppStackManager.Instance().pushActivity(this);
 		// 让音量键固定为媒体音量控制,其他的页面不要这样设置--只在音视频的界面加入这段代码
 		this.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		setContentView(R.layout.vconf_video_ui_layout);
 		initExtras();
 		onViewCreated();
+		registerReceiver();
 //		startRecord();// 先开启录屏权限请求  授权了才开启视频
 	}
 
@@ -235,7 +238,7 @@ public class VConfVideoUI extends ActionBarActivity {
 	@Override
 	protected void onDestroy() {
 		Log.w("VConfVideo", "VConfVideoUI-->onDestroy");
-		PcAppStackManager.Instance().popActivity(this, false);
+		unregisterReceiver(mBroadcastReceiver);
 //		unbindService(connection);
 //		if (recordService!= null && recordService.isRunning()){
 //			if (getUserType()){
@@ -292,6 +295,80 @@ public class VConfVideoUI extends ActionBarActivity {
 	}
 
 
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			switch (intent.getAction()){
+				case Constants.MEETING_FORCE_CLOSE_ACTION:
+					finish();
+					break;
+				case Constants.MEETING_SWITCHVCONFVIEW_ACTION:
+					switchVConfFragment();
+					break;
+				case Constants.MEETING_MUTEIMAGE_ACTION:
+					if (null !=getVConfContentFrame()) {
+						getVConfContentFrame().getBottomFunctionFragment().setMuteImageView(true);
+					}
+					break;
+				case Constants.MEETING_NOT_MUTEIMAGE_ACTION:
+					if (null !=getVConfContentFrame()) {
+						getVConfContentFrame().getBottomFunctionFragment().setMuteImageView(false);
+					}
+					break;
+				case Constants.MEETING_QUIETIMAGE_ACTION:
+					if (null !=getVConfContentFrame()) {
+						getVConfContentFrame().getBottomFunctionFragment().setQuietImageView(true);
+					}
+					break;
+				case Constants.MEETING_NOT_QUIETIMAGE_ACTION:
+					if (null !=getVConfContentFrame()) {
+						getVConfContentFrame().getBottomFunctionFragment().setQuietImageView(false);
+					}
+					break;
+				case Constants.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION:
+					if (null !=getVConfContentFrame()) {
+						getVConfContentFrame().getBottomFunctionFragment().removeReqChairmanHandler();
+						getVConfContentFrame().getBottomFunctionFragment().updateOperationView();
+					}
+					break;
+				case Constants.MEETING_REMOVEREQSPEAKERHANDLER_ACTION:
+					if (null !=getVConfContentFrame()) {
+						getVConfContentFrame().getBottomFunctionFragment().removeReqSpeakerHandler();
+						getVConfContentFrame().getBottomFunctionFragment().updateOperationView();
+					}
+					break;
+				case Constants.MEETING_ASSSENDSREAMSTATUSNTF_ACTION:
+					//视频播放界面 切换到双流
+					if (getVConfContentFrame() == null) {
+						return;
+					}
+					runOnUiThread(new Runnable() {
 
+						@Override
+						public void run() {
+							getVConfContentFrame().switchDualStreamCtrl(VConferenceManager.isDualStream);
+						}
+					});
+
+					break;
+			}
+		}
+	};
+	/**
+	 * 注册广播监听器
+	 */
+	private void registerReceiver(){
+		IntentFilter intentFilter=new IntentFilter();
+		intentFilter.addAction(Constants.MEETING_FORCE_CLOSE_ACTION);
+		intentFilter.addAction(Constants.MEETING_ASSSENDSREAMSTATUSNTF_ACTION);
+		intentFilter.addAction(Constants.MEETING_SWITCHVCONFVIEW_ACTION);
+		intentFilter.addAction(Constants.MEETING_MUTEIMAGE_ACTION);
+		intentFilter.addAction(Constants.MEETING_NOT_MUTEIMAGE_ACTION);
+		intentFilter.addAction(Constants.MEETING_QUIETIMAGE_ACTION);
+		intentFilter.addAction(Constants.MEETING_NOT_QUIETIMAGE_ACTION);
+		intentFilter.addAction(Constants.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION);
+		intentFilter.addAction(Constants.MEETING_REMOVEREQSPEAKERHANDLER_ACTION);
+		registerReceiver(mBroadcastReceiver,intentFilter);
+	}
 
 }

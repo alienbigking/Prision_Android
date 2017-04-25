@@ -26,7 +26,6 @@ import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.customview.CancelVideoDialog;
 import com.gkzxhn.prision.keda.utils.GKStateMannager;
-import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.kedacom.kdv.mt.api.Conference;
 import com.kedacom.kdv.mt.constant.EmMtCallDisReason;
@@ -147,7 +146,7 @@ public class VConfFunctionFragment extends Fragment implements View.OnClickListe
 	 */
 	@Override
 	public void onResume() {
-		if(mCancelVideoDialog!=null&mCancelVideoDialog.isShowing())mCancelVideoDialog.measureWindow();
+		if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.measureWindow();
 		Log.i("VConfVideo", "VConfFunctionFragment-->onResume");
 		super.onResume();
 	}
@@ -750,41 +749,4 @@ public class VConfFunctionFragment extends Fragment implements View.OnClickListe
 		super.onDestroy();
 	}
 
-	public void pupHangupOrEndConfDialog(final boolean isHangup) {
-		final Activity ttBaseActivity = (Activity) PcAppStackManager.Instance().currentActivity();
-		if (null == ttBaseActivity) {
-			return;
-		}
-		String title = ttBaseActivity.getString(R.string.vconf_end_msg);
-		String okTxt = ttBaseActivity.getString(R.string.vconf_end);
-		String cancelTxt = ttBaseActivity.getString(R.string.cancel);
-		if (isHangup) {
-			title = ttBaseActivity.getString(R.string.vconf_quit_msg);
-			okTxt = ttBaseActivity.getString(R.string.vconf_quit);
-		}
-
-		// 确定
-		View.OnClickListener okListener = new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				dissPopWin();
-				if (isHangup) {
-					Conference.hangupConfByReason(EmMtCallDisReason.emDisconnect_Normal);
-				} else {
-					Conference.endConf();
-				}
-			}
-		};
-
-		// 取消
-
-		View.OnClickListener cancelListener = new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				dissPopWin();
-			}
-		};
-	}
 }

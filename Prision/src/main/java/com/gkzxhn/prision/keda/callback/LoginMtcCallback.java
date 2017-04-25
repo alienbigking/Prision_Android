@@ -13,7 +13,6 @@ import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.utils.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.LoginStateManager;
-import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.TruetouchGlobal;
 import com.gkzxhn.prision.keda.utils.DNSParseUtil;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
@@ -84,8 +83,6 @@ public class LoginMtcCallback {
 			Log.e("Login", "Login Aps 失败");
 			LoginStateManager.restoreLoginState();
 			Base.logoutApsServerCmd();
-			Activity currActivity = PcAppStackManager.Instance().currentActivity();
-			clearTerminal();
 //			Toast.makeText(GKApplication.getInstance(), "APS登录失败:"+ finalApsErr, Toast.LENGTH_SHORT).show();
 			GKApplication.getInstance().sendBroadcast(new Intent(Constants.TERMINAL_FAILED_ACTION));
 			return;
@@ -275,7 +272,6 @@ public class LoginMtcCallback {
 				Log.i("Login", "注册GK成功");
 				GKApplication.getInstance().sendBroadcast(new Intent(Constants.TERMINAL_SUCCESS_ACTION));
 			} else {
-				clearTerminal();
 				new Handler(Looper.getMainLooper()).post(new Runnable() {
 
 					@Override
@@ -332,15 +328,6 @@ public class LoginMtcCallback {
 			e.printStackTrace();
 		}
 	}
-	private static void clearTerminal(){
-		//注册失败，清除
-		SharedPreferences sharedPreferences=GKApplication.getInstance().getSharedPreferences(Constants.USER_TABLE,Context.MODE_PRIVATE);
-		Editor editor=sharedPreferences.edit();
-		editor.putString(Constants.TERMINAL_ACCOUNT,"");
-		editor.putInt(Constants.TERMINAL_RATE,512);
-		editor.commit();
-	}
-
 	/**
 	 * Im登录消息
 	 *
@@ -406,8 +393,6 @@ public class LoginMtcCallback {
 				LoginStateManager.restoreLoginState();
 				Base.logoutApsServerCmd();
 				Log.i("Login", "LoginIm失败");
-				Activity currActivity = PcAppStackManager.Instance().currentActivity();
-				clearTerminal();
 //				Toast.makeText(GKApplication.getInstance(), "LoginIm失败", Toast.LENGTH_SHORT).show();
 				GKApplication.getInstance().sendBroadcast(new Intent(Constants.TERMINAL_FAILED_ACTION));
 //					GKStateMannager.instance().registerGK();

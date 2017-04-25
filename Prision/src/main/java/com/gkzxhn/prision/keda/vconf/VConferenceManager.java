@@ -17,7 +17,6 @@ import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.utils.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.LoginStateManager;
-import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.TruetouchGlobal;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
@@ -634,17 +633,13 @@ public class VConferenceManager {
 	 *  currTMtCallLinkSate
 	 */
 	public static void switchVConfViewFromCallLinkSate() {
-		Activity currActivity = PcAppStackManager.Instance().currentActivity();
 		// mcu 音频呼叫 码率为64
 		if (VConferenceManager.currTMtCallLinkSate.isAudio()) {
 			VConferenceManager.nativeConfType = EmNativeConfType.AUDIO;
 		} else {
 			// 处于被叫界面
-
 		}
-		if (currActivity instanceof VConfVideoUI) {
-			((VConfVideoUI) currActivity).switchVConfFragment();
-		}
+		GKApplication.getInstance().sendBroadcast(new Intent(Constants.MEETING_SWITCHVCONFVIEW_ACTION));
 	}
 
 	/**
@@ -660,7 +655,7 @@ public class VConferenceManager {
 				}
 		*/
 		cleanConf();
-		forceCloseVConfActivity();
+		GKApplication.getInstance().sendBroadcast(new Intent(Constants.MEETING_FORCE_CLOSE_ACTION));
 		VideoCapServiceManager.unBindService();
 		// 修改自己的状态
 		LoginStateManager.imModifySelfStateReq();
@@ -774,17 +769,6 @@ public class VConferenceManager {
 		}
 
 		return resId;
-	}
-
-	/**
-	 * 关闭音视频相关界面
-	 */
-	public static void forceCloseVConfActivity() {
-
-		VConfVideoUI vconfVideoUI = (VConfVideoUI) PcAppStackManager.Instance().getActivity(VConfVideoUI.class);
-		if (vconfVideoUI != null) {
-			PcAppStackManager.Instance().popActivity(vconfVideoUI);
-		}
 	}
 
 	/**
@@ -1021,10 +1005,10 @@ public class VConferenceManager {
 		}
 
 		Bundle extras = new Bundle();
-		extras.putString("VconfName", vconfName);
+		extras.putString(Constants.TERMINAL_VCONFNAME, vconfName);
 		extras.putString("tMtList", new Gson().toJson(tMtList));
-		extras.putInt("VconfQuality", vconfQuality);
-		extras.putInt("VconfDuration", duration);
+		extras.putInt(Constants.TERMINAL_VCONFQUALITY, vconfQuality);
+		extras.putInt(Constants.TERMINAL_VCONFDURATION, duration);
 
 		// 正在会议中
 		if (isCSVConf()) {

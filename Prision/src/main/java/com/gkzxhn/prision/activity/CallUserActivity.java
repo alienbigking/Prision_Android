@@ -217,8 +217,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     @Override
     protected void onResume() {
         super.onResume();
-        if(mShowTerminalDialog!=null&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
-        if(mCustomDialog!=null&mCustomDialog.isShowing())mCustomDialog.measureWindow();
+        if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
+        if(mCustomDialog!=null&&mCustomDialog.isShowing())mCustomDialog.measureWindow();
     }
 
     /**

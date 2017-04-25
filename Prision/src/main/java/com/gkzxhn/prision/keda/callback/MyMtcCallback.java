@@ -5,12 +5,14 @@
 
 package com.gkzxhn.prision.keda.callback;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.content.Intent;
+import android.os.Looper;
 import android.widget.Toast;
 
+import com.gkzxhn.prision.R;
+import com.gkzxhn.prision.common.Constants;
+import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.keda.utils.LoginStateManager;
-import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.google.gson.Gson;
@@ -171,11 +173,10 @@ public class MyMtcCallback extends MtcCallback {
 				int reson = -1;
 				if (jsonBodyObj.has(KEY_basetype)) {
 					reson = jsonBodyObj.getInt(KEY_basetype);
-					PcAppStackManager.Instance().currentActivity().runOnUiThread(new Runnable() {
-
+					new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
 						@Override
 						public void run() {
-							Toast.makeText(PcAppStackManager.Instance().currentActivity(), "验证失败", Toast.LENGTH_SHORT)
+							Toast.makeText(GKApplication.getInstance(), R.string.check_failed, Toast.LENGTH_SHORT)
 									.show();
 						}
 					});
@@ -248,7 +249,7 @@ public class MyMtcCallback extends MtcCallback {
 			}
 			// 向本终端申请主席（本端为主席）
 			else if (EmMtEntity.ApplyChairNtf.toString().equalsIgnoreCase(eventname)) {
-				VconfMtcCallback.applyChair(body);
+//				VconfMtcCallback.applyChair(body);
 			}
 			// 向本终端申请发言（本端为主席）
 			else if (EmMtEntity.ApplySpeakNtf.toString().equalsIgnoreCase(eventname)) {
@@ -329,13 +330,13 @@ public class MyMtcCallback extends MtcCallback {
 			// 静音
 			else if (EmMtEntity.CodecQuietNtf.toString().equalsIgnoreCase(eventname)) {
 				if (jsonBodyObj.has(KEY_basetype)) {
-					VconfMtcCallback.parseCodecQuiet(jsonBodyObj.getBoolean(KEY_basetype));
+					GKApplication.getInstance().sendBroadcast(new Intent(jsonBodyObj.getBoolean(KEY_basetype)?Constants.MEETING_QUIETIMAGE_ACTION:Constants.MEETING_NOT_QUIETIMAGE_ACTION));
 				}
 			}
 			// 哑音
 			else if (EmMtEntity.CodecMuteNtf.toString().equalsIgnoreCase(eventname)) {
-				if (jsonBodyObj.has(KEY_basetype)) {
-					VconfMtcCallback.parseCodecMute(jsonBodyObj.getBoolean(KEY_basetype));
+				if (jsonBodyObj.has(KEY_basetype)) {// 设置哑音
+					GKApplication.getInstance().sendBroadcast(new Intent(jsonBodyObj.getBoolean(KEY_basetype)?Constants.MEETING_MUTEIMAGE_ACTION:Constants.MEETING_NOT_MUTEIMAGE_ACTION));
 				}
 			}
 			// 会议列表信息
@@ -372,21 +373,19 @@ public class MyMtcCallback extends MtcCallback {
 			else if (EmMtEntity.ProlongResultNtf.toString().equalsIgnoreCase(eventname)) {
 				if (VConferenceManager.isChairMan()) {
 					if (jsonBodyObj.has(KEY_basetype) && jsonBodyObj.getBoolean(KEY_basetype)) {
-						PcAppStackManager.Instance().currentActivity().runOnUiThread(new Runnable() {
-
+						new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
 							@Override
 							public void run() {
-								Toast.makeText(PcAppStackManager.Instance().currentActivity(), "延长会议成功",
-										Toast.LENGTH_SHORT).show();
+								Toast.makeText(GKApplication.getInstance(), R.string.delay_meeting_success, Toast.LENGTH_SHORT)
+										.show();
 							}
 						});
 					} else {
-						PcAppStackManager.Instance().currentActivity().runOnUiThread(new Runnable() {
-
+						new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
 							@Override
 							public void run() {
-								Toast.makeText(PcAppStackManager.Instance().currentActivity(), "延长会议失败",
-										Toast.LENGTH_SHORT).show();
+								Toast.makeText(GKApplication.getInstance(), R.string.delay_meeting_failed, Toast.LENGTH_SHORT)
+										.show();
 							}
 						});
 					}

@@ -69,4 +69,24 @@ public interface Constants {
     final String TERMINAL_FAILED_ACTION="com.gkzxhn.prision.TERMINAL_FAILED";//注册终端失败
     final String ONLINE_FAILED_ACTION="com.gkzxhn.prision.ONLINE_FAILED_ACTION";//连线失败
     final String ONLINE_SUCCESS_ACTION="com.gkzxhn.prision.ONLINE_SUCCESS_ACTION";//连线成功
+    //退出视频会议
+    final String MEETING_FORCE_CLOSE_ACTION="com.gkzxhn.prision.MEETING_FORCE_CLOSE_ACTION";
+    //接收双流
+    final String MEETING_ASSSENDSREAMSTATUSNTF_ACTION="com.gkzxhn.prision.MEETING_ASSSENDSREAMSTATUSNTF_ACTION";
+    //根据呼叫状态选择是否切换界面
+    final String MEETING_SWITCHVCONFVIEW_ACTION="com.gkzxhn.prision.MEETING_SWITCHVCONFVIEW_ACTION";
+    //设置哑音图标
+    final String MEETING_MUTEIMAGE_ACTION="com.gkzxhn.prision.MEETING_MUTEIMAGE_ACTION";
+    //不设置哑音图标
+    final String MEETING_NOT_MUTEIMAGE_ACTION="com.gkzxhn.prision.MEETING_NOT_MUTEIMAGE_ACTION";
+    // 设置静音
+    final String MEETING_QUIETIMAGE_ACTION="com.gkzxhn.prision.MEETING_QUIETIMAGE_ACTION";
+    // 不设置静音
+    final String MEETING_NOT_QUIETIMAGE_ACTION="com.gkzxhn.prision.MEETING_NOT_QUIETIMAGE_ACTION";
+    // 刷新音视频下面的工具栏
+    final String MEETING_REMOVEREQCHAIRMANHANDLER_ACTION="com.gkzxhn.prision.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION";
+    // 刷新音视频下面的工具栏
+    final String MEETING_REMOVEREQSPEAKERHANDLER_ACTION="com.gkzxhn.prision.MEETING_REMOVEREQSPEAKERHANDLER_ACTION";
+
+
 }

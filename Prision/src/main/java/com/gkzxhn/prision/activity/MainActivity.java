@@ -25,7 +25,6 @@ import com.gkzxhn.prision.customview.calendar.CustomDate;
 import com.gkzxhn.prision.entity.MeetingEntity;
 import com.gkzxhn.prision.entity.VersionEntity;
 import com.gkzxhn.prision.keda.utils.GKStateMannager;
-import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.MainPresenter;
 import com.gkzxhn.prision.view.IMainView;
@@ -52,7 +51,6 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PcAppStackManager.Instance().pushActivity(this);
         setContentView(R.layout.main_layout);
         initControls();
         init();
@@ -297,9 +295,9 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     @Override
     protected void onResume() {
         super.onResume();
-        if(updateDialog!=null&updateDialog.isShowing())updateDialog.measureWindow();
-        if(mShowTerminalDialog!=null&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
-        if(mCancelVideoDialog!=null&mCancelVideoDialog.isShowing())mCancelVideoDialog.measureWindow();
+        if(updateDialog!=null&&updateDialog.isShowing())updateDialog.measureWindow();
+        if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
+        if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.measureWindow();
         onRefresh();
     }
 
@@ -310,7 +308,6 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
 
     @Override
     protected void onDestroy() {
-        PcAppStackManager.Instance().popActivity(this);
         if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.dismiss();
         if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.dismiss();
         if(updateDialog!=null&&updateDialog.isShowing())updateDialog.dismiss();

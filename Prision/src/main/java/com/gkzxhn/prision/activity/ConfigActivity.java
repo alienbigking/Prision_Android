@@ -112,6 +112,11 @@ public class ConfigActivity extends SuperActivity {
             if(mTimer!=null) mTimer.cancel();
             if(intent.getAction().equals(Constants.TERMINAL_FAILED_ACTION)){//GK注册失败
                 showToast(R.string.terminal_account_not_available);
+                //清除终端信息
+                SharedPreferences.Editor editor=preferences.edit();
+                editor.putString(Constants.TERMINAL_ACCOUNT,"");
+                editor.putInt(Constants.TERMINAL_RATE,512);
+                editor.commit();
             }else if(intent.getAction().equals(Constants.TERMINAL_SUCCESS_ACTION)){// GK 注册成功
                 ConfigActivity.this.setResult(RESULT_OK);
                 ConfigActivity.this.finish();

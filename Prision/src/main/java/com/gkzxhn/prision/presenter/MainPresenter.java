@@ -43,6 +43,8 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
                         if(view!=null){
                             view.updateItems(datas);
                         }
+                    }else{
+                        view.updateItems(null);
                     }
                 }catch (Exception e){ }
 
