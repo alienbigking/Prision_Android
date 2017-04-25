@@ -88,7 +88,6 @@ public class VconfMtcCallback {
 	 *
 	 */
 
-	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	public static void parseCallLinkSate(String callingSateJson) {
 		TMtCallLinkSate callLinkSate = new TMtCallLinkSate().fromJson(callingSateJson);
 		if (null == callLinkSate) {

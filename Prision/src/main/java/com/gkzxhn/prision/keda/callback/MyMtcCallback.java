@@ -97,7 +97,6 @@ public class MyMtcCallback extends MtcCallback {
 	 * "SessionID": "1" }, "body":{ "basetype" : true } } }
 	 * 
 	 */
-	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	public void callback(String result) {
 		if (StringUtils.isNull(result)) {
 			return;

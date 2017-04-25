@@ -7,6 +7,7 @@ package com.gkzxhn.prision.keda.vconf;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,7 +19,6 @@ import com.gkzxhn.prision.keda.utils.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.LoginStateManager;
 import com.gkzxhn.prision.keda.utils.PcAppStackManager;
 import com.gkzxhn.prision.keda.utils.TruetouchGlobal;
-import com.gkzxhn.prision.keda.utils.ActivityUtils;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.keda.utils.TerminalUtils;
@@ -541,8 +541,9 @@ public class VConferenceManager {
 		if (null != e164) {
 			VConferenceManager.mCallPeerE164Num = e164;
 		}
-
-		ActivityUtils.openActivity(cucrActivity, VConfVideoUI.class, extras);
+		Intent intent=new Intent(cucrActivity,VConfVideoUI.class);
+		intent.putExtras(extras);
+		cucrActivity.startActivity(intent);
 	}
 
 	/**
@@ -621,7 +622,9 @@ public class VConferenceManager {
 		pBundle.putString(Constants.TERMINAL_E164NUM, e164);
 		pBundle.putBoolean("JoinVConf", true);
 		VConferenceManager.nativeConfType = EmNativeConfType.JOINING_VIDEO;
-		ActivityUtils.openActivity(activity, VConfVideoUI.class, pBundle);
+		Intent intent=new Intent(activity,VConfVideoUI.class);
+		intent.putExtras(pBundle);
+		activity.startActivity(intent);
 	}
 
 
@@ -1031,9 +1034,9 @@ public class VConferenceManager {
 		}
 		// 注册视频会议Service
 		VideoCapServiceManager.bindService();
-
-		ActivityUtils.openActivity(activity, VConfVideoUI.class, extras);
-
+		Intent intent=new Intent(activity,VConfVideoUI.class);
+		intent.putExtras(extras);
+		activity.startActivity(intent);
 	}
 
 	 

@@ -340,7 +340,6 @@ public class VConfFunctionFragment extends Fragment implements View.OnClickListe
 				}
 				if(!mCancelVideoDialog.isShowing())mCancelVideoDialog.show();
 				break;
-
 			// 退出会议
 			case R.id.ExitConf_Text:
 				if (checkExceptionQuit()) {
