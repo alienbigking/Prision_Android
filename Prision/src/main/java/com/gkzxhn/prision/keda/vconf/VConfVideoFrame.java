@@ -185,9 +185,9 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	 */
 	private void setIdCheckData() {
 		SharedPreferences sharedPreferences=getActivity().getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
-		String avatarUri =sharedPreferences.getString (Constants.OTHER_CARD+3,"");
-		String idCardUri1 = sharedPreferences.getString (Constants.OTHER_CARD+1,"");
-		String idCardUri2 =sharedPreferences.getString (Constants.OTHER_CARD+2,"");
+		String avatarUri =Constants.DOMAIN_NAME_XLS+"/"+sharedPreferences.getString (Constants.OTHER_CARD+3,"");
+		String idCardUri1 = Constants.DOMAIN_NAME_XLS+"/"+sharedPreferences.getString (Constants.OTHER_CARD+1,"");
+		String idCardUri2 =Constants.DOMAIN_NAME_XLS+"/"+sharedPreferences.getString (Constants.OTHER_CARD+2,"");
 		ImageLoader.getInstance().displayImage(avatarUri,mIv_avatar);
 		ImageLoader.getInstance().displayImage(idCardUri1,mIv_id_card_01);
 		ImageLoader.getInstance().displayImage(idCardUri2,mIv_id_card_02);
