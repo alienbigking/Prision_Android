@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.gkzxhn.prision.R;
@@ -72,6 +73,11 @@ public class CancelVideoDialog extends Dialog {
     private void init(){
         rateArray = context.getResources().getStringArray(isCancelVideo?R.array.cancel_video_reason:R.array.cancel_meeting_reason);
         content =rateArray[0];
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+
+                R.layout.spinner_item, rateArray);
+
+        mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
