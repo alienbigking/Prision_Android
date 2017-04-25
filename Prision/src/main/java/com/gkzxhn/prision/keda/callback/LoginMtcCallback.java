@@ -260,16 +260,6 @@ public class LoginMtcCallback {
 				Configure.setAnswerMode(1);// 设置应答模式
 				Configure.setASymmetricNetCfgCmd(true);// 设置非对称网络
 				Log.i("Login", "注册GK成功");
-//				new Handler(Looper.getMainLooper()).post(new Runnable() {
-//
-//					@Override
-//					public void run() {
-//						Log.e("注册GK成功","raleigh_Test");
-//						Toast.makeText(MyApplication.getContext(), "GK注册成功...", Toast.LENGTH_SHORT).show();
-//					}
-//				});
-
-				Log.i("Login", "注册GK成功");
 				GKApplication.getInstance().sendBroadcast(new Intent(Constants.TERMINAL_SUCCESS_ACTION));
 			} else {
 				new Handler(Looper.getMainLooper()).post(new Runnable() {

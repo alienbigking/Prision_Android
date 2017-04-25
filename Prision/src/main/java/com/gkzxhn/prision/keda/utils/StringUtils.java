@@ -37,6 +37,13 @@
 
 package com.gkzxhn.prision.keda.utils;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.Surface;
+import android.view.WindowManager;
+
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -2580,6 +2587,131 @@ public class StringUtils {
 		return sb.toString();
 	}
 
+
+	/**
+	 * 终端设备的宽高
+	 *
+	 * @Description
+	 * @return
+	 */
+	public static int[] terminalWH(Context context) {
+		int[] wh = new int[2];
+
+		DisplayMetrics dm = new DisplayMetrics();
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		wm.getDefaultDisplay().getMetrics(dm);
+
+		wh[0] = dm.widthPixels;
+		wh[1] = dm.heightPixels;
+
+		// int orientation =
+		// KTruetouchApplication.mOurApplication.getResources().getConfiguration().orientation;
+		// if (orientation == Configuration.ORIENTATION_LANDSCAPE) {// 横屏
+		// } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {// 竖屏
+		// }
+
+		return wh;
+	}
+
+	/**
+	 * 终端设备高度
+	 *
+	 * @Description
+	 * @return
+	 */
+	public static int terminalH(Context context) {
+		DisplayMetrics dm = new DisplayMetrics();
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		wm.getDefaultDisplay().getMetrics(dm);
+
+		return dm.heightPixels;
+	}
+
+	/**
+	 * 终端设备的宽度
+	 *
+	 * @Description
+	 * @return
+	 */
+	public static int terminalW(Context context) {
+		DisplayMetrics dm = new DisplayMetrics();
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		wm.getDefaultDisplay().getMetrics(dm);
+
+		return dm.widthPixels;
+	}
+
+
+
+	/**
+	 * 屏幕方向角度
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static int getRotationAngle(Context context) {
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display d = wm.getDefaultDisplay();
+		int angle = 0;
+		switch (d.getRotation()) {
+			case Surface.ROTATION_0: // 手机处于正常状态
+				angle = 0;
+				break;
+
+			case Surface.ROTATION_90:// 手机旋转90度
+				angle = 90;
+				break;
+
+			case Surface.ROTATION_180:// 手机旋转180度
+				angle = 180;
+				break;
+
+			case Surface.ROTATION_270:// 手机旋转270度
+				angle = 270;
+				break;
+
+			default:
+				break;
+		}
+
+		return angle;
+	}
+
+
+
+	/**
+	 * 扬声器模式
+	 *
+	 * @param context
+	 * @param useMaxVolume 使用最大音量
+	 * @param forceOpenVolume 强制开启音量，当音量为0时有效
+	 */
+	public static void setSpeakerphoneOn(Context context, boolean useMaxVolume, boolean forceOpenVolume) {
+		if (null == context) {
+			return;
+		}
+
+		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		if (audioManager.isSpeakerphoneOn()) {
+			return;
+		}
+
+		int volumeIndex = 0;
+		if (useMaxVolume) {
+			volumeIndex = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
+		} else {
+			volumeIndex = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+			if (volumeIndex <= 0 && forceOpenVolume) {
+				volumeIndex = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
+			}
+		}
+		// 打开扬声器
+		audioManager.setSpeakerphoneOn(true);
+
+		// 设置音量
+		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volumeIndex, AudioManager.STREAM_VOICE_CALL);
+		audioManager.setMode(AudioManager.MODE_NORMAL);
+	}
 
 
 }

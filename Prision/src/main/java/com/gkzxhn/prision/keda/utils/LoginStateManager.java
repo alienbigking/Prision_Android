@@ -7,7 +7,10 @@ package com.gkzxhn.prision.keda.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.gkzxhn.prision.common.GKApplication;
@@ -29,11 +32,11 @@ import org.json.JSONObject;
 import java.net.InetAddress;
 
 /**
-  * 登录状态管理机
-  * 
-  * @author chenj
-  * @date 2014-8-15
-  */
+ * 登录状态管理机
+ *
+ * @author chenj
+ * @date 2014-8-15
+ */
 
 public class LoginStateManager {
 
@@ -49,7 +52,7 @@ public class LoginStateManager {
 
 	/**
 	 * 本端ip
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -60,10 +63,10 @@ public class LoginStateManager {
 
 	/**
 	 * 登录ASP
-	 * 
+	 *
 	 * <pre>
 	 * 	http://172.16.179.3:60080/v5/aps/login?Version=2.6.0.1&UserName=0512800960000&PassWord=21218cca77804d2ba1922c33e0151105&DeviceType=TrueLink&ApsLocalIp=172.16.179.3
-	 * 
+	 *
 	 * @param account
 	 * @param pwd
 	 */
@@ -93,7 +96,7 @@ public class LoginStateManager {
 				final TMtXAPSvr mtXAPSvr = new TMtXAPSvr();
 				mtXAPSvr.emAddrType = EmServerAddrType.emSrvAddrTypeCustom;
 				xapSvrList.arrMtXAPSvr = new TMtXAPSvr[] {
-					mtXAPSvr
+						mtXAPSvr
 				};
 
 				mtXAPSvr.achDomain = serverAddr;
@@ -125,11 +128,25 @@ public class LoginStateManager {
 				}
 
 				Log.i("Login", "LoginStateMannager.loginAps()...");
+				String defVersionName="5.0.0.0";
+				PackageManager packageMgr = GKApplication.getInstance().getPackageManager();
+				String packageName = GKApplication.getInstance().getPackageName();
+				if (packageMgr != null &&!TextUtils.isEmpty(packageName)) {
+					PackageInfo packageInfo = null;
+					try {
+						packageInfo = packageMgr.getPackageInfo(packageName, 0);
+						defVersionName=packageInfo.versionName;
+					} catch (PackageManager.NameNotFoundException e) {
+						e.printStackTrace();
+					}
+
+				}
+
 
 				final TMTApsLoginParam apsLoginParam = new TMTApsLoginParam();
 				apsLoginParam.achPassword = pwd;
 				apsLoginParam.achUsername = account;
-				apsLoginParam.achSoftwareVer = TerminalUtils.versionName(GKApplication.getInstance(), "5.0.0.0");
+				apsLoginParam.achSoftwareVer =defVersionName;
 				apsLoginParam.achModelName = TruetouchGlobal.MTINFO_SKYWALKER_APS;
 
 				imLogining = true;
@@ -144,7 +161,7 @@ public class LoginStateManager {
 
 	/**
 	 * 登录IM
-	 * 
+	 *
 	 * @param userLogin
 	 */
 	public synchronized static void loginIm(TImUserLogin userLogin) {
@@ -157,18 +174,18 @@ public class LoginStateManager {
 	}
 
 	/**
-	* 还原所有登录状态
-	*/
+	 * 还原所有登录状态
+	 */
 	public static void restoreLoginState() {
 		imLogining = false;
 		imLogin = false;
 	}
 
 	/**
-		* 获取平台Token
-		* 
-		* @param platformIp
-		*/
+	 * 获取平台Token
+	 *
+	 * @param platformIp
+	 */
 
 	public synchronized static void getPlatformToken(String platformIp) {
 
@@ -203,7 +220,7 @@ public class LoginStateManager {
 
 	/**
 	 * 修改自己的状态请求
-	 * @return 
+	 * @return
 	 */
 
 	public static int imModifySelfStateReq() {

@@ -20,7 +20,6 @@ import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.keda.utils.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
-import com.gkzxhn.prision.keda.utils.TerminalUtils;
 import com.kedacom.kdv.mt.api.Conference;
 import com.kedacom.kdv.mt.constant.EmMtCallDisReason;
 import com.kedacom.kdv.mt.constant.EmNativeConfType;
@@ -75,8 +74,8 @@ public class VConfJoinVideoFrame extends Fragment implements View.OnClickListene
 		if (StringUtils.equals(android.os.Build.MODEL, "MI 2")) {
 
 		} else {
-			int h = TerminalUtils.terminalH(getActivity());
-			int w = TerminalUtils.terminalW(getActivity());
+			int h = StringUtils.terminalH(getActivity());
+			int w = StringUtils.terminalW(getActivity());
 
 			// 保证预览头像为4:3
 			FrameLayout facingFrame = (FrameLayout) getView().findViewById(R.id.facingFrame);

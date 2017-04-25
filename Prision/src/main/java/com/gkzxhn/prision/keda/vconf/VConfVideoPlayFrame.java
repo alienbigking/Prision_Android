@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.gkzxhn.prision.R;
-import com.gkzxhn.prision.keda.utils.TerminalUtils;
+import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.kedacom.truetouch.video.player.EGLConfigChooser;
 import com.kedacom.truetouch.video.player.EGLContextFactory;
 import com.kedacom.truetouch.video.player.EGLWindowSurfaceFactory;
@@ -257,7 +257,7 @@ public class VConfVideoPlayFrame extends Fragment implements View.OnClickListene
 			return;
 		}
 
-		int[] wh = TerminalUtils.terminalWH(getActivity());
+		int[] wh = StringUtils.terminalWH(getActivity());
 		if (null == wh || wh.length != 2 || wh[0] == 0) {
 			return;
 		}

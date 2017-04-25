@@ -16,7 +16,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
-import com.gkzxhn.prision.keda.utils.TerminalUtils;
+import com.gkzxhn.prision.keda.utils.StringUtils;
 
 import java.util.List;
 
@@ -254,7 +254,7 @@ public class MyFacingView extends SurfaceView implements SurfaceHolder.Callback 
 		Camera.CameraInfo info = new Camera.CameraInfo();
 		Camera.getCameraInfo(mCameraId, info);
 
-		int degrees = TerminalUtils.getRotationAngle(getContext());
+		int degrees = StringUtils.getRotationAngle(getContext());
 		int angle;
 		if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
 			angle = (info.orientation + degrees) % 360;

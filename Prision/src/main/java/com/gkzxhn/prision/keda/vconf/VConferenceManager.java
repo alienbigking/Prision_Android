@@ -20,7 +20,6 @@ import com.gkzxhn.prision.keda.utils.LoginStateManager;
 import com.gkzxhn.prision.keda.utils.TruetouchGlobal;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.utils.StringUtils;
-import com.gkzxhn.prision.keda.utils.TerminalUtils;
 import com.google.gson.Gson;
 import com.kedacom.kdv.mt.api.Conference;
 import com.kedacom.kdv.mt.bean.EmPeerProductId;
@@ -787,7 +786,7 @@ public class VConferenceManager {
 			@Override
 			public void run() {
 				// 连接到耳机，设置模式无效
-				TerminalUtils.setSpeakerphoneOn(TruetouchGlobal.getContext(), true, true);
+				StringUtils.setSpeakerphoneOn(TruetouchGlobal.getContext(), true, true);
 			}
 		}).start();
 	}

@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
 
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
-import com.gkzxhn.prision.keda.utils.TerminalUtils;
+import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.kedacom.kdv.mt.api.Configure;
 import com.kedacom.kdv.mt.constant.EmNativeConfType;
 import com.kedacom.truetouch.video.capture.VideoCapture;
@@ -173,7 +173,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 		registerListeners();
 		super.onViewCreated(view, savedInstanceState);
 		setIdCheckData();
-		wh = TerminalUtils.terminalWH(getActivity());
+		wh = StringUtils.terminalWH(getActivity());
 		initPreGLSurfaceView();
 		computePipViewLayoutParams();
 		// 存储本地音视频入会类型为：视频会议
@@ -852,7 +852,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 
 		// 设置过一次之后不需要再重新设置了
 		mIsRsetPipFramePosition = false;
-		int[] wh = TerminalUtils.terminalWH(getActivity());
+		int[] wh = StringUtils.terminalWH(getActivity());
 		int statusBarHeight = 0;
 		// 全屏时不计算状态栏
 		// statusBarHeight = TerminalUtils.getStatusBarHeight(getActivity());
@@ -928,7 +928,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 			return;
 		}
 
-		int[] wh = TerminalUtils.terminalWH(getActivity());
+		int[] wh = StringUtils.terminalWH(getActivity());
 
 		if (null == wh || wh.length != 2 || wh[0] == 0) {
 			return;
@@ -1160,7 +1160,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	 * @return
 	 */
 	private boolean isScreenLandscape() {
-		int[] wh = TerminalUtils.terminalWH(getActivity());
+		int[] wh = StringUtils.terminalWH(getActivity());
 		if (null == wh || wh.length != 2 || wh[0] == 0) {
 			return false;
 		}
