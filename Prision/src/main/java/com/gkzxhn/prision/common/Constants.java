@@ -16,7 +16,7 @@ public interface Constants {
     final String SD_ROOT_PHOTO_PATH = SD_ROOT_PATH+"/photo/";//图片，不自动删除
     final String SD_PHOTO_PATH = SD_ROOT_PHOTO_PATH+"cutPhoto/";//拍照存储或压缩图片的图片路径,启动时自动删除
     final String SD_AUDIO_PATH = SD_ROOT_PATH+"/audio/";
-
+    final boolean IS_DEBUG_MODEL=true;//debug模式打印日志到控制台,发布版本不打印
     /*-------------------------------User Tab-------------------------------------------------*/
     final String USER_TABLE="user_table";
     final String USER_IS_UNAUTHORIZED="isUnauthorized";
@@ -48,7 +48,7 @@ public interface Constants {
     final String REQUEST_CANCEL_MEETING_URL=DOMAIN_NAME_XLS+"/api/v1/meetings";// 取消会见
     final String REQUEST_MEETING_DETAIL_URL=DOMAIN_NAME_XLS+"/api/v1/families";// 会见详情
     final String REQUEST_VERSION_URL=DOMAIN_NAME_XLS+"/api/v1/versions/2";//版本更新
-
+    final String REQUEST_CRASH_LOG_URL=DOMAIN_NAME_XLS+"/api/v1/loggers";//版本更新
 
     /*-------------------------------msg what-------------------------------------------------*/
     final int START_REFRESH_UI=1,STOP_REFRESH_UI=2;//msg what

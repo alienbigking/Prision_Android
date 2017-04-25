@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.activity.LoginActivity;
 import com.gkzxhn.prision.keda.utils.TruetouchGlobal;
+import com.gkzxhn.prision.utils.CrashHandler;
 import com.gkzxhn.prision.utils.KDInitUtil;
 import com.gkzxhn.prision.utils.NimInitUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -29,7 +30,7 @@ import java.io.File;
  * Created by Raleigh.Luo on 17/4/10.
  */
 
-public class GKApplication extends Application{
+public class GKApplication extends Application {
     private static GKApplication application;
     public static GKApplication getInstance() {
         return application;
@@ -37,6 +38,7 @@ public class GKApplication extends Application{
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private ImageLoaderConfiguration config = null;
     private BaseDiskCache imageLoadCache;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -44,6 +46,8 @@ public class GKApplication extends Application{
         new NimInitUtil().initNim();// 云信SDK相关初始化及后续操作
         KDInitUtil.init();// 科达SDK相关初始化及后续操作
         initImageLoader();
+        //收集崩溃日志
+        CrashHandler.getInstance().init(this);
     }
     private void initImageLoader(){
         File pictureCacheDirFile = new File(Constants.SD_IMAGE_CACHE_PATH);
