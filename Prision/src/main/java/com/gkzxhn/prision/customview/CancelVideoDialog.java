@@ -3,6 +3,7 @@ package com.gkzxhn.prision.customview;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
@@ -16,7 +17,10 @@ import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import com.gkzxhn.prision.R;
+import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
+import com.gkzxhn.prision.model.iml.MainModel;
+import com.gkzxhn.prision.view.IBaseView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -41,6 +45,7 @@ public class CancelVideoDialog extends Dialog {
     private View.OnClickListener onClickListener;
     private boolean isCancelVideo;
 
+    private MainModel mModel;
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
@@ -49,6 +54,7 @@ public class CancelVideoDialog extends Dialog {
         super(context, R.style.update_dialog_style);
         this.context=context;
         this.isCancelVideo=isCancelVideo;
+        mModel=new MainModel();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,72 +101,42 @@ public class CancelVideoDialog extends Dialog {
                 dismiss();
                 CommonHelper.clapseSoftInputMethod((Activity) context);
                 if(onClickListener!=null)onClickListener.onClick(view);
-//                if(isCancelVideo)sendMessage();
+                if(isCancelVideo)sendMessage();
 
             }
         });
     }
-//    private void sendMessage(){
-//        String sessionId= Config.xyAccount;
-//        if(sessionId!=null&&sessionId.length()>0) {
-////            // 创建文本消息
-////            IMMessage message = MessageBuilder.createTextMessage(
-////                    sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-////                    SessionTypeEnum.P2P, // 聊天类型，单聊或群组
-////                    content // 文本内容
-////            );
-////// 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-////            NIMClient.getService(MsgService.class).sendMessage(message, false);
-//            // 构造自定义通知，指定接收者
-//            CustomNotification notification = new CustomNotification();
-//            notification.setSessionId(sessionId);
-//            notification.setSessionType( SessionTypeEnum.P2P);
-//
-//// 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
-//// 这里以类型 “1” 作为“正在输入”的状态通知。
-//            JSONObject json = new JSONObject();
-//            try {
-//                json.put("msg", content);
-//                json.put("code", 0);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            notification.setContent(json.toString());
-//
-//// 发送自定义通知
-//            NIMClient.getService(MsgService.class).sendCustomNotification(notification);
-//        }
-//        sendCancelMeetingToServer();
-//
-//
-//    }
+    private void sendMessage(){
+        SharedPreferences sharedPreferences=mModel.getSharedPreferences();
+        String otherAccount= sharedPreferences.getString(Constants.EXTRA,"");//对方云信帐号
+        String meetingId= sharedPreferences.getString(Constants.EXTRAS,"");//记录ID
+        if(otherAccount!=null&&otherAccount.length()>0) {
+//// 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+//            NIMClient.getService(MsgService.class).sendMessage(message, false);
+            // 构造自定义通知，指定接收者
+            CustomNotification notification = new CustomNotification();
+            notification.setSessionId(otherAccount);
+            notification.setSessionType( SessionTypeEnum.P2P);
 
-    /**
-     * 发送取消会见至服务器
-     */
-    private void sendCancelMeetingToServer() {
-//        if (NetWorkUtils.isAvailable(context)) {
-//            Retrofit retrofit = new Retrofit.Builder()
-//                    .baseUrl(Constants.URL_HEAD)
-//                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//                    .addConverterFactory(GsonConverterFactory.create())
-//                    .build();
-//            ApiService apiService = retrofit.create(ApiService.class);
-//            String msg = "{\"remarks\":\"" + content + "\"}";
-//            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), msg);
-//            apiService.cancelMeeting(Config.meetingId, body).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new SimpleObserver<ResponseBody>() {
-//                        @Override public void onError(Throwable e) {
-//                        }
-//
-//                        @Override public void onNext(ResponseBody responseBody) {
-//
-//                        }
-//                    });
-//        } else {
-//            ToastUtil.showShortToast(context.getString(R.string.net_broken));
-//        }
+// 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
+// 这里以类型 “1” 作为“正在输入”的状态通知。
+            JSONObject json = new JSONObject();
+            try {
+                json.put("msg", content);
+                json.put("code", 0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            notification.setContent(json.toString());
+
+// 发送自定义通知
+            NIMClient.getService(MsgService.class).sendCustomNotification(notification);
+        }
+        mModel.requestCancel(meetingId,content,null);
+
+
     }
+
     public void measureWindow(){
         Window dialogWindow = this.getWindow();
         WindowManager.LayoutParams params = dialogWindow.getAttributes();

@@ -29,6 +29,7 @@ public interface Constants {
     final String TERMINAL_PASSWORD="terminal_password";//终端密码，空
     final String LAST_IGNORE_VERSION="last_ignore_version";//上一个忽略的版本
     final String OTHER_CARD="other_card";//身份证信息
+    final String OTHER_ACCOUNT="other_account";//身份证信息
     final String TERMINAL_ADDRESS= "222.244.146.206";//科达服务器终端
     /*-------------------------------Video Config-------------------------------------------------*/
     final  String TERMINAL_E164NUM = "e164Num";

@@ -47,7 +47,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private ProgressDialog mProgress;
     private SharedPreferences preferences;
     private String phone=null;
-    private String nickName=null;
+    private String nickName=null,id=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +62,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         ivCard02= (ImageView) findViewById(R.id.call_user_layout_iv_card_02);
     }
     private void init(){
-//        String id=getIntent().getStringExtra(Constants.EXTRA);
+       id=getIntent().getStringExtra(Constants.EXTRA);
         phone=getIntent().getStringExtra(Constants.EXTRAS);
         nickName=getIntent().getStringExtra(Constants.EXTRA_TAB);
         mProgress = ProgressDialog.show(this, null, getString(R.string.check_other_status));
@@ -89,8 +89,10 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     }
     public void stopVConfVideo(){
         stopProgress();
-        mCustomDialog.setTitle(getString(R.string.other_offline));
-        mCustomDialog.show();
+        if(mCustomDialog!=null) {
+            mCustomDialog.setTitle(getString(R.string.other_offline));
+            mCustomDialog.show();
+        }
     }
     public void onClickListener(View view){
         switch (view.getId()){
@@ -147,6 +149,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         editor.putString(Constants.OTHER_CARD+1,img_urls[0]);
         editor.putString(Constants.OTHER_CARD+2,img_urls[1]);
         editor.putString(Constants.OTHER_CARD+3,img_urls[2]);
+        editor.putString(Constants.EXTRA,phone);
+        editor.putString(Constants.EXTRAS,id);
         editor.commit();
 
     }
@@ -235,6 +239,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
 
     @Override
     protected void onDestroy() {
+        if(mTimer!=null)mTimer.cancel();
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         super.onDestroy();
     }

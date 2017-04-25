@@ -15,9 +15,15 @@ import com.gkzxhn.prision.common.GKApplication;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -97,6 +103,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
         if (ex == null) {
             return false;
         }
+        saveCrashInfo2File(ex);
         if(!flag){
             uploadLog(ex.getMessage());
         }
@@ -122,14 +129,59 @@ public class CrashHandler implements UncaughtExceptionHandler {
             params.put("device_type",String.valueOf(Build.VERSION.SDK_INT));
             PackageManager pm = mContext.getPackageManager();
             PackageInfo packageInfo = null;
-                packageInfo = pm.getPackageInfo(mContext.getPackageName(),
-                        PackageManager.GET_CONFIGURATIONS);
+            packageInfo = pm.getPackageInfo(mContext.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
             params.put("app_version",packageInfo.versionCode);
             volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL,params,null,null);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    /**
+     * 保存错误信息到文件中
+     *
+     * @param ex
+     * @return  返回文件名称,便于将文件传送到服务器
+     */
+    private String saveCrashInfo2File(Throwable ex) {
 
+        StringBuffer sb = new StringBuffer();
+        for (Map.Entry<String, String> entry : infos.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            sb.append(key + "=" + value + "\n");
+        }
+
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        ex.printStackTrace(printWriter);
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            cause.printStackTrace(printWriter);
+            cause = cause.getCause();
+        }
+        printWriter.close();
+        String result = writer.toString();
+        sb.append(result);
+        try {
+            long timestamp = System.currentTimeMillis();
+            String time = formatter.format(new Date());
+            String fileName = "crash-" + time + "-" + timestamp + ".log";
+            if (true) {
+                String path =Constants.SD_ROOT_PATH + "/crashLog";
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                FileOutputStream fos = new FileOutputStream(path + "/" +fileName);
+                fos.write(sb.toString().getBytes());
+                fos.close();
+            }
+            return fileName;
+        } catch (Exception e) {
+            Log.e(TAG, "an error occured while writing file..." + e.getMessage());
+        }
+        return null;
+    }
 
 }
