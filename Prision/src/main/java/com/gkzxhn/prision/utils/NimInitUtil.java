@@ -27,6 +27,8 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Author: Huang ZN
  * Date: 2016/12/20
@@ -63,9 +65,11 @@ public class NimInitUtil {
             public void onEvent(StatusCode status) {
                 switch (status) {
                     case KICKOUT:
-                        Toast.makeText(GKApplication.getInstance(), R.string.kickout,Toast.LENGTH_SHORT).show();
+                        if(Utils.isForeground(GKApplication.getInstance())) {
+                            Toast.makeText(GKApplication.getInstance(), R.string.kickout,Toast.LENGTH_SHORT).show();
 //                        被踢下线进入主页
-                        GKApplication.getInstance().loginOff();
+                            GKApplication.getInstance().loginOff();
+                        }
                         break;
                     case NET_BROKEN:
                         Toast.makeText(GKApplication.getInstance(), R.string.network_error,Toast.LENGTH_SHORT).show();
@@ -105,6 +109,7 @@ public class NimInitUtil {
         String processName = getProcessName();
         return packageName.equals(processName);
     }
+
 
     /**
      * 获取当前进程名
