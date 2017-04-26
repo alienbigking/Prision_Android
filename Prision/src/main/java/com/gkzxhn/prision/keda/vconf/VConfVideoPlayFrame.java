@@ -63,7 +63,6 @@ public class VConfVideoPlayFrame extends Fragment implements View.OnClickListene
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-
 		Log.i("VConfVideo", "VConfVideoPlayFrame-->onAttach ");
 
 		mVConfVideoUI = (VConfVideoUI) getActivity();
@@ -220,7 +219,6 @@ public class VConfVideoPlayFrame extends Fragment implements View.OnClickListene
 		mGlPlayView.setEGLContextFactory(new EGLContextFactory());
 		mGlPlayView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		mGlPlayView.setEGLContextClientVersion(2);
-
 		mMainRenderer = new Renderer();
 		mGlPlayView.setRenderer(mMainRenderer);
 

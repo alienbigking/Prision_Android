@@ -88,59 +88,7 @@ public class VideoCapServiceConnect implements ServiceConnection {
 		}
 	}
 
-	/**
-	 * 重新开始采集图像
-	 *
-	 * @param surfaceHolder
-	 * @param portrait
-	 */
-	private void reStartVideoCapture(boolean portrait) {
-		// if (null == mVideoCapService) {
-		// return;
-		// }
-		//
-		// try {
-		// mVideoCapService.reStartVideoCapture(SlidingMenuManager.getCaptureSurfaceHolder(), portrait);
-		// } catch (Exception e) {
-		// Log.i(getClass().getSimpleName(), "reStartVideoCapture", e);
-		// }
-	}
 
-	/**
-	 * 开始采集图像
-	 *
-	 * @param resolution
-	 * @param portrait
-	 */
-	public void startVideoCapture(SurfaceHolder surfaceHolder, short resolution, boolean portrait) {
-		if (null == mVideoCapService) {
-			return;
-		}
-
-		try {
-			mVideoCapService.startVideoCapture(surfaceHolder, resolution, portrait);
-		} catch (Exception e) {
-			Log.i(getClass().getSimpleName(), "startVideoCapture", e);
-		}
-	}
-
-	/**
-	 * 开始采集图像
-	 *
-	 * @param resolution
-	 * @param portrait
-	 */
-	private void startVideoCapture(short resolution, boolean portrait) {
-		// if (null == mVideoCapService) {
-		// return;
-		// }
-		//
-		// try {
-		// mVideoCapService.startVideoCapture(SlidingMenuManager.getCaptureSurfaceHolder(), resolution, portrait);
-		// } catch (Exception e) {
-		// Log.i(getClass().getSimpleName(), "startVideoCapture", e);
-		// }
-	}
 
 	/**
 	 * 返回当前采集数据的SurfaceHolder

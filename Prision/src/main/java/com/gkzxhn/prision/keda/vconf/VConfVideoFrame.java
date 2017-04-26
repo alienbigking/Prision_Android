@@ -1149,9 +1149,10 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	 */
 	public void reStartVideoCapture() {
 		if (VideoCapServiceManager.getVideoCapServiceConnect() == null) {
+			Log.e("Connect=null","VideoCapService");
 			return;
 		}
-
+		Log.e("Connect=true","VideoCapService");
 		VideoCapServiceManager.getVideoCapServiceConnect().reStartVideoCapture(mPreSurfaceView.getHolder(), !isScreenLandscape());
 	}
 
