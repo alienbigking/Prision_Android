@@ -149,7 +149,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         editor.putString(Constants.OTHER_CARD+1,img_urls[0]);
         editor.putString(Constants.OTHER_CARD+2,img_urls[1]);
         editor.putString(Constants.OTHER_CARD+3,img_urls[2]);
-        editor.putString(Constants.EXTRA,phone);
+        editor.putString(Constants.EXTRA, mPresenter.getEntity().getAccid());
         editor.putString(Constants.EXTRAS,id);
         editor.commit();
 
