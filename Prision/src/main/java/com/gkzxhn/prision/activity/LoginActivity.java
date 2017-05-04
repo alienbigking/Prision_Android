@@ -1,12 +1,16 @@
 package com.gkzxhn.prision.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
 import com.gkzxhn.prision.R;
+import com.gkzxhn.prision.common.Constants;
+import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.presenter.LoginPresenter;
 import com.gkzxhn.prision.view.ILoginView;
 
@@ -24,7 +28,11 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
         setContentView(R.layout.login_layout);
         initControls();
         init();
+        //清除下信息
+        SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().commit();
     }
+
     private void initControls(){
         etAccount= (EditText) findViewById(R.id.loign_layout_et_username);
         etPassword= (EditText) findViewById(R.id.loign_layout_et_password);
