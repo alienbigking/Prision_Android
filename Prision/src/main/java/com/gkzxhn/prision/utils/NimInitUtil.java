@@ -27,8 +27,6 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
 /**
  * Author: Huang ZN
  * Date: 2016/12/20

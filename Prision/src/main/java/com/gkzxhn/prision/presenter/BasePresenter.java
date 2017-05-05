@@ -1,16 +1,10 @@
 package com.gkzxhn.prision.presenter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.gkzxhn.prision.R;
-import com.gkzxhn.prision.activity.LoginActivity;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.model.IBaseModel;
@@ -18,15 +12,9 @@ import com.gkzxhn.prision.utils.Utils;
 import com.gkzxhn.prision.view.IBaseView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
-import com.starlight.mobile.android.lib.util.CommonHelper;
-import com.starlight.mobile.android.lib.util.ConvertUtil;
 import com.starlight.mobile.android.lib.util.HttpStatus;
-import com.starlight.mobile.android.lib.util.JSONUtil;
-
-import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-import java.util.concurrent.Executors;
 
 
 /**

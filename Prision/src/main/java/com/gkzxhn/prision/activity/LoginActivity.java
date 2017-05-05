@@ -72,4 +72,10 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
         if(mProgress!=null&&mProgress.isShowing())mProgress.dismiss();
     }
 
+    @Override
+    protected void onDestroy() {
+        stopRefreshAnim();
+        mPresenter.onDestory();
+        super.onDestroy();
+    }
 }

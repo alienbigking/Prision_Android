@@ -13,14 +13,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
-import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.model.iml.MainModel;
-import com.gkzxhn.prision.view.IBaseView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -29,8 +26,6 @@ import com.starlight.mobile.android.lib.util.CommonHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Raleigh.Luo on 17/3/29.

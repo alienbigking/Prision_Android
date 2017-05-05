@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.gkzxhn.prision.async.VolleyUtils;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;

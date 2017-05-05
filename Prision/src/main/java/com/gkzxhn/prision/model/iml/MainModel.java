@@ -5,7 +5,6 @@ import com.android.volley.AuthFailureError;
 import com.gkzxhn.prision.async.VolleyUtils;
 import com.gkzxhn.prision.model.IMainModel;
 import com.gkzxhn.prision.common.Constants;
-import com.gkzxhn.prision.utils.KDInitUtil;
 
 import org.json.JSONObject;
 
