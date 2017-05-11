@@ -189,23 +189,14 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver"/>
 
-        <activity
-            android:name=".keda.main.VConfListActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".keda.vconf.VConfDetailsUI"
-            android:screenOrientation="landscape" />
+
         <!-- vconf -->
         <activity
             android:name=".keda.vconf.VConfVideoUI"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".keda.vconf.controller.VConfAudioUI"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
+
         <service android:name=".keda.vconf.VideoCapService"/>
     </application>
 

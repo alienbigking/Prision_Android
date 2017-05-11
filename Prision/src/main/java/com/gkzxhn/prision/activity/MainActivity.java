@@ -28,6 +28,7 @@ import com.gkzxhn.prision.keda.utils.GKStateMannager;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.MainPresenter;
 import com.gkzxhn.prision.view.IMainView;
+import com.netease.nimlib.sdk.StatusCode;
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout;
 import com.starlight.mobile.android.lib.view.dotsloading.DotsTextView;
 
@@ -159,15 +160,19 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
 
     @Override
     public void onRefresh() {
-        //没有设置终端，则提示用户设置终端
-        if(mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT,"").length()==0){
-            stopRefreshAnim();
-            if (mShowTerminalDialog == null) {
-                mShowTerminalDialog = new ShowTerminalDialog(this);
+        if(mPresenter.checkStatusCode()== StatusCode.LOGINED) {
+            //没有设置终端，则提示用户设置终端
+            if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "").length() == 0) {
+                stopRefreshAnim();
+                if (mShowTerminalDialog == null) {
+                    mShowTerminalDialog = new ShowTerminalDialog(this);
+                }
+                if (!mShowTerminalDialog.isShowing()) mShowTerminalDialog.show();
+            } else {
+                mPresenter.request(mDate.toString());
             }
-            if (!mShowTerminalDialog.isShowing()) mShowTerminalDialog.show();
-        }else {
-            mPresenter.request(mDate.toString());
+        }else{
+            stopRefreshAnim();
         }
     }
     private OnItemClickListener onItemClickListener=new OnItemClickListener() {

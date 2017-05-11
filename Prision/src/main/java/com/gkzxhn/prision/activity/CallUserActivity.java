@@ -3,6 +3,7 @@ package com.gkzxhn.prision.activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -48,6 +49,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private SharedPreferences preferences;
     private String phone=null;
     private String nickName=null,id=null;
+    private boolean isClickCall=false;//是否点击了呼叫按钮
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         ivCard02= (ImageView) findViewById(R.id.call_user_layout_iv_card_02);
     }
     private void init(){
-       id=getIntent().getStringExtra(Constants.EXTRA);
+        id=getIntent().getStringExtra(Constants.EXTRA);
         phone=getIntent().getStringExtra(Constants.EXTRAS);
         nickName=getIntent().getStringExtra(Constants.EXTRA_TAB);
         mProgress = ProgressDialog.show(this, null, getString(R.string.check_other_status));
@@ -76,22 +78,32 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
                 }
             }
         });
+        mCustomDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                mTimer.cancel();
+            }
+        });
         mPresenter=new CallUserPresenter(this,this);
         preferences=mPresenter.getSharedPreferences();
         mPresenter.request(phone);//请求详情
     }
     public void openVConfVideoUI(){
-        if(mTimer!=null)mTimer.cancel();
-        stopProgress();
-        if (phone==null || phone.equals(GKStateMannager.mE164))  return;
-        if (!VConferenceManager.isAvailableVCconf(true, true, true))   return;
-        VConferenceManager.openVConfVideoUI(CallUserActivity.this, true, String.format("%s(%s)",nickName,phone), phone);
+        if(isClickCall) {
+            isClickCall=false;
+            if (mTimer != null) mTimer.cancel();
+            stopProgress();
+            if (phone == null || phone.equals(GKStateMannager.mE164)) return;
+            if (!VConferenceManager.isAvailableVCconf(true, true, true)) return;
+            VConferenceManager.openVConfVideoUI(CallUserActivity.this, true, String.format("%s(%s)", nickName, phone), phone);
+        }
     }
     public void stopVConfVideo(){
+        isClickCall=false;
         stopProgress();
         if(mCustomDialog!=null) {
             mCustomDialog.setTitle(getString(R.string.other_offline));
-            mCustomDialog.show();
+            if(!mCustomDialog.isShowing())mCustomDialog.show();
         }
     }
     public void onClickListener(View view){
@@ -105,6 +117,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         }
     }
     private void online(){
+        isClickCall=true;
         String account=preferences.getString(Constants.TERMINAL_ACCOUNT,"");
         if(account!=null&&account.length()>0) {
             if (NetWorkUtils.isAvailable(this)) {
@@ -207,7 +220,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         public void onReceive(Context context, Intent intent) {
             stopRefreshAnim();
             if(intent.getAction().equals(Constants.TERMINAL_FAILED_ACTION)){//GK注册失败
-                showToast(R.string.GK_register_failed);
+                mCustomDialog.setTitle(getString(R.string.GK_register_failed));
+                if(!mCustomDialog.isShowing())mCustomDialog.show();
             }else if(intent.getAction().equals(Constants.TERMINAL_SUCCESS_ACTION)){// GK 注册成功
                 openVConfVideoUI();
             }else if(intent.getAction().equals(Constants.ONLINE_SUCCESS_ACTION)){

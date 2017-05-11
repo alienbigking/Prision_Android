@@ -1,17 +1,26 @@
 package com.gkzxhn.prision.presenter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.async.VolleyUtils;
+import com.gkzxhn.prision.common.Constants;
+import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.entity.MeetingEntity;
 import com.gkzxhn.prision.entity.VersionEntity;
 import com.gkzxhn.prision.model.IMainModel;
 import com.gkzxhn.prision.model.iml.MainModel;
+import com.gkzxhn.prision.view.ICallUserView;
 import com.gkzxhn.prision.view.IMainView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.starlight.mobile.android.lib.util.ConvertUtil;
 import com.starlight.mobile.android.lib.util.HttpStatus;
 import com.starlight.mobile.android.lib.util.JSONUtil;
@@ -98,7 +107,36 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
             public void onFailed(VolleyError error) {}
         });
     }
-
+    /**
+     * 判断当前云信id状态
+     */
+    public StatusCode checkStatusCode() {
+        IMainView view=mWeakView==null?null:mWeakView.get();
+        StatusCode code = NIMClient.getStatus();
+        if (code == StatusCode.KICKOUT) {// 被其他端挤掉
+            Toast.makeText(GKApplication.getInstance(), R.string.kickout,Toast.LENGTH_SHORT).show();
+            GKApplication.getInstance().loginOff();
+            ((Activity)mWeakContext.get()).finish();
+        } else if (code == StatusCode.CONNECTING) {// 正在连接
+        } else if (code == StatusCode.LOGINING) {// 正在登录
+        } else if (code == StatusCode.NET_BROKEN) { // 网络连接已断开
+            if(view!=null)view.showToast(R.string.network_error);
+        } else if (code == StatusCode.UNLOGIN) {// 未登录
+            //系统自动登录云信
+            String username=getSharedPreferences().getString(Constants.USER_ACCOUNT,"");
+            String password= getSharedPreferences().getString(Constants.USER_PASSWORD,"");
+            if(username!=null&username.length()>0) {
+                LoginInfo info = new LoginInfo(username, password); // config...
+                //登录云信
+                NIMClient.getService(AuthService.class).login(info)
+                        .setCallback(null);
+            }else{//退出到登录界面
+                GKApplication.getInstance().loginOff();
+                ((Activity)mWeakContext.get()).finish();
+            }
+        }
+        return code;
+    }
     @Override
     protected void stopAnim() {
         super.stopAnim();
