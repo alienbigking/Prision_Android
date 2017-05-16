@@ -127,7 +127,7 @@ public class CancelVideoDialog extends Dialog {
 // 发送自定义通知
             NIMClient.getService(MsgService.class).sendCustomNotification(notification);
         }
-        mModel.requestCancel(meetingId,content,null);
+//        mModel.requestCancel(meetingId,content,null);
 
 
     }

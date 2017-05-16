@@ -198,6 +198,7 @@
             android:screenOrientation="landscape" />
 
         <service android:name=".keda.vconf.VideoCapService"/>
+        <service android:name=".service.ScreenRecordService"/>
     </application>
 
 </manifest>

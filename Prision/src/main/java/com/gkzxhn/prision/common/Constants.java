@@ -9,7 +9,7 @@ import android.os.Environment;
 public interface Constants {
     /*-------------------------------Config-------------------------------------------------*/
 
-    final String SD_ROOT_PATH= Environment.getExternalStorageDirectory().getPath()+"/Prision";
+    final String SD_ROOT_PATH= Environment.getExternalStorageDirectory().getPath()+"/YWTPrision";
     final String SD_FILE_CACHE_PATH = SD_ROOT_PATH+"/cache/";
 
     final String SD_IMAGE_CACHE_PATH = SD_ROOT_PATH+"/imageCache/";//图片下载的缓存
