@@ -15,7 +15,7 @@ public interface Constants {
     final String SD_IMAGE_CACHE_PATH = SD_ROOT_PATH+"/imageCache/";//图片下载的缓存
     final String SD_ROOT_PHOTO_PATH = SD_ROOT_PATH+"/photo/";//图片，不自动删除
     final String SD_PHOTO_PATH = SD_ROOT_PHOTO_PATH+"cutPhoto/";//拍照存储或压缩图片的图片路径,启动时自动删除
-    final String SD_AUDIO_PATH = SD_ROOT_PATH+"/audio/";
+    final String SD_VIDEO_PATH = SD_ROOT_PATH+"/video/";
     final boolean IS_DEBUG_MODEL=true;//debug模式打印日志到控制台,发布版本不打印
     /*-------------------------------User Tab-------------------------------------------------*/
     final String USER_TABLE="user_table";
@@ -29,7 +29,8 @@ public interface Constants {
     final String TERMINAL_PASSWORD="terminal_password";//终端密码，空
     final String LAST_IGNORE_VERSION="last_ignore_version";//上一个忽略的版本
     final String OTHER_CARD="other_card";//身份证信息
-    final String OTHER_ACCOUNT="other_account";//身份证信息
+    //每次会见视频名称记录,囚犯名字_会见记录ID 后期添加 时间戳年月日时分秒，如20170908102033_张三_144
+    final String RECORD_VIDEO_NAME="record_video_name";
     final String TERMINAL_ADDRESS= "222.244.146.206";//科达服务器终端
     /*-------------------------------Video Config-------------------------------------------------*/
     final  String TERMINAL_E164NUM = "e164Num";
@@ -41,6 +42,8 @@ public interface Constants {
 
 
     /*-------------------------------request url-------------------------------------------------*/
+    final String UPLOAD_VIDEO_DOMAIN="";//上传视频的ip
+    final int UPLOAD_VIDEO_PORT=9999;//上传视频的端口
     final String RELEASE_DOMAIN="https://www.fushuile.com";//发布正式环境
     final String DEMO_DOMAIN="";//开发环境
     final String DOMAIN_NAME_XLS = RELEASE_DOMAIN;

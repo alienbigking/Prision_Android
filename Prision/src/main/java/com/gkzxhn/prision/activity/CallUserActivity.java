@@ -90,6 +90,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     }
     public void openVConfVideoUI(){
         if(isClickCall) {
+            String name=String.format("%s_%s",mPresenter.getEntity().getName(),mPresenter.getEntity().getAccid());
+            mPresenter.getSharedPreferences().edit().putString(Constants.RECORD_VIDEO_NAME,name).commit();
             isClickCall=false;
             if (mTimer != null) mTimer.cancel();
             stopProgress();
