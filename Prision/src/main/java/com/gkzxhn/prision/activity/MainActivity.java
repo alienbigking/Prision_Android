@@ -160,6 +160,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
 
     @Override
     public void onRefresh() {
+        mPresenter.checkStatusCode();
         if(mPresenter.checkStatusCode()== StatusCode.LOGINED) {
             //没有设置终端，则提示用户设置终端
             if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "").length() == 0) {

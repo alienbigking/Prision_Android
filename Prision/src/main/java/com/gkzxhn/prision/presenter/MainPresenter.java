@@ -118,7 +118,9 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
             GKApplication.getInstance().loginOff();
             ((Activity)mWeakContext.get()).finish();
         } else if (code == StatusCode.CONNECTING) {// 正在连接
+            if(view!=null)view.showToast(R.string.connecting_yunxin);
         } else if (code == StatusCode.LOGINING) {// 正在登录
+            if(view!=null)view.showToast(R.string.login_yunxin);
         } else if (code == StatusCode.NET_BROKEN) { // 网络连接已断开
             if(view!=null)view.showToast(R.string.network_error);
         } else if (code == StatusCode.UNLOGIN) {// 未登录
