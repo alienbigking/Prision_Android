@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 
 import org.json.JSONArray;
@@ -52,6 +53,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (obj != null && obj.equals(JSONObject.class))
             {
@@ -63,6 +67,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (obj != null && obj.equals(JSONArray.class))
             {
@@ -74,7 +81,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             }
         } catch (Exception e)
@@ -107,7 +116,9 @@ public class VolleyUtils<T>
                     }
 
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (params instanceof JSONArray)
             {
@@ -120,7 +131,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (params instanceof Map)
             {
@@ -139,7 +152,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             }
         } catch (Exception e)
@@ -170,7 +185,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (params instanceof JSONArray)
             {
@@ -183,7 +200,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (params instanceof Map)
             {
@@ -201,7 +220,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             }
         } catch (Exception e)
@@ -231,7 +252,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (params instanceof JSONArray)
             {
@@ -244,7 +267,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (params instanceof Map)
             {
@@ -262,7 +287,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             }
         } catch (Exception e)
@@ -295,7 +322,9 @@ public class VolleyUtils<T>
                 };
 //                //超时时间10s,最大重连次数2次
 //                request.setRetryPolicy(new DefaultRetryPolicy(10 * 1000, 2, 1.0f));
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));;
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (params instanceof JSONArray)
             {
@@ -308,7 +337,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             } else if (params instanceof Map)
             {
@@ -326,7 +357,9 @@ public class VolleyUtils<T>
                         return tag == null ? new HashMap<String, String>() : getCusHeaders();
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0f));
+                request.setRetryPolicy(new DefaultRetryPolicy(Constants.REQUEST_TIMEOUT,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 SingleRequestQueue.getInstance().add(request, tag);
             }
         } catch (Exception e)

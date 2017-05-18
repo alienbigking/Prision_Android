@@ -54,7 +54,8 @@
     <string name="account_disable">您的账号已被禁用</string>
     <string name="kickout">被挤下线</string>
     <string name="yunxin_offline">帐号已掉线，正在重新登录中</string>
-
+    <string name="connecting_yunxin">正在重连云信...</string>
+    <string name="login_yunxin">正在登录云信...</string>
     <!--Dialog-->
     <string name="please_set_terminal_infor">请先设置终端信息</string>
     <string name="to_setting">马上设置</string>
