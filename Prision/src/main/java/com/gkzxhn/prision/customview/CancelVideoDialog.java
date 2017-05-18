@@ -96,7 +96,7 @@ public class CancelVideoDialog extends Dialog {
                 dismiss();
                 CommonHelper.clapseSoftInputMethod((Activity) context);
                 if(onClickListener!=null)onClickListener.onClick(view);
-                if(isCancelVideo)sendMessage();
+//                if(isCancelVideo)sendMessage();
 
             }
         });
@@ -127,9 +127,7 @@ public class CancelVideoDialog extends Dialog {
 // 发送自定义通知
             NIMClient.getService(MsgService.class).sendCustomNotification(notification);
         }
-//        mModel.requestCancel(meetingId,content,null);
-
-
+        mModel.requestCancel(meetingId,content,null);
     }
 
     public void measureWindow(){

@@ -59,22 +59,27 @@ public class ScreenRecordService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            // TODO Auto-generated method stub
-            Log.i(TAG, "Service onStartCommand() is called");
-            mResultCode = intent.getIntExtra("code", -1);
-            mResultData = intent.getParcelableExtra("data");
+            String rootPath = Utils.getTFPath();
+            if (rootPath == null) {
+                // TODO Auto-generated method stub
+                Log.i(TAG, "Service onStartCommand() is called");
+                mResultCode = intent.getIntExtra("code", -1);
+                mResultData = intent.getParcelableExtra("data");
 
-            mScreenWidth = intent.getIntExtra("width", 720);
-            mScreenHeight = intent.getIntExtra("height", 1280);
-            mScreenDensity = intent.getIntExtra("density", 1);
-            isVideoSd = intent.getBooleanExtra("quality", true);
-            isAudio = intent.getBooleanExtra("audio", true);
+                mScreenWidth = intent.getIntExtra("width", 720);
+                mScreenHeight = intent.getIntExtra("height", 1280);
+                mScreenDensity = intent.getIntExtra("density", 1);
+                isVideoSd = intent.getBooleanExtra("quality", true);
+                isAudio = intent.getBooleanExtra("audio", true);
 
-            mMediaProjection = createMediaProjection();
-            mMediaRecorder = createMediaRecorder();
-            mVirtualDisplay = createVirtualDisplay(); // 必须在mediaRecorder.prepare() 之后调用，否则报错"fail to get surface"
+                mMediaProjection = createMediaProjection();
+                //            String rootPath=Constants.SD_VIDEO_PATH;//存放目录
 
-            mMediaRecorder.start();
+                mMediaRecorder = createMediaRecorder(rootPath);
+                mVirtualDisplay = createVirtualDisplay(); // 必须在mediaRecorder.prepare() 之后调用，否则报错"fail to get surface"
+
+                mMediaRecorder.start();
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -97,7 +102,7 @@ public class ScreenRecordService extends Service {
         return ((MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE)).getMediaProjection(mResultCode, mResultData);
     }
 
-    private MediaRecorder createMediaRecorder() {
+    private MediaRecorder createMediaRecorder(String rootPath) {
         MediaRecorder mediaRecorder=null;
         try {
 //            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -127,7 +132,9 @@ public class ScreenRecordService extends Service {
 
             String fileName=String.format("%s_%s", Utils.getDateFromTimeInMillis(System.currentTimeMillis(),new SimpleDateFormat("yyyyMMddHHmmss")),
                     preferences.getString(Constants.RECORD_VIDEO_NAME,""));
-            mediaRecorder.setOutputFile(Constants.SD_VIDEO_PATH  + fileName + ".mp4");
+
+
+            mediaRecorder.setOutputFile(rootPath + fileName + ".mp4");
 
 //            Socket receiver = new Socket("10.10.10.102", 8089);
 //            ParcelFileDescriptor pfd = ParcelFileDescriptor.fromSocket(receiver);

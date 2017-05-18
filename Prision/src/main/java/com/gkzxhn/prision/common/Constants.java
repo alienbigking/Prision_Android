@@ -70,6 +70,8 @@ public interface Constants {
     final int RESIZE_REQUEST_CODE=0x105;
     final int EXTRAS_CODE=0x106;
     /*-------------------------------action-------------------------------------------------*/
+    final String _ACTION="com.gkzxhn.prision.TERMINAL_SUCCESS";//注册终端成功
+
     final String TERMINAL_SUCCESS_ACTION="com.gkzxhn.prision.TERMINAL_SUCCESS";//注册终端成功
     final String TERMINAL_FAILED_ACTION="com.gkzxhn.prision.TERMINAL_FAILED";//注册终端失败
     final String ONLINE_FAILED_ACTION="com.gkzxhn.prision.ONLINE_FAILED_ACTION";//连线失败
@@ -92,6 +94,4 @@ public interface Constants {
     final String MEETING_REMOVEREQCHAIRMANHANDLER_ACTION="com.gkzxhn.prision.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION";
     // 刷新音视频下面的工具栏
     final String MEETING_REMOVEREQSPEAKERHANDLER_ACTION="com.gkzxhn.prision.MEETING_REMOVEREQSPEAKERHANDLER_ACTION";
-
-
 }
