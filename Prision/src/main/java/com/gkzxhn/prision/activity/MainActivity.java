@@ -4,10 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -24,10 +24,7 @@ import com.gkzxhn.prision.customview.calendar.CalendarViewAdapter;
 import com.gkzxhn.prision.customview.calendar.CustomDate;
 import com.gkzxhn.prision.entity.MeetingEntity;
 import com.gkzxhn.prision.entity.VersionEntity;
-import com.gkzxhn.prision.keda.utils.GKStateMannager;
-import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.MainPresenter;
-import com.gkzxhn.prision.utils.Utils;
 import com.gkzxhn.prision.view.IMainView;
 import com.netease.nimlib.sdk.StatusCode;
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout;
@@ -141,7 +138,6 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
 
     @Override
     public void onRefresh() {
-        Utils.getTFPath();
         mPresenter.checkStatusCode();
         if(mPresenter.checkStatusCode()== StatusCode.LOGINED) {
             //没有设置终端，则提示用户设置终端

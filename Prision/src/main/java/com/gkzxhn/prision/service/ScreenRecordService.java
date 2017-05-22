@@ -20,10 +20,8 @@ import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.common.GKApplication;
 import com.gkzxhn.prision.utils.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,7 +58,7 @@ public class ScreenRecordService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
             String rootPath = Utils.getTFPath();
-            if (rootPath == null) {
+            if (rootPath != null) {
                 // TODO Auto-generated method stub
                 Log.i(TAG, "Service onStartCommand() is called");
                 mResultCode = intent.getIntExtra("code", -1);
@@ -73,7 +71,7 @@ public class ScreenRecordService extends Service {
                 isAudio = intent.getBooleanExtra("audio", true);
 
                 mMediaProjection = createMediaProjection();
-                //            String rootPath=Constants.SD_VIDEO_PATH;//存放目录
+//                            /*String*/ rootPath=Constants.SD_VIDEO_PATH;//存放目录
 
                 mMediaRecorder = createMediaRecorder(rootPath);
                 mVirtualDisplay = createVirtualDisplay(); // 必须在mediaRecorder.prepare() 之后调用，否则报错"fail to get surface"
@@ -117,7 +115,7 @@ public class ScreenRecordService extends Service {
             if (isAudio) mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
 
-            File rootfile=new File(Constants.SD_ROOT_PATH);
+            /*File rootfile=new File(Constants.SD_ROOT_PATH);
             if(!rootfile.exists()){
                 rootfile.mkdirs();
             }
@@ -125,7 +123,7 @@ public class ScreenRecordService extends Service {
             File file=new File(Constants.SD_VIDEO_PATH);
             if(!file.exists()){
                 file.mkdirs();
-            }
+            }*/
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             SharedPreferences preferences= GKApplication.getInstance().
                     getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
@@ -133,8 +131,13 @@ public class ScreenRecordService extends Service {
             String fileName=String.format("%s_%s", Utils.getDateFromTimeInMillis(System.currentTimeMillis(),new SimpleDateFormat("yyyyMMddHHmmss")),
                     preferences.getString(Constants.RECORD_VIDEO_NAME,""));
 
-
-            mediaRecorder.setOutputFile(rootPath + fileName + ".mp4");
+/*
+            rootPath += "/video/";
+            File file=new File(rootPath);
+            if(!file.exists()){
+                file.mkdirs();
+            }*/
+            mediaRecorder.setOutputFile(rootPath + "/" + fileName + ".mp4");
 
 //            Socket receiver = new Socket("10.10.10.102", 8089);
 //            ParcelFileDescriptor pfd = ParcelFileDescriptor.fromSocket(receiver);

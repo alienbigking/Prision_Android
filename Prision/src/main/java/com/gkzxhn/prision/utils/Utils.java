@@ -196,11 +196,16 @@ public  class Utils {
     public static String getTFPath(){
         String path=null;
         List<String> paths=getExtSDCardPathList();
-        if(paths!=null&&paths.size()>1){
-            path=paths.get(1);
+        if (paths != null) {
+            if (paths.size() > 1) {
+                try {
+                    path = paths.get(1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return path;
-
     }
 
     /**
@@ -233,38 +238,43 @@ public  class Utils {
             int mountPathIndex = 1;
             while ((line = br.readLine()) != null) {
                 // format of sdcard file system: vfat/fuse
-                if ((!line.contains("fat") && !line.contains("fuse") && !line
-                        .contains("storage"))
-                        || line.contains("secure")
-                        || line.contains("asec")
-                        || line.contains("firmware")
-                        || line.contains("shell")
-                        || line.contains("obb")
-                        || line.contains("legacy") || line.contains("data")) {
-                    continue;
+                String mountPath = null;
+                if (line.contains("sdcard")) {
+                    if ((!line.contains("fat") && !line.contains("fuse") && !line
+                            .contains("storage"))
+                            || line.contains("secure")
+                            || line.contains("asec")
+                            || line.contains("firmware")
+                            || line.contains("shell")
+                            || line.contains("obb")
+                            || line.contains("legacy") || line.contains("data")) {
+                        continue;
+                    }
+                    String[] parts = line.split(" ");
+                    int length = parts.length;
+                    if (mountPathIndex >= length) {
+                        continue;
+                    }
+                    mountPath = parts[mountPathIndex];
+                    if (!mountPath.contains("/") || mountPath.contains("data")
+                            || mountPath.contains("Data")) {
+                        continue;
+                    }
+                    File mountRoot = new File(mountPath);
+                    if (!mountRoot.exists() || !mountRoot.isDirectory()
+                            || !mountRoot.canWrite()) {
+                        continue;
+                    }
+                    boolean equalsToPrimarySD = mountPath.equals(extFile
+                            .getAbsolutePath());
+                    if (equalsToPrimarySD) {
+                        continue;
+                    }
+                    //扩展存储卡即TF卡或者SD卡路径
+                    if (null != mountPath) {
+                        paths.add(mountPath);
+                    }
                 }
-                String[] parts = line.split(" ");
-                int length = parts.length;
-                if (mountPathIndex >= length) {
-                    continue;
-                }
-                String mountPath = parts[mountPathIndex];
-                if (!mountPath.contains("/") || mountPath.contains("data")
-                        || mountPath.contains("Data")) {
-                    continue;
-                }
-                File mountRoot = new File(mountPath);
-                if (!mountRoot.exists() || !mountRoot.isDirectory()
-                        || !mountRoot.canWrite()) {
-                    continue;
-                }
-                boolean equalsToPrimarySD = mountPath.equals(extFile
-                        .getAbsolutePath());
-                if (equalsToPrimarySD) {
-                    continue;
-                }
-                //扩展存储卡即TF卡或者SD卡路径
-                paths.add(mountPath);
             }
         } catch (IOException e) {
             e.printStackTrace();
