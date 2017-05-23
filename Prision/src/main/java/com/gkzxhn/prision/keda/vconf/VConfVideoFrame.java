@@ -10,15 +10,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.projection.MediaProjectionManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,11 +35,14 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.gkzxhn.prision.Manifest;
 import com.gkzxhn.prision.R;
 import com.gkzxhn.prision.common.Constants;
 import com.gkzxhn.prision.keda.utils.StringUtils;
 import com.gkzxhn.prision.service.ScreenRecordService;
+import com.gkzxhn.prision.utils.Utils;
 import com.kedacom.kdv.mt.api.Configure;
 import com.kedacom.kdv.mt.constant.EmNativeConfType;
 import com.kedacom.truetouch.video.capture.VideoCapture;
@@ -236,10 +243,12 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void startScreenRecording() {
-		// TODO Auto-generated method stub
-		MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) (getActivity().getSystemService(Context.MEDIA_PROJECTION_SERVICE));
-		Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
-		startActivityForResult(permissionIntent, REQUEST_CODE);
+//		if(Utils.getTFPath()!=null) {
+			// TODO Auto-generated method stub
+			MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) (getActivity().getSystemService(Context.MEDIA_PROJECTION_SERVICE));
+			Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
+			startActivityForResult(permissionIntent, REQUEST_CODE);
+//		}
 	}
 	private int mScreenWidth;
 	private int mScreenHeight;
@@ -271,10 +280,8 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 				isStarted = !isStarted;
 //                statusIsStarted();
 //                simulateHome(); // this.finish();  // 可以直接关闭Activity
-				Log.i(TAG, "Started screen recording");
 			} else {
-//				ToastUtil.showShortToast("取消录制...");
-				Log.i(TAG, "User cancelled");
+				Toast.makeText(getContext(),R.string.cancel_record,Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

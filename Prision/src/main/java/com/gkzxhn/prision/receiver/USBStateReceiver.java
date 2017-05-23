@@ -20,7 +20,6 @@ public class USBStateReceiver extends BroadcastReceiver{
         String action = intent.getAction();
         if (action.equals(Intent.ACTION_MEDIA_EJECT)) {
             //USB设备移除，更新UI
-            Log.e("USB:ACTION_MEDIA_EJECT","raleigh_test" );
             String rootPath = Utils.getTFPath();
             if (rootPath == null) {//停止录像
                 Intent service = new Intent(context, ScreenRecordService.class);
@@ -28,7 +27,6 @@ public class USBStateReceiver extends BroadcastReceiver{
             }
         } else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
             //USB设备挂载，更新UI
-            Log.d("USB:ACTION_MEDIA_MOUNTED","raleigh_test");
         }
     }
 }

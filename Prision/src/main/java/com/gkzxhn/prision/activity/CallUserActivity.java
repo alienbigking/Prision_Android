@@ -22,6 +22,7 @@ import com.gkzxhn.prision.keda.utils.GKStateMannager;
 import com.gkzxhn.prision.keda.utils.NetWorkUtils;
 import com.gkzxhn.prision.keda.vconf.VConferenceManager;
 import com.gkzxhn.prision.presenter.CallUserPresenter;
+import com.gkzxhn.prision.utils.Utils;
 import com.gkzxhn.prision.view.ICallUserView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.StatusCode;
@@ -90,13 +91,13 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     }
     public void openVConfVideoUI(){
         if(isClickCall) {
-            String name=String.format("%s_%s",mPresenter.getEntity().getName(),mPresenter.getEntity().getAccid());
+            String name=String.format("%s_%s",mPresenter.getEntity().getPrisonerNumber(),id);
             mPresenter.getSharedPreferences().edit().putString(Constants.RECORD_VIDEO_NAME,name).commit();
-            isClickCall=false;
             if (mTimer != null) mTimer.cancel();
             stopProgress();
             if (phone == null || phone.equals(GKStateMannager.mE164)) return;
             if (!VConferenceManager.isAvailableVCconf(true, true, true)) return;
+            isClickCall=false;//位置不可改变
             VConferenceManager.openVConfVideoUI(CallUserActivity.this, true, String.format("%s(%s)", nickName, phone), phone);
         }
     }
@@ -104,7 +105,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         isClickCall=false;
         stopProgress();
         if(mCustomDialog!=null) {
-            mCustomDialog.setTitle(getString(R.string.other_offline));
+            mCustomDialog.setContent(getString(R.string.other_offline),
+                    getString(R.string.cancel),getString(R.string.call_back));
             if(!mCustomDialog.isShowing())mCustomDialog.show();
         }
     }
@@ -114,7 +116,15 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
                 finish();
                 break;
             case R.id.call_user_layout_bt_call:
-                online();
+                if(Utils.getTFPath()==null){//没有检测到TF卡
+                    if(mCustomDialog!=null) {
+                        mCustomDialog.setContent(getString(R.string.not_found_tf_card),
+                                getString(R.string.cancel),getString(R.string.continue_call));
+                        if(!mCustomDialog.isShowing())mCustomDialog.show();
+                    }
+                }else {
+                    online();
+                }
                 break;
         }
     }
@@ -222,7 +232,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         public void onReceive(Context context, Intent intent) {
             stopRefreshAnim();
             if(intent.getAction().equals(Constants.TERMINAL_FAILED_ACTION)){//GK注册失败
-                mCustomDialog.setTitle(getString(R.string.GK_register_failed));
+                mCustomDialog.setContent(getString(R.string.GK_register_failed),
+                        getString(R.string.cancel),getString(R.string.call_back));
                 if(!mCustomDialog.isShowing())mCustomDialog.show();
             }else if(intent.getAction().equals(Constants.TERMINAL_SUCCESS_ACTION)){// GK 注册成功
                 openVConfVideoUI();

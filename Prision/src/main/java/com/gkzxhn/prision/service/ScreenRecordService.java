@@ -31,7 +31,6 @@ import java.util.List;
 public class ScreenRecordService extends Service {
 
     private static final String TAG = "ScreenRecordingService";
-
     private int mScreenWidth;
     private int mScreenHeight;
     private int mScreenDensity;
@@ -57,7 +56,8 @@ public class ScreenRecordService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            String rootPath = Utils.getTFPath();
+//            String rootPath = Utils.getTFPath();
+           String rootPath=Constants.SD_VIDEO_PATH;//存放目录
             if (rootPath != null) {
                 // TODO Auto-generated method stub
                 Log.i(TAG, "Service onStartCommand() is called");
@@ -71,7 +71,6 @@ public class ScreenRecordService extends Service {
                 isAudio = intent.getBooleanExtra("audio", true);
 
                 mMediaProjection = createMediaProjection();
-//                            /*String*/ rootPath=Constants.SD_VIDEO_PATH;//存放目录
 
                 mMediaRecorder = createMediaRecorder(rootPath);
                 mVirtualDisplay = createVirtualDisplay(); // 必须在mediaRecorder.prepare() 之后调用，否则报错"fail to get surface"
@@ -138,11 +137,6 @@ public class ScreenRecordService extends Service {
                 file.mkdirs();
             }*/
             mediaRecorder.setOutputFile(rootPath + "/" + fileName + ".mp4");
-
-//            Socket receiver = new Socket("10.10.10.102", 8089);
-//            ParcelFileDescriptor pfd = ParcelFileDescriptor.fromSocket(receiver);
-//            mediaRecorder.setOutputFile(pfd.getFileDescriptor());
-
             mediaRecorder.setVideoSize(mScreenWidth, mScreenHeight);  //after setVideoSource(), setOutFormat()
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);  //after setOutputFormat()
             if (isAudio)

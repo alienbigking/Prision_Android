@@ -13,6 +13,17 @@ public class MeetingDetailEntity {
     @SerializedName("image_url")
     String imageUrl;
     String accid;
+    @SerializedName("prisoner_number")
+    String prisonerNumber;//囚号
+
+    public String getPrisonerNumber() {
+        return prisonerNumber == null ? "" : prisonerNumber;
+    }
+
+    public void setPrisonerNumber(String prisonerNumber) {
+        if (prisonerNumber != null && !prisonerNumber.equals("null"))
+            this.prisonerNumber = prisonerNumber;
+    }
 
     public String getName() {
         return name == null ? "" : name;
