@@ -1,6 +1,9 @@
 package com.gkzxhn.prison.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gkzxhn.prison.R;
+import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.customview.CustomDialog;
 import com.gkzxhn.prison.customview.UpdateDialog;
@@ -47,6 +51,7 @@ public class SettingActivity extends SuperActivity implements IMainView{
         });
         mCustomDialog.setContent(getString(R.string.exit_account_hint),
                 getString(R.string.cancel),getString(R.string.ok));
+        registerReceiver();
     }
     public void onClickListener(View view){
         switch (view.getId()) {
@@ -141,6 +146,7 @@ public class SettingActivity extends SuperActivity implements IMainView{
 
     @Override
     protected void onDestroy() {
+        unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         if (mCustomDialog != null&&mCustomDialog.isShowing())   mCustomDialog.dismiss();
         if(updateDialog!=null&&updateDialog.isShowing())updateDialog.dismiss();
         super.onDestroy();
@@ -168,5 +174,21 @@ public class SettingActivity extends SuperActivity implements IMainView{
         if(updateDialog!=null&&updateDialog.isShowing())updateDialog.measureWindow();
         if(mCustomDialog!=null&&mCustomDialog.isShowing())mCustomDialog.measureWindow();
 
+    }
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(Constants.NIM_KIT_OUT)){
+                finish();
+            }
+        }
+    };
+    /**
+     * 注册广播监听器
+     */
+    private void registerReceiver(){
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(Constants.NIM_KIT_OUT);
+        registerReceiver(mBroadcastReceiver,intentFilter);
     }
 }

@@ -124,6 +124,8 @@ public class ConfigActivity extends SuperActivity {
             }else if(intent.getAction().equals(Constants.TERMINAL_SUCCESS_ACTION)){// GK 注册成功
                 ConfigActivity.this.setResult(RESULT_OK);
                 ConfigActivity.this.finish();
+            }else if(intent.getAction().equals(Constants.NIM_KIT_OUT)){
+                finish();
             }
         }
     };
@@ -137,6 +139,7 @@ public class ConfigActivity extends SuperActivity {
         IntentFilter intentFilter=new IntentFilter();
         intentFilter.addAction(Constants.TERMINAL_FAILED_ACTION);
         intentFilter.addAction(Constants.TERMINAL_SUCCESS_ACTION);
+        intentFilter.addAction(Constants.NIM_KIT_OUT);
         registerReceiver(mBroadcastReceiver,intentFilter);
     }
 
@@ -162,5 +165,6 @@ public class ConfigActivity extends SuperActivity {
             editor.commit();
         }
     };
+
 
 }

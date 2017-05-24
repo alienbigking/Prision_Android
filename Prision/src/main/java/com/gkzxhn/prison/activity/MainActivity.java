@@ -1,7 +1,10 @@
 package com.gkzxhn.prison.activity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -54,6 +57,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         setContentView(R.layout.main_layout);
         initControls();
         init();
+        registerReceiver();
     }
     private void initControls(){
         tvMonth= (TextView) findViewById(R.id.main_layout_tv_month);
@@ -302,9 +306,26 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
 
     @Override
     protected void onDestroy() {
+        unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.dismiss();
         if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.dismiss();
         if(updateDialog!=null&&updateDialog.isShowing())updateDialog.dismiss();
         super.onDestroy();
+    }
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(Constants.NIM_KIT_OUT)){
+                finish();
+            }
+        }
+    };
+    /**
+     * 注册广播监听器
+     */
+    private void registerReceiver(){
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(Constants.NIM_KIT_OUT);
+        registerReceiver(mBroadcastReceiver,intentFilter);
     }
 }

@@ -63,7 +63,7 @@ public class NimInitUtil {
             public void onEvent(StatusCode status) {
                 switch (status) {
                     case KICKOUT:
-                        if(Utils.isForeground(GKApplication.getInstance())) {
+                          if(Utils.isForeground(GKApplication.getInstance())) {
                             Toast.makeText(GKApplication.getInstance(), R.string.kickout,Toast.LENGTH_SHORT).show();
 //                        被踢下线进入主页
                             GKApplication.getInstance().loginOff();

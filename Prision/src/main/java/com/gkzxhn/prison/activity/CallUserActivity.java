@@ -242,6 +242,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
                 openVConfVideoUI();
             }else if(intent.getAction().equals(Constants.ONLINE_FAILED_ACTION)){
                 stopVConfVideo();
+            }else if(intent.getAction().equals(Constants.NIM_KIT_OUT)){
+                finish();
             }
         }
     };
@@ -270,6 +272,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         intentFilter.addAction(Constants.TERMINAL_SUCCESS_ACTION);
         intentFilter.addAction(Constants.ONLINE_FAILED_ACTION);
         intentFilter.addAction(Constants.ONLINE_SUCCESS_ACTION);
+        intentFilter.addAction(Constants.NIM_KIT_OUT);
         registerReceiver(mBroadcastReceiver,intentFilter);
     }
 
@@ -280,4 +283,9 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         super.onDestroy();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isClickCall=false;
+    }
 }

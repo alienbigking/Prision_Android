@@ -113,6 +113,8 @@ public class GKApplication extends Application {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        //关闭其他页面
+        sendBroadcast(new Intent(Constants.NIM_KIT_OUT));
     }
     public String getTerminalAccount(){
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);

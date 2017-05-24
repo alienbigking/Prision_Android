@@ -76,6 +76,9 @@ public interface Constants {
     final String TERMINAL_FAILED_ACTION="com.gkzxhn.prision.TERMINAL_FAILED";//注册终端失败
     final String ONLINE_FAILED_ACTION="com.gkzxhn.prision.ONLINE_FAILED_ACTION";//连线失败
     final String ONLINE_SUCCESS_ACTION="com.gkzxhn.prision.ONLINE_SUCCESS_ACTION";//连线成功
+    //云信被踢下线
+    final String NIM_KIT_OUT="com.gkzxhn.prision.NIM_KIT_OUT";
+
     //退出视频会议
     final String MEETING_FORCE_CLOSE_ACTION="com.gkzxhn.prision.MEETING_FORCE_CLOSE_ACTION";
     //接收双流
