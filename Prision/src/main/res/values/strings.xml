@@ -64,6 +64,9 @@
     <string name="check_other_status">正在连线...</string>
     <string name="other_offline">对方不在线，请稍候再呼叫</string>
     <string name="call_back">重新呼叫</string>
+    <string name="continue_call">继续呼叫</string>
+    <string name="cancel_record">取消录制</string>
+    <string name="not_found_tf_card">未检测到TF卡，无法录制本次视频会话</string>
     <!--版本更新-->
     <string name="update_version_hint">狱务通监狱版更新</string>
     <string name="new_version_colon">新版本：</string>

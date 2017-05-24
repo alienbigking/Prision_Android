@@ -103,9 +103,9 @@ public class CrashHandler implements UncaughtExceptionHandler {
             return false;
         }
         saveCrashInfo2File(ex);
-//        if(!flag){
-//            uploadLog(ex.getMessage());
-//        }
+        if(!flag){
+            uploadLog(ex.getMessage());
+        }
         if(Constants.IS_DEBUG_MODEL){//打印日志
             ex.printStackTrace();
         }

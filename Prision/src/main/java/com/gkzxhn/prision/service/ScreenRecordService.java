@@ -56,8 +56,8 @@ public class ScreenRecordService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-//            String rootPath = Utils.getTFPath();
-           String rootPath=Constants.SD_VIDEO_PATH;//存放目录
+            String rootPath = Utils.getTFPath();//TF卡路径
+//           String rootPath=Constants.SD_VIDEO_PATH;//存放目录
             if (rootPath != null) {
                 // TODO Auto-generated method stub
                 Log.i(TAG, "Service onStartCommand() is called");

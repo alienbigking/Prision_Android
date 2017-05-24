@@ -243,12 +243,12 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void startScreenRecording() {
-//		if(Utils.getTFPath()!=null) {
+		if(Utils.getTFPath()!=null) {
 			// TODO Auto-generated method stub
 			MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) (getActivity().getSystemService(Context.MEDIA_PROJECTION_SERVICE));
 			Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
 			startActivityForResult(permissionIntent, REQUEST_CODE);
-//		}
+		}
 	}
 	private int mScreenWidth;
 	private int mScreenHeight;

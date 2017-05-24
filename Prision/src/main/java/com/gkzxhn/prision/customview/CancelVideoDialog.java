@@ -96,7 +96,7 @@ public class CancelVideoDialog extends Dialog {
                 dismiss();
                 CommonHelper.clapseSoftInputMethod((Activity) context);
                 if(onClickListener!=null)onClickListener.onClick(view);
-//                if(isCancelVideo)sendMessage();
+                if(isCancelVideo)sendMessage();
 
             }
         });

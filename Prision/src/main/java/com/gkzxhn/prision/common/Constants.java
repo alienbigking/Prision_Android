@@ -16,7 +16,7 @@ public interface Constants {
     final String SD_ROOT_PHOTO_PATH = SD_ROOT_PATH+"/photo/";//图片，不自动删除
     final String SD_PHOTO_PATH = SD_ROOT_PHOTO_PATH+"cutPhoto/";//拍照存储或压缩图片的图片路径,启动时自动删除
     final String SD_VIDEO_PATH = SD_ROOT_PATH+"/video/";
-    final boolean IS_DEBUG_MODEL=true;//debug模式打印日志到控制台,发布版本不打印
+    final boolean IS_DEBUG_MODEL=false;//debug模式打印日志到控制台,发布版本不打印
     final int REQUEST_TIMEOUT=60000;//超时时间1分钟
     /*-------------------------------User Tab-------------------------------------------------*/
     final String USER_TABLE="user_table";
