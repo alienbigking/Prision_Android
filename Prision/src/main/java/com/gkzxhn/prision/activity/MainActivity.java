@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -283,6 +284,15 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
         if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.measureWindow();
         onRefresh();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(updateDialog!=null&&updateDialog.isShowing())updateDialog.measureWindow();
+        if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
+        if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.measureWindow();
+
     }
 
     @Override

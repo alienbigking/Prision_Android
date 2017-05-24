@@ -3,6 +3,7 @@ package com.gkzxhn.prision.activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -156,6 +157,14 @@ public class SettingActivity extends SuperActivity implements IMainView{
     @Override
     protected void onResume() {
         super.onResume();
+        if(updateDialog!=null&&updateDialog.isShowing())updateDialog.measureWindow();
+        if(mCustomDialog!=null&&mCustomDialog.isShowing())mCustomDialog.measureWindow();
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         if(updateDialog!=null&&updateDialog.isShowing())updateDialog.measureWindow();
         if(mCustomDialog!=null&&mCustomDialog.isShowing())mCustomDialog.measureWindow();
 

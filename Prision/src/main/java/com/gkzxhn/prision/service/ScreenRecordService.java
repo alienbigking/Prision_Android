@@ -52,6 +52,7 @@ public class ScreenRecordService extends Service {
         Log.i(TAG, "Service onCreate() is called");
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

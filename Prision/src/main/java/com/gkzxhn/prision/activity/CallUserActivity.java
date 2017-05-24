@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -250,6 +251,14 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         super.onResume();
         if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
         if(mCustomDialog!=null&&mCustomDialog.isShowing())mCustomDialog.measureWindow();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.measureWindow();
+        if(mCustomDialog!=null&&mCustomDialog.isShowing())mCustomDialog.measureWindow();
+
     }
 
     /**
