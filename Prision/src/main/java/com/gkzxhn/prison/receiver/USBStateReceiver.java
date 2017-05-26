@@ -15,16 +15,16 @@ import com.gkzxhn.prison.utils.Utils;
 public class USBStateReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(final Context context, Intent intent) {
-        String action = intent.getAction();
-        if (action.equals(Intent.ACTION_MEDIA_EJECT)) {
-            //USB设备移除，更新UI
-            String rootPath = Utils.getTFPath();
-            if (rootPath == null) {//停止录像
-                Intent service = new Intent(context, ScreenRecordService.class);
-                context.stopService(service);
-            }
-        } else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
-            //USB设备挂载，更新UI
-        }
+//        String action = intent.getAction();
+//        if (action.equals(Intent.ACTION_MEDIA_EJECT)) {
+//            //USB设备移除，更新UI
+//            String rootPath = Utils.getTFPath();
+//            if (rootPath == null) {//停止录像
+//                Intent service = new Intent(context, ScreenRecordService.class);
+//                context.stopService(service);
+//            }
+//        } else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
+//            //USB设备挂载，更新UI
+//        }
     }
 }
