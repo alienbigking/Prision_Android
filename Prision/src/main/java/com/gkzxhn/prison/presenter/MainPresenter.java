@@ -2,6 +2,8 @@ package com.gkzxhn.prison.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -13,6 +15,7 @@ import com.gkzxhn.prison.entity.MeetingEntity;
 import com.gkzxhn.prison.entity.VersionEntity;
 import com.gkzxhn.prison.model.IMainModel;
 import com.gkzxhn.prison.model.iml.MainModel;
+import com.gkzxhn.prison.utils.AsynHelper;
 import com.gkzxhn.prison.view.IMainView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,12 +30,14 @@ import com.starlight.mobile.android.lib.util.JSONUtil;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Raleigh.Luo on 17/4/12.
  */
 
 public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
+    private AsynHelper asynHelper;
     public MainPresenter(Context context,IMainView view) {
         super(context, new MainModel(), view);
     }
@@ -47,10 +52,17 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
                 try{
                     int code= ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"code"));
                     if(code== HttpStatus.SC_OK){
-                        List<MeetingEntity> datas = new Gson().fromJson(JSONUtil.getJSONObjectStringValue(response,"meetings"),  new TypeToken<List<MeetingEntity>>() {}.getType());
-                        if(view!=null){
-                            view.updateItems(datas);
-                        }
+                        String resultJson=JSONUtil.getJSONObjectStringValue(response,"meetings");
+                        startAsynTask(AsynHelper.AsynHelperTag.DEFUALT_TAG, new AsynHelper.TaskFinishedListener() {
+                            @Override
+                            public void back(Object object) {
+                                IMainView view=mWeakView==null?null:mWeakView.get();
+                                if(view!=null){
+                                    view.updateItems((List<MeetingEntity>) object);
+                                }
+                            }
+                        },resultJson);
+
                     }else{
                         view.updateItems(null);
                     }
@@ -143,5 +155,29 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
         super.stopAnim();
         IMainView view=mWeakView==null?null:mWeakView.get();
         if(view!=null)view.dismissProgress();
+    }
+
+    /**
+     * 启动异步任务
+     *
+     * @param tag
+     * @param params
+     */
+    protected void startAsynTask(AsynHelper.AsynHelperTag tag, AsynHelper.TaskFinishedListener taskFinishedListener, Object... params) {
+        try {
+            if (asynHelper != null) {
+                if (asynHelper.getStatus() == AsyncTask.Status.RUNNING) asynHelper.cancel(true);
+                asynHelper = null;
+            }
+            asynHelper = new AsynHelper(tag);
+            asynHelper.setOnTaskFinishedListener(taskFinishedListener);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                asynHelper.executeOnExecutor(Executors.newCachedThreadPool(), params);
+            } else {
+                asynHelper.execute(params);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

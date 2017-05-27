@@ -164,7 +164,6 @@
         <item>申请会见的信息有误</item>
         <item>犯人拒绝会见</item>
         <item>系统分配有误</item>
-        <item>设备出现故障</item>
-        <item>临时出现突发情况</item>
+        <item>其他原因</item>
     </string-array>
 </resources>

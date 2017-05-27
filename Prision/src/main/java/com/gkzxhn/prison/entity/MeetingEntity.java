@@ -15,6 +15,26 @@ public class MeetingEntity {
     private String area;
     @SerializedName("to")
     private String yxAccount;
+    private String remarks;//取消原因
+    private String status;//状态
+
+    public String getRemarks() {
+        return remarks == null ? "" : remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        if (remarks != null && !remarks.equals("null"))
+            this.remarks = remarks;
+    }
+
+    public String getStatus() {
+        return status == null ? "" : status;
+    }
+
+    public void setStatus(String status) {
+        if (status != null && !status.equals("null"))
+            this.status = status;
+    }
 
     public String getId() {
         return id == null ? "" : id;
