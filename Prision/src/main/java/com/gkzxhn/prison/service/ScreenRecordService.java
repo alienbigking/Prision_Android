@@ -20,6 +20,7 @@ import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -57,8 +58,10 @@ public class ScreenRecordService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            String rootPath = Utils.getTFPath();//TF卡路径
-//           String rootPath=Constants.SD_VIDEO_PATH;//存放目录
+//            String rootPath = Utils.getTFPath();//TF卡路径
+            String rootPath=Constants.SD_VIDEO_PATH;//存放目录
+            File pathFile=new File(rootPath);
+            if(!pathFile.exists())pathFile.mkdirs();
             if (rootPath != null) {
                 // TODO Auto-generated method stub
                 Log.i(TAG, "Service onStartCommand() is called");
