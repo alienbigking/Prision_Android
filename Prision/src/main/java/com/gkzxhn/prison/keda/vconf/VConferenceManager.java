@@ -843,7 +843,6 @@ public class VConferenceManager {
 		// GK注册失败
 		if (!GKStateMannager.mRegisterGK) {
 			if (reRegisterGK) {
-				GKStateMannager.restoreLoginState();
 				GKStateMannager.instance().registerGK();
 //				Toast.makeText(MyApplication.getContext(), "GK重连中...", Toast.LENGTH_SHORT).show();
 			}
