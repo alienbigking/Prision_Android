@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import com.gkzxhn.prison.presenter.MainPresenter;
 import com.gkzxhn.prison.view.IMainView;
 import com.netease.nimlib.sdk.StatusCode;
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout;
+import com.starlight.mobile.android.lib.view.RecycleViewDivider;
 import com.starlight.mobile.android.lib.view.dotsloading.DotsTextView;
 
 import java.util.List;
@@ -79,6 +81,10 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         mSwipeRefresh.setLoadNoFull(false);
         mSwipeRefresh.setOnRefreshListener(this);
         mRecylerView.setAdapter(adapter);
+        int sizeMenu=getResources().getDimensionPixelSize(R.dimen.recycler_view_line_height);
+        mRecylerView.addItemDecoration(new RecycleViewDivider(
+                this, LinearLayoutManager.HORIZONTAL, sizeMenu, getResources().getColor(R.color.common_hint_text_color)));
+
         //初始化进度条
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting));
         dismissProgress();
