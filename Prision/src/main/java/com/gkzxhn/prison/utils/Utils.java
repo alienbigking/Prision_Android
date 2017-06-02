@@ -2,6 +2,7 @@ package com.gkzxhn.prison.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -34,6 +35,14 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2016/4/7.
  */
 public  class Utils {
+    /**
+     * 判断当前设备是手机还是平板，代码来自 Google I/O App for Android
+     * @param context
+     * @return 平板返回 True，手机返回 False
+     */
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
     /**
      * 显示图片来源对话框，相册/拍照
      *

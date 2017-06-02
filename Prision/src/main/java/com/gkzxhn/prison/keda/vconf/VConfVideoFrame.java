@@ -289,6 +289,9 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 		mScreenWidth = metrics.widthPixels;
 		mScreenHeight = metrics.heightPixels;
 		mScreenDensity = metrics.densityDpi;
+		if(Utils.isTablet(getActivity())){//是否是平板，有些平板满屏无法录制
+			mScreenWidth=mScreenWidth-mScreenDensity/2;
+		}
 	}
 
 	/**
