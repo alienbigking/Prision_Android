@@ -12,6 +12,7 @@ import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
@@ -58,12 +59,11 @@ public class ScreenRecordService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-//            String rootPath = Utils.getTFPath();//TF卡路径
-            String rootPath=Constants.SD_VIDEO_PATH;//存放目录
-            File pathFile=new File(rootPath);
-            if(!pathFile.exists())pathFile.mkdirs();
+            String rootPath = Utils.getTFPath();//TF卡路径 外置SD卡根目录
+            if(rootPath==null&&Utils.hasSDFree()){//内置SD卡根目录
+                rootPath= Environment.getExternalStorageDirectory().getPath();
+            }
             if (rootPath != null) {
-                // TODO Auto-generated method stub
                 Log.i(TAG, "Service onStartCommand() is called");
                 mResultCode = intent.getIntExtra("code", -1);
                 mResultData = intent.getParcelableExtra("data");
@@ -106,9 +106,6 @@ public class ScreenRecordService extends Service {
     private MediaRecorder createMediaRecorder(String rootPath) {
         MediaRecorder mediaRecorder=null;
         try {
-//            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-//            Date curDate = new Date(System.currentTimeMillis());
-//            String curTime = formatter.format(curDate).replace(" ", "");
             String videoQuality = "HD";
             if (isVideoSd) videoQuality = "SD";
 
@@ -117,16 +114,6 @@ public class ScreenRecordService extends Service {
             mediaRecorder.reset();
             if (isAudio) mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-
-            /*File rootfile=new File(Constants.SD_ROOT_PATH);
-            if(!rootfile.exists()){
-                rootfile.mkdirs();
-            }
-
-            File file=new File(Constants.SD_VIDEO_PATH);
-            if(!file.exists()){
-                file.mkdirs();
-            }*/
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             SharedPreferences preferences= GKApplication.getInstance().
                     getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
@@ -134,12 +121,6 @@ public class ScreenRecordService extends Service {
             String fileName=String.format("%s_%s", Utils.getDateFromTimeInMillis(System.currentTimeMillis(),new SimpleDateFormat("yyyyMMddHHmmss")),
                     preferences.getString(Constants.RECORD_VIDEO_NAME,""));
 
-/*
-            rootPath += "/video/";
-            File file=new File(rootPath);
-            if(!file.exists()){
-                file.mkdirs();
-            }*/
             mediaRecorder.setOutputFile(rootPath + "/" + fileName + ".mp4");
             mediaRecorder.setVideoSize(mScreenWidth, mScreenHeight);  //after setVideoSource(), setOutFormat()
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);  //after setOutputFormat()

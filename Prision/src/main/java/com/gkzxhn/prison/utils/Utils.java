@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.os.StatFs;
 import android.text.TextUtils;
 import android.view.WindowManager;
 
@@ -215,6 +216,25 @@ public  class Utils {
             }
         }
         return path;
+    }
+    public static boolean hasSDFree(){
+      return getSDFreeSize()>100;//大于100M
+    }
+    /**获取SD卡剩余空间
+     * @return
+     */
+    public static long getSDFreeSize(){
+        //取得SD卡文件路径
+        File path = Environment.getExternalStorageDirectory();
+        StatFs sf = new StatFs(path.getPath());
+        //获取单个数据块的大小(Byte)
+        long blockSize = sf.getBlockSizeLong();
+        //空闲的数据块的数量
+        long freeBlocks = sf.getAvailableBlocksLong();
+        //返回SD卡空闲大小
+        //return freeBlocks * blockSize;  //单位Byte
+        //return (freeBlocks * blockSize)/1024;   //单位KB
+        return (freeBlocks * blockSize)/1024 /1024; //单位MB
     }
 
     /**

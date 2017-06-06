@@ -238,12 +238,12 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void startScreenRecording() {
-//		if(Utils.getTFPath()!=null) {
-			// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
+		if(Utils.getTFPath()!=null||Utils.hasSDFree()) {//有TF卡或者有足够SD存储容量
 			MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) (getActivity().getSystemService(Context.MEDIA_PROJECTION_SERVICE));
 			Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
 			startActivityForResult(permissionIntent, REQUEST_CODE);
-//		}
+		}
 	}
 	private int mScreenWidth;
 	private int mScreenHeight;
@@ -255,7 +255,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	/** 是否开启音频录制 */
 	private boolean isAudio = true;
 
-//	@Override
+	//	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
