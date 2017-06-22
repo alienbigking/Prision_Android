@@ -1,5 +1,6 @@
 package com.gkzxhn.prison.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
+import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.presenter.LoginPresenter;
 import com.gkzxhn.prison.view.ILoginView;
 
@@ -37,6 +39,10 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
         etPassword= (EditText) findViewById(R.id.loign_layout_et_password);
     }
     private void init(){
+        //显示记住的密码
+        SharedPreferences preferences= getSharedPreferences(Constants.USER_ACCOUNT_TABLE, Activity.MODE_PRIVATE);
+        etAccount.setText(preferences.getString(Constants.USER_ACCOUNT,""));
+        etPassword.setText(preferences.getString(Constants.USER_PASSWORD,""));
         mPresenter=new LoginPresenter(this,this);
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting));
         stopRefreshAnim();
@@ -69,6 +75,14 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
     @Override
     public void stopRefreshAnim() {
         if(mProgress!=null&&mProgress.isShowing())mProgress.dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 
     @Override

@@ -20,6 +20,7 @@ public interface Constants {
     final int REQUEST_TIMEOUT=60000;//超时时间1分钟
     /*-------------------------------User Tab-------------------------------------------------*/
     final String USER_TABLE="user_table";
+    final String USER_ACCOUNT_TABLE="user_account_table";//记住账号密码
     final String USER_IS_UNAUTHORIZED="isUnauthorized";
     final String USER_ID="user_id";
     final String IS_FIRST_IN="is_first_in";

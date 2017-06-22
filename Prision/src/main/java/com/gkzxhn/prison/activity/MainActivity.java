@@ -334,4 +334,12 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         intentFilter.addAction(Constants.NIM_KIT_OUT);
         registerReceiver(mBroadcastReceiver,intentFilter);
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
+    }
+
 }
