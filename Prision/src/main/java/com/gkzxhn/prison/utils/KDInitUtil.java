@@ -179,7 +179,9 @@ public class KDInitUtil {
                 setCancelH323PxyCfgCmd();
                 return;
             }
-            LoginStateManager.loginAps(GKApplication.getInstance().getTerminalAccount(), GKApplication.getInstance().getTerminalPassword(), Constants.TERMINAL_ADDRESS);
+            String terminalAccount = GKApplication.getInstance().getTerminalAccount();
+            terminalAccount = "001001" + terminalAccount;
+            LoginStateManager.loginAps(terminalAccount, GKApplication.getInstance().getTerminalPassword(), Constants.TERMINAL_ADDRESS);
         } else {
             Configure.setAudioPriorCfgCmd(KDInitUtil.isH323);
             new Thread(new Runnable() {
@@ -201,7 +203,9 @@ public class KDInitUtil {
                         return;
                     }
                     // 注册代理
-                    GKStateMannager.instance().registerGKFromH323(GKApplication.getInstance().getTerminalAccount(), GKApplication.getInstance().getTerminalPassword(), "");
+                    String terminalAccount = GKApplication.getInstance().getTerminalAccount();
+                    terminalAccount = "001001" + terminalAccount;
+                    GKStateMannager.instance().registerGKFromH323(terminalAccount, GKApplication.getInstance().getTerminalPassword(), "");
                 }
             }).start();
         }
@@ -312,7 +316,7 @@ public class KDInitUtil {
 
             @Override
             public void run() {
-                Configure.setH323PxyCfgCmd(true, false, dwIp);
+                Configure.setH323PxyCfgCmd(true, true, dwIp);
                 // 关闭并重新开启协议栈
                 Configure.stackOnOff((short) EmConfProtocol.em323.ordinal());
             }
