@@ -23,7 +23,6 @@ import com.gkzxhn.prison.keda.utils.GKStateMannager;
 import com.gkzxhn.prison.keda.utils.NetWorkUtils;
 import com.gkzxhn.prison.keda.vconf.VConferenceManager;
 import com.gkzxhn.prison.presenter.CallUserPresenter;
-import com.gkzxhn.prison.utils.Utils;
 import com.gkzxhn.prison.view.ICallUserView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.StatusCode;
@@ -99,7 +98,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
             if (phone == null || phone.equals(GKStateMannager.mE164)) return;
             if (!VConferenceManager.isAvailableVCconf(true, true, true)) return;
             isClickCall=false;//位置不可改变
-            VConferenceManager.openVConfVideoUI(CallUserActivity.this, true, String.format("%s(%s)", nickName, phone), phone);
+            String aliyun = "001001" + phone.substring(4);
+            VConferenceManager.openVConfVideoUI(CallUserActivity.this, true, String.format("%s(%s)", nickName, phone), aliyun);
         }
     }
     public void stopVConfVideo(){
@@ -117,16 +117,17 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
                 finish();
                 break;
             case R.id.call_user_layout_bt_call:
-                if(Utils.getTFPath()==null){//没有检测到TF卡
-                    if(mCustomDialog!=null) {
-                        mCustomDialog.setContent(Utils.hasSDFree()?getString(R.string.not_found_tf_card_but_sd_free):getString(R.string.not_found_tf_card),
-                                getString(R.string.cancel),
-                                getString(R.string.continue_call));
-                        if(!mCustomDialog.isShowing())mCustomDialog.show();
-                    }
-                }else {
-                    online();
-                }
+//                if(Utils.getTFPath()==null){//没有检测到TF卡
+//                    if(mCustomDialog!=null) {
+//                        mCustomDialog.setContent(Utils.hasSDFree()?getString(R.string.not_found_tf_card_but_sd_free):getString(R.string.not_found_tf_card),
+//                                getString(R.string.cancel),
+//                                getString(R.string.continue_call));
+//                        if(!mCustomDialog.isShowing())mCustomDialog.show();
+//                    }
+//                }else {
+//                    online();
+//                }
+                online();
                 break;
         }
     }

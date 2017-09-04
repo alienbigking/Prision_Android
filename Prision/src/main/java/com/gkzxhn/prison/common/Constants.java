@@ -33,7 +33,9 @@ public interface Constants {
     final String OTHER_CARD="other_card";//身份证信息
     //每次会见视频名称记录,囚犯名字_会见记录ID 后期添加 时间戳年月日时分秒，如20170908102033_张三_144
     final String RECORD_VIDEO_NAME="record_video_name";
-    final String TERMINAL_ADDRESS= "222.244.146.206";//科达服务器终端
+//    final String TERMINAL_ADDRESS= "222.244.146.206";//科达服务器终端
+    public static String TERMINAL_ADDRESS = "106.14.18.98";    //阿里云的服务器,开启会商
+
     /*-------------------------------Video Config-------------------------------------------------*/
     final  String TERMINAL_E164NUM = "e164Num";
     final  String TERMINAL_VCONFNAME = "VconfName";
