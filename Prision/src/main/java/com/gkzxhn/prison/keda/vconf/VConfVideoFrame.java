@@ -145,9 +145,9 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//开启录屏
-//		getScreenBaseInfo();
+		getScreenBaseInfo();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//			startScreenRecording();
+			startScreenRecording();
 		}
 		Log.i("VConfVideo", "VconfVideoFrame-->onCreate ");
 	}
@@ -955,7 +955,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 		}
 
 		VideoCapServiceManager.unBindService();
-//		stopScreenRecording();
+		stopScreenRecording();
 		super.onDestroy();
 	}
 
