@@ -262,7 +262,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 		if(requestCode == REQUEST_CODE) {
 			if(resultCode == RESULT_OK) {
 				// 获得权限，启动Service开始录制
-				/*Intent service = new Intent(getActivity(), ScreenRecordService.class);
+				Intent service = new Intent(getActivity(), ScreenRecordService.class);
 				service.putExtra("code", resultCode);
 				service.putExtra("data", data);
 				service.putExtra("audio", isAudio);
@@ -272,7 +272,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 				service.putExtra("quality", isVideoSd);
 				getActivity().startService(service);
 				// 已经开始屏幕录制，修改UI状态
-				isStarted = !isStarted;*/
+				isStarted = !isStarted;
 //                statusIsStarted();
 //                simulateHome(); // this.finish();  // 可以直接关闭Activity
 			} else {
