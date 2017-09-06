@@ -163,6 +163,7 @@ public class GKStateMannager {
 	 *  重新注册GK
 	 */
 	public void registerGK() {
+		//TODO mRegisteringGK=false
 		if (mRegisteringGK || mRegisterGK) {
 			return;
 		}

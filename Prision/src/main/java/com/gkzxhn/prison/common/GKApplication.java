@@ -132,8 +132,7 @@ public class GKApplication extends Application {
     /**
      * 关闭屏幕录制，即停止录制Service
      */
-    public void stopScreenRecording(boolean isConnected) {
-        // TODO Auto-generated method stub
+    public void stopScreenRecording() {
         Intent service = new Intent(this, ScreenRecordService.class);
         service.setAction(Constants.STOP_RECORDSCREEN_ACTION);
         startService(service);

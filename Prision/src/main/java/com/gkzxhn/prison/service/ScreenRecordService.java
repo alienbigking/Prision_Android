@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
@@ -61,6 +62,7 @@ public class ScreenRecordService extends Service {
         try {
             if(intent.getAction()!=null) {
                 if (intent.getAction().equals(Constants.START_RECORDSCREEN_ACTION)) {//开始录屏
+                    Log.e("开始录屏","raleigh_test");
                     String rootPath = Utils.getTFPath();//TF卡路径 外置SD卡根目录
                     if (rootPath == null && Utils.hasSDFree()) {//内置SD卡根目录
                         rootPath = Environment.getExternalStorageDirectory().getPath();
@@ -84,6 +86,8 @@ public class ScreenRecordService extends Service {
                         mMediaRecorder.start();
                     }
                 } else if (intent.getAction().equals(Constants.STOP_RECORDSCREEN_ACTION)) {
+                    Toast.makeText(this,"已停止录屏",Toast.LENGTH_LONG).show();
+                    Log.e("已停止录屏","raleigh_test");
                     if (mVirtualDisplay != null) {
                         mVirtualDisplay.release();
                         mVirtualDisplay = null;

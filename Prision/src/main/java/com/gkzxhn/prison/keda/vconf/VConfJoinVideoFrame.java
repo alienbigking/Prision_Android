@@ -234,7 +234,7 @@ public class VConfJoinVideoFrame extends Fragment implements View.OnClickListene
 		}
 
 		//停止录屏－没有接通就挂断
-		GKApplication.getInstance().stopScreenRecording(false);
+//		GKApplication.getInstance().stopScreenRecording(false);
 		if (GKStateMannager.mRegisterGK) {
 			Conference.hangupConfByReason(EmMtCallDisReason.emDisconnect_Normal);
 			mIsHangup = true;

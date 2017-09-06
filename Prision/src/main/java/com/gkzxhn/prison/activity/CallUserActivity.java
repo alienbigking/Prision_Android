@@ -290,4 +290,5 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         super.onPause();
         isClickCall=false;
     }
+
 }

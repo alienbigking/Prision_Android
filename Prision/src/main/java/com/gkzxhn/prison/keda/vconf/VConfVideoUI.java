@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
+import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.keda.utils.StringUtils;
 import com.gkzxhn.prison.service.ScreenRecordService;
 import com.gkzxhn.prison.utils.Utils;
@@ -442,5 +443,12 @@ public class VConfVideoUI extends ActionBarActivity {
 				Toast.makeText(this,R.string.cancel_record,Toast.LENGTH_SHORT).show();
 			}
 		}
+	}
+
+	@Override
+	public void finish() {
+		//停止录屏
+		GKApplication.getInstance().stopScreenRecording();
+		super.finish();
 	}
 }

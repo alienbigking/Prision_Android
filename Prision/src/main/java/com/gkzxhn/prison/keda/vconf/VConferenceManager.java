@@ -655,7 +655,9 @@ public class VConferenceManager {
 				}
 		*/
 		cleanConf();
-		GKApplication.getInstance().sendBroadcast(new Intent(Constants.MEETING_FORCE_CLOSE_ACTION));
+		Intent intent=new Intent(Constants.MEETING_FORCE_CLOSE_ACTION);
+		intent.putExtra(Constants.EXTRA,hasConnected);
+		GKApplication.getInstance().sendBroadcast(intent);
 		VideoCapServiceManager.unBindService();
 		// 修改自己的状态
 		LoginStateManager.imModifySelfStateReq();
