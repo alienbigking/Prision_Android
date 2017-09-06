@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.activity.LoginActivity;
 import com.gkzxhn.prison.keda.utils.TruetouchGlobal;
+import com.gkzxhn.prison.service.ScreenRecordService;
 import com.gkzxhn.prison.utils.CrashHandler;
 import com.gkzxhn.prison.utils.KDInitUtil;
 import com.gkzxhn.prison.utils.NimInitUtil;
@@ -127,6 +128,15 @@ public class GKApplication extends Application {
     public String getTerminalPassword(){
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
         return sharedPreferences.getString(Constants.TERMINAL_PASSWORD,"");
+    }
+    /**
+     * 关闭屏幕录制，即停止录制Service
+     */
+    public void stopScreenRecording(boolean isConnected) {
+        // TODO Auto-generated method stub
+        Intent service = new Intent(this, ScreenRecordService.class);
+        service.setAction(Constants.STOP_RECORDSCREEN_ACTION);
+        startService(service);
     }
 
 }

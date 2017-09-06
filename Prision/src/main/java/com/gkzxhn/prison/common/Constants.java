@@ -100,4 +100,9 @@ public interface Constants {
     final String MEETING_REMOVEREQCHAIRMANHANDLER_ACTION="com.gkzxhn.prision.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION";
     // 刷新音视频下面的工具栏
     final String MEETING_REMOVEREQSPEAKERHANDLER_ACTION="com.gkzxhn.prision.MEETING_REMOVEREQSPEAKERHANDLER_ACTION";
+
+    //开始录屏
+    final String START_RECORDSCREEN_ACTION="com.gkzxhn.prision.START_RECORDSCREEN_ACTION";
+    //结束录屏
+    final String STOP_RECORDSCREEN_ACTION="com.gkzxhn.prision.STOP_RECORDSCREEN_ACTION";
 }

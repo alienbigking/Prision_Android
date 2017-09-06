@@ -539,6 +539,7 @@ public class VConferenceManager {
 		if (null != e164) {
 			VConferenceManager.mCallPeerE164Num = e164;
 		}
+
 		Intent intent=new Intent(cucrActivity,VConfVideoUI.class);
 		intent.putExtras(extras);
 		cucrActivity.startActivity(intent);

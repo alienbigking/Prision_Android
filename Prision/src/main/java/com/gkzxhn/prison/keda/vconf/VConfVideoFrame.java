@@ -144,11 +144,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//开启录屏
-		getScreenBaseInfo();
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			startScreenRecording();
-		}
+
 		Log.i("VConfVideo", "VconfVideoFrame-->onCreate ");
 	}
 
@@ -231,76 +227,8 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	}
 
 
-	//录屏方案3
-	private static final int REQUEST_CODE = 1000;
-	/**
-	 * 获取屏幕录制的权限,开启录制
-	 */
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-	private void startScreenRecording() {
-		// TODO Auto-generated method stub
-		if(Utils.getTFPath()!=null||Utils.hasSDFree()) {//有TF卡或者有足够SD存储容量
-			MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) (getActivity().getSystemService(Context.MEDIA_PROJECTION_SERVICE));
-			Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
-			startActivityForResult(permissionIntent, REQUEST_CODE);
-		}
-	}
-	private int mScreenWidth;
-	private int mScreenHeight;
-	private int mScreenDensity;
-	/** 是否已经开启视频录制 */
-	private boolean isStarted = false;
-	/** 是否为标清视频 */
-	private boolean isVideoSd = true;
-	/** 是否开启音频录制 */
-	private boolean isAudio = true;
 
-	//	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == REQUEST_CODE) {
-			if(resultCode == RESULT_OK) {
-				// 获得权限，启动Service开始录制
-				Intent service = new Intent(getActivity(), ScreenRecordService.class);
-				service.putExtra("code", resultCode);
-				service.putExtra("data", data);
-				service.putExtra("audio", isAudio);
-				service.putExtra("width", mScreenWidth);
-				service.putExtra("height", mScreenHeight);
-				service.putExtra("density", mScreenDensity);
-				service.putExtra("quality", isVideoSd);
-				getActivity().startService(service);
-				// 已经开始屏幕录制，修改UI状态
-				isStarted = !isStarted;
-//                statusIsStarted();
-//                simulateHome(); // this.finish();  // 可以直接关闭Activity
-			} else {
-				Toast.makeText(getContext(),R.string.cancel_record,Toast.LENGTH_SHORT).show();
-			}
-		}
-	}
-	/**
-	 * 获取屏幕相关数据
-	 */
-	private void getScreenBaseInfo() {
-		DisplayMetrics metrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		mScreenWidth = metrics.widthPixels;
-		mScreenHeight = metrics.heightPixels;
-		mScreenDensity = metrics.densityDpi;
-		mScreenWidth=mScreenWidth-mScreenDensity/2;//解决有些平板满屏无法录制问题
-	}
 
-	/**
-	 * 关闭屏幕录制，即停止录制Service
-	 */
-	private void stopScreenRecording() {
-		// TODO Auto-generated method stub
-		Intent service = new Intent(getActivity(), ScreenRecordService.class);
-		getActivity().stopService(service);
-		isStarted = !isStarted;
-	}
 
 	@Override
 	public void onStart() {
@@ -955,7 +883,6 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 		}
 
 		VideoCapServiceManager.unBindService();
-		stopScreenRecording();
 		super.onDestroy();
 	}
 

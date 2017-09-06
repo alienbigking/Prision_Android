@@ -59,6 +59,7 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
                                 IMainView view=mWeakView==null?null:mWeakView.get();
                                 if(view!=null){
                                     view.updateItems((List<MeetingEntity>) object);
+                                    view.stopRefreshAnim();
                                 }
                             }
                         },resultJson);

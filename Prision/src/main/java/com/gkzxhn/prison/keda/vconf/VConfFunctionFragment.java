@@ -318,6 +318,8 @@ public class VConfFunctionFragment extends Fragment implements View.OnClickListe
 					mCancelVideoDialog.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View view) {
+							//停止录屏－正常通话挂断
+							GKApplication.getInstance().stopScreenRecording(true);
 							if (checkExceptionQuit()) {
 								VConferenceManager.quitConfAction(VConferenceManager.isCSVConf(), false);
 								return;

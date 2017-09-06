@@ -59,27 +59,45 @@ public class ScreenRecordService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            String rootPath = Utils.getTFPath();//TF卡路径 外置SD卡根目录
-            if(rootPath==null&&Utils.hasSDFree()){//内置SD卡根目录
-                rootPath= Environment.getExternalStorageDirectory().getPath();
-            }
-            if (rootPath != null) {
-                Log.i(TAG, "Service onStartCommand() is called");
-                mResultCode = intent.getIntExtra("code", -1);
-                mResultData = intent.getParcelableExtra("data");
+            if(intent.getAction()!=null) {
+                if (intent.getAction().equals(Constants.START_RECORDSCREEN_ACTION)) {//开始录屏
+                    String rootPath = Utils.getTFPath();//TF卡路径 外置SD卡根目录
+                    if (rootPath == null && Utils.hasSDFree()) {//内置SD卡根目录
+                        rootPath = Environment.getExternalStorageDirectory().getPath();
+                    }
+                    if (rootPath != null) {
+                        Log.i(TAG, "Service onStartCommand() is called");
+                        mResultCode = intent.getIntExtra("code", -1);
+                        mResultData = intent.getParcelableExtra("data");
 
-                mScreenWidth = intent.getIntExtra("width", 720);
-                mScreenHeight = intent.getIntExtra("height", 1280);
-                mScreenDensity = intent.getIntExtra("density", 1);
-                isVideoSd = intent.getBooleanExtra("quality", true);
-                isAudio = intent.getBooleanExtra("audio", true);
+                        mScreenWidth = intent.getIntExtra("width", 720);
+                        mScreenHeight = intent.getIntExtra("height", 1280);
+                        mScreenDensity = intent.getIntExtra("density", 1);
+                        isVideoSd = intent.getBooleanExtra("quality", true);
+                        isAudio = intent.getBooleanExtra("audio", true);
 
-                mMediaProjection = createMediaProjection();
+                        mMediaProjection = createMediaProjection();
 
-                mMediaRecorder = createMediaRecorder(rootPath);
-                mVirtualDisplay = createVirtualDisplay(); // 必须在mediaRecorder.prepare() 之后调用，否则报错"fail to get surface"
+                        mMediaRecorder = createMediaRecorder(rootPath);
+                        mVirtualDisplay = createVirtualDisplay(); // 必须在mediaRecorder.prepare() 之后调用，否则报错"fail to get surface"
 
-                mMediaRecorder.start();
+                        mMediaRecorder.start();
+                    }
+                } else if (intent.getAction().equals(Constants.STOP_RECORDSCREEN_ACTION)) {
+                    if (mVirtualDisplay != null) {
+                        mVirtualDisplay.release();
+                        mVirtualDisplay = null;
+                    }
+                    if (mMediaRecorder != null) {
+                        mMediaRecorder.setOnErrorListener(null);
+                        mMediaProjection.stop();
+                        mMediaRecorder.reset();
+                    }
+                    if (mMediaProjection != null) {
+                        mMediaProjection.stop();
+                        mMediaProjection = null;
+                    }
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -112,7 +130,7 @@ public class ScreenRecordService extends Service {
             Log.i(TAG, "Create MediaRecorder");
             mediaRecorder = new MediaRecorder();
             mediaRecorder.reset();
-            if (isAudio) mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            if (isAudio) mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             SharedPreferences preferences= GKApplication.getInstance().

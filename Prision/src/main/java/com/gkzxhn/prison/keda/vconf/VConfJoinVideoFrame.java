@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gkzxhn.prison.R;
+import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.keda.utils.GKStateMannager;
 import com.gkzxhn.prison.keda.utils.NetWorkUtils;
 import com.gkzxhn.prison.keda.utils.StringUtils;
@@ -232,6 +233,8 @@ public class VConfJoinVideoFrame extends Fragment implements View.OnClickListene
 			return;
 		}
 
+		//停止录屏－没有接通就挂断
+		GKApplication.getInstance().stopScreenRecording(false);
 		if (GKStateMannager.mRegisterGK) {
 			Conference.hangupConfByReason(EmMtCallDisReason.emDisconnect_Normal);
 			mIsHangup = true;

@@ -12,15 +12,22 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.AudioManager;
+import android.media.projection.MediaProjectionManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.keda.utils.StringUtils;
+import com.gkzxhn.prison.service.ScreenRecordService;
+import com.gkzxhn.prison.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kedacom.kdv.mt.bean.TMtAddr;
@@ -111,6 +118,11 @@ public class VConfVideoUI extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i("VConfVideo", "VConfVideoUI-->onCreate");
 		super.onCreate(savedInstanceState);
+		//开启录屏
+		getScreenBaseInfo();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			startScreenRecording();
+		}
 		// 让音量键固定为媒体音量控制,其他的页面不要这样设置--只在音视频的界面加入这段代码
 		this.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		setContentView(R.layout.vconf_video_ui_layout);
@@ -371,4 +383,64 @@ public class VConfVideoUI extends ActionBarActivity {
 		registerReceiver(mBroadcastReceiver,intentFilter);
 	}
 
+	//录屏方案3
+	private static final int REQUEST_CODE = 1000;
+	/**
+	 * 获取屏幕录制的权限,开启录制
+	 */
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+	private void startScreenRecording() {
+		// TODO Auto-generated method stub
+		if(Utils.getTFPath()!=null||Utils.hasSDFree()) {//有TF卡或者有足够SD存储容量
+			MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) (this.getSystemService(Context.MEDIA_PROJECTION_SERVICE));
+			Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
+			startActivityForResult(permissionIntent, REQUEST_CODE);
+		}
+	}
+	private int mScreenWidth;
+	private int mScreenHeight;
+	private int mScreenDensity;
+	/** 是否为标清视频 */
+	private boolean isVideoSd = true;
+	/** 是否开启音频录制 */
+	private boolean isAudio = true;
+
+
+	/**
+	 * 获取屏幕相关数据
+	 */
+	private void getScreenBaseInfo() {
+		DisplayMetrics metrics = new DisplayMetrics();
+		this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		mScreenWidth = metrics.widthPixels;
+		mScreenHeight = metrics.heightPixels;
+		mScreenDensity = metrics.densityDpi;
+		mScreenWidth=mScreenWidth-mScreenDensity/2;//解决有些平板满屏无法录制问题
+	}
+
+	//	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == REQUEST_CODE) {
+			if(resultCode == RESULT_OK) {
+				// 获得权限，启动Service开始录制
+				Intent service = new Intent(this, ScreenRecordService.class);
+				service.setAction(Constants.START_RECORDSCREEN_ACTION);
+				service.putExtra("code", resultCode);
+				service.putExtra("data", data);
+				service.putExtra("audio", isAudio);
+				service.putExtra("width", mScreenWidth);
+				service.putExtra("height", mScreenHeight);
+				service.putExtra("density", mScreenDensity);
+				service.putExtra("quality", isVideoSd);
+				this.startService(service);
+				// 已经开始屏幕录制，修改UI状态
+//                statusIsStarted();
+//                simulateHome(); // this.finish();  // 可以直接关闭Activity
+			} else {
+				Toast.makeText(this,R.string.cancel_record,Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
 }
