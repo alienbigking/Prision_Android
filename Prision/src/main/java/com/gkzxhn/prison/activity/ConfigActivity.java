@@ -19,7 +19,9 @@ import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.keda.utils.GKStateMannager;
+import com.gkzxhn.prison.keda.utils.TruetouchGlobal;
 import com.gkzxhn.prison.utils.KDInitUtil;
+import com.starlight.mobile.android.lib.util.CommonHelper;
 
 /**
  * Created by Raleigh.Luo on 17/4/12.
@@ -80,6 +82,7 @@ public class ConfigActivity extends SuperActivity {
         mSpinner.setSelection(index);
     }
     public void onClickListener(View view){
+        CommonHelper.clapseSoftInputMethod(this);
         switch (view.getId()){
             case R.id.common_head_layout_iv_left:
                 finish();
@@ -92,7 +95,7 @@ public class ConfigActivity extends SuperActivity {
                     mTimer.start();
                     startRefreshAnim();
                     //退出终端平台，如果已经注册了终端平台
-                    GKStateMannager.restoreLoginState();
+                    TruetouchGlobal.logOff();
                     SharedPreferences.Editor editor=preferences.edit();
                     editor.putString(Constants.TERMINAL_ACCOUNT,acc);
                     editor.putInt(Constants.TERMINAL_RATE,Integer.valueOf(mRate));

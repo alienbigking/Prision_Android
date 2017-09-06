@@ -62,7 +62,6 @@ public final class TruetouchGlobal {
 	 * 退出
 	 */
 	public static void logOut() {
-
 		GKStateMannager.instance().unRegisterGK();
 		GKStateMannager.restoreLoginState();
 		// 退出平台
