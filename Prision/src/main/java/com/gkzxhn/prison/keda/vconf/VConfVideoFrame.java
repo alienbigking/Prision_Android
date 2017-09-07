@@ -1100,8 +1100,8 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-//		VConferenceManager.recoverSpeakerphoneOn();// 打开扬声器
-		getActivity().startService(new Intent(getActivity(), RecordServer.class));
+		VConferenceManager.recoverSpeakerphoneOn();// 打开扬声器
+//		getActivity().startService(new Intent(getActivity(), RecordServer.class));
 	}
 
 	@Override

@@ -118,14 +118,28 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
                 finish();
                 break;
             case R.id.call_user_layout_bt_call:
-                if(Utils.getTFPath()==null){//没有检测到TF卡
-                    if(mCustomDialog!=null) {
-                        mCustomDialog.setContent(Utils.hasSDFree()?getString(R.string.not_found_tf_card_but_sd_free):getString(R.string.not_found_tf_card),
+                if(Utils.getTFPath()==null) {//没有检测到TF卡
+                    if (mCustomDialog != null) {
+                        mCustomDialog.setContent(Utils.hasSDFree() ? getString(R.string.not_found_tf_card_but_sd_free) : getString(R.string.not_found_tf_card),
                                 getString(R.string.cancel),
                                 getString(R.string.continue_call));
-                        if(!mCustomDialog.isShowing())mCustomDialog.show();
+                        if (!mCustomDialog.isShowing()) mCustomDialog.show();
                     }
-                }else {
+                }else if(Utils.getTFPath().length()==0){
+                    if (mCustomDialog != null) {
+                        mCustomDialog.setContent(Utils.hasSDFree() ? getString(R.string.tf_card_not_root_but_sd_free) : getString(R.string.tf_card_not_root),
+                                getString(R.string.cancel),
+                                getString(R.string.continue_call));
+                        if (!mCustomDialog.isShowing()) mCustomDialog.show();
+                    }
+                }else if(Utils.hasTFFree()){
+                    if (mCustomDialog != null) {
+                        mCustomDialog.setContent(getString(R.string.tf_card_is_fill),
+                                getString(R.string.cancel),
+                                getString(R.string.continue_call));
+                        if (!mCustomDialog.isShowing()) mCustomDialog.show();
+                    }
+                }else{
                     online();
                 }
                 break;
