@@ -210,6 +210,14 @@ public  class Utils {
             if (paths.size() > 1) {
                 try {
                     path = paths.get(1);
+                    File tempFile=new File(path+"/prisionTemp.txt");
+                    boolean result=true;
+                    if(!tempFile.exists()){
+                        result=tempFile.mkdir();
+                    }else{
+                        result=tempFile.delete();
+                    }
+                    if(!result)path=null;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -218,7 +226,7 @@ public  class Utils {
         return path;
     }
     public static boolean hasSDFree(){
-      return getSDFreeSize()>100;//大于100M
+        return getSDFreeSize()>100;//大于100M
     }
     /**获取SD卡剩余空间
      * @return
