@@ -263,7 +263,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
             int lastIgnoreVersion= mPresenter.getSharedPreferences().getInt(Constants.LAST_IGNORE_VERSION,0);
             boolean isIgoreVersion=lastIgnoreVersion==newVersion;//若是已忽略的版本，则不弹出升级对话框
             if(version.isForce())isIgoreVersion=false;
-            if (newVersion >= currentVersion&&!isIgoreVersion) {//新版本大于当前版本，则弹出更新下载到对话框
+            if (newVersion > currentVersion&&!isIgoreVersion) {//新版本大于当前版本，则弹出更新下载到对话框
                 //版本名
                 String versionName =  version.getVersionName();
                 // 下载地址
