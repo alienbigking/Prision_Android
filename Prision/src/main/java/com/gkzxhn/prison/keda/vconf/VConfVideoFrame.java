@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.media.AudioManager;
 import android.media.projection.MediaProjectionManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.keda.utils.StringUtils;
+import com.gkzxhn.prison.service.RecordServer;
 import com.gkzxhn.prison.service.ScreenRecordService;
 import com.gkzxhn.prison.utils.Utils;
 import com.kedacom.kdv.mt.api.Configure;
@@ -1098,7 +1100,8 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		VConferenceManager.recoverSpeakerphoneOn();// 打开扬声器
+//		VConferenceManager.recoverSpeakerphoneOn();// 打开扬声器
+		getActivity().startService(new Intent(getActivity(), RecordServer.class));
 	}
 
 	@Override

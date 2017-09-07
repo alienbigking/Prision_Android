@@ -197,6 +197,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
 
+        <service android:name=".service.RecordServer"/>
         <service android:name="com.gkzxhn.prison.keda.vconf.VideoCapService"/>
         <service android:name="com.gkzxhn.prison.service.ScreenRecordService"/>
         <!--<receiver android:name="com.gkzxhn.prison.receiver.USBStateReceiver"/>-->

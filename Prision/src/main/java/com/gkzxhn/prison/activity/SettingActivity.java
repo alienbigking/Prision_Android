@@ -114,7 +114,7 @@ public class SettingActivity extends SuperActivity implements IMainView{
             packageInfo = pm.getPackageInfo(getPackageName(),
                     PackageManager.GET_CONFIGURATIONS);
             int currentVersion=packageInfo.versionCode;//当前App版本
-            if (newVersion > currentVersion) {//新版本大于当前版本
+//            if (newVersion > currentVersion) {//新版本大于当前版本
                 //版本名
                 String versionName =  version.getVersionName();
                 // 下载地址
@@ -125,9 +125,9 @@ public class SettingActivity extends SuperActivity implements IMainView{
                 updateDialog.setDownloadInfor(versionName,newVersion,downloadUrl);
                 updateDialog.show();//显示对话框
                 tvUpdateHint.setText(getString(R.string.new_version_colon)+versionName);
-            }else{
-                tvUpdateHint.setText(R.string.has_last_version);
-            }
+//            }else{
+//                tvUpdateHint.setText(R.string.has_last_version);
+//            }
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
