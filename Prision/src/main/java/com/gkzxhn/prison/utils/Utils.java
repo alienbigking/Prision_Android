@@ -211,13 +211,13 @@ public  class Utils {
                 try {
                     path = paths.get(1);
                     File tempFile=new File(path+"/prisionTemp.txt");
-                    boolean result=true;
+                    boolean result;
                     if(!tempFile.exists()){
                         result=tempFile.mkdir();
                     }else{
                         result=tempFile.delete();
                     }
-                    if(!result)path=null;
+                    if(!result)path="";
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -244,7 +244,21 @@ public  class Utils {
         //return (freeBlocks * blockSize)/1024;   //单位KB
         return (freeBlocks * blockSize)/1024 /1024; //单位MB
     }
-
+    /**获取SD卡剩余空间
+     * @return
+     */
+    public static boolean hasTFFree(){
+        //取得SD卡文件路径
+        StatFs sf = new StatFs(getTFPath());
+        //获取单个数据块的大小(Byte)
+        long blockSize = sf.getBlockSizeLong();
+        //空闲的数据块的数量
+        long freeBlocks = sf.getAvailableBlocksLong();
+        //返回SD卡空闲大小
+        //return freeBlocks * blockSize;  //单位Byte
+        //return (freeBlocks * blockSize)/1024;   //单位KB
+        return (freeBlocks * blockSize)/1024 /1024>100; //单位MB   磁盘大于100M
+    }
     /**
      * 获取外置SD卡路径以及TF卡的路径
      * <p>

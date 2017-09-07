@@ -68,6 +68,11 @@
     <string name="cancel_record">取消录制</string>
     <string name="not_found_tf_card_but_sd_free">未检测到TF卡，本次视频会话将录制到内置SD卡中</string>
     <string name="not_found_tf_card">未检测到TF卡，内置SD卡存储容量不足，本次视频会话将不录制</string>
+
+    <string name="tf_card_not_root_but_sd_free">TF卡无法写入，本次视频会话将录制到内置SD卡中</string>
+    <string name="tf_card_not_root">TF卡无法写入，内置SD卡存储容量不足，本次视频会话将不录制</string>
+    <string name="tf_card_is_fill">TF卡存储容量不足，录制的视频可能无法写入，确定继续视频会话？</string>
+
     <!--版本更新-->
     <string name="update_version_hint">狱务通监狱版更新</string>
     <string name="new_version_colon">新版本：</string>

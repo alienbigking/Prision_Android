@@ -392,7 +392,7 @@ public class VConfVideoUI extends ActionBarActivity {
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void startScreenRecording() {
 		// TODO Auto-generated method stub
-		if(Utils.getTFPath()!=null||Utils.hasSDFree()) {//有TF卡或者有足够SD存储容量
+		if((Utils.getTFPath()!=null&&Utils.getTFPath().length()>0)||Utils.hasSDFree()) {//有TF卡或者有足够SD存储容量
 			MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) (this.getSystemService(Context.MEDIA_PROJECTION_SERVICE));
 			Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
 			startActivityForResult(permissionIntent, REQUEST_CODE);
