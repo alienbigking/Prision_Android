@@ -201,6 +201,7 @@
         <service android:name="com.gkzxhn.prison.keda.vconf.VideoCapService"/>
         <service android:name="com.gkzxhn.prison.service.ScreenRecordService"/>
         <!--<receiver android:name="com.gkzxhn.prison.receiver.USBStateReceiver"/>-->
+        <service android:name=".utils.RecordServer"/>
     </application>
 
 </manifest>

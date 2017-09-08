@@ -8,19 +8,16 @@ package com.gkzxhn.prison.keda.vconf;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.AudioManager;
-import android.media.projection.MediaProjectionManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -32,14 +29,11 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.keda.utils.StringUtils;
-import com.gkzxhn.prison.service.RecordServer;
-import com.gkzxhn.prison.service.ScreenRecordService;
-import com.gkzxhn.prison.utils.Utils;
+import com.gkzxhn.prison.utils.RecordThread;
 import com.kedacom.kdv.mt.api.Configure;
 import com.kedacom.kdv.mt.constant.EmNativeConfType;
 import com.kedacom.truetouch.video.capture.VideoCapture;
@@ -51,8 +45,6 @@ import com.kedacom.truetouch.video.player.Renderer.Channel;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * 视频会议界面
@@ -133,8 +125,9 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	private ImageView mIv_id_card_01;
 	private ImageView mIv_id_card_02;
 	private boolean isScaled = false;  //审核界面是否已缩放
+    private RecordThread mRecordThread;
 
-	@Override
+    @Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 
@@ -1100,9 +1093,31 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		VConferenceManager.recoverSpeakerphoneOn();// 打开扬声器
+//		VConferenceManager.recoverSpeakerphoneOn();// 打开扬声器
 //		getActivity().startService(new Intent(getActivity(), RecordServer.class));
-	}
+        AudioManager audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+        boolean bluetoothA2dpOn = audioManager.isBluetoothA2dpOn();
+        boolean bluetoothScoOn = audioManager.isBluetoothScoOn();
+        boolean bluetoothScoAvailableOffCall = audioManager.isBluetoothScoAvailableOffCall();
+        boolean microphoneMute = audioManager.isMicrophoneMute();
+        boolean musicActive = audioManager.isMusicActive();
+        boolean speakerphoneOn = audioManager.isSpeakerphoneOn();
+//        boolean volumeFixed = audioManager.isVolumeFixed();
+        Log.i(TAG, "surfaceCreated: bluetoothA2dpOn : " + bluetoothA2dpOn);
+        Log.i(TAG, "surfaceCreated: bluetoothScoOn : " + bluetoothScoOn);
+        Log.i(TAG, "surfaceCreated: bluetoothScoAvailableOffCall : " + bluetoothScoAvailableOffCall);
+        Log.i(TAG, "surfaceCreated: microphoneMute : " + microphoneMute);
+        Log.i(TAG, "surfaceCreated: musicActive : " + musicActive);
+        Log.i(TAG, "surfaceCreated: speakerphoneOn : " + speakerphoneOn);
+//        Log.i(TAG, "surfaceCreated: volumeFixed : " + volumeFixed);
+
+        if (mRecordThread == null) {
+            mRecordThread = new RecordThread();
+            Log.i(TAG, "surfaceCreated: 准备输出本地音频");
+        }
+        mRecordThread.start();
+        Log.i(TAG, "surfaceCreated: 开始输出本地音频");
+    }
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -1110,6 +1125,9 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
+        if (mRecordThread != null) {
+            mRecordThread.setFlag(false);
+        }
 //		if (recordService!= null && recordService.isRunning()){
 //			String username = (String) SPUtil.get(getActivity(), SPKeyConstants.ACCESS_TOKEN, "");
 //			if (!TextUtils.isEmpty(username)) {

@@ -1,9 +1,5 @@
 package com.gkzxhn.prison.keda.vconf;
 
-/**
- * @(#)VConfVideoUI.java   2014-8-28
- * Copyright 2014  it.kedacom.com, Inc. All rights reserved.
- */
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -39,9 +35,7 @@ import java.util.List;
 
 /**
   * 视频会议
-  *  
-  * @author chenj
-  * @date 2014-8-28
+  * Created by 方 on 2017/6/21.
   */
 
 public class VConfVideoUI extends ActionBarActivity {

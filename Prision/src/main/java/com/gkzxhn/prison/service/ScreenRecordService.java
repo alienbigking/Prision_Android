@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
+import android.media.AudioFormat;
 import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
@@ -16,13 +17,11 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.utils.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -76,6 +75,7 @@ public class ScreenRecordService extends Service {
                         mScreenDensity = intent.getIntExtra("density", 1);
                         isVideoSd = intent.getBooleanExtra("quality", true);
                         isAudio = intent.getBooleanExtra("audio", true);
+                        isAudio = false;
 
                         mMediaProjection = createMediaProjection();
 
@@ -131,7 +131,10 @@ public class ScreenRecordService extends Service {
             Log.i(TAG, "Create MediaRecorder");
             mediaRecorder = new MediaRecorder();
             mediaRecorder.reset();
-            if (isAudio) mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+            if (isAudio) {
+                mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                mediaRecorder.setAudioChannels(AudioFormat.CHANNEL_IN_MONO);
+            }
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             SharedPreferences preferences= GKApplication.getInstance().
