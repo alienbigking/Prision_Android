@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
-import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
@@ -1095,7 +1094,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
 	public void surfaceCreated(SurfaceHolder holder) {
 //		VConferenceManager.recoverSpeakerphoneOn();// 打开扬声器
 //		getActivity().startService(new Intent(getActivity(), RecordServer.class));
-        AudioManager audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+        /*AudioManager audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         boolean bluetoothA2dpOn = audioManager.isBluetoothA2dpOn();
         boolean bluetoothScoOn = audioManager.isBluetoothScoOn();
         boolean bluetoothScoAvailableOffCall = audioManager.isBluetoothScoAvailableOffCall();
@@ -1108,7 +1107,7 @@ public class VConfVideoFrame extends Fragment implements View.OnClickListener, S
         Log.i(TAG, "surfaceCreated: bluetoothScoAvailableOffCall : " + bluetoothScoAvailableOffCall);
         Log.i(TAG, "surfaceCreated: microphoneMute : " + microphoneMute);
         Log.i(TAG, "surfaceCreated: musicActive : " + musicActive);
-        Log.i(TAG, "surfaceCreated: speakerphoneOn : " + speakerphoneOn);
+        Log.i(TAG, "surfaceCreated: speakerphoneOn : " + speakerphoneOn);*/
 //        Log.i(TAG, "surfaceCreated: volumeFixed : " + volumeFixed);
 
         if (mRecordThread == null) {

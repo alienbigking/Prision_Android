@@ -75,7 +75,6 @@ public class ScreenRecordService extends Service {
                         mScreenDensity = intent.getIntExtra("density", 1);
                         isVideoSd = intent.getBooleanExtra("quality", true);
                         isAudio = intent.getBooleanExtra("audio", true);
-                        isAudio = false;
 
                         mMediaProjection = createMediaProjection();
 

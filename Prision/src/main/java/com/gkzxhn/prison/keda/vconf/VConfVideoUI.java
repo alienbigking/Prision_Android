@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
-import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.keda.utils.StringUtils;
 import com.gkzxhn.prison.service.ScreenRecordService;
 import com.gkzxhn.prison.utils.Utils;
@@ -56,68 +55,16 @@ public class VConfVideoUI extends ActionBarActivity {
 	private int mVConfQuality;// 会议质量 2M.1M.256,192
 	private int mDuration;// 会议时长
 
-	/**
-	 *   --------------------------------录屏相关 -----------------------------
-	 */
-//	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//	private void startRecord() {
-//		manager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-//		Intent intent = manager.createScreenCaptureIntent();
-//		startActivityForResult(intent, REQUEST_CODE);
-//		Intent service = new Intent(this, RecordService.class);
-//		bindService(service, connection, BIND_AUTO_CREATE);
-//	}
-//
-//	private MediaProjectionManager manager;
-//	private RecordService recordService;
-//	private ServiceConnection connection = new ServiceConnection() {
-//		@Override public void onServiceConnected(ComponentName name, IBinder service) {
-//			DisplayMetrics metrics = new DisplayMetrics();
-//			getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//			RecordService.RecordBinder binder = (RecordService.RecordBinder) service;
-//			recordService = binder.getRecordService();
-//			recordService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
-//		}
-//
-//		@Override public void onServiceDisconnected(ComponentName name) {
-//
-//		}
-//	};
-//	private static final int REQUEST_CODE = 1;
-//	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//	@Override
-//	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		if (resultCode == RESULT_OK) {
-//			if (requestCode == REQUEST_CODE) {
-//				if (data == null){
-//					ToastUtil.showShortToast("录制失败1");
-//					return;
-//				}
-//				manager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-//				MediaProjection projection = manager.getMediaProjection(resultCode, data);
-//				recordService.setMediaProject(projection);
-//				recordService.startRecord();
-//				initExtras();
-//				onViewCreated();
-//			}
-//		}else {
-//			ToastUtil.showShortToast("录制失败");
-//			finish();
-//		}
-//	}
-	/**
-	 * -----------------以上为录屏相关  加上onDestory方法中的部分片段-----------------------
-	 */
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i("VConfVideo", "VConfVideoUI-->onCreate");
 		super.onCreate(savedInstanceState);
 		//开启录屏
-		getScreenBaseInfo();
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			startScreenRecording();
-		}
+//		getScreenBaseInfo();
+//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//			startScreenRecording();
+//		}
 		// 让音量键固定为媒体音量控制,其他的页面不要这样设置--只在音视频的界面加入这段代码
 		this.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		setContentView(R.layout.vconf_video_ui_layout);
@@ -246,16 +193,6 @@ public class VConfVideoUI extends ActionBarActivity {
 	protected void onDestroy() {
 		Log.w("VConfVideo", "VConfVideoUI-->onDestroy");
 		unregisterReceiver(mBroadcastReceiver);
-//		unbindService(connection);
-//		if (recordService!= null && recordService.isRunning()){
-//			if (getUserType()){
-//				boolean result = recordService.stopRecord();
-//				Log.i("VConfVideo", "record service already "
-//						+ (result ? "stop" : "failed"));
-//			}
-//		}
-//		startActivity(new Intent(this, getUserType() ?
-//				DateMeetingListActivity.class : MainActivity.class));
 		super.onDestroy();
 	}
 
@@ -430,9 +367,6 @@ public class VConfVideoUI extends ActionBarActivity {
 				service.putExtra("density", mScreenDensity);
 				service.putExtra("quality", isVideoSd);
 				this.startService(service);
-				// 已经开始屏幕录制，修改UI状态
-//                statusIsStarted();
-//                simulateHome(); // this.finish();  // 可以直接关闭Activity
 			} else {
 				Toast.makeText(this,R.string.cancel_record,Toast.LENGTH_SHORT).show();
 			}
@@ -442,7 +376,7 @@ public class VConfVideoUI extends ActionBarActivity {
 	@Override
 	public void finish() {
 		//停止录屏
-		GKApplication.getInstance().stopScreenRecording();
+//		GKApplication.getInstance().stopScreenRecording();
 		super.finish();
 	}
 }
