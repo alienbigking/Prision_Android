@@ -2,16 +2,28 @@ package com.gkzxhn.prison.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.gkzxhn.prison.R;
+import com.gkzxhn.prison.activity.CallUserActivity;
+import com.gkzxhn.prison.activity.CallZiJingActivity;
+import com.gkzxhn.prison.async.SingleRequestQueue;
 import com.gkzxhn.prison.async.VolleyUtils;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.entity.MeetingDetailEntity;
+import com.gkzxhn.prison.entity.ZijingCall;
 import com.gkzxhn.prison.model.ICallUserModel;
 import com.gkzxhn.prison.model.iml.CallUserModel;
+import com.gkzxhn.prison.utils.XtHttpUtil;
 import com.gkzxhn.prison.view.ICallUserView;
 import com.google.gson.Gson;
 import com.netease.nimlib.sdk.NIMClient;
@@ -22,6 +34,7 @@ import com.starlight.mobile.android.lib.util.ConvertUtil;
 import com.starlight.mobile.android.lib.util.HttpStatus;
 import com.starlight.mobile.android.lib.util.JSONUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -88,5 +101,55 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
             }
         }
         return code;
+    }
+
+    private final String TAG = CallUserPresenter.class.getSimpleName();
+
+    public void callFang(String account){
+        final ICallUserView view=mWeakView==null?null:mWeakView.get();
+        ZijingCall json = new ZijingCall();
+        json.url = "h323:" + account;
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(new Gson().toJson(json));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                XtHttpUtil.DIAL, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "DIAL" + response.toString());
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 0){
+                                if (view != null) {
+                                    ((CallUserActivity) view).startActivity(new Intent(((CallUserActivity) view), CallZiJingActivity.class));
+//                                    ((CallUserActivity) view).finish();
+                                }
+                            }else {
+                                Log.i(TAG, "onResponse: 参数无效 code:  " + code);
+                            }
+                        } catch (JSONException e) {
+                            Log.e(TAG, "onResponse: >>> "+ e.getMessage() );
+//                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError error) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "ResetQuest..." + error.toString());
+                        view.showToast("ResetQuest...  " + error.toString());
+                    }
+                }, 2000);
+
+            }
+        });
+        request.setRetryPolicy(new DefaultRetryPolicy(Constants.RETRY_TIME, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        SingleRequestQueue.getInstance().add(request, "");
     }
 }

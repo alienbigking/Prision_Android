@@ -54,6 +54,14 @@
                 android:textSize="24sp"
                 android:lineSpacingExtra="10dp"
                 android:padding="10dp"/>
+        <EditText
+            android:id="@+id/et_account"
+            android:text="fangyuxing@zijingcloud.com"
+            android:layout_gravity="center_horizontal"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
     <Button

@@ -30,6 +30,7 @@ import com.gkzxhn.prison.customview.calendar.CustomDate;
 import com.gkzxhn.prison.entity.MeetingEntity;
 import com.gkzxhn.prison.entity.VersionEntity;
 import com.gkzxhn.prison.presenter.MainPresenter;
+import com.gkzxhn.prison.service.EReportService;
 import com.gkzxhn.prison.view.IMainView;
 import com.netease.nimlib.sdk.StatusCode;
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout;
@@ -52,6 +53,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     private CancelVideoDialog mCancelVideoDialog;
     private UpdateDialog updateDialog;
     private ShowTerminalDialog mShowTerminalDialog;
+    private Intent mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         ((TextView)findViewById(R.id.common_no_data_layout_iv_hint)).setText(R.string.no_meeting_data);
     }
     private void init(){
+        mService = new Intent(this, EReportService.class);
+        startService(mService);
         initCalander();
         adapter=new MainAdapter(this);
         adapter.setOnItemClickListener(onItemClickListener);
@@ -313,6 +317,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     @Override
     protected void onDestroy() {
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
+        stopService(mService);
         if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.dismiss();
         if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.dismiss();
         if(updateDialog!=null&&updateDialog.isShowing())updateDialog.dismiss();

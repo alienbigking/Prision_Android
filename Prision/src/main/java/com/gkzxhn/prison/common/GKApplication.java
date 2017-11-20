@@ -8,10 +8,8 @@ import android.graphics.Bitmap;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.activity.LoginActivity;
-import com.gkzxhn.prison.keda.utils.TruetouchGlobal;
 import com.gkzxhn.prison.service.ScreenRecordService;
 import com.gkzxhn.prison.utils.CrashHandler;
-import com.gkzxhn.prison.utils.KDInitUtil;
 import com.gkzxhn.prison.utils.NimInitUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -45,7 +43,7 @@ public class GKApplication extends Application {
         super.onCreate();
         application = this;
         new NimInitUtil().initNim();// 云信SDK相关初始化及后续操作
-        KDInitUtil.init();// 科达SDK相关初始化及后续操作
+//        KDInitUtil.init();// 科达SDK相关初始化及后续操作
         initImageLoader();
         //收集崩溃日志
         CrashHandler.getInstance().init(this);
@@ -108,7 +106,7 @@ public class GKApplication extends Application {
 
     public void loginOff(){
         NIMClient.getService(AuthService.class).logout();
-        TruetouchGlobal.logOff();
+//        TruetouchGlobal.logOff();
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().commit();
         Intent intent = new Intent(this, LoginActivity.class);

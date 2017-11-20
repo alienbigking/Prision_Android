@@ -105,4 +105,13 @@ public interface Constants {
     final String START_RECORDSCREEN_ACTION="com.gkzxhn.prision.START_RECORDSCREEN_ACTION";
     //结束录屏
     final String STOP_RECORDSCREEN_ACTION="com.gkzxhn.prision.STOP_RECORDSCREEN_ACTION";
+
+
+    int RETRY_TIME = 10000;
+    /**
+     * C9上行消息发送广播
+     */
+    String ZIJING_ACTION = "zijing_action";
+    //紫荆上报消息
+    String ZIJING_JSON = "jsonObject";
 }

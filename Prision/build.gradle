@@ -14,7 +14,7 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId 'com.gkzxhn.prison'
-        minSdkVersion 18
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 7
         versionName '1.0.7'

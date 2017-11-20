@@ -39,9 +39,11 @@
                 android:textSize="16sp"
                 android:spinnerMode="dropdown"
                 android:minHeight="50dip"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:overlapAnchor="false"
                 android:layout_width="match_parent"
-                android:background="@drawable/spinner_bg"
+                android:background="@drawable/spinner_selector"
                 android:entries="@array/cancel_video_reason"
                 android:layout_height="wrap_content"/>
             <ImageView
@@ -81,6 +83,8 @@
                 android:background="@drawable/common_item_click_selector"
                 android:gravity="center"
                 android:text="@string/cancel"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:textColor="@color/common_hint_text_color"
                 android:textSize="16sp" />
 
@@ -97,6 +101,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/common_item_click_selector"
                 android:gravity="center"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:text="挂断"
                 android:textColor="@color/common_blue"
                 android:textSize="16sp" />

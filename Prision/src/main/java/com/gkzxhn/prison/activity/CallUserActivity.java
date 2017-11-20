@@ -13,6 +13,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.gkzxhn.prison.R;
@@ -23,7 +24,6 @@ import com.gkzxhn.prison.keda.utils.GKStateMannager;
 import com.gkzxhn.prison.keda.utils.NetWorkUtils;
 import com.gkzxhn.prison.keda.vconf.VConferenceManager;
 import com.gkzxhn.prison.presenter.CallUserPresenter;
-import com.gkzxhn.prison.utils.Utils;
 import com.gkzxhn.prison.view.ICallUserView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.StatusCode;
@@ -52,6 +52,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private String phone=null;
     private String nickName=null,id=null;
     private boolean isClickCall=false;//是否点击了呼叫按钮
+    private EditText mEt_account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,9 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         tvLoading= (DotsTextView) findViewById(R.id.common_loading_layout_tv_load);
         ivCard01= (ImageView) findViewById(R.id.call_user_layout_iv_card_01);
         ivCard02= (ImageView) findViewById(R.id.call_user_layout_iv_card_02);
+
+        mEt_account = (EditText) findViewById(R.id.et_account);
+        mEt_account.setText("fangyuxing@zijingcloud.com");
     }
     private void init(){
         id=getIntent().getStringExtra(Constants.EXTRA);
@@ -140,7 +145,9 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
 //                        if (!mCustomDialog.isShowing()) mCustomDialog.show();
 //                    }
 //                }else{
-                    online();
+                    /*online();*/
+                    String account = mEt_account.getText().toString().trim();
+                    mPresenter.callFang(account);
 //                }
                 break;
         }
