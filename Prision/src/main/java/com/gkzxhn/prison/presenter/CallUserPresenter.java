@@ -3,6 +3,7 @@ package com.gkzxhn.prison.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -62,6 +63,9 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
                 int code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"));
                 if (code == HttpStatus.SC_OK) {
                     entity=new Gson().fromJson(JSONUtil.getJSONObjectStringValue(response, "family"), MeetingDetailEntity.class);
+                    SharedPreferences.Editor edit = getSharedPreferences().edit();
+                    edit.putString(Constants.ACCID, entity.getAccid());
+                    edit.apply();
                     view.onSuccess();
                 }
             }
@@ -107,6 +111,11 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
 
     public void callFang(String account){
         final ICallUserView view=mWeakView==null?null:mWeakView.get();
+        String[] strings = null;
+        if (account.contains("##")) {
+            strings = account.split("##");
+            account = strings[0];
+        }
         ZijingCall json = new ZijingCall();
         json.url = "h323:" + account;
         JSONObject jsonObject = null;
@@ -115,6 +124,7 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        final String[] finalStrings = strings;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
                 XtHttpUtil.DIAL, jsonObject,
                 new Response.Listener<JSONObject>() {
@@ -125,8 +135,12 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
                             int code = response.getInt("code");
                             if (code == 0){
                                 if (view != null) {
-                                    ((CallUserActivity) view).startActivity(new Intent(((CallUserActivity) view), CallZiJingActivity.class));
-//                                    ((CallUserActivity) view).finish();
+                                    Intent intent = new Intent(((CallUserActivity) view), CallZiJingActivity.class);
+                                    if (null!=finalStrings && finalStrings.length > 1) {
+                                        intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1]);
+                                    }
+                                    ((CallUserActivity) view).stopProgress();
+                                    ((CallUserActivity) view).startActivity(intent);
                                 }
                             }else {
                                 Log.i(TAG, "onResponse: 参数无效 code:  " + code);

@@ -215,7 +215,9 @@ public class NimInitUtil {
                         if(code==-1){//呼叫 连线成功
                             GKApplication.getInstance().sendBroadcast(new Intent(Constants.ONLINE_SUCCESS_ACTION));
                         }else if(code==-2){//挂断 联系失败
-                            GKApplication.getInstance().sendBroadcast(new Intent(Constants.ONLINE_FAILED_ACTION));
+                            Intent intent = new Intent(Constants.ZIJING_ACTION);
+                            intent.putExtra(Constants.HANGUP, true);
+                            GKApplication.getInstance().sendBroadcast(intent);
                         }
                     }
                 } catch (Exception e) {

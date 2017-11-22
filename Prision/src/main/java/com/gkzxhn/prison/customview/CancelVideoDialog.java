@@ -46,7 +46,7 @@ public class CancelVideoDialog extends Dialog {
     }
 
     public CancelVideoDialog(Context context,boolean isCancelVideo) {
-        super(context, R.style.update_dialog_style);
+        super(context);
         this.context=context;
         this.isCancelVideo=isCancelVideo;
         mModel=new MainModel();

@@ -114,4 +114,8 @@ public interface Constants {
     String ZIJING_ACTION = "zijing_action";
     //紫荆上报消息
     String ZIJING_JSON = "jsonObject";
+    //紫荆会议主之人密码密码
+    String ZIJING_PASSWORD = "zijing_password";
+    String HANGUP = "hangup";
+    String ACCID = "accid";
 }

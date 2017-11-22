@@ -3,7 +3,6 @@ package com.gkzxhn.prison.activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -20,9 +19,7 @@ import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.customview.CustomDialog;
 import com.gkzxhn.prison.customview.ShowTerminalDialog;
-import com.gkzxhn.prison.keda.utils.GKStateMannager;
 import com.gkzxhn.prison.keda.utils.NetWorkUtils;
-import com.gkzxhn.prison.keda.vconf.VConferenceManager;
 import com.gkzxhn.prison.presenter.CallUserPresenter;
 import com.gkzxhn.prison.view.ICallUserView;
 import com.netease.nimlib.sdk.NIMClient;
@@ -45,7 +42,6 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private DotsTextView tvLoading;
     private ImageView ivCard01,ivCard02;
     private CustomDialog mCustomDialog;
-    private final long DOWN_TIME=20000;//倒计时 20秒
     private ShowTerminalDialog mShowTerminalDialog;
     private ProgressDialog mProgress;
     private SharedPreferences preferences;
@@ -53,6 +49,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private String nickName=null,id=null;
     private boolean isClickCall=false;//是否点击了呼叫按钮
     private EditText mEt_account;
+    private String mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +65,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         ivCard02= (ImageView) findViewById(R.id.call_user_layout_iv_card_02);
 
         mEt_account = (EditText) findViewById(R.id.et_account);
-        mEt_account.setText("fangyuxing@zijingcloud.com");
+        mEt_account.setText("6623##123456##654321");
     }
     private void init(){
         id=getIntent().getStringExtra(Constants.EXTRA);
@@ -81,14 +78,9 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
             @Override
             public void onClick(View view) {
                 if(view.getId()==R.id.custom_dialog_layout_tv_confirm){
-                    online();
+                    String account = mEt_account.getText().toString().trim();
+                    online(account);
                 }
-            }
-        });
-        mCustomDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                mTimer.cancel();
             }
         });
         mPresenter=new CallUserPresenter(this,this);
@@ -97,26 +89,12 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     }
     public void openVConfVideoUI(){
         if(isClickCall) {
-            String name=String.format("%s_%s",mPresenter.getEntity().getPrisonerNumber(),id);
-            mPresenter.getSharedPreferences().edit().putString(Constants.RECORD_VIDEO_NAME,name).commit();
-            if (mTimer != null) mTimer.cancel();
             stopProgress();
-            if (phone == null || phone.equals(GKStateMannager.mE164)) return;
-            if (!VConferenceManager.isAvailableVCconf(true, true, true)) return;
-            isClickCall=false;//位置不可改变
-            String aliyun = "001001" + phone.substring(4);
-            VConferenceManager.openVConfVideoUI(CallUserActivity.this, true, String.format("%s(%s)", nickName, phone), aliyun);
+            mTimer.cancel();
+            mPresenter.callFang(mAccount);
         }
     }
-    public void stopVConfVideo(){
-        isClickCall=false;
-        stopProgress();
-        if(mCustomDialog!=null) {
-            mCustomDialog.setContent(getString(R.string.other_offline),
-                    getString(R.string.cancel),getString(R.string.call_back));
-            if(!mCustomDialog.isShowing())mCustomDialog.show();
-        }
-    }
+
     public void onClickListener(View view){
         switch (view.getId()){
             case R.id.common_head_layout_iv_left:
@@ -145,36 +123,35 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
 //                        if (!mCustomDialog.isShowing()) mCustomDialog.show();
 //                    }
 //                }else{
-                    /*online();*/
-                    String account = mEt_account.getText().toString().trim();
-                    mPresenter.callFang(account);
+                mAccount = mEt_account.getText().toString().trim();
+                    online(mAccount);
 //                }
                 break;
         }
     }
-    private void online(){
+    private void online(String account){
         isClickCall=true;
-        String account=preferences.getString(Constants.TERMINAL_ACCOUNT,"");
         if(account!=null&&account.length()>0) {
             if (NetWorkUtils.isAvailable(this)) {
                 if(mPresenter.checkStatusCode()== StatusCode.LOGINED) {
                     startProgress();
-                    //启动倒计时
-                    mTimer.start();
                     //发送云信消息，检测家属端是否已经准备好可以呼叫
                     CustomNotification notification = new CustomNotification();
-                    notification.setSessionId(mPresenter.getEntity().getAccid());
+                    String accid = mPresenter.getEntity().getAccid();
+                    notification.setSessionId(accid);
                     notification.setSessionType(SessionTypeEnum.P2P);
                     // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
                     // 这里以类型 “1” 作为“正在输入”的状态通知。
                     JSONObject json = new JSONObject();
                     try {
                         json.put("code", -1);
+                        json.put("msg", account);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     notification.setContent(json.toString());
                     NIMClient.getService(MsgService.class).sendCustomNotification(notification);
+                    mTimer.start();
                 }else{
                     showToast(R.string.yunxin_offline);
                 }
@@ -212,16 +189,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     public void stopRefreshAnim() {
         handler.sendEmptyMessage(Constants.STOP_REFRESH_UI);
     }
-    private CountDownTimer mTimer=new CountDownTimer(DOWN_TIME, 1000) {
-        @Override
-        public void onTick(long millisUntilFinished) {
-//            long second = millisUntilFinished / 1000;
-        }
-        @Override
-        public void onFinish() {
-            stopVConfVideo();
-        }
-    };
+
 
 
     /**
@@ -264,7 +232,6 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
             }else if(intent.getAction().equals(Constants.ONLINE_SUCCESS_ACTION)){
                 openVConfVideoUI();
             }else if(intent.getAction().equals(Constants.ONLINE_FAILED_ACTION)){
-                stopVConfVideo();
             }else if(intent.getAction().equals(Constants.NIM_KIT_OUT)){
                 finish();
             }
@@ -301,7 +268,6 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
 
     @Override
     protected void onDestroy() {
-        if(mTimer!=null)mTimer.cancel();
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         super.onDestroy();
     }
@@ -312,4 +278,25 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         isClickCall=false;
     }
 
+    private final long DOWN_TIME=10000;//倒计时 10秒
+    private CountDownTimer mTimer=new CountDownTimer(DOWN_TIME, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+//            long second = millisUntilFinished / 1000;
+        }
+        @Override
+        public void onFinish() {
+            stopVConfVideo();
+        }
+    };
+
+    public void stopVConfVideo(){
+        isClickCall=false;
+        stopProgress();
+        if(mCustomDialog!=null) {
+            mCustomDialog.setContent(getString(R.string.other_offline),
+                    getString(R.string.cancel),getString(R.string.call_back));
+            if(!mCustomDialog.isShowing())mCustomDialog.show();
+        }
+    }
 }
