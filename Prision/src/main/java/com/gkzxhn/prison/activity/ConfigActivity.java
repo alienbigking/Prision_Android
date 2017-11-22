@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,9 +17,6 @@ import android.widget.Spinner;
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
-import com.gkzxhn.prison.keda.utils.GKStateMannager;
-import com.gkzxhn.prison.keda.utils.TruetouchGlobal;
-import com.gkzxhn.prison.utils.KDInitUtil;
 import com.starlight.mobile.android.lib.util.CommonHelper;
 
 /**
@@ -88,19 +84,16 @@ public class ConfigActivity extends SuperActivity {
                 finish();
                 break;
             case R.id.config_layout_btn_save:
-                String acc = etAccount.getText().toString().trim();
-                if (TextUtils.isEmpty(acc) ) {
+                String account = etAccount.getText().toString().trim();
+                if (TextUtils.isEmpty(account) ) {
                     showToast(R.string.please_input_terminal_account);
                 }else {
-                    mTimer.start();
-                    startRefreshAnim();
-                    //退出终端平台，如果已经注册了终端平台
-                    TruetouchGlobal.logOff();
+                    //退修改账号
                     SharedPreferences.Editor editor=preferences.edit();
-                    editor.putString(Constants.TERMINAL_ACCOUNT,acc);
+                    editor.putString(Constants.TERMINAL_ACCOUNT,account);
                     editor.putInt(Constants.TERMINAL_RATE,Integer.valueOf(mRate));
-                    editor.commit();
-                    KDInitUtil.login();
+                    editor.apply();
+                    showToast("修改成功");
                 }
                 break;
         }
@@ -116,18 +109,7 @@ public class ConfigActivity extends SuperActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             stopRefreshAnim();
-            if(mTimer!=null) mTimer.cancel();
-            if(intent.getAction().equals(Constants.TERMINAL_FAILED_ACTION)){//GK注册失败
-                showToast(R.string.terminal_account_not_available);
-                //清除终端信息
-                SharedPreferences.Editor editor=preferences.edit();
-                editor.putString(Constants.TERMINAL_ACCOUNT,"");
-                editor.putInt(Constants.TERMINAL_RATE,512);
-                editor.commit();
-            }else if(intent.getAction().equals(Constants.TERMINAL_SUCCESS_ACTION)){// GK 注册成功
-                ConfigActivity.this.setResult(RESULT_OK);
-                ConfigActivity.this.finish();
-            }else if(intent.getAction().equals(Constants.NIM_KIT_OUT)){
+            if(intent.getAction().equals(Constants.NIM_KIT_OUT)){
                 finish();
             }
         }
@@ -151,23 +133,5 @@ public class ConfigActivity extends SuperActivity {
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         super.onDestroy();
     }
-    private CountDownTimer mTimer=new CountDownTimer(DOWN_TIME, 1000) {
-        @Override
-        public void onTick(long millisUntilFinished) {
-//            long second = millisUntilFinished / 1000;
-        }
-        @Override
-        public void onFinish() {
-            stopRefreshAnim();
-            showToast(R.string.terminal_account_not_available);
-            //注册失败，清除
-            SharedPreferences sharedPreferences=GKApplication.getInstance().getSharedPreferences(Constants.USER_TABLE,Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor=sharedPreferences.edit();
-            editor.putString(Constants.TERMINAL_ACCOUNT,"");
-            editor.putInt(Constants.TERMINAL_RATE,512);
-            editor.commit();
-        }
-    };
-
 
 }

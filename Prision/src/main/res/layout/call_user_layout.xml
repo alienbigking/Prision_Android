@@ -54,14 +54,7 @@
                 android:textSize="24sp"
                 android:lineSpacingExtra="10dp"
                 android:padding="10dp"/>
-        <EditText
-            android:id="@+id/et_account"
-            android:hint="请填写会议室号,主持人密码和参与密码,用##隔开"
-            android:layout_gravity="center_horizontal"
-            android:textSize="24sp"
-            android:textColor="@android:color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+
         </LinearLayout>
     </ScrollView>
     <Button

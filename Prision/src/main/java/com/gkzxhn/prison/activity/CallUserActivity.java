@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.gkzxhn.prison.R;
@@ -48,7 +48,6 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private String phone=null;
     private String nickName=null,id=null;
     private boolean isClickCall=false;//是否点击了呼叫按钮
-    private EditText mEt_account;
     private String mAccount;
 
     @Override
@@ -64,27 +63,31 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         ivCard01= (ImageView) findViewById(R.id.call_user_layout_iv_card_01);
         ivCard02= (ImageView) findViewById(R.id.call_user_layout_iv_card_02);
 
-        mEt_account = (EditText) findViewById(R.id.et_account);
-        mEt_account.setText("6623##123456##654321");
     }
     private void init(){
+        mPresenter=new CallUserPresenter(this,this);
         id=getIntent().getStringExtra(Constants.EXTRA);
         phone=getIntent().getStringExtra(Constants.EXTRAS);
         nickName=getIntent().getStringExtra(Constants.EXTRA_TAB);
         mProgress = ProgressDialog.show(this, null, getString(R.string.check_other_status));
         mProgress.setCanceledOnTouchOutside(true);
         stopProgress();
+        preferences=mPresenter.getSharedPreferences();
+        mAccount = preferences.getString(Constants.TERMINAL_ACCOUNT,"");
+        if (TextUtils.isEmpty(mAccount)) {
+            if (mShowTerminalDialog == null) {
+                mShowTerminalDialog = new ShowTerminalDialog(this);
+            }
+            if (!mShowTerminalDialog.isShowing()) mShowTerminalDialog.show();
+        }
         mCustomDialog=new CustomDialog(this, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(view.getId()==R.id.custom_dialog_layout_tv_confirm){
-                    String account = mEt_account.getText().toString().trim();
-                    online(account);
+                    online(mAccount);
                 }
             }
         });
-        mPresenter=new CallUserPresenter(this,this);
-        preferences=mPresenter.getSharedPreferences();
         mPresenter.request(phone);//请求详情
     }
     public void openVConfVideoUI(){
@@ -123,8 +126,8 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
 //                        if (!mCustomDialog.isShowing()) mCustomDialog.show();
 //                    }
 //                }else{
-                mAccount = mEt_account.getText().toString().trim();
-                    online(mAccount);
+                String account=preferences.getString(Constants.TERMINAL_ACCOUNT,"");
+                online(account);
 //                }
                 break;
         }

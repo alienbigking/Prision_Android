@@ -53,9 +53,8 @@
         android:background="@android:color/white"
         android:layout_toRightOf="@+id/config_layout_tv_terminal_account_title"
         android:layout_below="@+id/config_layout_tv_notice"
-        android:hint="@string/please_input_terminal_account"
+        android:hint="请填写会议室号,主持人密码和参与密码,用##隔开"
         />
-
 
     <TextView
         android:id="@+id/config_layout_tv_rate_title"

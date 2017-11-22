@@ -62,7 +62,7 @@ public class LoginPresenter extends BasePresenter<IBaseModel,ILoginView>{
                             SharedPreferences.Editor editor=sharedPreferences.edit();
                             editor.putString(Constants.USER_ACCOUNT,account);
                             editor.putString(Constants.USER_PASSWORD,password);
-                            editor.putString(Constants.TERMINAL_ACCOUNT,account);
+//                            editor.putString(Constants.TERMINAL_ACCOUNT,account);
                             editor.commit();
                             //主要为了记住账号和密码
                             SharedPreferences.Editor accountEditor= GKApplication.getInstance().

@@ -39,8 +39,8 @@ public class MainModel extends BaseModel implements IMainModel {
 
     @Override
     public void request(String date,VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener) {
-        String terminalAccount=preferences.getString(Constants.TERMINAL_ACCOUNT,"");
-        String url= String.format("%s/%s/meetings?application_date=%s",Constants.REQUEST_MEETING_LIST_URL,terminalAccount,date);
+        String account=preferences.getString(Constants.USER_ACCOUNT,"");
+        String url= String.format("%s/%s/meetings?application_date=%s",Constants.REQUEST_MEETING_LIST_URL,account,date);
         try {
             volleyUtils.get(JSONObject.class,url,REQUEST_TAG,onFinishedListener);
         } catch (AuthFailureError authFailureError) {
