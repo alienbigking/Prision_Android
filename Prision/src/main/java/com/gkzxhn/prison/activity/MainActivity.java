@@ -14,12 +14,19 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.adapter.MainAdapter;
 import com.gkzxhn.prison.adapter.OnItemClickListener;
+import com.gkzxhn.prison.async.SingleRequestQueue;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.customview.CancelVideoDialog;
 import com.gkzxhn.prison.customview.ShowTerminalDialog;
@@ -31,11 +38,14 @@ import com.gkzxhn.prison.entity.MeetingEntity;
 import com.gkzxhn.prison.entity.VersionEntity;
 import com.gkzxhn.prison.presenter.MainPresenter;
 import com.gkzxhn.prison.service.EReportService;
+import com.gkzxhn.prison.utils.XtHttpUtil;
 import com.gkzxhn.prison.view.IMainView;
 import com.netease.nimlib.sdk.StatusCode;
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout;
 import com.starlight.mobile.android.lib.view.RecycleViewDivider;
 import com.starlight.mobile.android.lib.view.dotsloading.DotsTextView;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -347,4 +357,31 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         startActivity(intent);
     }
 
+    private final String TAG = MainActivity.class.getSimpleName();
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.i(TAG, "onKeyDown: getkeycode >>>>>> " + event.getKeyCode());
+        switch (event.getKeyCode()) {
+            case 222:
+                //关机按键
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
+                        XtHttpUtil.POWEROFF, null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                //成功关机
+                                showToast("正在关机...");
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(final VolleyError error) {
+                        Log.e(TAG, "onErrorResponse: error..." +error.toString());
+
+                    }
+                });
+                SingleRequestQueue.getInstance().add(request,"");
+                return true;
+        }
+        return false;
+    }
 }

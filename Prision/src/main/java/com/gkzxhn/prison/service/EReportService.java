@@ -199,10 +199,7 @@ public class EReportService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //销毁自启动
-//        stopSelf();
-        Intent intent = new Intent(this, EReportService.class);
-        startService(intent);
+        stopSelf();
     }
 
 }

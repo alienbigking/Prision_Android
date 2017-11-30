@@ -25,12 +25,19 @@ import com.starlight.mobile.android.lib.util.CommonHelper;
 
 public class ConfigActivity extends SuperActivity {
     private EditText etAccount;
+    private EditText etTime;
     private Spinner mSpinner;
     private String[] mRateArray;
     private String mRate=null;
+    private String protocol=null;
     private ProgressDialog mProgress;
     private SharedPreferences preferences;
     private final long DOWN_TIME=20000;//倒计时 20秒
+    private Spinner mSp_protocol;
+    private String mAccount;
+    private long mTimeLimit;
+    private String DEFAULTACC = "*******************";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +49,8 @@ public class ConfigActivity extends SuperActivity {
     private void initControls(){
         etAccount= (EditText) findViewById(R.id.config_layout_et_account);
         mSpinner= (Spinner) findViewById(R.id.config_layout_sp_rate);
+        mSp_protocol = (Spinner) findViewById(R.id.sp_protocol);
+        etTime= (EditText) findViewById(R.id.et_config_time);
     }
     private void init(){
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting));
@@ -49,6 +58,21 @@ public class ConfigActivity extends SuperActivity {
         mRateArray = getResources().getStringArray(R.array.rate_array);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, mRateArray);
+        final String[] protocolArray = getResources().getStringArray(R.array.protocol);
+        ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, protocolArray);
+        mSp_protocol.setAdapter(protocolAdapter);
+        mSp_protocol.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                protocol = protocolArray[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -63,13 +87,22 @@ public class ConfigActivity extends SuperActivity {
         });
         int index=1;
         preferences=getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
-        String account=preferences.getString(Constants.TERMINAL_ACCOUNT,"");
-        if(account!=null&&account.length()>0) {
-            etAccount.setText(account);
+        mAccount = preferences.getString(Constants.TERMINAL_ACCOUNT,"");
+        mTimeLimit = preferences.getLong(Constants.TIME_LIMIT, 20L);
+        etTime.setText(String.valueOf(mTimeLimit));
+        if(mAccount !=null&& mAccount.length()>0) {
+            etAccount.setText(DEFAULTACC);
             for(int i = 0; i< mRateArray.length; i++){
                 String mRate= mRateArray[i];
                 if(mRate.equals(String.valueOf(GKApplication.getInstance().getTerminalRate()))){
                     index=i;
+                    break;
+                }
+            }
+            for (int i = 0; i< protocolArray.length; i++) {
+                String protocol = preferences.getString(Constants.PROTOCOL, "h323");
+                if (protocolArray[i].equals(protocol)) {
+                    mSp_protocol.setSelection(i);
                     break;
                 }
             }
@@ -85,15 +118,22 @@ public class ConfigActivity extends SuperActivity {
                 break;
             case R.id.config_layout_btn_save:
                 String account = etAccount.getText().toString().trim();
-                if (TextUtils.isEmpty(account) ) {
+                String timeStr = etTime.getText().toString().trim();
+                if (!account.equals(DEFAULTACC)) {
+                    mAccount = account;
+                }
+                if (TextUtils.isEmpty(mAccount) ) {
                     showToast(R.string.please_input_terminal_account);
                 }else {
                     //退修改账号
                     SharedPreferences.Editor editor=preferences.edit();
-                    editor.putString(Constants.TERMINAL_ACCOUNT,account);
+                    editor.putString(Constants.TERMINAL_ACCOUNT,mAccount);
                     editor.putInt(Constants.TERMINAL_RATE,Integer.valueOf(mRate));
+                    editor.putString(Constants.PROTOCOL, protocol);
+                    editor.putLong(Constants.TIME_LIMIT, Long.parseLong(timeStr));
                     editor.apply();
                     showToast("修改成功");
+                    finish();
                 }
                 break;
         }

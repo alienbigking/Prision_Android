@@ -12,6 +12,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -94,7 +95,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         if(isClickCall) {
             stopProgress();
             mTimer.cancel();
-            mPresenter.callFang(mAccount);
+            mPresenter.callFang(mAccount, 0);
         }
     }
 
@@ -148,7 +149,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
                     JSONObject json = new JSONObject();
                     try {
                         json.put("code", -1);
-                        json.put("msg", account);
+//                        json.put("msg", account);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -302,4 +303,38 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
             if(!mCustomDialog.isShowing())mCustomDialog.show();
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0) {
+            if (resultCode == 0) {
+                if (data != null) {
+                    boolean call_again = data.getBooleanExtra(Constants.CALL_AGAIN, false);
+                    if (call_again) {
+                        //换协议呼叫
+                        String protocol = preferences.getString(Constants.PROTOCOL, "h323");
+                        if ("h323".equals(protocol)) {
+                            protocol = "sip";
+                        }else {
+                            protocol = "h323";
+                        }
+                        SharedPreferences.Editor edit = preferences.edit();
+                        edit.putString(Constants.PROTOCOL, protocol);
+                        edit.apply();
+                        Log.i(TAG, "protocol : " + protocol);
+                        showToast("呼叫失败,切换成" + protocol + "协议重新进行呼叫...");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mPresenter.callFang(mAccount, 1);
+                            }
+                        }, 1500);
+                    }
+                }
+            }
+        }
+    }
+
+    private final String TAG = CallUserActivity.class.getSimpleName();
 }

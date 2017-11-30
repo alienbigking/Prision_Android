@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -109,15 +108,22 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
 
     private final String TAG = CallUserPresenter.class.getSimpleName();
 
-    public void callFang(String account){
+    public void callFang(String account, int requestCode){
         final ICallUserView view=mWeakView==null?null:mWeakView.get();
         String[] strings = null;
+        String password = "";
         if (account.contains("##")) {
             strings = account.split("##");
             account = strings[0];
+            if (strings.length > 0) {
+                password = strings[1];
+            }
         }
         ZijingCall json = new ZijingCall();
-        json.url = "h323:" + account;
+        String protocol = getSharedPreferences().getString(Constants.PROTOCOL, "h323");
+        int rate = getSharedPreferences().getInt(Constants.TERMINAL_RATE, 512);
+        json.url = protocol + ":" + account + "**" + password;
+        json.rate = rate;
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(new Gson().toJson(json));
@@ -140,7 +146,7 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
                                         intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1]);
                                     }
                                     ((CallUserActivity) view).stopProgress();
-                                    ((CallUserActivity) view).startActivity(intent);
+                                    ((CallUserActivity) view).startActivityForResult(intent, 0);
                                 }
                             }else {
                                 Log.i(TAG, "onResponse: 参数无效 code:  " + code);
@@ -163,7 +169,6 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
 
             }
         });
-        request.setRetryPolicy(new DefaultRetryPolicy(Constants.RETRY_TIME, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         SingleRequestQueue.getInstance().add(request, "");
     }
 }

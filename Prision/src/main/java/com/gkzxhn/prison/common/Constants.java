@@ -118,4 +118,7 @@ public interface Constants {
     String ZIJING_PASSWORD = "zijing_password";
     String HANGUP = "hangup";
     String ACCID = "accid";
+    String PROTOCOL = "protocol";
+    String TIME_LIMIT = "time_limit";
+    String CALL_AGAIN = "call_again";
 }

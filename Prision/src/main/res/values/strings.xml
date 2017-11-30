@@ -149,6 +149,9 @@
     <string name="microphone">麦克风</string>
     <string name="speaker">扬声器</string>
     <string name="add_text">添加</string>
+    <string name="protocol">协议</string>
+    <string name="config_time">通话时长(Min)</string>
+    <string name="reminder">提示</string>
 
     <string-array  name="rate_array">
         <item>128</item>
@@ -159,6 +162,12 @@
         <!--<item>4096</item>-->
         <!--<item>8192</item>-->
     </string-array>
+
+    <string-array  name="protocol">
+        <item>h323</item>
+        <item>sip</item>
+    </string-array>
+
     <string-array  name="cancel_video_reason">
         <item>本次会见结束</item>
         <item>提前结束本次会见</item>

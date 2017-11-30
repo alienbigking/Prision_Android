@@ -1,8 +1,10 @@
 package com.gkzxhn.prison.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -43,6 +45,14 @@ import com.starlight.mobile.android.lib.util.JSONUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by 方 on 2017/11/16.
  */
@@ -82,13 +92,28 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                         break;
                     case "established_call":
                         //呼叫建立
-                        if (!TextUtils.isEmpty(mPassword)) {
-                            sendPassWord(mPassword);
-                        }
+                        callAccount();
                         mText.setVisibility(View.GONE);
                         mContent.setBackgroundColor(getResources().getColor(R.color.zijing_video_bg));
+                        Long time = GKApplication.getInstance().
+                                getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
+                                .getLong(Constants.TIME_LIMIT, 20);
+                        startTime(time * 60);
                         break;
                     case "cleared_call":
+                        JSONObject jsonObject = JSONUtil.getJSONObject(jsonStr);
+                        JSONObject objv = null;
+                        try {
+                            objv = jsonObject.getJSONObject("v");
+                            String reason = objv.getString("reason");
+                            if ("Remote host offline".equals(reason)) {
+                                Intent data = new Intent();
+                                data.putExtra(Constants.CALL_AGAIN, true);
+                                CallZiJingActivity.this.setResult(0, data);
+                            }
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
                         showToast("已挂断");
                         CallZiJingActivity.this.finish();
                         break;
@@ -120,7 +145,65 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
             }
         }
     };
-    private String mPassword;
+    private Subscription mTimeSubscribe;
+
+    /**
+     * 延迟time秒执行
+     * @param time
+     */
+    private void startTime(Long time) {
+        mTimeSubscribe = Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                subscriber.onNext(true);
+            }
+        }).delay(time, TimeUnit.SECONDS)
+                //线程调度
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        showTimeUp();
+                    }
+                });
+    }
+
+    /**
+     * 提示通话时间已到
+     */
+    private void showTimeUp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle(R.string.reminder)
+                .setMessage("通话时间已到,是否结束通话?")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendHangupMessage();
+                        hangUp();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     /**
      * 发送DTMF
@@ -184,7 +267,6 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call_zijing);
-        mPassword = getIntent().getStringExtra(Constants.ZIJING_PASSWORD);
         findViews();
         setIdCheckData();
         setClickListener();
@@ -218,6 +300,9 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
     protected void onDestroy() {
         if (null != mCancelVideoDialog && mCancelVideoDialog.isShowing()) {
             mCancelVideoDialog.dismiss();
+        }
+        if (mTimeSubscribe != null) {
+            mTimeSubscribe.unsubscribe();
         }
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         super.onDestroy();
@@ -480,6 +565,31 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
             });
         }
         if (!mCancelVideoDialog.isShowing()) mCancelVideoDialog.show();
+    }
+
+    private void callAccount(){
+        SharedPreferences sharedPreferences = GKApplication.getInstance().
+                getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
+        String account = sharedPreferences.getString(Constants.TERMINAL_ACCOUNT, "");
+        if(account!=null&&account.length()>0) {
+                //发送云信消息，检测家属端是否已经准备好可以呼叫
+            CustomNotification notification = new CustomNotification();
+            String accid = sharedPreferences
+                    .getString(Constants.ACCID, "");
+            notification.setSessionId(accid);
+            notification.setSessionType(SessionTypeEnum.P2P);
+            // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
+            // 这里以类型 “1” 作为“正在输入”的状态通知。
+            JSONObject json = new JSONObject();
+            try {
+                json.put("code", -1);//-1表示接通
+                json.put("msg", account);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            notification.setContent(json.toString());
+            NIMClient.getService(MsgService.class).sendCustomNotification(notification);
+        }
     }
 }
 
