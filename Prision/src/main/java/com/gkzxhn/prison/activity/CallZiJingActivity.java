@@ -48,9 +48,10 @@ import org.json.JSONObject;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Subscriber;
+import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -146,35 +147,49 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
         }
     };
     private Subscription mTimeSubscribe;
+    private TextView tv_count_down;
 
     /**
      * 延迟time秒执行
      * @param time
      */
-    private void startTime(Long time) {
-        mTimeSubscribe = Observable.create(new Observable.OnSubscribe<Boolean>() {
-            @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
-                subscriber.onNext(true);
-            }
-        }).delay(time, TimeUnit.SECONDS)
-                //线程调度
+    private void startTime(final Long time) {
+        mTimeSubscribe = Observable.interval(0 ,1, TimeUnit.SECONDS)
+                .take(time + 1, TimeUnit.SECONDS)
+                .map(new Func1<Long, String>() {
+                    @Override
+                    public String call(Long aLong) {
+                        Long delay = time - aLong;
+                        if (delay == 30){
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tv_count_down.setTextColor(getResources().getColor(R.color.red_text));
+                                }
+                            });
+                        }
+                        long min = delay / 60;
+                        long seconds = delay - min * 60;
+                        return min + "分" + seconds + "秒";
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Boolean>() {
+                .subscribe(new Observer<String>() {
                     @Override
                     public void onCompleted() {
-
+                        showTimeUp();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e(TAG, e.getMessage());
                     }
 
                     @Override
-                    public void onNext(Boolean aBoolean) {
-                        showTimeUp();
+                    public void onNext(String s) {
+                        Log.i(TAG, "count_down : " + s);
+                        tv_count_down.setText(s);
                     }
                 });
     }
@@ -279,6 +294,7 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
         mExit_img = (ImageView) findViewById(R.id.exit_Img);
         mMute_txt = (TextView) findViewById(R.id.mute_text);
         mQuite_txt = (TextView) findViewById(R.id.quiet_text);
+        tv_count_down = (TextView) findViewById(R.id.tv_count_down);
 
         mLl_check_id = (LinearLayout) findViewById(R.id.ll_check_id); //审核布局
         mIv_avatar = (ImageView) findViewById(R.id.iv_avatar);   //审核头像

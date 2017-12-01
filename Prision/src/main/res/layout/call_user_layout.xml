@@ -21,12 +21,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:id="@+id/call_user_layout_ll_card"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_height="350dip">
+                android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/call_user_layout_iv_card_01"
                     android:layout_width="0dp"

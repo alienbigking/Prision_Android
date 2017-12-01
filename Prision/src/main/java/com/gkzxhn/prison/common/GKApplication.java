@@ -108,7 +108,10 @@ public class GKApplication extends Application {
         NIMClient.getService(AuthService.class).logout();
 //        TruetouchGlobal.logOff();
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear().commit();
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.remove(Constants.USER_ACCOUNT);
+        edit.remove(Constants.USER_PASSWORD);
+        edit.apply();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

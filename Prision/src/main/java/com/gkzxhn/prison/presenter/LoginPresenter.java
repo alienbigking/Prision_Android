@@ -1,6 +1,5 @@
 package com.gkzxhn.prison.presenter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,7 +16,6 @@ import com.gkzxhn.prison.activity.CallZiJingActivity;
 import com.gkzxhn.prison.activity.LoginActivity;
 import com.gkzxhn.prison.async.SingleRequestQueue;
 import com.gkzxhn.prison.common.Constants;
-import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.entity.ZijingCall;
 import com.gkzxhn.prison.model.IBaseModel;
 import com.gkzxhn.prison.model.iml.BaseModel;
@@ -65,11 +63,6 @@ public class LoginPresenter extends BasePresenter<IBaseModel,ILoginView>{
 //                            editor.putString(Constants.TERMINAL_ACCOUNT,account);
                             editor.commit();
                             //主要为了记住账号和密码
-                            SharedPreferences.Editor accountEditor= GKApplication.getInstance().
-                                    getSharedPreferences(Constants.USER_ACCOUNT_TABLE, Activity.MODE_PRIVATE).edit();
-                            accountEditor.putString(Constants.USER_ACCOUNT,account);
-                            accountEditor.putString(Constants.USER_PASSWORD,password);
-                            accountEditor.commit();
                             //关闭加载条
                             view.startRefreshAnim();
                             view.onSuccess();

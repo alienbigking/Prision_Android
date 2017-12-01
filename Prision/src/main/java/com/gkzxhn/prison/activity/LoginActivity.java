@@ -30,7 +30,10 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
         init();
         //清除下信息
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear().commit();
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.remove(Constants.USER_ACCOUNT);
+        edit.remove(Constants.USER_PASSWORD);
+        edit.apply();
     }
 
     private void initControls(){
@@ -51,8 +54,7 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
             String account=etAccount.getText().toString().trim();
             String password=etPassword.getText().toString().trim();
             if(account.length()==0){
-//                showToast(getString(R.string.please_input)+getString(R.string.account));
-                mPresenter.callFang();
+                showToast(getString(R.string.please_input)+getString(R.string.account));
             }else if(password.length()==0){
                 showToast(getString(R.string.please_input)+getString(R.string.password));
             }else{

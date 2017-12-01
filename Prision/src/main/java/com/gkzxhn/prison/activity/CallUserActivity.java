@@ -14,7 +14,9 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
@@ -50,6 +52,9 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private String nickName=null,id=null;
     private boolean isClickCall=false;//是否点击了呼叫按钮
     private String mAccount;
+    private static final float ID_RATIO = 856f / 540f ;
+    private int mIDWidth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,19 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         ivCard01= (ImageView) findViewById(R.id.call_user_layout_iv_card_01);
         ivCard02= (ImageView) findViewById(R.id.call_user_layout_iv_card_02);
 
+        ViewTreeObserver viewTreeObserver = ivCard01.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ivCard01.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mIDWidth = ivCard01.getMeasuredWidth();
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) ivCard01.getLayoutParams();
+                layoutParams.height = (int) (mIDWidth / ID_RATIO);
+                layoutParams.width = mIDWidth;
+                ivCard01.setLayoutParams(layoutParams);
+                ivCard02.setLayoutParams(layoutParams);
+            }
+        });
     }
     private void init(){
         mPresenter=new CallUserPresenter(this,this);

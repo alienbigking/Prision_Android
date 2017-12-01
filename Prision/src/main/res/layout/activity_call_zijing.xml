@@ -64,12 +64,32 @@
 
     </LinearLayout>
 
-    <LinearLayout android:layout_width="match_parent"
+    <RelativeLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:background="@android:color/black"
                   android:layout_gravity="bottom"
-                  android:gravity="center"
                   android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_marginLeft="22dp"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="剩余通话时间:  "
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/XLargeTextSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_count_down"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/XLargeTextSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/mute_text"
@@ -80,6 +100,7 @@
             android:minWidth="60dip"
             android:scaleType="center"
             android:text="@string/microphone"
+            android:layout_toLeftOf="@id/quiet_text"
             android:textColor="@android:color/white"
             android:textSize="@dimen/SmallTextSize" />
 
@@ -91,6 +112,7 @@
             android:gravity="center|bottom"
             android:minWidth="60dip"
             android:scaleType="center"
+            android:layout_centerInParent="true"
             android:text="@string/speaker"
             android:textColor="@android:color/white"
             android:textSize="@dimen/SmallTextSize" />
@@ -122,11 +144,12 @@
 
         <ImageView
             android:id="@+id/exit_Img"
+            android:layout_toRightOf="@id/quiet_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
             android:minWidth="60dip"
             android:scaleType="center"
             android:src="@drawable/vconf_hangup_selector" />
-    </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

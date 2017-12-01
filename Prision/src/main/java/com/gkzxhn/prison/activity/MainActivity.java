@@ -327,6 +327,7 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     @Override
     protected void onDestroy() {
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
+        SingleRequestQueue.getInstance().cancelAll("");
         stopService(mService);
         if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.dismiss();
         if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.dismiss();
