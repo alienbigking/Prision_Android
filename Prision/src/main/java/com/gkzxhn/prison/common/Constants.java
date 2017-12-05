@@ -57,6 +57,7 @@ public interface Constants {
     final String REQUEST_MEETING_DETAIL_URL=DOMAIN_NAME_XLS+"/api/v1/families";// 会见详情
     final String REQUEST_VERSION_URL=DOMAIN_NAME_XLS+"/api/v1/versions/2";//版本更新
     final String REQUEST_CRASH_LOG_URL=DOMAIN_NAME_XLS+"/api/v1/loggers";//版本更新
+    final String REQUEST_MEETING_ROOM=DOMAIN_NAME_XLS+"/api/v1/prisoners";//会议室信息
 
     /*-------------------------------msg what-------------------------------------------------*/
     final int START_REFRESH_UI=1,STOP_REFRESH_UI=2;//msg what
@@ -121,4 +122,6 @@ public interface Constants {
     String PROTOCOL = "protocol";
     String TIME_LIMIT = "time_limit";
     String CALL_AGAIN = "call_again";
+    String USER_ACCOUNT_CACHE = "user_account_cache";
+    String USER_PASSWORD_CACHE = "user_password_cache";
 }

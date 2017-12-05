@@ -107,7 +107,7 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                         try {
                             objv = jsonObject.getJSONObject("v");
                             String reason = objv.getString("reason");
-                            if ("Remote host offline".equals(reason)) {
+                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
                                 Intent data = new Intent();
                                 data.putExtra(Constants.CALL_AGAIN, true);
                                 CallZiJingActivity.this.setResult(0, data);

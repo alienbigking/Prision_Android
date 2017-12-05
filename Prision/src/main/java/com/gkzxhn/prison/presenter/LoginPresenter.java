@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -11,17 +12,20 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.activity.CallZiJingActivity;
 import com.gkzxhn.prison.activity.LoginActivity;
 import com.gkzxhn.prison.async.SingleRequestQueue;
 import com.gkzxhn.prison.common.Constants;
+import com.gkzxhn.prison.entity.MeetingRoomInfo;
 import com.gkzxhn.prison.entity.ZijingCall;
 import com.gkzxhn.prison.model.IBaseModel;
 import com.gkzxhn.prison.model.iml.BaseModel;
 import com.gkzxhn.prison.utils.XtHttpUtil;
 import com.gkzxhn.prison.view.ILoginView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -58,14 +62,14 @@ public class LoginPresenter extends BasePresenter<IBaseModel,ILoginView>{
 //                            KDInitUtil.login();
                             //保存登录信息
                             SharedPreferences.Editor editor=sharedPreferences.edit();
-                            editor.putString(Constants.USER_ACCOUNT,account);
-                            editor.putString(Constants.USER_PASSWORD,password);
+                            editor.putString(Constants.USER_ACCOUNT_CACHE,account);
+                            editor.putString(Constants.USER_PASSWORD_CACHE,password);
 //                            editor.putString(Constants.TERMINAL_ACCOUNT,account);
-                            editor.commit();
+                            editor.apply();
                             //主要为了记住账号和密码
                             //关闭加载条
-                            view.startRefreshAnim();
-                            view.onSuccess();
+                            getMeetingRoom(account, password);
+
                         }
                     }
 
@@ -164,5 +168,34 @@ public class LoginPresenter extends BasePresenter<IBaseModel,ILoginView>{
         });
         request.setRetryPolicy(new DefaultRetryPolicy(Constants.RETRY_TIME, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         SingleRequestQueue.getInstance().add(request, "");
+    }
+
+    private void getMeetingRoom(final String account, final String password) {
+        final ILoginView view=mWeakView==null?null:mWeakView.get();
+        String url = Constants.REQUEST_MEETING_ROOM + "/" + account + "/get_number";
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                MeetingRoomInfo meetingRoomInfo = new GsonBuilder().create().fromJson(response, MeetingRoomInfo.class);
+                String content = meetingRoomInfo.data.content;
+                SharedPreferences.Editor edit = sharedPreferences.edit();
+                edit.putString(Constants.USER_ACCOUNT, account);
+                edit.putString(Constants.USER_PASSWORD, password);
+                if (!TextUtils.isEmpty(content)) {
+                    edit.putString(Constants.TERMINAL_ACCOUNT, content);
+                }
+                edit.apply();
+                if (view != null) {
+                    view.stopRefreshAnim();
+                    view.onSuccess();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                showErrors(error);
+            }
+        });
+        SingleRequestQueue.getInstance().add(request,"");
     }
 }

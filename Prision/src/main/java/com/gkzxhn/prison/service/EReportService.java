@@ -44,6 +44,7 @@ public class EReportService extends Service {
 
     //重置事件队列id
     public void ResetQuest() {
+        SingleRequestQueue.getInstance().cancelAll("");
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 XtHttpUtil.RESET, null,

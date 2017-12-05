@@ -42,9 +42,9 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
     }
     private void init(){
         //显示记住的密码
-        SharedPreferences preferences= getSharedPreferences(Constants.USER_ACCOUNT_TABLE, Activity.MODE_PRIVATE);
-        etAccount.setText(preferences.getString(Constants.USER_ACCOUNT,""));
-        etPassword.setText(preferences.getString(Constants.USER_PASSWORD,""));
+        SharedPreferences preferences= getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
+        etAccount.setText(preferences.getString(Constants.USER_ACCOUNT_CACHE,""));
+        etPassword.setText(preferences.getString(Constants.USER_PASSWORD_CACHE,""));
         mPresenter=new LoginPresenter(this,this);
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting));
         stopRefreshAnim();
