@@ -172,7 +172,7 @@ public class LoginPresenter extends BasePresenter<IBaseModel,ILoginView>{
 
     private void getMeetingRoom(final String account, final String password) {
         final ILoginView view=mWeakView==null?null:mWeakView.get();
-        String url = Constants.REQUEST_MEETING_ROOM + "/" + account + "/get_number";
+        String url = Constants.REQUEST_MEETING_ROOM + "/" + account + "/detail";
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

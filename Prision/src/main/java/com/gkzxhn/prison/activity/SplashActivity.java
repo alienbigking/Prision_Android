@@ -48,8 +48,8 @@ public class SplashActivity extends Activity {
         mFl_content.setBackgroundColor(getResources().getColor(R.color.zijing_video_bg));
         mLl_content.setVisibility(View.GONE);
 
-//        query();
-        mHandler.sendEmptyMessageDelayed(1, SPLASH_DELAY_MILLIS);
+        query();
+//        mHandler.sendEmptyMessageDelayed(1, SPLASH_DELAY_MILLIS);
 
         String versionName = "";
         // 包管理器

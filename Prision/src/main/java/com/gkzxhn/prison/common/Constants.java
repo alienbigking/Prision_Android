@@ -11,6 +11,7 @@ public interface Constants {
 
     final String SD_ROOT_PATH= Environment.getExternalStorageDirectory().getPath()+"/YWTPrision";
     final String SD_FILE_CACHE_PATH = SD_ROOT_PATH+"/cache/";
+    String CACHE_FILE = GKApplication.getInstance().getFilesDir().getAbsolutePath();
 
     final String SD_IMAGE_CACHE_PATH = SD_ROOT_PATH+"/imageCache/";//图片下载的缓存
     final String SD_ROOT_PHOTO_PATH = SD_ROOT_PATH+"/photo/";//图片，不自动删除
@@ -57,7 +58,7 @@ public interface Constants {
     final String REQUEST_MEETING_DETAIL_URL=DOMAIN_NAME_XLS+"/api/v1/families";// 会见详情
     final String REQUEST_VERSION_URL=DOMAIN_NAME_XLS+"/api/v1/versions/2";//版本更新
     final String REQUEST_CRASH_LOG_URL=DOMAIN_NAME_XLS+"/api/v1/loggers";//版本更新
-    final String REQUEST_MEETING_ROOM=DOMAIN_NAME_XLS+"/api/v1/prisoners";//会议室信息
+    final String REQUEST_MEETING_ROOM=DOMAIN_NAME_XLS+"/api/v1/terminals";//会议室信息
 
     /*-------------------------------msg what-------------------------------------------------*/
     final int START_REFRESH_UI=1,STOP_REFRESH_UI=2;//msg what

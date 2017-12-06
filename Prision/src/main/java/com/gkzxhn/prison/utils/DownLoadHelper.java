@@ -126,8 +126,10 @@ public class DownLoadHelper {
             if (!tmpFile.exists()) {
                 tmpFile.mkdir();
             }
-            final File file = new File(Constants.SD_FILE_CACHE_PATH + "/" + "app.apk");
+//            final File file = new File(Constants.SD_FILE_CACHE_PATH + "/" + "app.apk");
+            final File file = new File(Constants.CACHE_FILE + "/" + "app.apk");
             filePath=file.getAbsolutePath();
+
             try {
                 URL url = new URL(mUrl);
                 HttpURLConnection connection = (HttpURLConnection) url
