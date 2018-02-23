@@ -12,6 +12,7 @@ public interface Constants {
     final String SD_ROOT_PATH= Environment.getExternalStorageDirectory().getPath()+"/YWTPrision";
     final String SD_FILE_CACHE_PATH = SD_ROOT_PATH+"/cache/";
     String CACHE_FILE = GKApplication.getInstance().getFilesDir().getAbsolutePath();
+    String APK_C9_DIR = "data/app";
 
     final String SD_IMAGE_CACHE_PATH = SD_ROOT_PATH+"/imageCache/";//图片下载的缓存
     final String SD_ROOT_PHOTO_PATH = SD_ROOT_PATH+"/photo/";//图片，不自动删除
@@ -49,7 +50,8 @@ public interface Constants {
     /*-------------------------------request url-------------------------------------------------*/
     final String UPLOAD_VIDEO_DOMAIN="";//上传视频的ip
     final int UPLOAD_VIDEO_PORT=9999;//上传视频的端口
-    final String RELEASE_DOMAIN="https://www.fushuile.com";//发布正式环境
+    final String RELEASE_DOMAIN="https://www.yuwugongkai.com";//新发布正式环境
+//    final String RELEASE_DOMAIN="https://www.fushuile.com";//发布正式环境
     final String DEMO_DOMAIN="";//开发环境
     final String DOMAIN_NAME_XLS = RELEASE_DOMAIN;
 
@@ -125,4 +127,7 @@ public interface Constants {
     String CALL_AGAIN = "call_again";
     String USER_ACCOUNT_CACHE = "user_account_cache";
     String USER_PASSWORD_CACHE = "user_password_cache";
+    String END_REASON = "end_reason";
+    //远端连接
+    String TIME_CONNECT = "time_connect";
 }

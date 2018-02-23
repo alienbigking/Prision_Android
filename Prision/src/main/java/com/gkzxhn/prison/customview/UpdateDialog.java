@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.utils.DownLoadHelper;
@@ -144,6 +143,23 @@ public class UpdateDialog extends Dialog {
 			i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
 					"application/vnd.android.package-archive");
 			context.startActivity(i);
+
+			/*String cmd = "chmod 777 " +filePath;
+			try {
+				Runtime.getRuntime().exec(cmd);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			Intent intent = new Intent();
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.setAction(android.content.Intent.ACTION_VIEW);
+			File file = new File(filePath);
+			if (file.exists() && file.isAbsolute()) {
+				intent.setDataAndType(Uri.fromFile(file),
+						"application/vnd.android.package-archive");
+				context.startActivity(intent);
+			}*/
+
 			dismiss();
 		}
 

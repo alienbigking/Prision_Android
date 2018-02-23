@@ -70,6 +70,16 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                 if (hangup) {
                     hangUp();
                 }
+                boolean time_connect = intent.getBooleanExtra(Constants.TIME_CONNECT, false);
+                if (time_connect) {
+                    if (mTimeSubscribe != null) {
+                        mTimeSubscribe.unsubscribe();
+                        SharedPreferences sharedPreferences = GKApplication.getInstance().
+                                getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
+                        Long time = sharedPreferences.getLong(Constants.TIME_LIMIT, 20);
+                        startTime(time * 60);
+                    }
+                }
                 String jsonStr = intent.getStringExtra(Constants.ZIJING_JSON);
                 if (TextUtils.isEmpty(jsonStr)) {
                     return;
@@ -93,13 +103,9 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                         break;
                     case "established_call":
                         //呼叫建立
-                        callAccount();
                         mText.setVisibility(View.GONE);
                         mContent.setBackgroundColor(getResources().getColor(R.color.zijing_video_bg));
-                        Long time = GKApplication.getInstance().
-                                getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
-                                .getLong(Constants.TIME_LIMIT, 20);
-                        startTime(time * 60);
+                        callAccount();
                         break;
                     case "cleared_call":
                         JSONObject jsonObject = JSONUtil.getJSONObject(jsonStr);
@@ -107,9 +113,11 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                         try {
                             objv = jsonObject.getJSONObject("v");
                             String reason = objv.getString("reason");
-                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
+                            if (!"Ended by local user".equals(reason)) {
+//                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
                                 Intent data = new Intent();
                                 data.putExtra(Constants.CALL_AGAIN, true);
+                                data.putExtra(Constants.END_REASON, reason);
                                 CallZiJingActivity.this.setResult(0, data);
                             }
                         } catch (JSONException e1) {
@@ -583,10 +591,14 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
         if (!mCancelVideoDialog.isShowing()) mCancelVideoDialog.show();
     }
 
+    /**
+     * 通知远端进入房间
+     */
     private void callAccount(){
         SharedPreferences sharedPreferences = GKApplication.getInstance().
                 getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
         String account = sharedPreferences.getString(Constants.TERMINAL_ACCOUNT, "");
+        Long time = sharedPreferences.getLong(Constants.TIME_LIMIT, 20);
         if(account!=null&&account.length()>0) {
                 //发送云信消息，检测家属端是否已经准备好可以呼叫
             CustomNotification notification = new CustomNotification();
@@ -600,12 +612,14 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
             try {
                 json.put("code", -1);//-1表示接通
                 json.put("msg", account);
+                json.put("limit_time", time);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             notification.setContent(json.toString());
             NIMClient.getService(MsgService.class).sendCustomNotification(notification);
         }
+        startTime(time * 60);
     }
 }
 

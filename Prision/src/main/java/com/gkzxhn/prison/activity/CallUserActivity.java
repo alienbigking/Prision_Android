@@ -30,6 +30,7 @@ import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.starlight.mobile.android.lib.view.dotsloading.DotsTextView;
 
@@ -189,9 +190,22 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     }
     @Override
     public void onSuccess() {
-        String[] img_urls = mPresenter.getEntity().getImageUrl().split("\\|");
-        ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[0],ivCard01);
-        ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[1],ivCard02);
+        final String[] img_urls = mPresenter.getEntity().getImageUrl().split("\\|");
+        final DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .build();
+        ivCard01.post(new Runnable() {
+            @Override
+            public void run() {
+                ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[0],ivCard01, options);
+            }
+        });
+        ivCard02.post(new Runnable() {
+            @Override
+            public void run() {
+                ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[1],ivCard02, options);
+            }
+        });
         findViewById(R.id.call_user_layout_bt_call).setEnabled(true);
         SharedPreferences.Editor editor=mPresenter.getSharedPreferences().edit();
         editor.putString(Constants.OTHER_CARD+1,img_urls[0]);
@@ -325,10 +339,11 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0) {
-            if (resultCode == 0) {
+        if (resultCode == 0) {
+            if (requestCode == 0) {
                 if (data != null) {
                     boolean call_again = data.getBooleanExtra(Constants.CALL_AGAIN, false);
+                    String reason = data.getStringExtra(Constants.END_REASON);
                     if (call_again) {
                         //换协议呼叫
                         String protocol = preferences.getString(Constants.PROTOCOL, "h323");
@@ -341,7 +356,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
                         edit.putString(Constants.PROTOCOL, protocol);
                         edit.apply();
                         Log.i(TAG, "protocol : " + protocol);
-                        showToast("呼叫失败,切换成" + protocol + "协议重新进行呼叫...");
+                        showToast("呼叫失败,原因:" + reason + "/n切换成" + protocol + "协议重新进行呼叫...");
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {

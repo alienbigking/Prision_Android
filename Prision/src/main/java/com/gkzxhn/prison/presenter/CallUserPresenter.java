@@ -108,7 +108,7 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
 
     private final String TAG = CallUserPresenter.class.getSimpleName();
 
-    public void callFang(String account, int requestCode){
+    public void callFang(String account, final int requestCode){
         final ICallUserView view=mWeakView==null?null:mWeakView.get();
         String[] strings = null;
         String password = "";
@@ -146,7 +146,7 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
                                         intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1]);
                                     }
                                     ((CallUserActivity) view).stopProgress();
-                                    ((CallUserActivity) view).startActivityForResult(intent, 0);
+                                    ((CallUserActivity) view).startActivityForResult(intent, requestCode);
                                 }
                             }else {
                                 Log.i(TAG, "onResponse: 参数无效 code:  " + code);

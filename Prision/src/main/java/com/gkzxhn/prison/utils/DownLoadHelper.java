@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 
 import com.gkzxhn.prison.common.Constants;
@@ -126,9 +127,10 @@ public class DownLoadHelper {
             if (!tmpFile.exists()) {
                 tmpFile.mkdir();
             }
-//            final File file = new File(Constants.SD_FILE_CACHE_PATH + "/" + "app.apk");
-            final File file = new File(Constants.CACHE_FILE + "/" + "app.apk");
+            final File file = new File(Constants.SD_FILE_CACHE_PATH + "/" + "app.apk");
+//            final File file = new File(Constants.APK_C9_DIR + "/" + "app.apk");
             filePath=file.getAbsolutePath();
+            Log.i(DownLoadHelper.class.getSimpleName(), "path : " + filePath);
 
             try {
                 URL url = new URL(mUrl);

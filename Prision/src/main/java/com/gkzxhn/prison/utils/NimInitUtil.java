@@ -218,6 +218,11 @@ public class NimInitUtil {
                             Intent intent = new Intent(Constants.ZIJING_ACTION);
                             intent.putExtra(Constants.HANGUP, true);
                             GKApplication.getInstance().sendBroadcast(intent);
+                        }else if(code == 0 ) {
+                            //表示远端进入通话 更新计时器
+                            Intent intent = new Intent(Constants.ZIJING_ACTION);
+                            intent.putExtra(Constants.TIME_CONNECT, true);
+                            GKApplication.getInstance().sendBroadcast(intent);
                         }
                     }
                 } catch (Exception e) {

@@ -2,23 +2,33 @@ package com.gkzxhn.prison.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.gkzxhn.prison.R;
+import com.gkzxhn.prison.activity.CallZiJingActivity;
+import com.gkzxhn.prison.activity.MainActivity;
+import com.gkzxhn.prison.async.SingleRequestQueue;
 import com.gkzxhn.prison.async.VolleyUtils;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.entity.MeetingEntity;
 import com.gkzxhn.prison.entity.VersionEntity;
+import com.gkzxhn.prison.entity.ZijingCall;
 import com.gkzxhn.prison.model.IMainModel;
 import com.gkzxhn.prison.model.iml.MainModel;
 import com.gkzxhn.prison.utils.AsynHelper;
+import com.gkzxhn.prison.utils.XtHttpUtil;
 import com.gkzxhn.prison.view.IMainView;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -27,6 +37,7 @@ import com.starlight.mobile.android.lib.util.ConvertUtil;
 import com.starlight.mobile.android.lib.util.HttpStatus;
 import com.starlight.mobile.android.lib.util.JSONUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -180,5 +191,69 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private final String TAG = MainPresenter.class.getSimpleName();
+    public void callFang(String account, final int requestCode){
+        final IMainView view=mWeakView==null?null:mWeakView.get();
+        String[] strings = null;
+        String password = "";
+        if (account.contains("##")) {
+            strings = account.split("##");
+            account = strings[0];
+            if (strings.length > 0) {
+                password = strings[1];
+            }
+        }
+        ZijingCall json = new ZijingCall();
+        String protocol = getSharedPreferences().getString(Constants.PROTOCOL, "h323");
+        int rate = getSharedPreferences().getInt(Constants.TERMINAL_RATE, 512);
+        json.url = protocol + ":" + account + "**" + password;
+        json.rate = rate;
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(new Gson().toJson(json));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final String[] finalStrings = strings;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                XtHttpUtil.DIAL, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "DIAL" + response.toString());
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 0){
+                                Intent intent = new Intent((MainActivity) view, CallZiJingActivity.class);
+                                if (null!=finalStrings && finalStrings.length > 1) {
+                                    intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1]);
+                                }
+                                if (view != null) {
+                                    ((MainActivity)view).startActivityForResult(intent, requestCode);
+                                }
+                            }else {
+                                Log.i(TAG, "onResponse: 参数无效 code:  " + code);
+                            }
+                        } catch (JSONException e) {
+                            Log.e(TAG, "onResponse: >>> "+ e.getMessage() );
+//                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError error) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "ResetQuest..." + error.toString());
+                        ((MainActivity)view).showToast("ResetQuest...  " + error.toString());
+                    }
+                }, 2000);
+
+            }
+        });
+        SingleRequestQueue.getInstance().add(request, "");
     }
 }

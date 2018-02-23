@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.gkzxhn.prison.BuildConfig;
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.adapter.MainAdapter;
 import com.gkzxhn.prison.adapter.OnItemClickListener;
@@ -113,6 +114,16 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         });
         //请求数据
         mPresenter=new MainPresenter(this,this);
+
+        if (BuildConfig.DEBUG) {
+            findViewById(R.id.main_layout_ch_head).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String account = mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT,"");
+                    mPresenter.callFang(account, 1);
+                }
+            });
+        }
 
         mPresenter.requestVersion();
 
@@ -385,4 +396,5 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         }
         return false;
     }
+
 }
