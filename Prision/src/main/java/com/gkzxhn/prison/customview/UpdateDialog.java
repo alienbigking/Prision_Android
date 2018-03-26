@@ -2,11 +2,13 @@ package com.gkzxhn.prison.customview;
 
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
+import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.utils.DownLoadHelper;
 
 import java.io.File;
@@ -138,6 +141,10 @@ public class UpdateDialog extends Dialog {
 			if (!apkfile.exists()) {
 				return;
 			}
+			// Change the system setting
+			ContentResolver contentResolver = GKApplication.getInstance().getContentResolver();
+			boolean enabled = Settings.Secure.getInt(contentResolver, Settings.Secure.INSTALL_NON_MARKET_APPS, 0) == 1;
+			Settings.Secure.putInt(contentResolver, Settings.Secure.INSTALL_NON_MARKET_APPS, enabled ? 0 : 1);
 			// 通过Intent安装APK文件
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setDataAndType(Uri.parse("file://" + apkfile.toString()),

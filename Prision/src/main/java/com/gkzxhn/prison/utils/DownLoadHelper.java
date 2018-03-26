@@ -6,12 +6,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-
 import com.gkzxhn.prison.common.Constants;
 import com.starlight.mobile.android.lib.util.HttpStatus;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -121,16 +121,31 @@ public class DownLoadHelper {
             int responseCode=0;
             File rootFile = new File(Constants.SD_ROOT_PATH);
             if (!rootFile.exists()) {
-                rootFile.mkdir();
+                rootFile.mkdirs();
             }
             File tmpFile = new File(Constants.SD_FILE_CACHE_PATH);
             if (!tmpFile.exists()) {
-                tmpFile.mkdir();
+                tmpFile.mkdirs();
             }
-            final File file = new File(Constants.SD_FILE_CACHE_PATH + "/" + "app.apk");
-//            final File file = new File(Constants.APK_C9_DIR + "/" + "app.apk");
+
+            final File file = new File(Constants.CACHE_FILE + "/" + "app.apk");
+//            final File file = new File(Constants.SD_ROOT_PATH + "/" + "app.apk");
             filePath=file.getAbsolutePath();
             Log.i(DownLoadHelper.class.getSimpleName(), "path : " + filePath);
+            String cmd = "chmod 777 " + filePath;
+            try {
+                Process p = Runtime.getRuntime().exec(cmd);
+                int status = p.waitFor();
+                if (status == 0) {
+                    Log.i(DownLoadHelper.class.getSimpleName(), "doInBackground: 权限修改成功");
+                }else{
+                    Log.i(DownLoadHelper.class.getSimpleName(), "doInBackground: 权限修改失败");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             try {
                 URL url = new URL(mUrl);

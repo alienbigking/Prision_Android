@@ -62,7 +62,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
         MeetingEntity entity=mDatas.get(position);
         holder.tvName.setText(entity.getName());
         String meetingTime=entity.getTime();
-        String formateTime=meetingTime.substring(meetingTime.length()-11,meetingTime.length());
+//        2017-08-03 9:00 - 9:30
+        String formateTime=meetingTime.substring(12 ,meetingTime.length());
         holder.tvTime.setText(formateTime);
         holder.tvArea.setText(entity.getArea());
         holder.itemView.setOnClickListener(new View.OnClickListener() {

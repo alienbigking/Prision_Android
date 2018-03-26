@@ -49,7 +49,6 @@ public class SplashActivity extends Activity {
         mLl_content.setVisibility(View.GONE);
 
         query();
-//        mHandler.sendEmptyMessageDelayed(1, SPLASH_DELAY_MILLIS);
 
         String versionName = "";
         // 包管理器
