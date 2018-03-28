@@ -32,11 +32,6 @@ import org.json.JSONObject;
  */
 
 public class SplashActivity extends Activity {
-    private final long SPLASH_DELAY_MILLIS = 1000;
-    private FrameLayout mFl_content;
-    private LinearLayout mLl_content;
-    private VolleyUtils volleyUtils=new VolleyUtils();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +41,6 @@ public class SplashActivity extends Activity {
 
     private void init() {
         TextView tvVersionName = (TextView) findViewById(R.id.splash_layout_tv_version);
-
         String versionName = "";
         // 包管理器
         PackageManager pm = getPackageManager();
@@ -63,9 +57,9 @@ public class SplashActivity extends Activity {
 //            mHandler.sendEmptyMessageDelayed(0, SPLASH_DELAY_MILLIS);
 //        }else
         if (preferences.getString(Constants.USER_ACCOUNT, "").length() == 0) {//未登录 未认证
-            mHandler.sendEmptyMessageDelayed(1, SPLASH_DELAY_MILLIS);
+            mHandler.sendEmptyMessage(1);
         } else {//已登录
-            mHandler.sendEmptyMessageDelayed(2, SPLASH_DELAY_MILLIS);
+            mHandler.sendEmptyMessage(2);
         }
     }
 

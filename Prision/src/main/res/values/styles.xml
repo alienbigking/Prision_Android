@@ -28,7 +28,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">@null</item>
         <item name="android:padding">10dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">16sp</item>
@@ -83,5 +83,11 @@
         <!--设置文字颜色-->
         <item name="colorAccent">@color/common_text_color</item>
 
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@mipmap/splash_tablet</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

@@ -43,7 +43,6 @@ public class GKApplication extends Application {
         super.onCreate();
         application = this;
         new NimInitUtil().initNim();// 云信SDK相关初始化及后续操作
-//        KDInitUtil.init();// 科达SDK相关初始化及后续操作
         initImageLoader();
         //收集崩溃日志
         CrashHandler.getInstance().init(this);

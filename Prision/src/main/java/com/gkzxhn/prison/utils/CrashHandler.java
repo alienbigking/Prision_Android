@@ -7,8 +7,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.gkzxhn.prison.async.SingleRequestQueue;
 import com.gkzxhn.prison.async.VolleyUtils;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
@@ -51,6 +58,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     //用于格式化日期,作为日志文件名的一部分
     private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
     private boolean flag=false;
+    private VolleyUtils  volleyUtils = new VolleyUtils();
     /** 保证只有一个CrashHandler实例 */
     private CrashHandler() {
     }
@@ -105,7 +113,17 @@ public class CrashHandler implements UncaughtExceptionHandler {
         }
 //        saveCrashInfo2File(ex);
         if(!flag){
-            uploadLog(ex.getMessage());
+            StringBuffer b = new StringBuffer();
+            b.append(ex.toString());
+            StackTraceElement[] stackTraceElements=ex.getStackTrace();
+            int lenth=stackTraceElements.length>2?2:stackTraceElements.length;
+            if(stackTraceElements!=null){
+                for (int i=0;i<lenth;i++) {
+                    StackTraceElement s=stackTraceElements[i];
+                    if(s!=null&&!s.toString().isEmpty())b.append("\n"+s.toString() );
+                }
+            }
+            uploadLog(b.toString());
         }
         if(Constants.IS_DEBUG_MODEL){//打印日志
             ex.printStackTrace();
@@ -117,7 +135,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * @param message
      */
     private void uploadLog(String message){
-        VolleyUtils  volleyUtils = new VolleyUtils();
         JSONObject params=new JSONObject();
         try {
             SharedPreferences preferences= GKApplication.getInstance().
@@ -132,18 +149,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
             packageInfo = pm.getPackageInfo(mContext.getPackageName(),
                     PackageManager.GET_CONFIGURATIONS);
             params.put("app_version",packageInfo.versionCode);
-            volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL, new JSONObject().put("logger", params), null, new VolleyUtils.OnFinishedListener<JSONObject>() {
-                @Override
-                public void onSuccess(JSONObject response) {
-                    int i=0;
-
-                }
-
-                @Override
-                public void onFailed(VolleyError error) {
-                    int i=0;
-                }
-            });
+            volleyUtils.post( Constants.REQUEST_CRASH_LOG_URL,new JSONObject().put("logger", params),null,null);
         } catch (Exception e) {
             e.printStackTrace();
         }

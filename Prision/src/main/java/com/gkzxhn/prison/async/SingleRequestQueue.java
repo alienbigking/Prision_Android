@@ -38,7 +38,7 @@ public class SingleRequestQueue {
      * @param <T>
      */
     public <T> void add(Request<T> req, String tag) {
-        req.setTag(tag);
+        if(tag!=null)req.setTag(tag);
         getRequestQueue().add(req);
     }
 

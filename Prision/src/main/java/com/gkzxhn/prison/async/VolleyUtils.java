@@ -25,13 +25,6 @@ import java.util.Map;
  */
 public class VolleyUtils<T>
 {
-    private Context applicationContext;
-
-    public VolleyUtils()
-    {
-        applicationContext = GKApplication.getInstance();
-    }
-
     /**
      * GET request
      *
