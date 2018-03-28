@@ -22,7 +22,6 @@ import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.customview.CustomDialog;
 import com.gkzxhn.prison.customview.ShowTerminalDialog;
-import com.gkzxhn.prison.keda.utils.NetWorkUtils;
 import com.gkzxhn.prison.presenter.CallUserPresenter;
 import com.gkzxhn.prison.view.ICallUserView;
 import com.netease.nimlib.sdk.NIMClient;
@@ -155,7 +154,6 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private void online(String account){
         isClickCall=true;
         if(account!=null&&account.length()>0) {
-            if (NetWorkUtils.isAvailable(this)) {
                 if(mPresenter.checkStatusCode()== StatusCode.LOGINED) {
                     startProgress();
                     //发送云信消息，检测家属端是否已经准备好可以呼叫
@@ -178,9 +176,6 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
                 }else{
                     showToast(R.string.yunxin_offline);
                 }
-            } else {
-                showToast(R.string.network_error);
-            }
         }else{
             if(mShowTerminalDialog==null){
                 mShowTerminalDialog=new ShowTerminalDialog(this);

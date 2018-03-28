@@ -4,9 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.gkzxhn.prison.service.ScreenRecordService;
-import com.gkzxhn.prison.utils.Utils;
-
 /**
  * Created by Raleigh.Luo on 17/5/18.
  * 检测USB和TF检测挂载和异常

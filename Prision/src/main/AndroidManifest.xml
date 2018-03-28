@@ -209,19 +209,6 @@
             android:value="com.netease.nimlib.service.NimReceiver"/>
 
 
-        <!-- vconf -->
-        <activity
-            android:name="com.gkzxhn.prison.keda.vconf.VConfVideoUI"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
-
-        <service android:name=".service.RecordServer"/>
-        <service android:name="com.gkzxhn.prison.keda.vconf.VideoCapService"/>
-        <service android:name="com.gkzxhn.prison.service.ScreenRecordService"/>
-        <!--<receiver android:name="com.gkzxhn.prison.receiver.USBStateReceiver"/>-->
-        <service android:name=".utils.RecordServer"/>
-
         <service android:name=".service.EReportService"
                  android:label="@string/app_name"
                  android:permission="cn.com.rocware.c9gui.service.EReportService"

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+
     signingConfigs {
         config {
             keyAlias 'gkzx'
@@ -10,9 +11,9 @@ android {
         }
     }
     compileSdkVersion 25
-    buildToolsVersion "26.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.gkzxhn.prision"
+        applicationId 'com.gkzxhn.prison'
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 10
@@ -35,18 +36,14 @@ android {
     }
     productFlavors {
     }
+
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     testCompile 'junit:junit:4.12'
     compile project(':base_lib_system')
     compile 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
-    compile files('libs/kdmediasdk.jar')
-    compile files('libs/kdmobilesdk-V5.0.0.2.1.jar')
     compile 'com.netease.nimlib:basesdk:3.2.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'io.reactivex:rxjava:1.2.9'

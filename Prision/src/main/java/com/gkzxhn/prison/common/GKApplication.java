@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.activity.LoginActivity;
-import com.gkzxhn.prison.service.ScreenRecordService;
 import com.gkzxhn.prison.utils.CrashHandler;
 import com.gkzxhn.prison.utils.NimInitUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -130,14 +129,6 @@ public class GKApplication extends Application {
     public String getTerminalPassword(){
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
         return sharedPreferences.getString(Constants.TERMINAL_PASSWORD,"");
-    }
-    /**
-     * 关闭屏幕录制，即停止录制Service
-     */
-    public void stopScreenRecording() {
-        Intent service = new Intent(this, ScreenRecordService.class);
-        service.setAction(Constants.STOP_RECORDSCREEN_ACTION);
-        startService(service);
     }
 
 }
