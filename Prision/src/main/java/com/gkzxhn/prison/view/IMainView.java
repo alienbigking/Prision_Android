@@ -15,4 +15,6 @@ public interface IMainView extends IBaseView{
     void updateItems(List<MeetingEntity> datas);
     void onCanceled();
     void updateVersion(VersionEntity version);
+    void startZijingService();
+    void zijingServiceFailed();
 }

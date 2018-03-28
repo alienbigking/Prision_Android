@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -30,22 +31,21 @@ import java.util.List;
  */
 
 public class EReportService extends Service {
-
     private static final String TAG = "EReportService";
-
     private String qid;
-
     private VolleyUtils volleyUtils=new VolleyUtils();
     @Override
     public void onCreate() {
         super.onCreate();
+        //取消所有请求
+        SingleRequestQueue.getInstance().cancelAll(TAG);
         ResetQuest();
     }
 
     //重置事件队列id
     public void ResetQuest() {
         try {
-            volleyUtils.get(JSONObject.class, XtHttpUtil.RESET, null, new VolleyUtils.OnFinishedListener<JSONObject>() {
+            volleyUtils.get(JSONObject.class, XtHttpUtil.RESET, TAG, new VolleyUtils.OnFinishedListener<JSONObject>() {
                 @Override
                 public void onSuccess(JSONObject response) {
                     Log.d(TAG, "Reset" + response.toString());
@@ -76,7 +76,7 @@ public class EReportService extends Service {
     private void GetClearQuest(final int next_seq) {
         String url=XtHttpUtil.CLEAR + qid + "&expect_seq=" + next_seq;
         try {
-            volleyUtils.get(JSONObject.class, url, null, new VolleyUtils.OnFinishedListener<JSONObject>() {
+            volleyUtils.get(JSONObject.class, url, TAG, new VolleyUtils.OnFinishedListener<JSONObject>() {
                 @Override
                 public void onSuccess(JSONObject response) {
 
@@ -120,7 +120,7 @@ public class EReportService extends Service {
     public void GetQueryQuest(final int a) {
         String url=XtHttpUtil.QUERY + qid + "&expect_seq=" + (a);
         try {
-            volleyUtils.get(JSONObject.class, url, null, new VolleyUtils.OnFinishedListener<JSONObject>() {
+            volleyUtils.get(JSONObject.class, url, TAG, new VolleyUtils.OnFinishedListener<JSONObject>() {
                 @Override
                 public void onSuccess(JSONObject response) {
                     initData(response, a);

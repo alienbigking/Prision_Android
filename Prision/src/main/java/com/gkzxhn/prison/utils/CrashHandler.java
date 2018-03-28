@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
+import com.android.volley.VolleyError;
 import com.gkzxhn.prison.async.VolleyUtils;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
@@ -102,7 +103,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
         if (ex == null) {
             return false;
         }
-        saveCrashInfo2File(ex);
+//        saveCrashInfo2File(ex);
         if(!flag){
             uploadLog(ex.getMessage());
         }
@@ -131,7 +132,18 @@ public class CrashHandler implements UncaughtExceptionHandler {
             packageInfo = pm.getPackageInfo(mContext.getPackageName(),
                     PackageManager.GET_CONFIGURATIONS);
             params.put("app_version",packageInfo.versionCode);
-            volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL,params,null,null);
+            volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL, new JSONObject().put("logger", params), null, new VolleyUtils.OnFinishedListener<JSONObject>() {
+                @Override
+                public void onSuccess(JSONObject response) {
+                    int i=0;
+
+                }
+
+                @Override
+                public void onFailed(VolleyError error) {
+                    int i=0;
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

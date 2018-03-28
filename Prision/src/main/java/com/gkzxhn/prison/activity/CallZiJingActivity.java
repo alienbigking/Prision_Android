@@ -59,9 +59,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class CallZiJingActivity extends SuperActivity implements View.OnClickListener {
-
     private final String TAG = CallZiJingActivity.class.getSimpleName();
-
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

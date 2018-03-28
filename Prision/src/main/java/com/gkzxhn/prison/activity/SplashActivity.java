@@ -46,12 +46,6 @@ public class SplashActivity extends Activity {
 
     private void init() {
         TextView tvVersionName = (TextView) findViewById(R.id.splash_layout_tv_version);
-        mFl_content = (FrameLayout) findViewById(R.id.fl_content);
-        mLl_content = (LinearLayout) findViewById(R.id.ll_content);
-        mFl_content.setBackgroundColor(getResources().getColor(R.color.zijing_video_bg));
-        mLl_content.setVisibility(View.GONE);
-
-        query();
 
         String versionName = "";
         // 包管理器
@@ -64,7 +58,7 @@ public class SplashActivity extends Activity {
         }
         tvVersionName.setText(getString(R.string.app_v) + versionName);
 
-        /*SharedPreferences preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
 //        if(preferences.getBoolean(Constants.IS_FIRST_IN,true)) {
 //            mHandler.sendEmptyMessageDelayed(0, SPLASH_DELAY_MILLIS);
 //        }else
@@ -72,46 +66,6 @@ public class SplashActivity extends Activity {
             mHandler.sendEmptyMessageDelayed(1, SPLASH_DELAY_MILLIS);
         } else {//已登录
             mHandler.sendEmptyMessageDelayed(2, SPLASH_DELAY_MILLIS);
-        }*/
-    }
-
-    private void query() {
-        try {
-            volleyUtils.post(XtHttpUtil.GET_DIAL_HISTORY, new JSONObject(), null, new VolleyUtils.OnFinishedListener<JSONObject>() {
-                @Override
-                public void onSuccess(JSONObject response) {
-                    try {
-                        int code = response.getInt("code");
-                        if (code == 0) {
-                            mLl_content.setVisibility(View.VISIBLE);
-                            mFl_content.setBackgroundDrawable(getResources().getDrawable(R.mipmap.splash_common_tablet));
-                            SharedPreferences preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
-                            //        if(preferences.getBoolean(Constants.IS_FIRST_IN,true)) {
-                            //            mHandler.sendEmptyMessageDelayed(0, SPLASH_DELAY_MILLIS);
-                            //        }else
-                            if (preferences.getString(Constants.USER_ACCOUNT, "").length() == 0) {//未登录 未认证
-                                mHandler.sendEmptyMessageDelayed(1, SPLASH_DELAY_MILLIS);
-                            } else {//已登录
-                                mHandler.sendEmptyMessageDelayed(2, SPLASH_DELAY_MILLIS);
-                            }
-                        }
-                    } catch (JSONException e) {
-                    }
-                }
-
-                @Override
-                public void onFailed(VolleyError error) {
-                    new Handler().postDelayed(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    query();
-                                }
-                            }, 2000);
-                }
-            });
-        } catch (AuthFailureError authFailureError) {
-            authFailureError.printStackTrace();
         }
     }
 

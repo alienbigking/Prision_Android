@@ -20,7 +20,9 @@ import com.gkzxhn.prison.customview.UpdateDialog;
 import com.gkzxhn.prison.entity.MeetingEntity;
 import com.gkzxhn.prison.entity.VersionEntity;
 import com.gkzxhn.prison.presenter.MainPresenter;
+import com.gkzxhn.prison.presenter.SettingPresenter;
 import com.gkzxhn.prison.view.IMainView;
+import com.gkzxhn.prison.view.ISettingView;
 
 import java.util.List;
 
@@ -28,10 +30,10 @@ import java.util.List;
  * Created by Raleigh.Luo on 17/4/12.
  */
 
-public class SettingActivity extends SuperActivity implements IMainView{
+public class SettingActivity extends SuperActivity implements ISettingView{
     private int mResultCode=RESULT_CANCELED;
     private TextView tvUpdateHint;
-    private MainPresenter mPresenter;
+    private SettingPresenter mPresenter;
     private UpdateDialog updateDialog;
     private CustomDialog mCustomDialog;
     @Override
@@ -39,7 +41,15 @@ public class SettingActivity extends SuperActivity implements IMainView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_layout);
         tvUpdateHint= (TextView) findViewById(R.id.setting_layout_tv_update_hint);
-        mPresenter=new MainPresenter(this,this);
+        PackageManager pm = getPackageManager();
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+            tvUpdateHint.setText(getString(R.string.current_version)+"v"+packageInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+          mPresenter=new SettingPresenter(this,this);
         mCustomDialog = new CustomDialog(this, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,26 +93,6 @@ public class SettingActivity extends SuperActivity implements IMainView{
         }
     }
 
-
-    @Override
-    public void showProgress() {
-
-    }
-
-    @Override
-    public void dismissProgress() {
-
-    }
-
-    @Override
-    public void updateItems(List<MeetingEntity> datas) {
-
-    }
-
-    @Override
-    public void onCanceled() {
-
-    }
 
     @Override
     public void updateVersion(VersionEntity version) {

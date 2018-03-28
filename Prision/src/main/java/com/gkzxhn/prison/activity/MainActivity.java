@@ -51,7 +51,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class MainActivity extends SuperActivity implements IMainView,CusSwipeRefreshLayout.OnRefreshListener {
-    private TextView tvMonth;
+    private TextView tvMonth,tvServiceConnectHint;
     private ViewPager mViewPager;
     private CustomDate mDate;
     private MainAdapter adapter;
@@ -64,17 +64,19 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     private CancelVideoDialog mCancelVideoDialog;
     private UpdateDialog updateDialog;
     private ShowTerminalDialog mShowTerminalDialog;
-    private Intent mService;
+    private boolean isConnectZijing=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isConnectZijing=false;
         setContentView(R.layout.main_layout);
         initControls();
         init();
         registerReceiver();
     }
     private void initControls(){
+        tvServiceConnectHint= (TextView) findViewById(R.id.main_layout_tv_service_hint);
         tvMonth= (TextView) findViewById(R.id.main_layout_tv_month);
         mViewPager= (ViewPager) findViewById(R.id.main_layout_vp_calendar);
         mRecylerView = (RecyclerView) findViewById(R.id.common_list_layout_rv_list);
@@ -84,8 +86,6 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         ((TextView)findViewById(R.id.common_no_data_layout_iv_hint)).setText(R.string.no_meeting_data);
     }
     private void init(){
-        mService = new Intent(this, EReportService.class);
-        startService(mService);
         initCalander();
         adapter=new MainAdapter(this);
         adapter.setOnItemClickListener(onItemClickListener);
@@ -114,7 +114,8 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         });
         //请求数据
         mPresenter=new MainPresenter(this,this);
-
+        //请求连接紫荆服务器
+        mPresenter.requestZijing();
         if (BuildConfig.DEBUG) {
             findViewById(R.id.main_layout_ch_head).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,7 +125,6 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
                 }
             });
         }
-
         mPresenter.requestVersion();
 
 
@@ -168,6 +168,11 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
             case R.id.common_head_layout_iv_right:
                 onRefresh();
                 break;
+            case R.id.main_layout_ll_service_hint://视频连接服务
+                if(!isConnectZijing){
+                    reConnextZijing();
+                }
+                break;
 
         }
     }
@@ -198,16 +203,33 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
                     if(mCancelVideoDialog!=null&&!mCancelVideoDialog.isShowing())mCancelVideoDialog.show();
                     break;
                 default:
-                    Intent intent=new Intent(MainActivity.this,CallUserActivity.class);
-                    intent.putExtra(Constants.EXTRA,adapter.getCurrentItem().getId());
-                    intent.putExtra(Constants.EXTRAS,adapter.getCurrentItem().getYxAccount());
-                    intent.putExtra(Constants.EXTRA_TAB,adapter.getCurrentItem().getName());
-                    startActivityForResult(intent,Constants.EXTRA_CODE);
+                    if(isConnectZijing) {
+                        Intent intent = new Intent(MainActivity.this, CallUserActivity.class);
+                        intent.putExtra(Constants.EXTRA, adapter.getCurrentItem().getId());
+                        intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().getYxAccount());
+                        intent.putExtra(Constants.EXTRA_TAB, adapter.getCurrentItem().getName());
+                        startActivityForResult(intent, Constants.EXTRA_CODE);
+                    }else{
+                        showToast(R.string.video_service_is_error);
+                        reConnextZijing();
+                    }
                     break;
             }
 
         }
     };
+
+    /**
+     * 重连zijing服务器
+     */
+    private void reConnextZijing(){
+        tvServiceConnectHint.setTextColor(getResources().getColor(R.color.connecting));
+        tvServiceConnectHint.setText(R.string.video_service_connecting);
+        //充值请求次数
+        mPresenter.resetTime();
+        //重新请求
+        mPresenter.requestZijing();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -267,7 +289,6 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     @Override
     public void updateItems(List<MeetingEntity> datas) {
         adapter.updateItems(datas);
-
     }
 
     @Override
@@ -307,9 +328,26 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     }
 
     @Override
+    public void startZijingService() {
+        if(!isConnectZijing) {
+            isConnectZijing = true;
+            tvServiceConnectHint.setText(R.string.video_service_connect_success);
+            tvServiceConnectHint.setTextColor(getResources().getColor(R.color.connect_success));
+            Intent mService = new Intent(this, EReportService.class);
+            startService(mService);
+        }
+    }
+
+    @Override
+    public void zijingServiceFailed() {
+        isConnectZijing=false;
+        tvServiceConnectHint.setText(R.string.video_service_connect_failed);
+        tvServiceConnectHint.setTextColor(getResources().getColor(R.color.connect_failed));
+    }
+
+    @Override
     public void startRefreshAnim() {
         handler.sendEmptyMessage(Constants.START_REFRESH_UI);
-
     }
 
     @Override
@@ -339,7 +377,6 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
     protected void onDestroy() {
         unregisterReceiver(mBroadcastReceiver);//注销广播监听器
         SingleRequestQueue.getInstance().cancelAll("");
-        stopService(mService);
         if(mShowTerminalDialog!=null&&mShowTerminalDialog.isShowing())mShowTerminalDialog.dismiss();
         if(mCancelVideoDialog!=null&&mCancelVideoDialog.isShowing())mCancelVideoDialog.dismiss();
         if(updateDialog!=null&&updateDialog.isShowing())updateDialog.dismiss();

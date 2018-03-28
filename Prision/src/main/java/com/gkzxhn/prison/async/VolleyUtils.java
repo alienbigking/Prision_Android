@@ -404,44 +404,7 @@ public class VolleyUtils<T>
 
     public Map<String, String> getCusHeaders()
     {
-        Map<String, String> headers = new HashMap<String, String>(1);
-        try
-        {//TODO
-//            headers.put(HTTP.CONTENT_TYPE, "charset=utf-8");
-//            headers.put("Accept-Language", "zh-cn,zh");
-//            headers.put("MobileType", "Android");
-//            headers.put("DeviceModel", android.os.Build.MODEL);
-//            headers.put("OSVersion", android.os.Build.VERSION.RELEASE);
-//            headers.put("Longitude", String.valueOf(WitsParkApplication.getInstance().getLongitude()));
-//            headers.put("Latitude", String.valueOf(WitsParkApplication.getInstance().getLatitude()));
-//            try {
-//                headers.put("DeviceToken", android.os.Build.SERIAL);
-//            } catch (Exception e) {
-//            }
-//
-//            try {
-//                headers.put("AppVersion", String.valueOf(applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0).versionCode));
-//            } catch (Exception e) {
-//                headers.put("AppVersion", "-1");
-//            }
-//            SharedPreferences preferences=SAASApplication.getInstance().getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
-//            String sessionId = preferences.getString(Constants.USER_SESSION_ID, null);
-//            if (sessionId != null && sessionId.length() > 0) {
-//                headers.put("sessionId", sessionId);
-//            }
-//            String authorizationValue =preferences.getString(Constants.USER_ACCESS_TOKEN, null);
-//            String tokenType= preferences.getString(Constants.USER_TOKEN_TYPE, null);
-//            if (authorizationValue != null && authorizationValue.length() > 0 && tokenType!=null) {
-//                headers.put("Authorization", String.format("%s %s", tokenType, authorizationValue));
-//            }
-//
-//            headers.put("AppName", "SAAS");
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return headers;
+        return  new HashMap<String, String>();
     }
 
 

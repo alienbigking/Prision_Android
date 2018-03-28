@@ -18,7 +18,7 @@ public interface Constants {
     final String SD_ROOT_PHOTO_PATH = SD_ROOT_PATH+"/photo/";//图片，不自动删除
     final String SD_PHOTO_PATH = SD_ROOT_PHOTO_PATH+"cutPhoto/";//拍照存储或压缩图片的图片路径,启动时自动删除
     final String SD_VIDEO_PATH = SD_ROOT_PATH+"/video/";
-    final boolean IS_DEBUG_MODEL=false;//debug模式打印日志到控制台,发布版本不打印
+    final boolean IS_DEBUG_MODEL=true;//debug模式打印日志到控制台,发布版本不打印
     final int REQUEST_TIMEOUT=60000;//超时时间1分钟
     /*-------------------------------User Tab-------------------------------------------------*/
     final String USER_TABLE="user_table";
@@ -77,38 +77,38 @@ public interface Constants {
     final int RESIZE_REQUEST_CODE=0x105;
     final int EXTRAS_CODE=0x106;
     /*-------------------------------action-------------------------------------------------*/
-    final String _ACTION="com.gkzxhn.prision.TERMINAL_SUCCESS";//注册终端成功
+    final String _ACTION="com.gkzxhn.prison.TERMINAL_SUCCESS";//注册终端成功
 
-    final String TERMINAL_SUCCESS_ACTION="com.gkzxhn.prision.TERMINAL_SUCCESS";//注册终端成功
-    final String TERMINAL_FAILED_ACTION="com.gkzxhn.prision.TERMINAL_FAILED";//注册终端失败
-    final String ONLINE_FAILED_ACTION="com.gkzxhn.prision.ONLINE_FAILED_ACTION";//连线失败
-    final String ONLINE_SUCCESS_ACTION="com.gkzxhn.prision.ONLINE_SUCCESS_ACTION";//连线成功
+    final String TERMINAL_SUCCESS_ACTION="com.gkzxhn.prison.TERMINAL_SUCCESS";//注册终端成功
+    final String TERMINAL_FAILED_ACTION="com.gkzxhn.prison.TERMINAL_FAILED";//注册终端失败
+    final String ONLINE_FAILED_ACTION="com.gkzxhn.prison.ONLINE_FAILED_ACTION";//连线失败
+    final String ONLINE_SUCCESS_ACTION="com.gkzxhn.prison.ONLINE_SUCCESS_ACTION";//连线成功
     //云信被踢下线
-    final String NIM_KIT_OUT="com.gkzxhn.prision.NIM_KIT_OUT";
+    final String NIM_KIT_OUT="com.gkzxhn.prison.NIM_KIT_OUT";
 
     //退出视频会议
-    final String MEETING_FORCE_CLOSE_ACTION="com.gkzxhn.prision.MEETING_FORCE_CLOSE_ACTION";
+    final String MEETING_FORCE_CLOSE_ACTION="com.gkzxhn.prison.MEETING_FORCE_CLOSE_ACTION";
     //接收双流
-    final String MEETING_ASSSENDSREAMSTATUSNTF_ACTION="com.gkzxhn.prision.MEETING_ASSSENDSREAMSTATUSNTF_ACTION";
+    final String MEETING_ASSSENDSREAMSTATUSNTF_ACTION="com.gkzxhn.prison.MEETING_ASSSENDSREAMSTATUSNTF_ACTION";
     //根据呼叫状态选择是否切换界面
-    final String MEETING_SWITCHVCONFVIEW_ACTION="com.gkzxhn.prision.MEETING_SWITCHVCONFVIEW_ACTION";
+    final String MEETING_SWITCHVCONFVIEW_ACTION="com.gkzxhn.prison.MEETING_SWITCHVCONFVIEW_ACTION";
     //设置哑音图标
-    final String MEETING_MUTEIMAGE_ACTION="com.gkzxhn.prision.MEETING_MUTEIMAGE_ACTION";
+    final String MEETING_MUTEIMAGE_ACTION="com.gkzxhn.prison.MEETING_MUTEIMAGE_ACTION";
     //不设置哑音图标
-    final String MEETING_NOT_MUTEIMAGE_ACTION="com.gkzxhn.prision.MEETING_NOT_MUTEIMAGE_ACTION";
+    final String MEETING_NOT_MUTEIMAGE_ACTION="com.gkzxhn.prison.MEETING_NOT_MUTEIMAGE_ACTION";
     // 设置静音
-    final String MEETING_QUIETIMAGE_ACTION="com.gkzxhn.prision.MEETING_QUIETIMAGE_ACTION";
+    final String MEETING_QUIETIMAGE_ACTION="com.gkzxhn.prison.MEETING_QUIETIMAGE_ACTION";
     // 不设置静音
-    final String MEETING_NOT_QUIETIMAGE_ACTION="com.gkzxhn.prision.MEETING_NOT_QUIETIMAGE_ACTION";
+    final String MEETING_NOT_QUIETIMAGE_ACTION="com.gkzxhn.prison.MEETING_NOT_QUIETIMAGE_ACTION";
     // 刷新音视频下面的工具栏
-    final String MEETING_REMOVEREQCHAIRMANHANDLER_ACTION="com.gkzxhn.prision.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION";
+    final String MEETING_REMOVEREQCHAIRMANHANDLER_ACTION="com.gkzxhn.prison.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION";
     // 刷新音视频下面的工具栏
-    final String MEETING_REMOVEREQSPEAKERHANDLER_ACTION="com.gkzxhn.prision.MEETING_REMOVEREQSPEAKERHANDLER_ACTION";
+    final String MEETING_REMOVEREQSPEAKERHANDLER_ACTION="com.gkzxhn.prison.MEETING_REMOVEREQSPEAKERHANDLER_ACTION";
 
     //开始录屏
-    final String START_RECORDSCREEN_ACTION="com.gkzxhn.prision.START_RECORDSCREEN_ACTION";
+    final String START_RECORDSCREEN_ACTION="com.gkzxhn.prison.START_RECORDSCREEN_ACTION";
     //结束录屏
-    final String STOP_RECORDSCREEN_ACTION="com.gkzxhn.prision.STOP_RECORDSCREEN_ACTION";
+    final String STOP_RECORDSCREEN_ACTION="com.gkzxhn.prison.STOP_RECORDSCREEN_ACTION";
 
 
     int RETRY_TIME = 10000;

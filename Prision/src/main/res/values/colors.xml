@@ -14,4 +14,7 @@
 
     <color name="zijing_video_bg">#102030</color>
     <color name="red_text">#ff0a0a</color>
+    <color name="connect_success">#47cb33</color>
+    <color name="connect_failed">#ff8a07</color>
+    <color name="connecting">#6495ed</color>
 </resources>

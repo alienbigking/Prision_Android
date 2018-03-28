@@ -9,7 +9,9 @@ import org.json.JSONObject;
  */
 
 public interface IMainModel extends IBaseModel {
+    void requestZijing(VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener);
     void requestVersion(VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener);
     void requestCancel(String id,String reason, VolleyUtils.OnFinishedListener<String> onFinishedListener);
     void request(String date, VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener);
+    void callFang(String account, int requestCode, VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener);
 }

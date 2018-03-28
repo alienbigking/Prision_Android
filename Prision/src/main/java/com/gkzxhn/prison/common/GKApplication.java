@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.activity.LoginActivity;
+import com.gkzxhn.prison.service.EReportService;
 import com.gkzxhn.prison.utils.CrashHandler;
 import com.gkzxhn.prison.utils.NimInitUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -104,14 +105,18 @@ public class GKApplication extends Application {
 
 
     public void loginOff(){
+        //停止zijing服务
+        stopService(new Intent(this, EReportService.class));
+        //退出云信
         NIMClient.getService(AuthService.class).logout();
-//        TruetouchGlobal.logOff();
+        //清除数据
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.remove(Constants.USER_ACCOUNT);
         edit.remove(Constants.USER_PASSWORD);
         edit.remove(Constants.TERMINAL_ACCOUNT);
         edit.apply();
+        //调整到登录界面
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

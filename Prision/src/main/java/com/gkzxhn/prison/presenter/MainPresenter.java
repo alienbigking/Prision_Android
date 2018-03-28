@@ -3,10 +3,12 @@ package com.gkzxhn.prison.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -51,6 +53,35 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
     private AsynHelper asynHelper;
     public MainPresenter(Context context,IMainView view) {
         super(context, new MainModel(), view);
+    }
+    private int requestZijingTime=0;
+    public void resetTime(){
+        requestZijingTime=0;
+    }
+    public void requestZijing(){
+        requestZijingTime++;
+        mModel.requestZijing(new VolleyUtils.OnFinishedListener<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                int code =ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"code"));
+                IMainView view=mWeakView==null?null:mWeakView.get();
+                if (code == 0) {
+                    view.startZijingService();
+                }else{
+                    view.zijingServiceFailed();
+                }
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+                if(requestZijingTime<5) {//最多请求5次
+                    requestZijing();
+                }else{
+                    IMainView view=mWeakView==null?null:mWeakView.get();
+                    view.zijingServiceFailed();
+                }
+            }
+        });
     }
     public void request(String date){
         IMainView view=mWeakView==null?null:mWeakView.get();
@@ -205,55 +236,36 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
                 password = strings[1];
             }
         }
-        ZijingCall json = new ZijingCall();
-        String protocol = getSharedPreferences().getString(Constants.PROTOCOL, "h323");
-        int rate = getSharedPreferences().getInt(Constants.TERMINAL_RATE, 512);
-        json.url = protocol + ":" + account + "**" + password;
-        json.rate = rate;
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(new Gson().toJson(json));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         final String[] finalStrings = strings;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                XtHttpUtil.DIAL, jsonObject,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "DIAL" + response.toString());
-                        try {
-                            int code = response.getInt("code");
-                            if (code == 0){
-                                Intent intent = new Intent((MainActivity) view, CallZiJingActivity.class);
-                                if (null!=finalStrings && finalStrings.length > 1) {
-                                    intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1]);
-                                }
-                                if (view != null) {
-                                    ((MainActivity)view).startActivityForResult(intent, requestCode);
-                                }
-                            }else {
-                                Log.i(TAG, "onResponse: 参数无效 code:  " + code);
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "onResponse: >>> "+ e.getMessage() );
-//                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
+        mModel.callFang(account, requestCode, new VolleyUtils.OnFinishedListener<JSONObject>() {
             @Override
-            public void onErrorResponse(final VolleyError error) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "ResetQuest..." + error.toString());
-                        ((MainActivity)view).showToast("ResetQuest...  " + error.toString());
-                    }
-                }, 2000);
+            public void onSuccess(JSONObject response) {
+                Log.d(TAG, "DIAL" + response.toString());
+                try {
+                    int code = response.getInt("code");
+                    if (code == 0){
 
+                        Intent intent = new Intent((MainActivity) view, CallZiJingActivity.class);
+                        if (null!=finalStrings && finalStrings.length > 1) {
+                            intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1]);
+                        }
+                        if (view != null) {
+                            ((MainActivity)view).startActivityForResult(intent, requestCode);
+                        }
+                    }else {
+                        Log.i(TAG, "onResponse: 参数无效 code:  " + code);
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "onResponse: >>> "+ e.getMessage() );
+//                            e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+                Log.d(TAG, "ResetQuest..." + error.toString());
+                view.showToast("ResetQuest...  " + error.toString());
             }
         });
-        SingleRequestQueue.getInstance().add(request, "");
     }
 }

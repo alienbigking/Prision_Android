@@ -12,7 +12,11 @@ import android.widget.EditText;
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.presenter.LoginPresenter;
+import com.gkzxhn.prison.service.EReportService;
 import com.gkzxhn.prison.view.ILoginView;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.starlight.mobile.android.lib.util.CommonHelper;
 
 /**
  * Created by Raleigh.Luo on 17/3/29.
@@ -28,11 +32,16 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
         setContentView(R.layout.login_layout);
         initControls();
         init();
+        //停止zijing服务
+        stopService(new Intent(this, EReportService.class));
+        //退出云信
+        NIMClient.getService(AuthService.class).logout();
         //清除下信息
         SharedPreferences sharedPreferences= getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.remove(Constants.USER_ACCOUNT);
         edit.remove(Constants.USER_PASSWORD);
+        edit.remove(Constants.TERMINAL_ACCOUNT);
         edit.apply();
     }
 
@@ -43,8 +52,11 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
     private void init(){
         //显示记住的密码
         SharedPreferences preferences= getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
-        etAccount.setText(preferences.getString(Constants.USER_ACCOUNT_CACHE,""));
-        etPassword.setText(preferences.getString(Constants.USER_PASSWORD_CACHE,""));
+//        etAccount.setText(preferences.getString(Constants.USER_ACCOUNT_CACHE,""));
+//        etPassword.setText(preferences.getString(Constants.USER_PASSWORD_CACHE,""));
+        //TODO
+        etAccount.setText("9999");
+        etPassword.setText("9999");
         mPresenter=new LoginPresenter(this,this);
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting));
         stopRefreshAnim();
@@ -58,6 +70,7 @@ public class LoginActivity  extends SuperActivity implements ILoginView{
             }else if(password.length()==0){
                 showToast(getString(R.string.please_input)+getString(R.string.password));
             }else{
+                CommonHelper.clapseSoftInputMethod(this);
                 mPresenter.login(account,password);
             }
         }
