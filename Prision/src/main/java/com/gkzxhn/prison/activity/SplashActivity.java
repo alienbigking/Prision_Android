@@ -13,12 +13,14 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.async.SingleRequestQueue;
+import com.gkzxhn.prison.async.VolleyUtils;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.utils.XtHttpUtil;
 
@@ -33,6 +35,7 @@ public class SplashActivity extends Activity {
     private final long SPLASH_DELAY_MILLIS = 1000;
     private FrameLayout mFl_content;
     private LinearLayout mLl_content;
+    private VolleyUtils volleyUtils=new VolleyUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,43 +76,43 @@ public class SplashActivity extends Activity {
     }
 
     private void query() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                XtHttpUtil.GET_DIAL_HISTORY, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            int code = response.getInt("code");
-                            if (code == 0) {
-                                mLl_content.setVisibility(View.VISIBLE);
-                                mFl_content.setBackgroundDrawable(getResources().getDrawable(R.mipmap.splash_common_tablet));
-                                SharedPreferences preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
-//        if(preferences.getBoolean(Constants.IS_FIRST_IN,true)) {
-//            mHandler.sendEmptyMessageDelayed(0, SPLASH_DELAY_MILLIS);
-//        }else
-                                if (preferences.getString(Constants.USER_ACCOUNT, "").length() == 0) {//未登录 未认证
-                                    mHandler.sendEmptyMessageDelayed(1, SPLASH_DELAY_MILLIS);
-                                } else {//已登录
-                                    mHandler.sendEmptyMessageDelayed(2, SPLASH_DELAY_MILLIS);
-                                }
+        try {
+            volleyUtils.post(XtHttpUtil.GET_DIAL_HISTORY, new JSONObject(), null, new VolleyUtils.OnFinishedListener<JSONObject>() {
+                @Override
+                public void onSuccess(JSONObject response) {
+                    try {
+                        int code = response.getInt("code");
+                        if (code == 0) {
+                            mLl_content.setVisibility(View.VISIBLE);
+                            mFl_content.setBackgroundDrawable(getResources().getDrawable(R.mipmap.splash_common_tablet));
+                            SharedPreferences preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
+                            //        if(preferences.getBoolean(Constants.IS_FIRST_IN,true)) {
+                            //            mHandler.sendEmptyMessageDelayed(0, SPLASH_DELAY_MILLIS);
+                            //        }else
+                            if (preferences.getString(Constants.USER_ACCOUNT, "").length() == 0) {//未登录 未认证
+                                mHandler.sendEmptyMessageDelayed(1, SPLASH_DELAY_MILLIS);
+                            } else {//已登录
+                                mHandler.sendEmptyMessageDelayed(2, SPLASH_DELAY_MILLIS);
                             }
-                        } catch (JSONException e) {
                         }
+                    } catch (JSONException e) {
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError error) {
-                new Handler().postDelayed(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                query();
-                            }
-                        }, 2000);
+                }
 
-            }
-        });
-        SingleRequestQueue.getInstance().add(request,"");
+                @Override
+                public void onFailed(VolleyError error) {
+                    new Handler().postDelayed(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    query();
+                                }
+                            }, 2000);
+                }
+            });
+        } catch (AuthFailureError authFailureError) {
+            authFailureError.printStackTrace();
+        }
     }
 
     /**

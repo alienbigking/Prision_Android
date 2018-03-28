@@ -182,6 +182,7 @@ public class LoginPresenter extends BasePresenter<IBaseModel,ILoginView>{
                 edit.putString(Constants.USER_ACCOUNT, account);
                 edit.putString(Constants.USER_PASSWORD, password);
                 if (!TextUtils.isEmpty(content)) {
+                    content="6848##7890##0987";//TODO
                     edit.putString(Constants.TERMINAL_ACCOUNT, content);
                 }
                 edit.apply();
