@@ -51,7 +51,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="30dip"
-            android:gravity="c"
             android:onClick="onClickListener"
             android:drawableRight="@mipmap/ic_right"
             android:textSize="26sp"
