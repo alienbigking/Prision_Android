@@ -83,6 +83,25 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
             }
         });
     }
+
+    public void requestFreeTime(){
+        mModel.requestFreeTime(new VolleyUtils.OnFinishedListener<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                int code= ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"code"));
+                if(code== HttpStatus.SC_OK){
+                    int time=ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"time"));
+                    //保存到本地
+                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME,time).apply();
+                }
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+
+            }
+        });
+    }
     public void request(String date){
         IMainView view=mWeakView==null?null:mWeakView.get();
         if(view!=null)view.startRefreshAnim();

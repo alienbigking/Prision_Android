@@ -9,5 +9,6 @@ import org.json.JSONObject;
  */
 
 public interface ICallUserModel extends IBaseModel {
+    void requestFreeTime(VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener);
     public void request(String id, VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener);
 }

@@ -12,6 +12,20 @@ import org.json.JSONObject;
  */
 
 public class CallUserModel extends BaseModel implements ICallUserModel{
+    /**
+     * 获取免费呼叫次数
+     * @param onFinishedListener
+     */
+    @Override
+    public void requestFreeTime(VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener) {
+        try {
+            String url=Constants.REQUEST_FREE_MEETING_TIME+"/"+
+                    getSharedPreferences().getString(Constants.USER_ACCOUNT,"");
+            volleyUtils.get(JSONObject.class, url,REQUEST_TAG,onFinishedListener);
+        } catch (AuthFailureError authFailureError) {
+            authFailureError.printStackTrace();
+        }
+    }
     @Override
     public void request(String id, VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener) {
         String url=String.format("%s/%s",Constants.REQUEST_MEETING_DETAIL_URL,id);

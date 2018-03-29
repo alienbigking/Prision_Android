@@ -32,7 +32,7 @@ import java.util.List;
 
 public class SettingActivity extends SuperActivity implements ISettingView{
     private int mResultCode=RESULT_CANCELED;
-    private TextView tvUpdateHint;
+    private TextView tvUpdateHint,tvCallFreeTime;
     private SettingPresenter mPresenter;
     private UpdateDialog updateDialog;
     private CustomDialog mCustomDialog;
@@ -41,6 +41,7 @@ public class SettingActivity extends SuperActivity implements ISettingView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_layout);
         tvUpdateHint= (TextView) findViewById(R.id.setting_layout_tv_update_hint);
+        tvCallFreeTime=(TextView) findViewById(R.id.setting_layout_tv_call_free_hint);
         PackageManager pm = getPackageManager();
         try {
             PackageInfo packageInfo = pm.getPackageInfo(getPackageName(),
@@ -49,7 +50,10 @@ public class SettingActivity extends SuperActivity implements ISettingView{
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-          mPresenter=new SettingPresenter(this,this);
+        mPresenter=new SettingPresenter(this,this);
+        tvCallFreeTime.setText(getString(R.string.leave)+
+                mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME,0)+getString(R.string.time));
+        mPresenter.requestFreeTime();
         mCustomDialog = new CustomDialog(this, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +71,7 @@ public class SettingActivity extends SuperActivity implements ISettingView{
         switch (view.getId()) {
             case R.id.setting_layout_tv_end_setting:
                 Intent intent = new Intent(this, ConfigActivity.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, Constants.EXTRA_CODE);
                 break;
             case R.id.setting_layout_tv_update:
                 tvUpdateHint.setText(R.string.check_updating);
@@ -81,15 +85,21 @@ public class SettingActivity extends SuperActivity implements ISettingView{
                 setResult(mResultCode);
                 finish();
                 break;
+            case R.id.setting_layout_tv_call_free:
+                startActivityForResult(new Intent(this,CallFreeActivity.class),Constants.EXTRAS_CODE);
+                break;
         }
 
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1&&resultCode==RESULT_OK){
+        if(requestCode==Constants.EXTRA_CODE&&resultCode==RESULT_OK){//修改终端信息成功
             mResultCode=RESULT_OK;
             showToast(R.string.alter_terminal_account_success);
+        }else if(requestCode==Constants.EXTRAS_CODE&&resultCode==RESULT_OK){//免费呼叫
+            mPresenter.requestFreeTime();
+
         }
     }
 
@@ -122,6 +132,11 @@ public class SettingActivity extends SuperActivity implements ISettingView{
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void updateFreeTime(int time) {
+        tvCallFreeTime.setText(time+getString(R.string.time));
     }
 
     @Override

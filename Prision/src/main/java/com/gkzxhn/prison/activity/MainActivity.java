@@ -116,6 +116,8 @@ public class MainActivity extends SuperActivity implements IMainView,CusSwipeRef
         mPresenter=new MainPresenter(this,this);
         //请求连接紫荆服务器
         mPresenter.requestZijing();
+        //请求免费呼叫次数
+        mPresenter.requestFreeTime();
         if (BuildConfig.DEBUG) {
             findViewById(R.id.main_layout_ch_head).setOnClickListener(new View.OnClickListener() {
                 @Override

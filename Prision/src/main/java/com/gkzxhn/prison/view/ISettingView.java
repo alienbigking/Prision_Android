@@ -8,4 +8,5 @@ import com.gkzxhn.prison.entity.VersionEntity;
 
 public interface ISettingView extends IBaseView{
     void updateVersion(VersionEntity version);
+    void updateFreeTime(int time);
 }

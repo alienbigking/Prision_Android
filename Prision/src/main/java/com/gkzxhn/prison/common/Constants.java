@@ -33,6 +33,8 @@ public interface Constants {
     final String TERMINAL_PASSWORD="terminal_password";//终端密码，空
     final String LAST_IGNORE_VERSION="last_ignore_version";//上一个忽略的版本
     final String OTHER_CARD="other_card";//身份证信息
+
+    final String CALL_FREE_TIME="call_free_time";//免费呼叫次数
     //每次会见视频名称记录,囚犯名字_会见记录ID 后期添加 时间戳年月日时分秒，如20170908102033_张三_144
     final String RECORD_VIDEO_NAME="record_video_name";
 //    final String TERMINAL_ADDRESS= "222.244.146.206";//科达服务器终端
@@ -61,6 +63,8 @@ public interface Constants {
     final String REQUEST_VERSION_URL=DOMAIN_NAME_XLS+"/api/v1/versions/2";//版本更新
     final String REQUEST_CRASH_LOG_URL=DOMAIN_NAME_XLS+"/api/v1/loggers";//版本更新
     final String REQUEST_MEETING_ROOM=DOMAIN_NAME_XLS+"/api/v1/terminals";//会议室信息
+
+    final String REQUEST_FREE_MEETING_TIME=DOMAIN_NAME_XLS+"/api/v1/freetime";//免费呼叫次数
 
     /*-------------------------------msg what-------------------------------------------------*/
     final int START_REFRESH_UI=1,STOP_REFRESH_UI=2;//msg what

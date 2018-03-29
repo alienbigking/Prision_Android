@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.volley.VolleyError;
 import com.gkzxhn.prison.async.VolleyUtils;
+import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.entity.VersionEntity;
 import com.gkzxhn.prison.model.IMainModel;
 import com.gkzxhn.prison.model.iml.MainModel;
@@ -22,6 +23,26 @@ import org.json.JSONObject;
 public class SettingPresenter  extends BasePresenter<IMainModel,ISettingView> {
     public SettingPresenter(Context context, ISettingView view) {
         super(context, new MainModel(), view);
+    }
+    public void requestFreeTime(){
+        mModel.requestFreeTime(new VolleyUtils.OnFinishedListener<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                int code= ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"code"));
+                if(code== HttpStatus.SC_OK){
+                    ISettingView view=mWeakView==null?null:mWeakView.get();
+                    int time=ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"time"));
+                    if(view!=null)view.updateFreeTime(time);
+                    //保存到本地
+                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME,time).apply();
+                }
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+
+            }
+        });
     }
     public void requestVersion(){
         mModel.requestVersion(new VolleyUtils.OnFinishedListener<JSONObject>() {

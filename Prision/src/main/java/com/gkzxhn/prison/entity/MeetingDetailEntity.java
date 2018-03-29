@@ -1,5 +1,6 @@
 package com.gkzxhn.prison.entity;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -15,6 +16,27 @@ public class MeetingDetailEntity {
     String accid;
     @SerializedName("prisoner_number")
     String prisonerNumber;//囚号
+    @SerializedName("prisoner_name")
+    String prisonerName;//囚犯名字
+
+    @Expose
+    String phone;// 电话号码
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPrisonerName() {
+        return prisonerName == null ? "" : prisonerName;
+    }
+
+    public void setPrisonerName(String prisonerName) {
+        this.prisonerName = prisonerName;
+    }
 
     public String getPrisonerNumber() {
         return prisonerNumber == null ? "" : prisonerNumber;

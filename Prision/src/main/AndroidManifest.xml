@@ -134,6 +134,12 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
             />
+        <activity android:name="com.gkzxhn.prison.activity.CallFreeActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
+            />
+
         <!--设置-->
         <activity android:name="com.gkzxhn.prison.activity.SettingActivity"
             android:screenOrientation="landscape"

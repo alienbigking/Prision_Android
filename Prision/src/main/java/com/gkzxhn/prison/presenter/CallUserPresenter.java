@@ -51,7 +51,7 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
         super(context, new CallUserModel(), view);
         checkStatusCode();
     }
-    public void request(String id){
+    public void request(final String id){
         ICallUserView view=mWeakView==null?null:mWeakView.get();
         if(view!=null)view.startRefreshAnim();
         mModel.request(id, new VolleyUtils.OnFinishedListener<JSONObject>() {
@@ -62,6 +62,7 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
                 int code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"));
                 if (code == HttpStatus.SC_OK) {
                     entity=new Gson().fromJson(JSONUtil.getJSONObjectStringValue(response, "family"), MeetingDetailEntity.class);
+                    entity.setPhone(id);
                     SharedPreferences.Editor edit = getSharedPreferences().edit();
                     edit.putString(Constants.ACCID, entity.getAccid());
                     edit.apply();
