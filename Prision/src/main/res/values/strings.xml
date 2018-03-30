@@ -46,10 +46,16 @@
     <string name="video_service_connect_success">连接成功</string>
     <string name="video_service_connect_failed">连接失败</string>
     <!--远程会见-->
+    <string name="open">开启USB录屏</string>
+    <string name="close">关闭USB录屏</string>
+
     <string name="remote_interview">远程会见</string>
     <string name="meeting_notice"><![CDATA[注意：\n        请确保视频内都是您的亲人，不是请及时告知狱警。\n        请注意通话不涉及犯罪、国家机密等内容，否则您将失去并可能永久失去远程会见机会。\n        请注意时间长短，不要影响后面的狱友使用。\n        若您在通话过程中有任何问题，请及时联系狱警沟通解决。]]></string>
     <string name="call">呼叫</string>
+    <string name="query_phone_is_error">查询的家属手机号码不存在</string>
+    <string name="click_for_call">点击呼叫</string>
     <string name="call_free">免费会见</string>
+    <string name="usb_setting">USB录屏设置</string>
     <string name="call_free_leave_time_hint">今年剩余免费呼叫次数</string>
 
     <string name="family_name_default">家属姓名</string>
@@ -98,14 +104,14 @@
     <!--系统设置-->
     <string name="no_call_free_time">免费呼叫次数已用完</string>
 
-    <string name="input_phone">家属手机号码</string>
+    <string name="input_phone">请输入家属手机号码</string>
     <string name="call_free_hint">免费提供100次/年呼叫家属\n每年1月1日重置次数</string>
     <string name="call_free_hint_defualt_time">剩余100次</string>
 
     <string name="exit_account_hint">确定退出当前账号？</string>
     <string name="setting">设置</string>
     <string name="end_setting">终端设置</string>
-    <string name="logout">注销</string>
+    <string name="logout">退出当前账号</string>
     <string name="check_update">检查更新</string>
     <string name="setting_terminal_infor">设置终端信息</string>
     <string name="terminal_account">终端帐号</string>

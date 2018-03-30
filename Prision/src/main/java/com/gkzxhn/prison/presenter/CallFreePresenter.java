@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.android.volley.VolleyError;
+import com.gkzxhn.prison.R;
 import com.gkzxhn.prison.async.VolleyUtils;
 import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.entity.MeetingDetailEntity;
@@ -23,10 +24,13 @@ import org.json.JSONObject;
  */
 
 public class CallFreePresenter extends  BasePresenter<ICallUserModel,ICallFreeView> {
-    private MeetingDetailEntity entity;
+    private MeetingDetailEntity entity=null;
 
     public MeetingDetailEntity getEntity() {
         return entity;
+    }
+    public void clearEntity() {
+        entity=null;
     }
     public CallFreePresenter(Context context,  ICallFreeView view) {
         super(context, new CallUserModel(), view);
@@ -38,7 +42,7 @@ public class CallFreePresenter extends  BasePresenter<ICallUserModel,ICallFreeVi
                 int code= ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"code"));
                 if(code== HttpStatus.SC_OK){
                     ICallFreeView view=mWeakView==null?null:mWeakView.get();
-                    if(view!=null)view.updateFreeTime(ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"time")));
+                    if(view!=null)view.updateFreeTime(ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"access_times")));
                 }
             }
 
@@ -65,6 +69,8 @@ public class CallFreePresenter extends  BasePresenter<ICallUserModel,ICallFreeVi
                     edit.putString(Constants.ACCID, entity.getAccid());
                     edit.apply();
                     view.onSuccess();
+                }else{
+                    view.showToast(R.string.query_phone_is_error);
                 }
             }
 

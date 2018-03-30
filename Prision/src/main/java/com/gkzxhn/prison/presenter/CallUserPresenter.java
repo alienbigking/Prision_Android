@@ -109,67 +109,34 @@ public class CallUserPresenter extends BasePresenter<ICallUserModel,ICallUserVie
 
     private final String TAG = CallUserPresenter.class.getSimpleName();
 
-    public void callFang(String account, final int requestCode){
-        final ICallUserView view=mWeakView==null?null:mWeakView.get();
-        String[] strings = null;
-        String password = "";
-        if (account.contains("##")) {
-            strings = account.split("##");
-            account = strings[0];
-            if (strings.length > 0) {
-                password = strings[1];
-            }
-        }
-        ZijingCall json = new ZijingCall();
-        String protocol = getSharedPreferences().getString(Constants.PROTOCOL, "h323");
-        int rate = getSharedPreferences().getInt(Constants.TERMINAL_RATE, 512);
-        json.url = protocol + ":" + account + "**" + password;
-        json.rate = rate;
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(new Gson().toJson(json));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        final String[] finalStrings = strings;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                XtHttpUtil.DIAL, jsonObject,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "DIAL" + response.toString());
-                        try {
-                            int code = response.getInt("code");
-                            if (code == 0){
-                                if (view != null) {
-                                    Intent intent = new Intent(((CallUserActivity) view), CallZiJingActivity.class);
-                                    if (null!=finalStrings && finalStrings.length > 1) {
-                                        intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1]);
-                                    }
-                                    ((CallUserActivity) view).stopProgress();
-                                    ((CallUserActivity) view).startActivityForResult(intent, requestCode);
-                                }
-                            }else {
-                                Log.i(TAG, "onResponse: 参数无效 code:  " + code);
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "onResponse: >>> "+ e.getMessage() );
-//                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
+    public void dial(final String account){
+        mModel.dial(account, new VolleyUtils.OnFinishedListener<JSONObject>() {
             @Override
-            public void onErrorResponse(final VolleyError error) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "ResetQuest..." + error.toString());
-                        view.showToast("ResetQuest...  " + error.toString());
+            public void onSuccess(JSONObject response) {
+                final ICallUserView view=mWeakView==null?null:mWeakView.get();
+                Log.d(TAG, "DIAL" + response.toString());
+                try {
+                    int code = response.getInt("code");
+                    if (code == 0&&view != null){
+                        String[] strings = account.split("##");
+                        view.dialSuccess(strings.length>1?strings[1]:"");
+                    }else {
+                        view.showToast("拨号失败 code:  " + code);
+                        Log.i(TAG, "onResponse: 参数无效 code:  " + code);
                     }
-                }, 2000);
+                } catch (JSONException e) {
+                    Log.e(TAG, "onResponse: >>> "+ e.getMessage() );
+//                            e.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onFailed(VolleyError error) {
+                final ICallUserView view=mWeakView==null?null:mWeakView.get();
+                view.showToast("ResetQuest...  " + error.toString());
             }
         });
-        SingleRequestQueue.getInstance().add(request, "");
+
+
     }
 }

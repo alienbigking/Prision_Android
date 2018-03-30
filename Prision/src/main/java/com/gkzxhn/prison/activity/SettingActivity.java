@@ -10,6 +10,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.gkzxhn.prison.R;
@@ -36,12 +38,15 @@ public class SettingActivity extends SuperActivity implements ISettingView{
     private SettingPresenter mPresenter;
     private UpdateDialog updateDialog;
     private CustomDialog mCustomDialog;
+    private RadioGroup mRadioGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_layout);
         tvUpdateHint= (TextView) findViewById(R.id.setting_layout_tv_update_hint);
         tvCallFreeTime=(TextView) findViewById(R.id.setting_layout_tv_call_free_hint);
+        mRadioGroup= (RadioGroup) findViewById(R.id.setting_layout_rg_usb);
+        mRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
         PackageManager pm = getPackageManager();
         try {
             PackageInfo packageInfo = pm.getPackageInfo(getPackageName(),
@@ -51,6 +56,8 @@ public class SettingActivity extends SuperActivity implements ISettingView{
             e.printStackTrace();
         }
         mPresenter=new SettingPresenter(this,this);
+        boolean isOpenUseb=mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD,true);
+        mRadioGroup.check(isOpenUseb?R.id.setting_layout_rb_usb_open:R.id.setting_layout_rb_usb_close);
         tvCallFreeTime.setText(getString(R.string.leave)+
                 mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME,0)+getString(R.string.time));
         mPresenter.requestFreeTime();
@@ -102,7 +109,19 @@ public class SettingActivity extends SuperActivity implements ISettingView{
 
         }
     }
-
+    private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener= new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            switch (checkedId){
+                case R.id.setting_layout_rb_usb_close://关闭
+                    mPresenter.getSharedPreferences().edit().putBoolean(Constants.IS_OPEN_USB_RECORD,false).apply();
+                    break;
+                case R.id.setting_layout_rb_usb_open://开启
+                    mPresenter.getSharedPreferences().edit().putBoolean(Constants.IS_OPEN_USB_RECORD,true).apply();
+                    break;
+            }
+        }
+    };
 
     @Override
     public void updateVersion(VersionEntity version) {
@@ -136,9 +155,8 @@ public class SettingActivity extends SuperActivity implements ISettingView{
 
     @Override
     public void updateFreeTime(int time) {
-        tvCallFreeTime.setText(time+getString(R.string.time));
+        tvCallFreeTime.setText(getString(R.string.leave)+time+getString(R.string.time));
     }
-
     @Override
     public void startRefreshAnim() {
 

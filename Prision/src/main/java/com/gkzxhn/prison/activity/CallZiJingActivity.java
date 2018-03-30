@@ -30,8 +30,10 @@ import com.gkzxhn.prison.common.Constants;
 import com.gkzxhn.prison.common.GKApplication;
 import com.gkzxhn.prison.customview.CancelVideoDialog;
 import com.gkzxhn.prison.entity.CommonRequest;
+import com.gkzxhn.prison.presenter.CallZijingPresenter;
 import com.gkzxhn.prison.utils.GetCameraControl;
 import com.gkzxhn.prison.utils.XtHttpUtil;
+import com.gkzxhn.prison.view.ICallZijingView;
 import com.google.gson.Gson;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -58,100 +60,10 @@ import rx.schedulers.Schedulers;
  * Created by 方 on 2017/11/16.
  */
 
-public class CallZiJingActivity extends SuperActivity implements View.OnClickListener {
+public class CallZiJingActivity extends SuperActivity implements View.OnClickListener,ICallZijingView {
     private final String TAG = CallZiJingActivity.class.getSimpleName();
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if ((Constants.ZIJING_ACTION).equals(intent.getAction())) {
-                boolean hangup = intent.getBooleanExtra(Constants.HANGUP, false);
-                if (hangup) {
-                    hangUp();
-                }
-                boolean time_connect = intent.getBooleanExtra(Constants.TIME_CONNECT, false);
-                if (time_connect) {
-                    if (mTimeSubscribe != null) {
-                        mTimeSubscribe.unsubscribe();
-                        SharedPreferences sharedPreferences = GKApplication.getInstance().
-                                getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
-                        Long time = sharedPreferences.getLong(Constants.TIME_LIMIT, 20);
-                        startTime(time * 60);
-                    }
-                }
-                String jsonStr = intent.getStringExtra(Constants.ZIJING_JSON);
-                if (TextUtils.isEmpty(jsonStr)) {
-                    return;
-                }
-                Log.w(TAG, "jsonStr received : " + jsonStr);
-                String e = null;
-                try {
-                    e = JSONUtil.getJSONObjectStringValue(new JSONObject(jsonStr), "e");
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-                if (e == null) {
-                    return;
-                }
-                switch (e) {
-                    case "setup_call_calling":
-                        mText.setText("正在连接...");
-                        break;
-                    case "ring_call":
-                        mText.setText("等待接听...");
-                        break;
-                    case "established_call":
-                        //呼叫建立
-                        mText.setVisibility(View.GONE);
-                        mContent.setBackgroundColor(getResources().getColor(R.color.zijing_video_bg));
-                        callAccount();
-                        break;
-                    case "cleared_call":
-                        JSONObject jsonObject = JSONUtil.getJSONObject(jsonStr);
-                        JSONObject objv = null;
-                        try {
-                            objv = jsonObject.getJSONObject("v");
-                            String reason = objv.getString("reason");
-                            if (!"Ended by local user".equals(reason)) {
-//                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
-                                Intent data = new Intent();
-                                data.putExtra(Constants.CALL_AGAIN, true);
-                                data.putExtra(Constants.END_REASON, reason);
-                                CallZiJingActivity.this.setResult(0, data);
-                            }
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        }
-                        showToast("已挂断");
-                        CallZiJingActivity.this.finish();
-                        break;
-                    case "missed_call":
-                        mText.setText("对方未接听...");
-                        showToast("对方未接听");
-                        CallZiJingActivity.this.finish();
-                        break;
-                    case "error":
-                        mText.setText("呼叫错误");
-                        CallZiJingActivity.this.finish();
-                        break;
-                    case "MuteOn":
-                        //麦克风静音
-                        mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                                getResources().getDrawable(R.drawable.vconf_microphone_off_selector),
-                                null,
-                                null);
-                        break;
-                    case "MuteOff":
-                        //麦克风静音
-                        mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                                getResources().getDrawable(R.drawable.vconf_microphone_on_selector),
-                                null,
-                                null);
-                        break;
+    private CallZijingPresenter mPresenter;
 
-                }
-            }
-        }
-    };
     private Subscription mTimeSubscribe;
     private TextView tv_count_down;
 
@@ -212,7 +124,7 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         sendHangupMessage();
-                        hangUp();
+                        mPresenter.hangUp();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -226,50 +138,6 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
         dialog.show();
     }
 
-    /**
-     * 发送DTMF
-     *
-     * @param password
-     */
-    private void sendPassWord(String password) {
-        JSONObject jsonRequest = null;
-        try {
-            jsonRequest = new JSONObject("{\"key\":\"" + password + "\"}");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                XtHttpUtil.SENDDTMF, jsonRequest,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "SENDDTMF" + response.toString());
-                        try {
-                            int code = response.getInt("code");
-                            if (code == 0) {
-                                //成功
-                            } else {
-                                Log.i(TAG, "sendPassWord: code :  " + code);
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "sendPassWord: >>> " + e.getMessage());
-//                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError error) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "ResetQuest..." + error.toString());
-                    }
-                }, 2000);
-
-            }
-        });
-        SingleRequestQueue.getInstance().add(request, "");
-    }
 
     private TextView mText;
     private FrameLayout mContent;
@@ -288,6 +156,7 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call_zijing);
+        mPresenter=new CallZijingPresenter(this,this);
         findViews();
         setIdCheckData();
         setClickListener();
@@ -347,11 +216,11 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.mute_text:
                 //哑音
-                switchMuteStatus();
+                mPresenter.switchMuteStatus();
                 break;
             case R.id.quiet_text:
                 //修改线性输出状态
-                setIsQuite(!isQuite);
+                mPresenter.setIsQuite(!isQuite);
                 break;
             case R.id.exit_Img:
                 //挂断
@@ -363,62 +232,14 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
         }
     }
 
-    /**
-     * 设置静音状态
-     *
-     * @param quiet true表示设置成静音
-     */
-    private void setIsQuite(final boolean quiet) {
-        CommonRequest json = new CommonRequest();
-        json.k = "enable-line-out";
-        json.v = !quiet;
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(new Gson().toJson(json));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                XtHttpUtil.SET_AUDIOUT, jsonObject,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "DIAL" + response.toString());
-                        try {
-                            int code = response.getInt("code");
-                            if (code == 0) {
-                                //设置成功
-                                isQuite = quiet;
-                                setSpeakerUi(isQuite);
-                            } else {
-                                Log.i(TAG, "onResponse: 参数无效 code:  " + code);
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "onResponse: >>> " + e.getMessage());
-//                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError error) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "ResetQuest..." + error.toString());
-                    }
-                }, 2000);
-
-            }
-        });
-        SingleRequestQueue.getInstance().add(request, "");
-    }
 
     /**
      * 设置扬声器UI
      *
      * @param quiet
      */
-    private void setSpeakerUi(boolean quiet) {
+    @Override
+    public void setSpeakerUi(boolean quiet) {
         if (quiet) mQuite_txt.setCompoundDrawablesWithIntrinsicBounds(null,
                 getResources().getDrawable(R.drawable.vconf_mute_selector), null, null);
         else
@@ -426,67 +247,6 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                     getResources().getDrawable(R.drawable.vconf_speaker_selector), null, null);
     }
 
-    //修改哑音状态
-    private void switchMuteStatus() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                XtHttpUtil.MUTE_AUDIIN, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "MUTE_AUDIIN" + response.toString());
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError error) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "ResetQuest..." + error.toString());
-                    }
-                }, 2000);
-
-            }
-        });
-        SingleRequestQueue.getInstance().add(request, "");
-    }
-
-    /**
-     * 挂断
-     */
-    private void hangUp() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                XtHttpUtil.HANGUP, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "HANGUP" + response.toString());
-                        try {
-                            int code = response.getInt("code");
-                            if (code == 0) {
-                                //成功
-
-                            } else {
-                                Log.i(TAG, "onResponse: code :  " + code);
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "onResponse: >>> " + e.getMessage());
-//                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError error) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "ResetQuest..." + error.toString());
-                    }
-                }, 2000);
-
-            }
-        });
-        SingleRequestQueue.getInstance().add(request, "");
-    }
 
     //发送云信消息，挂断
     private void sendHangupMessage() {
@@ -569,7 +329,7 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                 return true;
             case 218:
                 //静音
-                setIsQuite(!isQuite);
+                mPresenter.setIsQuite(!isQuite);
                 return true;
         }
         return false;
@@ -582,7 +342,7 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
                 @Override
                 public void onClick(View view) {
                     sendHangupMessage();
-                    hangUp();
+                    mPresenter.hangUp();
                 }
             });
         }
@@ -619,5 +379,108 @@ public class CallZiJingActivity extends SuperActivity implements View.OnClickLis
         }
         startTime(time * 60);
     }
+
+    @Override
+    public void startRefreshAnim() {
+
+    }
+
+    @Override
+    public void stopRefreshAnim() {
+
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ((Constants.ZIJING_ACTION).equals(intent.getAction())) {
+                boolean hangup = intent.getBooleanExtra(Constants.HANGUP, false);
+                if (hangup) {
+                    mPresenter.hangUp();
+                }
+                boolean time_connect = intent.getBooleanExtra(Constants.TIME_CONNECT, false);
+                if (time_connect) {
+                    if (mTimeSubscribe != null) {
+                        mTimeSubscribe.unsubscribe();
+                        SharedPreferences sharedPreferences = GKApplication.getInstance().
+                                getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE);
+                        Long time = sharedPreferences.getLong(Constants.TIME_LIMIT, 20);
+                        startTime(time * 60);
+                    }
+                }
+                String jsonStr = intent.getStringExtra(Constants.ZIJING_JSON);
+                if (TextUtils.isEmpty(jsonStr)) {
+                    return;
+                }
+                Log.w(TAG, "jsonStr received : " + jsonStr);
+                String e = null;
+                try {
+                    e = JSONUtil.getJSONObjectStringValue(new JSONObject(jsonStr), "e");
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                if (e == null) {
+                    return;
+                }
+                switch (e) {
+                    case "setup_call_calling":
+                        mText.setText("正在连接...");
+                        break;
+                    case "ring_call":
+                        mText.setText("等待接听...");
+                        break;
+                    case "established_call":
+                        //呼叫建立
+                        mText.setVisibility(View.GONE);
+                        mContent.setBackgroundColor(getResources().getColor(R.color.zijing_video_bg));
+                        callAccount();
+                        break;
+                    case "cleared_call":
+                        JSONObject jsonObject = JSONUtil.getJSONObject(jsonStr);
+                        JSONObject objv = null;
+                        try {
+                            objv = jsonObject.getJSONObject("v");
+                            String reason = objv.getString("reason");
+                            if (!"Ended by local user".equals(reason)) {
+//                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
+                                Intent data = new Intent();
+                                data.putExtra(Constants.CALL_AGAIN, true);
+                                data.putExtra(Constants.END_REASON, reason);
+                                CallZiJingActivity.this.setResult(RESULT_CANCELED, data);
+                            }
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                        showToast("已挂断");
+                        CallZiJingActivity.this.finish();
+                        break;
+                    case "missed_call":
+                        mText.setText("对方未接听...");
+                        showToast("对方未接听");
+                        CallZiJingActivity.this.finish();
+                        break;
+                    case "error":
+                        mText.setText("呼叫错误");
+                        CallZiJingActivity.this.finish();
+                        break;
+                    case "MuteOn":
+                        //麦克风静音
+                        mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
+                                getResources().getDrawable(R.drawable.vconf_microphone_off_selector),
+                                null,
+                                null);
+                        break;
+                    case "MuteOff":
+                        //麦克风静音
+                        mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
+                                getResources().getDrawable(R.drawable.vconf_microphone_on_selector),
+                                null,
+                                null);
+                        break;
+
+                }
+            }
+        }
+    };
 }
 

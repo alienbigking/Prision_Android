@@ -6,4 +6,5 @@ package com.gkzxhn.prison.view;
 
 public interface ICallUserView extends IBaseView{
     void onSuccess();
+    void dialSuccess(String password);
 }

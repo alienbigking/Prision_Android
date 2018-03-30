@@ -26,7 +26,7 @@ import com.starlight.mobile.android.lib.view.dotsloading.DotsTextView;
  */
 
 public class CallFreeActivity extends SuperActivity implements ICallFreeView {
-    private TextView tvFamilyName,tvPhone,tvPrisionName,tvPrisionNumber,tvSearch,tvFreeTime;
+    private TextView tvFamilyName,tvPhone,tvPrisionName,tvPrisionNumber,tvSearch,tvFreeTime,tvClickCall;
     private DotsTextView tvLoading;
     private CallFreePresenter mPresenter;
     private EditText etPhone;
@@ -36,6 +36,7 @@ public class CallFreeActivity extends SuperActivity implements ICallFreeView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.call_free_layout);
+        tvClickCall= (TextView) findViewById(R.id.call_free_layout_tv_click_call);
         tvFreeTime= (TextView) findViewById(R.id.call_free_layout_tv_leave_time);
         tvFamilyName= (TextView) findViewById(R.id.call_free_layout_tv_family_name);
         tvPhone= (TextView) findViewById(R.id.call_free_layout_tv_phone);
@@ -67,8 +68,7 @@ public class CallFreeActivity extends SuperActivity implements ICallFreeView {
         stopRefreshAnim();
         mPresenter=new CallFreePresenter(this,this);
         mCallFreeTime=  mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME,0);
-        tvFreeTime.setText(getString(R.string.leave)+
-                mCallFreeTime+getString(R.string.time));
+        tvFreeTime.setText(String.valueOf(mCallFreeTime));
         initSearchBtn();
         mPresenter.requestFreeTime();
 
@@ -105,14 +105,16 @@ public class CallFreeActivity extends SuperActivity implements ICallFreeView {
                 }
                 break;
             case R.id.call_free_layout_rl_item://点击项
-                if(mCallFreeTime>0) {
-                    Intent intent = new Intent(this, CallUserActivity.class);
-                    intent.putExtra(Constants.EXTRA, "");
-                    intent.putExtra(Constants.EXTRAS, mPresenter.getEntity().getPhone());
-                    intent.putExtra(Constants.EXTRA_TAB, mPresenter.getEntity().getPrisonerName());
-                    startActivityForResult(intent, Constants.EXTRA_CODE);
-                }else{
-                    showToast(R.string.no_call_free_time);
+                if(mPresenter.getEntity()!=null) {
+                    if (mCallFreeTime > 0) {
+                        Intent intent = new Intent(this, CallUserActivity.class);
+                        intent.putExtra(Constants.EXTRA, "");
+                        intent.putExtra(Constants.EXTRAS, mPresenter.getEntity().getPhone());
+                        intent.putExtra(Constants.EXTRA_TAB, mPresenter.getEntity().getPrisonerName());
+                        startActivityForResult(intent, Constants.EXTRA_CODE);
+                    } else {
+                        showToast(R.string.no_call_free_time);
+                    }
                 }
                 break;
             case R.id.call_free_layout_iv_clear:
@@ -122,10 +124,12 @@ public class CallFreeActivity extends SuperActivity implements ICallFreeView {
         }
     }
     private void recovery(){
+        mPresenter.clearEntity();
         tvFamilyName.setText(R.string.family_name_default);
         tvPhone.setText(R.string.family_phone_default);
         tvPrisionName.setText(R.string.prision_name_default);
         tvPrisionNumber.setText(R.string.prision_number_default);
+        tvClickCall.setVisibility(View.GONE);
     }
 
     /**
@@ -166,12 +170,13 @@ public class CallFreeActivity extends SuperActivity implements ICallFreeView {
         tvPhone.setText(mPresenter.getEntity().getPhone());
         tvPrisionName.setText(mPresenter.getEntity().getPrisonerName());
         tvPrisionNumber.setText(mPresenter.getEntity().getPrisonerNumber()+" "+mPresenter.getEntity().getRelationship());
+        tvClickCall.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void updateFreeTime(int time) {
         mCallFreeTime=time;
-        tvFreeTime.setText(getString(R.string.leave)+time+getString(R.string.time));
+        tvFreeTime.setText(String.valueOf(mCallFreeTime));
         initSearchBtn();
     }
 
@@ -181,7 +186,7 @@ public class CallFreeActivity extends SuperActivity implements ICallFreeView {
         if(requestCode==Constants.EXTRA_CODE&&resultCode==RESULT_OK){
             mPresenter.requestFreeTime();
             mCallFreeTime--;
-            tvFreeTime.setText(getString(R.string.leave)+ mCallFreeTime+getString(R.string.time));
+            tvFreeTime.setText(String.valueOf(mCallFreeTime));
             initSearchBtn();
         }
     }

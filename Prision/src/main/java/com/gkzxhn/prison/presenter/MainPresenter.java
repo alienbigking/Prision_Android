@@ -90,7 +90,7 @@ public class MainPresenter extends BasePresenter<IMainModel,IMainView> {
             public void onSuccess(JSONObject response) {
                 int code= ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"code"));
                 if(code== HttpStatus.SC_OK){
-                    int time=ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"time"));
+                    int time=ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response,"access_times"));
                     //保存到本地
                     getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME,time).apply();
                 }

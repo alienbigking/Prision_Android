@@ -36,7 +36,6 @@ public class GKApplication extends Application {
     }
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private ImageLoaderConfiguration config = null;
-    private BaseDiskCache imageLoadCache;
 
     @Override
     public void onCreate() {
@@ -48,11 +47,6 @@ public class GKApplication extends Application {
         CrashHandler.getInstance().init(this);
     }
     private void initImageLoader(){
-        File pictureCacheDirFile = new File(Constants.SD_IMAGE_CACHE_PATH);
-        if (!pictureCacheDirFile.exists()) {
-            pictureCacheDirFile.mkdirs();
-        }
-        imageLoadCache=new BaseDiskCache(pictureCacheDirFile) {};
         config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .memoryCacheExtraOptions(600, 800)// max width, max height，即保存的每个缓存文件的最大长宽
                 // max width, max height
@@ -61,13 +55,11 @@ public class GKApplication extends Application {
                 .threadPoolSize(3).////线程池内加载的数量
                 threadPriority(Thread.NORM_PRIORITY - 2)
                 .denyCacheImageMultipleSizesInMemory()
-                .diskCacheSize(16 * 1024 * 1024) // 50 Mb
                 .memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024))
                 ////任务线程的执行方式  后进先出法
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 // You can pass your own memory cache implementation
-                //自定义缓存路径
-                .diskCache(imageLoadCache)
+                //不用使用缓存路径
                 .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
                 .imageDownloader(new BaseImageDownloader(getApplicationContext(), 5 * 1000, 30 * 1000)) // connectTimeout (5 s), readTimeout (30 s)超时时间
                 //		  .discCacheFileNameGenerator(new Md5FileNameGenerator())//将保存的时候的URI名称用MD5 加密 ,.new HashCodeFileNameGenerator()//使用HASHCODE对UIL进行加密命名
@@ -89,9 +81,6 @@ public class GKApplication extends Application {
      * 通过url地址获取本地图片文件，通过文件就可以得到文件的路径 imageLoadCache.get(imageUri)
      * @return
      */
-    public BaseDiskCache getImageLoadCache(){
-        return imageLoadCache;
-    }
     private DisplayImageOptions options = new DisplayImageOptions.Builder()
             .showImageOnLoading(R.mipmap.ic_imageloading)//默认加载的图片
             .showImageForEmptyUri(R.mipmap.ic_imageload_failed)//下载地址不存在

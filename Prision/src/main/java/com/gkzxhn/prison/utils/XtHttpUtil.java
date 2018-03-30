@@ -487,6 +487,7 @@ public class XtHttpUtil {
     public final static String RESET_RECORDED_FAR = URL + "/api/v1/preferences/record/reset/";
 
     //本地录播状态查询
+    //  {"code":0,"v":{"status":"start"}}  /  {"code":0,"v":{"status":"stop"}}
     public final static String GET_RECORD_NEAR_STATUS = URL + "/api/v1/record/statusnear/get/";
     //开启本地录播
     public final static String START_NEAR_RECORD = URL + "/api/v1/record/startnear/";

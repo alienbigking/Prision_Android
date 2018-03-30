@@ -162,8 +162,6 @@ public class ConfigActivity extends SuperActivity {
      */
     private void registerReceiver(){
         IntentFilter intentFilter=new IntentFilter();
-        intentFilter.addAction(Constants.TERMINAL_FAILED_ACTION);
-        intentFilter.addAction(Constants.TERMINAL_SUCCESS_ACTION);
         intentFilter.addAction(Constants.NIM_KIT_OUT);
         registerReceiver(mBroadcastReceiver,intentFilter);
     }

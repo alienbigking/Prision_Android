@@ -20,6 +20,8 @@ import java.util.Map;
  */
 
 public class MainModel extends BaseModel implements IMainModel {
+
+
     /**
      * 获取免费呼叫次数
      * @param onFinishedListener
@@ -27,8 +29,8 @@ public class MainModel extends BaseModel implements IMainModel {
     @Override
     public void requestFreeTime(VolleyUtils.OnFinishedListener<JSONObject> onFinishedListener) {
         try {
-            String url=Constants.REQUEST_FREE_MEETING_TIME+"/"+
-                    getSharedPreferences().getString(Constants.USER_ACCOUNT,"");
+            String url=String.format("%s/%s/access_times",Constants.REQUEST_FREE_MEETING_TIME,
+                    getSharedPreferences().getString(Constants.USER_ACCOUNT,""));
             volleyUtils.get(JSONObject.class, url,REQUEST_TAG,onFinishedListener);
         } catch (AuthFailureError authFailureError) {
             authFailureError.printStackTrace();

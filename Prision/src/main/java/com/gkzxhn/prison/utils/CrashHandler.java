@@ -116,7 +116,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
             StringBuffer b = new StringBuffer();
             b.append(ex.toString());
             StackTraceElement[] stackTraceElements=ex.getStackTrace();
-            int lenth=stackTraceElements.length>2?2:stackTraceElements.length;
+            int lenth=stackTraceElements.length>5?5:stackTraceElements.length;
             if(stackTraceElements!=null){
                 for (int i=0;i<lenth;i++) {
                     StackTraceElement s=stackTraceElements[i];

@@ -13,7 +13,7 @@
         <item name="android:background">@color/common_blue</item>
         <item name="chHead_title_padding_left">@dimen/common_head_leftImgPadding</item>
         <item name="chHead_titleColor">@android:color/white</item>
-        <item name="chHead_leftImgPadding">13dip</item>
+        <item name="chHead_leftImgPadding">15dip</item>
         <item name="chHead_rightImgPadding">13dip</item>
         <item name="chHead_title_size">@dimen/common_head_title_size</item>
         <item name="chHead_text_size">@dimen/common_head_text_size</item>
@@ -56,7 +56,7 @@
     <style name="date_week_style">
         <item name="android:layout_width">0dip</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
     </style>
@@ -86,7 +86,7 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/splash_tablet</item>
+        <item name="android:windowBackground">@color/common_blue</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>

@@ -54,6 +54,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private String mAccount;
     private static final float ID_RATIO = 856f / 540f ;
     private int mIDWidth;
+    private int mCallRequestCode=Constants.EXTRA_CODE;
 
 
     @Override
@@ -109,13 +110,7 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         });
         mPresenter.request(phone);//请求详情
     }
-    public void openVConfVideoUI(){
-        if(isClickCall) {
-            stopProgress();
-            mTimer.cancel();
-            mPresenter.callFang(mAccount, 0);
-        }
-    }
+
 
     public void onClickListener(View view){
         switch (view.getId()){
@@ -154,28 +149,28 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     private void online(String account){
         isClickCall=true;
         if(account!=null&&account.length()>0) {
-                if(mPresenter.checkStatusCode()== StatusCode.LOGINED) {
-                    startProgress();
-                    //发送云信消息，检测家属端是否已经准备好可以呼叫
-                    CustomNotification notification = new CustomNotification();
-                    String accid = mPresenter.getEntity().getAccid();
-                    notification.setSessionId(accid);
-                    notification.setSessionType(SessionTypeEnum.P2P);
-                    // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
-                    // 这里以类型 “1” 作为“正在输入”的状态通知。
-                    JSONObject json = new JSONObject();
-                    try {
-                        json.put("code", -1);
+            if(mPresenter.checkStatusCode()== StatusCode.LOGINED) {
+                startProgress();
+                //发送云信消息，检测家属端是否已经准备好可以呼叫
+                CustomNotification notification = new CustomNotification();
+                String accid = mPresenter.getEntity().getAccid();
+                notification.setSessionId(accid);
+                notification.setSessionType(SessionTypeEnum.P2P);
+                // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
+                // 这里以类型 “1” 作为“正在输入”的状态通知。
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("code", -1);
 //                        json.put("msg", account);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    notification.setContent(json.toString());
-                    NIMClient.getService(MsgService.class).sendCustomNotification(notification);
-                    mTimer.start();
-                }else{
-                    showToast(R.string.yunxin_offline);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                notification.setContent(json.toString());
+                NIMClient.getService(MsgService.class).sendCustomNotification(notification);
+                mTimer.start();
+            }else{
+                showToast(R.string.yunxin_offline);
+            }
         }else{
             if(mShowTerminalDialog==null){
                 mShowTerminalDialog=new ShowTerminalDialog(this);
@@ -211,6 +206,21 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         editor.commit();
 
     }
+
+    /**
+     * 拨号成功 直接进入呼叫界面
+     * @param password
+     */
+    @Override
+    public void dialSuccess(String password) {
+        stopProgress();
+        Intent intent = new Intent(this, CallZiJingActivity.class);
+        if (password!=null) {
+            intent.putExtra(Constants.ZIJING_PASSWORD, password);
+        }
+        startActivityForResult(intent, mCallRequestCode);
+    }
+
     @Override
     public void startRefreshAnim() {
         handler.sendEmptyMessage(Constants.START_REFRESH_UI);
@@ -254,14 +264,14 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
         @Override
         public void onReceive(Context context, Intent intent) {
             stopRefreshAnim();
-            if(intent.getAction().equals(Constants.TERMINAL_FAILED_ACTION)){//GK注册失败
-                mCustomDialog.setContent(getString(R.string.GK_register_failed),
-                        getString(R.string.cancel),getString(R.string.call_back));
-                if(!mCustomDialog.isShowing())mCustomDialog.show();
-            }else if(intent.getAction().equals(Constants.TERMINAL_SUCCESS_ACTION)){// GK 注册成功
-                openVConfVideoUI();
-            }else if(intent.getAction().equals(Constants.ONLINE_SUCCESS_ACTION)){
-                openVConfVideoUI();
+            if(intent.getAction().equals(Constants.ONLINE_SUCCESS_ACTION)){
+                //对方在线，进行呼叫
+                if(isClickCall) {
+                    mCallRequestCode=Constants.EXTRA_CODE;
+                    stopProgress();
+                    mTimer.cancel();
+                    mPresenter.dial(mAccount);
+                }
             }else if(intent.getAction().equals(Constants.ONLINE_FAILED_ACTION)){
             }else if(intent.getAction().equals(Constants.NIM_KIT_OUT)){
                 finish();
@@ -289,8 +299,6 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
      */
     private void registerReceiver(){
         IntentFilter intentFilter=new IntentFilter();
-        intentFilter.addAction(Constants.TERMINAL_FAILED_ACTION);
-        intentFilter.addAction(Constants.TERMINAL_SUCCESS_ACTION);
         intentFilter.addAction(Constants.ONLINE_FAILED_ACTION);
         intentFilter.addAction(Constants.ONLINE_SUCCESS_ACTION);
         intentFilter.addAction(Constants.NIM_KIT_OUT);
@@ -334,31 +342,25 @@ public class CallUserActivity extends SuperActivity implements ICallUserView{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 0) {
-            if (requestCode == 0) {
-                if (data != null) {
-                    boolean call_again = data.getBooleanExtra(Constants.CALL_AGAIN, false);
-                    String reason = data.getStringExtra(Constants.END_REASON);
-                    if (call_again) {
-                        //换协议呼叫
-                        String protocol = preferences.getString(Constants.PROTOCOL, "h323");
-                        if ("h323".equals(protocol)) {
-                            protocol = "sip";
-                        }else {
-                            protocol = "h323";
-                        }
-                        SharedPreferences.Editor edit = preferences.edit();
-                        edit.putString(Constants.PROTOCOL, protocol);
-                        edit.apply();
-                        Log.i(TAG, "protocol : " + protocol);
-                        showToast("呼叫失败,原因:" + reason + "/n切换成" + protocol + "协议重新进行呼叫...");
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mPresenter.callFang(mAccount, 1);
-                            }
-                        }, 1500);
+        if(requestCode==Constants.EXTRA_CODE&&resultCode==RESULT_CANCELED){
+            if (data != null) {
+                boolean call_again = data.getBooleanExtra(Constants.CALL_AGAIN, false);
+                String reason = data.getStringExtra(Constants.END_REASON);
+                if (call_again) {
+                    //换协议呼叫
+                    String protocol = preferences.getString(Constants.PROTOCOL, "h323");
+                    if ("h323".equals(protocol)) {
+                        protocol = "sip";
+                    }else {
+                        protocol = "h323";
                     }
+                    SharedPreferences.Editor edit = preferences.edit();
+                    edit.putString(Constants.PROTOCOL, protocol);
+                    edit.apply();
+                    Log.i(TAG, "protocol : " + protocol);
+                    showToast("呼叫失败,原因:" + reason + "/n切换成" + protocol + "协议重新进行呼叫...");
+                    mCallRequestCode=Constants.EXTRAS_CODE;
+                    mPresenter.dial(mAccount);
                 }
             }
         }
