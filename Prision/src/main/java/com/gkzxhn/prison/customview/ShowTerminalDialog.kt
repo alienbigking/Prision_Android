@@ -28,7 +28,7 @@ class ShowTerminalDialog : Dialog {
     constructor(context: Context) : super(context, R.style.update_dialog_style) {
     }
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val contentView = LayoutInflater.from(getContext()).inflate(R.layout.show_terminal_dialog_layout, null)
         setContentView(contentView)

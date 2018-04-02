@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import com.android.volley.VolleyError
 
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
@@ -129,7 +130,16 @@ private constructor() : UncaughtExceptionHandler {
             packageInfo = pm.getPackageInfo(mContext.packageName,
                     PackageManager.GET_CONFIGURATIONS)
             params.put("app_version", packageInfo.versionCode)
-            volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL, JSONObject().put("logger", params), null, null)
+            volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL, JSONObject().put("logger", params), null,object :VolleyUtils.OnFinishedListener<JSONObject>{
+                override fun onFailed(error: VolleyError) {
+                    val i=0
+                }
+
+                override fun onSuccess(response: JSONObject) {
+                    val i=0
+                }
+
+            })
         } catch (e: Exception) {
             e.printStackTrace()
         }

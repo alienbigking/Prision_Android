@@ -102,7 +102,7 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LayoutInflater.from(getContext()).inflate(R.layout.update_dialog_layout, null))
         initControls()

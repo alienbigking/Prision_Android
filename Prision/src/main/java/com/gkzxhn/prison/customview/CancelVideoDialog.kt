@@ -47,7 +47,7 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         mModel = MainModel()
     }
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val contentView = LayoutInflater.from(getContext()).inflate(
                 if (isCancelVideo) R.layout.cancel_video_dialog else R.layout.cancel_meeting_dialog_layout, null)

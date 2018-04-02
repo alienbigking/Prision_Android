@@ -80,7 +80,6 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.call_free_layout)
-
         etPhone?.addTextChangedListener(mTextWatcher)
         etPhone?.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -102,6 +101,7 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         tvFreeTime.text = mCallFreeTime.toString()
         initSearchBtn()
         mPresenter.requestFreeTime()
+        etPhone.setText("18163657553")//TODO
 
     }
 

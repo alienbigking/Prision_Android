@@ -27,14 +27,26 @@ class CustomDialog(context: Context, private val onClickListener: View.OnClickLi
     private var title = ""
     private var leftText: String = ""
     private var rightText: String = ""
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val contentView = LayoutInflater.from(getContext()).inflate(R.layout.custom_dialog_layout, null)
         setContentView(contentView)
         init()
         measureWindow()
     }
-
+    private fun init() {
+        tvTitle.text = title
+        if (leftText.length > 0) tvCancel.text = leftText
+        if (rightText.length > 0) tvConfirm.text = rightText
+        tvCancel.setOnClickListener { view ->
+            dismiss()
+            onClickListener?.onClick(view)
+        }
+        tvConfirm.setOnClickListener { view ->
+            dismiss()
+            onClickListener?.onClick(view)
+        }
+    }
     fun measureWindow() {
         val dialogWindow = this.window
         val params = dialogWindow.attributes
@@ -47,20 +59,7 @@ class CustomDialog(context: Context, private val onClickListener: View.OnClickLi
         dialogWindow.attributes = params
     }
 
-    private fun init() {
 
-        tvTitle.text = title
-        if (leftText != null && leftText.length > 0) tvCancel.text = leftText
-        if (rightText != null && rightText.length > 0) tvConfirm.text = rightText
-        tvCancel.setOnClickListener { view ->
-            dismiss()
-            onClickListener?.onClick(view)
-        }
-        tvConfirm.setOnClickListener { view ->
-            dismiss()
-            onClickListener?.onClick(view)
-        }
-    }
 
     fun setTitle(title: String) {
         this.title = title

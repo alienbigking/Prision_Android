@@ -117,25 +117,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.call_user_layout)
-        initControls()
         init()
         registerReceiver()
-    }
-
-    private fun initControls() {
-
-        val viewTreeObserver = ivCard01.viewTreeObserver
-        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                ivCard01.viewTreeObserver.removeGlobalOnLayoutListener(this)
-                mIDWidth = ivCard01.measuredWidth
-                val layoutParams = ivCard01.layoutParams as LinearLayout.LayoutParams
-                layoutParams.height = (mIDWidth / ID_RATIO).toInt()
-                layoutParams.width = mIDWidth
-                ivCard01.layoutParams = layoutParams
-                ivCard02.layoutParams = layoutParams
-            }
-        })
     }
 
     private fun init() {
@@ -155,6 +138,18 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         mCustomDialog = CustomDialog(this, View.OnClickListener { view ->
             if (view.id == R.id.custom_dialog_layout_tv_confirm) {
                 online(mAccount)
+            }
+        })
+        val viewTreeObserver = ivCard01.viewTreeObserver
+        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                ivCard01.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                mIDWidth = ivCard01.measuredWidth
+                val layoutParams = ivCard01.layoutParams as LinearLayout.LayoutParams
+                layoutParams.height = (mIDWidth / ID_RATIO).toInt()
+                layoutParams.width = mIDWidth
+                ivCard01.layoutParams = layoutParams
+                ivCard02.layoutParams = layoutParams
             }
         })
         mPresenter.request(phone)//请求详情
