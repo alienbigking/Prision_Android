@@ -9,7 +9,7 @@
         <item name="chHead_titleColor">@android:color/white</item>
         <item name="chHead_leftImgPadding">@dimen/common_head_leftImgPadding</item>
         <item name="chHead_rightImgPadding">@dimen/common_head_rightImgPadding</item>
-        <item name="chHead_leftImg">@drawable/ic_menu_backward</item>
+        <item name="chHead_leftImg">@mipmap/ic_menu_backward</item>
         <item name="chHead_title_size">@dimen/common_head_title_size</item>
         <item name="chHead_text_size">@dimen/common_head_text_size</item>
         <item name="chHead_textColor">@android:color/white</item>

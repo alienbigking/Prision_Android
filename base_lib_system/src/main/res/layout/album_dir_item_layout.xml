@@ -12,13 +12,13 @@
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/ic_album_dir"
+        android:background="@mipmap/ic_album_dir"
         android:paddingBottom="17dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:paddingTop="9dp"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_picture_load" />
+        android:src="@mipmap/ic_picture_load" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
-        android:background="@drawable/ic_album_choose" />
+        android:background="@mipmap/ic_album_choose" />
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dip"

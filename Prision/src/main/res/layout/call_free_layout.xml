@@ -139,7 +139,6 @@
             android:layout_below="@+id/call_free_layout_tv_search"
             android:layout_height="wrap_content">
             <include layout="@layout/i_common_loading_layout"
-                android:id="@+id/call_free_layout_i_loading"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"

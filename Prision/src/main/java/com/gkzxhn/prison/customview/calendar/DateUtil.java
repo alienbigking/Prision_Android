@@ -24,7 +24,7 @@ public class DateUtil {
         int days = 0;
 
         if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-            arr[1] = 29; // 闰年2月29天  
+            arr[1] = 29; // 闰年2月29天
         }
         try {
             days = arr[month - 1];

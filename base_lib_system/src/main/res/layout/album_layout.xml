@@ -22,7 +22,7 @@
         android:scrollbars="vertical" />
 
     <FrameLayout
-        android:id="@+id/album_layout_fl_bottom"
+        android:id="@+id/album_layout_flBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -45,7 +45,7 @@
             android:ellipsize="end"
             android:clickable="true"
             android:onClick="onClickListener"
-            android:drawableRight="@drawable/ic_right_select"
+            android:drawableRight="@mipmap/ic_right_select"
             android:gravity="center_vertical"
             android:text="@string/album_all_photos"
             style="@style/album_btn_selector_style"

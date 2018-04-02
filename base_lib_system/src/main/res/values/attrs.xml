@@ -81,7 +81,7 @@
         <attr name="ptrMode">
             <flag name="disabled" value="0x0" />
             <flag name="pullFromStart" value="0x1" />
-            <flag name="pullFromEnd" value="0x2" />
+            <flag name="pullToEnd" value="0x2" />
             <flag name="both" value="0x3" />
             <flag name="manualOnly" value="0x4" />
             <flag name="pullFromStartOnlyProgress" value="0x5" />
@@ -167,6 +167,7 @@
         <attr name="ctv_topImg_height" format="dimension" />
         <attr name="ctv_bottomImg_width" format="dimension" />
         <attr name="ctv_bottomImg_height" format="dimension" />
+        <attr name="ctv_drawable_center" format="boolean" />
     </declare-styleable>
     <declare-styleable name="MaterialEditText">
         <!-- The base color of the line and the texts. Default is black. -->

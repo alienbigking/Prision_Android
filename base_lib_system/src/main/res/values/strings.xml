@@ -2,12 +2,6 @@
 
     <string name="app_name">base_lib_system</string>
     <string name="empty"></string>
-    <string name="xlistview_header_hint_normal">下拉刷新</string>
-    <string name="xlistview_header_hint_ready">松开刷新数据</string>
-    <string name="xlistview_header_hint_loading">正在加载...</string>
-    <string name="xlistview_header_last_time">上次更新时间：</string>
-    <string name="xlistview_footer_hint_normal">查看更多</string>
-    <string name="xlistview_footer_hint_ready">松开载入更多</string>
     <string name="album_all_photos">All Photos</string>
     <string name="album_preview">Preview</string>
     <string name="album_photos">Photos</string>
@@ -23,4 +17,28 @@
     <string name="lib_confirm">Confirm</string>
     <string name="prb_default_symbolic_string">$</string>
 
+
+    <!--Month name, you can instand this for cover in subProject-->
+    <string name="January">January</string>
+    <string name="February">February</string>
+    <string name="March">March</string>
+    <string name="April">April</string>
+    <string name="May">May</string>
+    <string name="June">June</string>
+    <string name="July">July</string>
+    <string name="August">August</string>
+    <string name="September">September</string>
+    <string name="October">October</string>
+    <string name="November">November</string>
+    <string name="December">December</string>
+    <string name="Undecimber">Undecimber</string>
+
+    <!--week name, you can instand this for cover in subProject-->
+    <string name="Sunday">Sunday</string>
+    <string name="Monday">Monday</string>
+    <string name="Tuesday">Tuesday</string>
+    <string name="Wednesday">Wednesday</string>
+    <string name="Thursday">Thursday</string>
+    <string name="Friday">Friday</string>
+    <string name="Saturday">Saturday</string>
 </resources>
