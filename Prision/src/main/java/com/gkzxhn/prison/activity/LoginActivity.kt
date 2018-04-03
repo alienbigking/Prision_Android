@@ -26,17 +26,12 @@ as etPassword
  */
 
 class LoginActivity : SuperActivity(), ILoginView {
-    private lateinit var mPresenter: LoginPresenter 
-    private lateinit var mProgress: ProgressDialog 
+    private lateinit var mPresenter: LoginPresenter
+    private lateinit var mProgress: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
-        initControls()
         init()
-        //停止zijing服务
-        stopService(Intent(this, EReportService::class.java))
-        //退出云信
-        NIMClient.getService(AuthService::class.java).logout()
         //清除下信息
         val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
         val edit = sharedPreferences.edit()
@@ -46,9 +41,6 @@ class LoginActivity : SuperActivity(), ILoginView {
         edit.apply()
     }
 
-    private fun initControls() {
-
-    }
 
     private fun init() {
         //显示记住的密码

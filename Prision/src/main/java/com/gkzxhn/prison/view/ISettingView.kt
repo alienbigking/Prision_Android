@@ -7,6 +7,6 @@ import com.gkzxhn.prison.entity.VersionEntity
  */
 
 interface ISettingView : IBaseView {
-    fun updateVersion(version: VersionEntity)
+    fun updateVersion(version: VersionEntity?)
     fun updateFreeTime(time: Int)
 }

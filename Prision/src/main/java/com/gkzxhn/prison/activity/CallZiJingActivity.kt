@@ -4,33 +4,25 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.customview.CancelVideoDialog
 import com.gkzxhn.prison.presenter.CallZijingPresenter
-import com.gkzxhn.prison.utils.GetCameraControl
 import com.gkzxhn.prison.view.ICallZijingView
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.nineoldandroids.animation.ObjectAnimator
-import com.nineoldandroids.animation.ValueAnimator
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.starlight.mobile.android.lib.util.JSONUtil
 
@@ -77,8 +69,6 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
 
     private var mTimeSubscribe: Subscription? = null
 
-    private lateinit var mGetCameraControl: GetCameraControl   // 遥控器控制器
-
     private lateinit var mCancelVideoDialog: CancelVideoDialog
     private val isQuite: Boolean = false    //是否静音
 
@@ -124,6 +114,14 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
                         mText.visibility = View.GONE
                         mContent.setBackgroundColor(resources.getColor(R.color.zijing_video_bg))
                         callAccount()
+                        if(mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD,true)){
+                            //停止录屏
+                            mPresenter.startUSBRecord()
+                            //免费呼叫次数更新
+                            if(getIntent().action==Constants.CALL_FREE_ACTION) {
+                                mPresenter.updateFreeTime()
+                            }
+                        }
                     }
                     "cleared_call" -> {
                         val jsonObject = JSONUtil.getJSONObject(jsonStr)
@@ -141,7 +139,6 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
                         } catch (e1: JSONException) {
                             e1.printStackTrace()
                         }
-
                         showToast("已挂断")
                         this@CallZiJingActivity.finish()
                     }
@@ -223,8 +220,7 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_zijing)
         mPresenter = CallZijingPresenter(this, this)
-        mGetCameraControl = GetCameraControl()
-        mGetCameraControl.cameraControl("direct")
+        mPresenter.cameraControl("direct")
         mCancelVideoDialog = CancelVideoDialog(this, true)
         mCancelVideoDialog.setOnClickListener(View.OnClickListener {
             sendHangupMessage()
@@ -419,6 +415,14 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
 
     override fun stopRefreshAnim() {
 
+    }
+
+    override fun finish() {
+        if(mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD,true)){
+            //停止录屏
+            mPresenter.stopUSBRecord()
+        }
+        super.finish()
     }
 }
 

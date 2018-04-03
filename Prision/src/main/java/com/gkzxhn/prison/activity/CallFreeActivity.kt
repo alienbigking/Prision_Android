@@ -97,9 +97,6 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         }
         stopRefreshAnim()
         mPresenter = CallFreePresenter(this, this)
-        mCallFreeTime = mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0)
-        tvFreeTime.text = mCallFreeTime.toString()
-        initSearchBtn()
         mPresenter.requestFreeTime()
         etPhone.setText("18163657553")//TODO
 
@@ -141,10 +138,11 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
                 mPresenter.entity?.let {
                     if (mCallFreeTime > 0) {
                         val intent = Intent(this, CallUserActivity::class.java)
+                        intent.action=Constants.CALL_FREE_ACTION
                         intent.putExtra(Constants.EXTRA, "")
                         intent.putExtra(Constants.EXTRAS, mPresenter.entity?.phone)
                         intent.putExtra(Constants.EXTRA_TAB, mPresenter.entity?.prisonerName)
-                        startActivityForResult(intent, Constants.EXTRA_CODE)
+                        startActivity(intent)
                     } else {
                         showToast(R.string.no_call_free_time)
                     }
@@ -189,13 +187,11 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         initSearchBtn()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        if (requestCode == Constants.EXTRA_CODE && resultCode == Activity.RESULT_OK) {
-            mPresenter.requestFreeTime()
-            mCallFreeTime--
-            tvFreeTime.text = mCallFreeTime.toString()
-            initSearchBtn()
-        }
+    override fun onResume() {
+        super.onResume()
+        mCallFreeTime = mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0)
+        tvFreeTime.text = mCallFreeTime.toString()
+        initSearchBtn()
     }
 
 }

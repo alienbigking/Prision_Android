@@ -226,6 +226,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     override fun dialSuccess(password: String) {
         stopProgress()
         val intent = Intent(this, CallZiJingActivity::class.java)
+        intent.action=getIntent().action
         if (password != null) {
             intent.putExtra(Constants.ZIJING_PASSWORD, password)
         }

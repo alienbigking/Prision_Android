@@ -70,7 +70,6 @@ object Constants {
     /*-------------------------------Request Tab-------------------------------------------------*/
     val MAIN_TAB = 0x206
     /*-------------------------------action-------------------------------------------------*/
-    val _ACTION = "com.gkzxhn.prison.TERMINAL_SUCCESS"//注册终端成功
 
     val ONLINE_FAILED_ACTION = "com.gkzxhn.prison.ONLINE_FAILED_ACTION"//连线失败
     val ONLINE_SUCCESS_ACTION = "com.gkzxhn.prison.ONLINE_SUCCESS_ACTION"//连线成功
@@ -101,8 +100,10 @@ object Constants {
     //结束录屏
     val STOP_RECORDSCREEN_ACTION = "com.gkzxhn.prison.STOP_RECORDSCREEN_ACTION"
 
+    //免费会见
+    val CALL_FREE_ACTION = "com.gkzxhn.prison.CALL_FREE_ACTION"
+    val CALL_DEFUALT_ACTION = "com.gkzxhn.prison.CALL_DEFUALT_ACTION"
 
-    val RETRY_TIME = 10000
     /**
      * C9上行消息发送广播
      */

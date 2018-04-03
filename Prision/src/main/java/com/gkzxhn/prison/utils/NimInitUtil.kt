@@ -1,5 +1,6 @@
 package com.gkzxhn.prison.utils
 
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
@@ -71,7 +72,14 @@ class NimInitUtil {
                     Toast.makeText(GKApplication.instance, R.string.kickout, Toast.LENGTH_SHORT).show()
                     GKApplication.instance.loginOff()
                 }
-                StatusCode.NET_BROKEN -> Toast.makeText(GKApplication.instance, R.string.network_error, Toast.LENGTH_SHORT).show()
+                StatusCode.NET_BROKEN -> {
+                    val preferences = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
+                    if(!preferences.getString(Constants.USER_ACCOUNT, "").isEmpty()){
+                        //已登录才提示
+                        Toast.makeText(GKApplication.instance, R.string.network_error, Toast.LENGTH_SHORT).show()
+                    }
+
+                }
             }
         }
 

@@ -123,31 +123,35 @@ class SettingActivity : SuperActivity(), ISettingView {
         }catch (e:Exception){}
     }
 
-    override fun updateVersion(version: VersionEntity) {
-        //新版本
-        val newVersion = version.versionCode
-        val pm = packageManager
-        var packageInfo: PackageInfo? = null
-        try {
-            packageInfo = pm.getPackageInfo(packageName,
-                    PackageManager.GET_CONFIGURATIONS)
-            val currentVersion = packageInfo.versionCode//当前App版本
-            if (newVersion > currentVersion) {//新版本大于当前版本
-                //版本名
-                val versionName = version.versionName
-                // 下载地址
-                val downloadUrl = version.downloadUrl
-                //是否强制更新
-                updateDialog.setForceUpdate(version.isForce)
-                updateDialog.setDownloadInfor(versionName?:"", newVersion, downloadUrl?:"")
-                updateDialog.show()//显示对话框
-                tvUpdateHint.text = getString(R.string.new_version_colon) + versionName
-            } else {
-                tvUpdateHint.setText(R.string.has_last_version)
-            }
+    override fun updateVersion(version: VersionEntity?) {
+        if(version!=null) {
+            //新版本
+            val newVersion = version.versionCode
+            val pm = packageManager
+            var packageInfo: PackageInfo? = null
+            try {
+                packageInfo = pm.getPackageInfo(packageName,
+                        PackageManager.GET_CONFIGURATIONS)
+                val currentVersion = packageInfo.versionCode//当前App版本
+                if (newVersion > currentVersion) {//新版本大于当前版本
+                    //版本名
+                    val versionName = version.versionName
+                    // 下载地址
+                    val downloadUrl = version.downloadUrl
+                    //是否强制更新
+                    updateDialog.setForceUpdate(version.isForce)
+                    updateDialog.setDownloadInfor(versionName ?: "", newVersion, downloadUrl ?: "")
+                    updateDialog.show()//显示对话框
+                    tvUpdateHint.text = getString(R.string.new_version_colon) + versionName
+                } else {
+                    tvUpdateHint.setText(R.string.has_last_version)
+                }
 
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+            } catch (e: PackageManager.NameNotFoundException) {
+                e.printStackTrace()
+            }
+        }else{
+            tvUpdateHint.setText(R.string.has_last_version)
         }
 
     }

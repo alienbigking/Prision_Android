@@ -98,6 +98,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
                 R.id.main_item_layout_tv_cancel -> if (mCancelVideoDialog != null && !mCancelVideoDialog.isShowing) mCancelVideoDialog.show()
                 else -> if (isConnectZijing) {
                     val intent = Intent(this@MainActivity, CallUserActivity::class.java)
+                    intent.action=Constants.CALL_DEFUALT_ACTION
                     intent.putExtra(Constants.EXTRA, adapter.getCurrentItem().id)
                     intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().yxAccount)
                     intent.putExtra(Constants.EXTRA_TAB, adapter.getCurrentItem().name)

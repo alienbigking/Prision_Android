@@ -47,7 +47,9 @@ class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISe
                 }
             }
 
-            override fun onFailed(error: VolleyError) {}
+            override fun onFailed(error: VolleyError) {
+                mView?.updateVersion(null);
+            }
         })
     }
 
