@@ -116,8 +116,9 @@
     <string name="check_update">检查更新</string>
     <string name="setting_terminal_infor">设置终端信息</string>
     <string name="terminal_account">终端帐号</string>
+    <string name="terminal_account_hint">请填写会议室号,主持人密码和参与密码,用##隔开</string>
     <string name="rate">码率</string>
-    <string name="rate_colon">码率(K)\u0020</string>
+    <string name="rate_colon">码\u3000\u3000率(K)</string>
     <string name="please_input_terminal_account">请输入终端帐号</string>
     <string name="alter_terminal_account_success">修改终端信息成功</string>
     <string name="terminal_account_not_available">此终端可不用，请重新设置</string>
@@ -175,7 +176,7 @@
     <string name="microphone">麦克风</string>
     <string name="speaker">扬声器</string>
     <string name="add_text">添加</string>
-    <string name="protocol">协议</string>
+    <string name="protocol">协\u3000\u3000议</string>
     <string name="config_time">通话时长(Min)</string>
     <string name="reminder">提示</string>
 

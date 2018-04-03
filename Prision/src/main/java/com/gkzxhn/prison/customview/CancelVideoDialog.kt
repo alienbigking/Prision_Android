@@ -124,7 +124,7 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         val d = m.defaultDisplay
         params.width = d.width/2
         //	        params.height=d.getHeight();
-        dialogWindow.setGravity(Gravity.TOP)
+        dialogWindow.setGravity(Gravity.CENTER)
         dialogWindow.attributes = params
     }
 }

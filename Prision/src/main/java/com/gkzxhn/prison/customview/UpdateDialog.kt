@@ -36,7 +36,7 @@ as mProgress
 
 class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_style) {
     private var versionName: String? = null
-    private lateinit var mHelper: DownLoadHelper
+    private var mHelper: DownLoadHelper
     private var downloadUrl: String? = null
     private var isForceUpdate = false
     private var versionCode: Int = 0
@@ -93,6 +93,7 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
 
     init {
         mHelper = DownLoadHelper()
+
     }
 
     fun setDownloadInfor(versionName: String, versionCode: Int, downloadUrl: String) {
@@ -125,7 +126,8 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
     private fun initControls() {
         tvCancel.visibility = if (isForceUpdate) View.GONE else View.VISIBLE
         vMidLine.visibility = if (isForceUpdate) View.GONE else View.VISIBLE
-        setCanceledOnTouchOutside(!isForceUpdate)
+        setCanceledOnTouchOutside(false)
+        setCancelable(false)
         tvVersion.text = context.getString(R.string.new_version_colon) + versionName
     }
 

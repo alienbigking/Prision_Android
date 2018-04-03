@@ -190,8 +190,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             }
         }
         mPresenter.requestVersion()
-        val t=CustomDialog(this)
-        t.show()
     }
     /**
      * 配置好终端提示对话框
@@ -344,17 +342,17 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     override fun onResume() {
         super.onResume()
-        if (updateDialog != null && updateDialog?.isShowing?:false) updateDialog?.measureWindow()
-        if (mShowTerminalDialog != null && mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
-        if (mCancelVideoDialog != null && mCancelVideoDialog.isShowing) mCancelVideoDialog.measureWindow()
+        if ( updateDialog?.isShowing?:false) updateDialog?.measureWindow()
+        if (  mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
+        if (  mCancelVideoDialog.isShowing) mCancelVideoDialog.measureWindow()
         onRefresh()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (updateDialog != null && updateDialog?.isShowing?:false) updateDialog?.measureWindow()
-        if (mShowTerminalDialog != null && mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
-        if (mCancelVideoDialog != null && mCancelVideoDialog.isShowing) mCancelVideoDialog.measureWindow()
+        if (  updateDialog?.isShowing?:false) updateDialog?.measureWindow()
+        if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
+        if ( mCancelVideoDialog.isShowing) mCancelVideoDialog.measureWindow()
 
     }
 
@@ -364,9 +362,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     override fun onDestroy() {
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
-        if (mShowTerminalDialog != null && mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.dismiss()
-        if (mCancelVideoDialog != null && mCancelVideoDialog.isShowing) mCancelVideoDialog.dismiss()
-        if (updateDialog != null && updateDialog?.isShowing?:false) updateDialog?.dismiss()
+        if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.dismiss()
+        if (  mCancelVideoDialog.isShowing) mCancelVideoDialog.dismiss()
+        if ( updateDialog?.isShowing?:false) updateDialog?.dismiss()
         super.onDestroy()
     }
 
@@ -378,14 +376,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         intentFilter.addAction(Constants.NIM_KIT_OUT)
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
-
-    override fun onBackPressed() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_MAIN
-        intent.addCategory(Intent.CATEGORY_HOME)
-        startActivity(intent)
-    }
-
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Log.i(TAG, "onKeyDown: getkeycode >>>>>> " + event.keyCode)
         when (event.keyCode) {

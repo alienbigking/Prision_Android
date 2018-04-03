@@ -10,10 +10,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
@@ -23,9 +22,9 @@ import kotlinx.android.synthetic.main.config_layout.config_layout_et_account
 as etAccount
 import kotlinx.android.synthetic.main.config_layout.config_layout_sp_rate
 as mSpinner
-import kotlinx.android.synthetic.main.config_layout.sp_protocol
-as mSp_protocol
-import kotlinx.android.synthetic.main.config_layout.et_config_time
+import kotlinx.android.synthetic.main.config_layout.config_layout_sp_protocol
+as mSpinnerProtocol
+import kotlinx.android.synthetic.main.config_layout.config_layout_et_config_time
 as etTime
 /**
  * Created by Raleigh.Luo on 17/4/12.
@@ -66,8 +65,8 @@ class ConfigActivity : SuperActivity() {
         val protocolArray = resources.getStringArray(R.array.protocol)
         val protocolAdapter = ArrayAdapter(this,
                 R.layout.spinner_item, protocolArray)
-        mSp_protocol.adapter = protocolAdapter
-        mSp_protocol.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        mSpinnerProtocol.adapter = protocolAdapter
+        mSpinnerProtocol.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, l: Long) {
                 protocol = protocolArray[position]
             }
@@ -86,6 +85,15 @@ class ConfigActivity : SuperActivity() {
 
             }
         }
+        mSpinner.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                if( mSpinner.dropDownVerticalOffset==0) {
+                    mSpinner.dropDownVerticalOffset = mSpinner.measuredHeight
+                    mSpinnerProtocol.dropDownVerticalOffset = mSpinnerProtocol.measuredHeight
+                }
+                return true
+            }
+        })
         var index = 1
         preferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
         mAccount = preferences.getString(Constants.TERMINAL_ACCOUNT, "")
@@ -103,7 +111,7 @@ class ConfigActivity : SuperActivity() {
             for (i in protocolArray.indices) {
                 val protocol = preferences.getString(Constants.PROTOCOL, "h323")
                 if (protocolArray[i] == protocol) {
-                    mSp_protocol.setSelection(i)
+                    mSpinnerProtocol.setSelection(i)
                     break
                 }
             }

@@ -47,8 +47,8 @@ class LoginActivity : SuperActivity(), ILoginView {
         //        etAccount.setText(preferences.getString(Constants.USER_ACCOUNT_CACHE,""));
         //        etPassword.setText(preferences.getString(Constants.USER_PASSWORD_CACHE,""));
         //TODO
-        etAccount.setText("9999")
-        etPassword.setText("9999")
+        etAccount.setText("9997")
+        etPassword.setText("9997")
         mPresenter = LoginPresenter(this, this)
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
         stopRefreshAnim()
@@ -81,13 +81,6 @@ class LoginActivity : SuperActivity(), ILoginView {
 
     override fun stopRefreshAnim() {
         if (  mProgress.isShowing) mProgress.dismiss()
-    }
-
-    override fun onBackPressed() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_MAIN
-        intent.addCategory(Intent.CATEGORY_HOME)
-        startActivity(intent)
     }
 
     override fun onDestroy() {

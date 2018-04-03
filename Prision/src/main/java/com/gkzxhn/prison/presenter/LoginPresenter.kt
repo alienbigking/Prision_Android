@@ -39,7 +39,7 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                 edit.putString(Constants.USER_ACCOUNT_CACHE, account)
                 edit.putString(Constants.USER_PASSWORD_CACHE, password)
                 if (!TextUtils.isEmpty(content)) {
-                    content = "6848##7890##0987"//TODO
+                    content = "6851##7890##0987"//TODO
                     edit.putString(Constants.TERMINAL_ACCOUNT, content)
                 }
                 edit.apply()
