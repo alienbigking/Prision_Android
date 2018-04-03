@@ -71,7 +71,6 @@
     <!--USB录屏-->
     <TextView
         android:id="@+id/setting_layout_tv_usb_switch_title"
-        android:clickable="true"
         android:textColor="@drawable/black_blue_text_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -22,7 +22,7 @@ class CardImageView: ImageView {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val height= measuredWidth.toFloat()/1.6
-        setMeasuredDimension(measuredWidth, height.toInt())
+        val width= 1.6*measuredHeight.toFloat()
+        setMeasuredDimension(width.toInt(), measuredHeight)
     }
 }

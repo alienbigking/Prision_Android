@@ -38,7 +38,7 @@ class CallUserModel : BaseModel(), ICallUserModel {
 
     }
 
-    override fun dial(account: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    override fun dial(account: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>) {
         try {
             val strings = account.split("##".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val protocol = sharedPreferences.getString(Constants.PROTOCOL, "h323")

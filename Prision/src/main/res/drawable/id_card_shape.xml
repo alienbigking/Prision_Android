@@ -3,8 +3,8 @@
     android:shape="rectangle" >
     <solid android:color="@android:color/white" />
     <stroke android:color="@color/common_hint_text_color"
-            android:width="1dip" />
-    <padding android:top="0dip" android:bottom="0dip"
-             android:left="10dip" android:right="10dip"/>
+        android:width="1dip" />
+    <padding android:top="10dip" android:bottom="10dip"
+        android:left="10dip" android:right="10dip"/>
 
 </shape>

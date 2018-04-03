@@ -96,8 +96,9 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
     }
 
     fun dial(account: String) {
-        mModel.dial(account, object : VolleyUtils.OnFinishedListener<JSONObject> {
-            override fun onSuccess(response: JSONObject) {
+        mModel.dial(account, object : VolleyUtils.OnFinishedListener<String> {
+            override fun onSuccess(responseStr: String) {
+                val response=JSONUtil.getJSONObject(responseStr)
                 Log.d(TAG, "DIAL" + response.toString())
                 try {
                     val code = response.getInt("code")

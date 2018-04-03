@@ -10,5 +10,5 @@ import org.json.JSONObject
 interface ICallUserModel : IBaseModel {
     fun requestFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
     fun request(id: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
-    fun dial(account: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
+    fun dial(account: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>)
 }
