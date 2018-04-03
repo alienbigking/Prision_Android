@@ -39,6 +39,7 @@
             android:spinnerMode="dropdown"
             android:layout_gravity="center_vertical"
             android:overlapAnchor="false"
+            android:theme="@style/common_spinner"
             android:padding="5dip"
             android:background="@null"
             android:layout_width="match_parent"

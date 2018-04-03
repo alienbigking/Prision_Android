@@ -11,6 +11,10 @@ import android.widget.EditText
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
+import com.gkzxhn.prison.common.GKApplication
+import com.gkzxhn.prison.customview.CancelVideoDialog
+import com.gkzxhn.prison.customview.CustomDialog
+import com.gkzxhn.prison.customview.UpdateDialog
 import com.gkzxhn.prison.presenter.LoginPresenter
 import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.view.ILoginView
@@ -33,12 +37,7 @@ class LoginActivity : SuperActivity(), ILoginView {
         setContentView(R.layout.login_layout)
         init()
         //清除下信息
-        val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
-        val edit = sharedPreferences.edit()
-        edit.remove(Constants.USER_ACCOUNT)
-        edit.remove(Constants.USER_PASSWORD)
-        edit.remove(Constants.TERMINAL_ACCOUNT)
-        edit.apply()
+        GKApplication.instance.clearSharedPreferences()
     }
 
 
@@ -53,6 +52,7 @@ class LoginActivity : SuperActivity(), ILoginView {
         mPresenter = LoginPresenter(this, this)
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
         stopRefreshAnim()
+
     }
 
     fun onClickListener(view: View) {

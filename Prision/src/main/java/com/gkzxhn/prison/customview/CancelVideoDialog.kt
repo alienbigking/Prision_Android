@@ -51,8 +51,9 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         val view=contentView.findViewById(R.id.cancel_dialog_layout_fl_spinner)
         view.viewTreeObserver.addOnPreDrawListener(object :ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                mSpinner.dropDownVerticalOffset=view.measuredHeight
-                return false
+                if( mSpinner.dropDownVerticalOffset==0)
+                    mSpinner.dropDownVerticalOffset=view.measuredHeight
+                return true
             }
         })
         init()
@@ -65,6 +66,7 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         val adapter = ArrayAdapter(getContext(),
                 R.layout.spinner_item, rateArray)
         mSpinner.adapter = adapter
+        mSpinner.setPopupBackgroundResource(R.drawable.spinner_bg)
         mSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, l: Long) {
                 content = rateArray[position]
@@ -122,7 +124,7 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         val d = m.defaultDisplay
         params.width = d.width/2
         //	        params.height=d.getHeight();
-        dialogWindow.setGravity(Gravity.CENTER)
+        dialogWindow.setGravity(Gravity.TOP)
         dialogWindow.attributes = params
     }
 }

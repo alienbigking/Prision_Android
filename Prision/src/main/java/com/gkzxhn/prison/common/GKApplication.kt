@@ -94,12 +94,7 @@ class GKApplication : Application() {
         //停止zijing服务
         stopService(Intent(this, EReportService::class.java))
         //清除数据
-        val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
-        val edit = sharedPreferences.edit()
-        edit.remove(Constants.USER_ACCOUNT)
-        edit.remove(Constants.USER_PASSWORD)
-        edit.remove(Constants.TERMINAL_ACCOUNT)
-        edit.apply()
+        clearSharedPreferences()
         //退出云信 必须先清除数据
         NIMClient.getService(AuthService::class.java).logout()
         //调整到登录界面
@@ -108,6 +103,14 @@ class GKApplication : Application() {
         startActivity(intent)
         //关闭其他页面
         sendBroadcast(Intent(Constants.NIM_KIT_OUT))
+    }
+    fun clearSharedPreferences(){
+        val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
+        val edit = sharedPreferences.edit()
+        edit.remove(Constants.USER_ACCOUNT)
+        edit.remove(Constants.USER_PASSWORD)
+        edit.remove(Constants.TERMINAL_ACCOUNT)
+        edit.apply()
     }
 
     companion object {
