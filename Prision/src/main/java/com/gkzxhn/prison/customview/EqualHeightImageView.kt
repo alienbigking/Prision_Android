@@ -23,7 +23,6 @@ class EqualHeightImageView : ImageView {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val measuredHeight = measuredHeight
         setMeasuredDimension(measuredHeight, measuredHeight)
     }
 }

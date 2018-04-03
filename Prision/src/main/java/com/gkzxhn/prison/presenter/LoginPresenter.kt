@@ -38,8 +38,8 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                 //记住帐号密码
                 edit.putString(Constants.USER_ACCOUNT_CACHE, account)
                 edit.putString(Constants.USER_PASSWORD_CACHE, password)
+                content = "6851##7890##0987"//TODO
                 if (!TextUtils.isEmpty(content)) {
-                    content = "6851##7890##0987"//TODO
                     edit.putString(Constants.TERMINAL_ACCOUNT, content)
                 }
                 edit.apply()
