@@ -9,7 +9,7 @@
     <color name="common_line_color">#dddddd</color>
     <color name="common_hint_text_color">#cccccc</color>
     <color name="common_bg_color">#f4f3f3</color>
-    <color name="common_item_click_color">#221bb2cb</color>
+    <color name="common_item_click_color">#eeeeee</color>
     <color name="common_gray_title_color">#999999</color>
 
     <color name="common_light_text_color">#666666</color>

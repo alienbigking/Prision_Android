@@ -3,14 +3,13 @@ package com.gkzxhn.prison.customview
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
-import android.view.Display
+import android.support.v7.widget.AppCompatSpinner
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -31,19 +30,15 @@ import org.json.JSONObject
  * Created by Raleigh.Luo on 17/3/29.
  */
 
-class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) : Dialog(context) {
-    private lateinit var mSpinner: Spinner
+class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) : Dialog(context,R.style.update_dialog_style) {
+    private lateinit var mSpinner: AppCompatSpinner
     private lateinit var rateArray: Array<String>
     var content: String = ""
-    private var onClickListener: View.OnClickListener? = null
+    var onClickListener: View.OnClickListener? = null
 
     private val mModel: MainModel
-    fun setOnClickListener(onClickListener: View.OnClickListener) {
-        this.onClickListener = onClickListener
-    }
 
     init {
-
         mModel = MainModel()
     }
 
@@ -52,19 +47,23 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         val contentView = LayoutInflater.from(getContext()).inflate(
                 if (isCancelVideo) R.layout.cancel_video_dialog else R.layout.cancel_meeting_dialog_layout, null)
         setContentView(contentView)
-        mSpinner = contentView.findViewById(R.id.spinner) as Spinner
+        mSpinner = contentView.findViewById(R.id.cancel_dialog_layout_spinner) as AppCompatSpinner
+        val view=contentView.findViewById(R.id.cancel_dialog_layout_fl_spinner)
+        view.viewTreeObserver.addOnPreDrawListener(object :ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                mSpinner.dropDownVerticalOffset=view.measuredHeight
+                return false
+            }
+        })
         init()
         measureWindow()
     }
 
     private fun init() {
-
         rateArray = context.resources.getStringArray(if (isCancelVideo) R.array.cancel_video_reason else R.array.cancel_meeting_reason)
         content = rateArray[0]
         val adapter = ArrayAdapter(getContext(),
-
                 R.layout.spinner_item, rateArray)
-
         mSpinner.adapter = adapter
         mSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, l: Long) {
@@ -75,14 +74,12 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
 
             }
         }
-        findViewById(R.id.cancel_video_dialog_tv_cancel).setOnClickListener {
+        findViewById(R.id.cancel_dialog_layout_tv_cancel).setOnClickListener {
             dismiss()
-            CommonHelper.clapseSoftInputMethod(context as Activity)
         }
-        findViewById(R.id.cancel_video_dialog_tv_set).setOnClickListener { view ->
+        findViewById(R.id.cancel_dialog_layout_tv_set).setOnClickListener { view ->
             dismiss()
-            CommonHelper.clapseSoftInputMethod(context as Activity)
-             onClickListener?.onClick(view)
+            onClickListener?.onClick(view)
             if (isCancelVideo) sendMessage()
         }
     }
@@ -123,10 +120,9 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         val m = dialogWindow.windowManager
 
         val d = m.defaultDisplay
-        params.width = d.width
+        params.width = d.width/2
         //	        params.height=d.getHeight();
         dialogWindow.setGravity(Gravity.CENTER)
         dialogWindow.attributes = params
     }
-
 }

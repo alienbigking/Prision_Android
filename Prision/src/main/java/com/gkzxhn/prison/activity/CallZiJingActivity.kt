@@ -222,11 +222,11 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
         mPresenter = CallZijingPresenter(this, this)
         mPresenter.cameraControl("direct")
         mCancelVideoDialog = CancelVideoDialog(this, true)
-        mCancelVideoDialog.setOnClickListener(View.OnClickListener {
+        mCancelVideoDialog.onClickListener=View.OnClickListener {
             sendHangupMessage()
             mPresenter.hangUp()
 
-        })
+        }
         setIdCheckData()
         setClickListener()
         registerReceiver()

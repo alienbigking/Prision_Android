@@ -76,6 +76,7 @@
     <string name="connecting_yunxin">正在重连云信...</string>
     <string name="login_yunxin">正在登录云信...</string>
     <!--Dialog-->
+    <string name="hint">提示</string>
     <string name="please_set_terminal_infor">请先设置终端信息</string>
     <string name="to_setting">马上设置</string>
     <string name="please_select_cancel_video_reason">请选择挂断本次会见的原因</string>

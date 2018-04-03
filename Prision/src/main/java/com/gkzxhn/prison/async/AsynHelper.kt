@@ -36,11 +36,6 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
         fun back(`object`: Any)
     }
 
-    enum class AsynHelperTag {
-        DEFUALT_TAG
-
-    }
-
     override fun doInBackground(vararg params: Any): Any? {
         var result: Any? = null
         try {

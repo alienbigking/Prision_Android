@@ -78,7 +78,7 @@ class SplashActivity : Activity() {
         if (preferences.getString(Constants.USER_ACCOUNT, "").length == 0) {//未登录 未认证
             mHandler.sendEmptyMessage(1)
         } else {//已登录
-            mHandler.sendEmptyMessage(2)
+            mHandler.sendEmptyMessage(1)
         }
     }
 

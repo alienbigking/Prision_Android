@@ -12,24 +12,20 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.TextView
 
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.gkzxhn.prison.BuildConfig
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.MainAdapter
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.customview.CancelVideoDialog
-import com.gkzxhn.prison.customview.ShowTerminalDialog
+import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.customview.UpdateDialog
 import com.gkzxhn.prison.customview.calendar.CalendarCard
 import com.gkzxhn.prison.customview.calendar.CalendarViewAdapter
@@ -45,7 +41,6 @@ import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
 import com.starlight.mobile.android.lib.view.RecycleViewDivider
-import com.starlight.mobile.android.lib.view.dotsloading.DotsTextView
 import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_service_hint
 as tvServiceConnectHint
 import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_month
@@ -71,7 +66,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     private lateinit var mProgress: ProgressDialog
     private lateinit var mCancelVideoDialog: CancelVideoDialog
     private var updateDialog: UpdateDialog?=null
-    private  var mShowTerminalDialog: ShowTerminalDialog?=null
+    private  var mShowTerminalDialog: CustomDialog?=null
     private var isConnectZijing = false
     private val TAG = MainActivity::class.java.simpleName
 
@@ -177,11 +172,11 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
         dismissProgress()
         mCancelVideoDialog = CancelVideoDialog(this, false)
-        mCancelVideoDialog.setOnClickListener(View.OnClickListener {
+        mCancelVideoDialog.onClickListener=View.OnClickListener {
             val reason = mCancelVideoDialog.content
             mCancelVideoDialog.dismiss()
             mPresenter.requestCancel(adapter.getCurrentItem().id?:"", reason)
-        })
+        }
         //请求数据
         mPresenter = MainPresenter(this, this)
         //请求连接紫荆服务器
@@ -195,8 +190,26 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             }
         }
         mPresenter.requestVersion()
-
-
+        val t=CustomDialog(this)
+        t.show()
+    }
+    /**
+     * 配置好终端提示对话框
+     */
+    private fun initTerminalDialog(){
+        if(mShowTerminalDialog==null) {
+            mShowTerminalDialog = CustomDialog(this)
+            with(mShowTerminalDialog!!){
+                this.title = getString(R.string.hint)
+                this.content = getString(R.string.please_set_terminal_infor)
+                this.confirmText = getString(R.string.to_setting)
+                this.cancelText = getString(R.string.cancel)
+                this.onClickListener= View.OnClickListener { v->
+                    if(v.id==R.id.custom_dialog_layout_tv_confirm)//去设置
+                        startActivity(Intent(context, ConfigActivity::class.java))
+                }
+            }
+        }
     }
 
     private fun initCalander() {
@@ -218,7 +231,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             R.id.main_layout_btn_next//下一个月
             -> mViewPager.currentItem = mViewPager.currentItem + 1
             R.id.common_head_layout_iv_left -> startActivity(Intent(this, SettingActivity::class.java))
-            R.id.common_head_layout_iv_right -> onRefresh()
+            R.id.common_head_layout_iv_right -> {
+                onRefresh()
+            }
             R.id.main_layout_ll_service_hint//视频连接服务
             -> if (!isConnectZijing) {
                 reConnextZijing()
@@ -232,9 +247,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             //没有设置终端，则提示用户设置终端
             if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "").length == 0) {
                 stopRefreshAnim()
-                if (mShowTerminalDialog == null) {
-                    mShowTerminalDialog = ShowTerminalDialog(this)
-                }
+                initTerminalDialog()
                 if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
             } else {
                 mPresenter.request(mDate.toString())

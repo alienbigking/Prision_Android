@@ -116,7 +116,7 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
         val m = dialogWindow.windowManager
 
         val d = m.defaultDisplay
-        params.width = d.width
+        params.width = d.width/2
         //	        params.height=d.getHeight();
         dialogWindow.setGravity(Gravity.CENTER)
         dialogWindow.attributes = params

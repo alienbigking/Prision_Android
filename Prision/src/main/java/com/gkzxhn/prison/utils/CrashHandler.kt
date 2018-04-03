@@ -105,7 +105,8 @@ private constructor() : UncaughtExceptionHandler {
                     if (s != null && !s.toString().isEmpty()) b.append("\n" + s.toString())
                 }
             }
-            uploadLog(b.toString())
+            Log.e("raleigh_test crash",b.toString())
+//TODO            uploadLog(b.toString())
         }
         if (Constants.IS_DEBUG_MODEL) {//打印日志
             ex.printStackTrace()
@@ -132,11 +133,9 @@ private constructor() : UncaughtExceptionHandler {
             params.put("app_version", packageInfo.versionCode)
             volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL, JSONObject().put("logger", params), null,object :VolleyUtils.OnFinishedListener<JSONObject>{
                 override fun onFailed(error: VolleyError) {
-                    val i=0
                 }
 
                 override fun onSuccess(response: JSONObject) {
-                    val i=0
                 }
 
             })

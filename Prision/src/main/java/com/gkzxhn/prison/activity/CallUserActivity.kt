@@ -16,13 +16,11 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.ImageView
 import android.widget.LinearLayout
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.customview.CustomDialog
-import com.gkzxhn.prison.customview.ShowTerminalDialog
 import com.gkzxhn.prison.presenter.CallUserPresenter
 import com.gkzxhn.prison.view.ICallUserView
 import com.netease.nimlib.sdk.NIMClient
@@ -51,7 +49,7 @@ as ivCard02
 class CallUserActivity : SuperActivity(), ICallUserView {
     private lateinit var mPresenter: CallUserPresenter
     private lateinit var mCustomDialog: CustomDialog
-    private lateinit var mShowTerminalDialog: ShowTerminalDialog
+    private var mShowTerminalDialog: CustomDialog?=null
     private lateinit var mProgress: ProgressDialog
     private var preferences: SharedPreferences? = null
     private lateinit var phone: String
@@ -131,15 +129,16 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         stopProgress()
         preferences = mPresenter.getSharedPreferences()
         mAccount = preferences?.getString(Constants.TERMINAL_ACCOUNT, "")
-        mShowTerminalDialog = ShowTerminalDialog(this)
         if (TextUtils.isEmpty(mAccount)) {
-            if (!mShowTerminalDialog.isShowing) mShowTerminalDialog.show()
+            initTerminalDialog()
+            if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
         }
-        mCustomDialog = CustomDialog(this, View.OnClickListener { view ->
+        mCustomDialog = CustomDialog(this)
+        mCustomDialog.onClickListener=View.OnClickListener { view ->
             if (view.id == R.id.custom_dialog_layout_tv_confirm) {
                 online(mAccount)
             }
-        })
+        }
         val viewTreeObserver = ivCard01.viewTreeObserver
         viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -153,6 +152,25 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             }
         })
         mPresenter.request(phone)//请求详情
+    }
+
+    /**
+     * 配置好终端提示对话框
+     */
+    private fun initTerminalDialog(){
+        if(mShowTerminalDialog==null) {
+            mShowTerminalDialog = CustomDialog(this)
+            with(mShowTerminalDialog!!){
+                this.title = getString(R.string.hint)
+                this.content = getString(R.string.please_set_terminal_infor)
+                this.confirmText = getString(R.string.to_setting)
+                this.cancelText = getString(R.string.cancel)
+                this.onClickListener= View.OnClickListener { v->
+                    if(v.id==R.id.custom_dialog_layout_tv_confirm)//去设置
+                        startActivity(Intent(context, ConfigActivity::class.java))
+                }
+            }
+        }
     }
 
 
@@ -193,10 +211,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                 showToast(R.string.yunxin_offline)
             }
         } else {
-            if (mShowTerminalDialog == null) {
-                mShowTerminalDialog = ShowTerminalDialog(this)
-            }
-            if (!mShowTerminalDialog.isShowing) mShowTerminalDialog.show()
+            initTerminalDialog()
+            if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
         }
     }
 
@@ -251,13 +267,13 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
     override fun onResume() {
         super.onResume()
-        if (mShowTerminalDialog.isShowing) mShowTerminalDialog.measureWindow()
+        if (mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
         if (  mCustomDialog.isShowing) mCustomDialog.measureWindow()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (  mShowTerminalDialog.isShowing) mShowTerminalDialog.measureWindow()
+        if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
         if (  mCustomDialog.isShowing) mCustomDialog.measureWindow()
 
     }
@@ -287,8 +303,9 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         isClickCall = false
         stopProgress()
         if (mCustomDialog != null) {
-            mCustomDialog.setContent(getString(R.string.other_offline),
-                    getString(R.string.cancel), getString(R.string.call_back))
+            mCustomDialog.content=getString(R.string.other_offline)
+            mCustomDialog.cancelText=getString(R.string.cancel)
+            mCustomDialog.confirmText=getString(R.string.call_back)
             if (!mCustomDialog.isShowing) mCustomDialog.show()
         }
     }

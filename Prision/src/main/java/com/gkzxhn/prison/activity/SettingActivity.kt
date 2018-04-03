@@ -78,14 +78,16 @@ class SettingActivity : SuperActivity(), ISettingView {
         tvCallFreeTime.text = getString(R.string.leave) +
                 mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0) + getString(R.string.time)
         mPresenter.requestFreeTime()
-        mCustomDialog = CustomDialog(this, View.OnClickListener { view ->
+        mCustomDialog = CustomDialog(this)
+        mCustomDialog.onClickListener=View.OnClickListener { view ->
             if (view.id == R.id.custom_dialog_layout_tv_confirm) {
                 GKApplication.instance.loginOff()
                 finish()
             }
-        })
-        mCustomDialog.setContent(getString(R.string.exit_account_hint),
-                getString(R.string.cancel), getString(R.string.ok))
+        }
+        mCustomDialog.content=getString(R.string.exit_account_hint)
+        mCustomDialog.cancelText= getString(R.string.cancel)
+        mCustomDialog.confirmText= getString(R.string.ok)
         updateDialog = UpdateDialog(this)
         registerReceiver()
     }

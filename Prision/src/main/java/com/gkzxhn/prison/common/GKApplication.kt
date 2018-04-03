@@ -43,22 +43,11 @@ class GKApplication : Application() {
             .bitmapConfig(Bitmap.Config.RGB_565)    //设置图片的质量
             .imageScaleType(ImageScaleType.IN_SAMPLE_INT)    //设置图片的缩放类型，该方法可以有效减少内存的占用
             .build()
-    val terminalAccount: String
-        get() {
-            val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
-            return sharedPreferences.getString(Constants.TERMINAL_ACCOUNT, "")
-        }
     val terminalRate: Int
         get() {
             val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
             return sharedPreferences.getInt(Constants.TERMINAL_RATE, 512)
         }
-    val terminalPassword: String
-        get() {
-            val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
-            return sharedPreferences.getString(Constants.TERMINAL_PASSWORD, "")
-        }
-
     override fun onCreate() {
         super.onCreate()
         instance = this
@@ -88,7 +77,7 @@ class GKApplication : Application() {
                 // .imageDownloader(new Httpclie(5 * 1000, 20 * 1000)) //
                 // connectTimeout (5 s), readTimeout (20 s)
                 .defaultDisplayImageOptions(options).build()
-        imageLoader.init(config!!)
+        imageLoader.init(config)
         //	清除所有图片imageLoader.clearDiskCache();
 
         //下载图片ImageLoader.getInstance().displayImage(loadUri,imageView);
@@ -104,8 +93,6 @@ class GKApplication : Application() {
     fun loginOff() {
         //停止zijing服务
         stopService(Intent(this, EReportService::class.java))
-        //退出云信
-        NIMClient.getService(AuthService::class.java).logout()
         //清除数据
         val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
         val edit = sharedPreferences.edit()
@@ -113,6 +100,8 @@ class GKApplication : Application() {
         edit.remove(Constants.USER_PASSWORD)
         edit.remove(Constants.TERMINAL_ACCOUNT)
         edit.apply()
+        //退出云信 必须先清除数据
+        NIMClient.getService(AuthService::class.java).logout()
         //调整到登录界面
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
