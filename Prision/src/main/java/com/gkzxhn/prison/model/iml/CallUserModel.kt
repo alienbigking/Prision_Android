@@ -1,10 +1,14 @@
 package com.gkzxhn.prison.model.iml
 
+import android.telecom.Call
+import android.util.Log
 import com.android.volley.AuthFailureError
+import com.android.volley.VolleyError
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ICallUserModel
 import com.gkzxhn.prison.utils.XtHttpUtil
 import com.gkzxhn.wisdom.async.VolleyUtils
+import org.json.JSONException
 
 import org.json.JSONObject
 
@@ -12,7 +16,7 @@ import org.json.JSONObject
  * Created by Raleigh.Luo on 17/4/13.
  */
 
-class CallUserModel : BaseModel(), ICallUserModel {
+class CallUserModel : CallZijingModel(), ICallUserModel {
     /**
      * 获取免费呼叫次数
      * @param onFinishedListener
@@ -38,18 +42,4 @@ class CallUserModel : BaseModel(), ICallUserModel {
 
     }
 
-    override fun dial(account: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>) {
-        try {
-            val strings = account.split("##".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val protocol = sharedPreferences.getString(Constants.PROTOCOL, "h323")
-            val rate = sharedPreferences.getInt(Constants.TERMINAL_RATE, 512)
-            val params = JSONObject()
-            params.put("url", String.format("%s:%s**%s", protocol, if (strings.size > 0) strings[0] else "", if (strings.size > 1) strings[1] else ""))
-            params.put("rate", rate)
-            volleyUtils.post(XtHttpUtil.DIAL, params, REQUEST_TAG, onFinishedListener)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
 }

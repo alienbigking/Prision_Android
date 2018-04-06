@@ -116,6 +116,12 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </activity>
+        <!--测试-->
+        <activity android:name="com.gkzxhn.prison.activity.TestClass"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
+            />
         <!--主页-->
         <activity android:name="com.gkzxhn.prison.activity.MainActivity"
             android:screenOrientation="landscape"

@@ -34,6 +34,18 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
 
         })
     }
+    fun getCallInfor(){
+        mModel.getCallInfor(object :VolleyUtils.OnFinishedListener<JSONObject>{
+            override fun onSuccess(response: JSONObject) {
+                Log.d("raleigh_Test", "getCallInfor" + response.toString())
+                mView?.showToast(response.toString())
+            }
+
+            override fun onFailed(error: VolleyError) {
+            }
+
+        })
+    }
     fun hangUp() {
         //挂断
         mModel.hangUp(object : VolleyUtils.OnFinishedListener<JSONObject> {

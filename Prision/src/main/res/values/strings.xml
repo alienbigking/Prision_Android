@@ -46,7 +46,7 @@
     <string name="video_service_connect_success">连接成功</string>
     <string name="video_service_connect_failed">连接失败</string>
     <!--远程会见-->
-
+    <string name="the_leave_time">剩余通话时间： </string>
     <string name="id_card_hint">身份审核\n点击缩放</string>
     <string name="open">开启USB录屏</string>
     <string name="close">关闭USB录屏</string>

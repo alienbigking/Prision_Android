@@ -8,13 +8,56 @@ import org.json.JSONObject
  */
 
 interface ICallZijingModel : IBaseModel {
-    fun updateFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
-    fun queryUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
-    fun startUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<String>)
-    fun stopUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<String>)
-    fun cameraControl(v: String,onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
-    fun hangUp(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
-    fun setIsQuite(quiet: Boolean, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
-    fun sendPassWord(password: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
-    fun switchMuteStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
+
+    /**
+     * 获取呼叫记录－测试
+     */
+    fun getCallHistory(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
+    /**
+     * 拨打电话
+     */
+    fun dial(account: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
+    /**
+     * 获取呼叫信息
+     */
+    fun getCallInfor(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
+    /**
+     * 更新免费次数
+     */
+    fun updateFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
+    /**
+     * 查询USB录播状态
+     */
+    fun queryUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
+    /**
+     * 开始USB录播
+     */
+    fun startUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+
+    /**
+     * 停止USB录播
+     */
+    fun stopUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+
+    /**
+     * 遥控器
+     */
+    fun cameraControl(v: String,onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
+    /**
+     * 挂断
+     */
+    fun hangUp(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
+    /**
+     * 设置静音
+     */
+    fun setIsQuite(quiet: Boolean, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+    fun sendPassWord(password: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+    fun switchMuteStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
 }

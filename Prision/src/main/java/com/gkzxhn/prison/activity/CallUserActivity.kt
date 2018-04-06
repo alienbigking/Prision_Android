@@ -269,6 +269,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         super.onResume()
         if (mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
         if (  mCustomDialog.isShowing) mCustomDialog.measureWindow()
+        //检查是否正在通话，有就挂断
+        mPresenter.checkCallStatus()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

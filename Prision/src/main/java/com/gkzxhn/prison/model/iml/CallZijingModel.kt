@@ -13,12 +13,42 @@ import org.json.JSONObject
  * Created by Raleigh.Luo on 18/3/30.
  */
 
-class CallZijingModel : BaseModel(), ICallZijingModel {
+open class CallZijingModel : BaseModel(), ICallZijingModel {
+    override fun getCallHistory(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
+        try {
+            volleyUtils[JSONObject::class.java, XtHttpUtil.GET_DIAL_HISTORY, REQUEST_TAG, onFinishedListener]
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+    }
+
+    override fun dial(account: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
+        try {
+            val strings = account.split("##".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val protocol = sharedPreferences.getString(Constants.PROTOCOL, "h323")
+            val rate = sharedPreferences.getInt(Constants.TERMINAL_RATE, 512)
+            val params =JSONObject()
+            params.put("url", String.format("%s:%s**%s", protocol, if (strings.size > 0) strings[0] else "", if (strings.size > 1) strings[1] else ""))
+            params.put("rate", rate.toString())
+            volleyUtils.post(XtHttpUtil.DIAL, params, REQUEST_TAG, onFinishedListener)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    override fun getCallInfor(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
+        try {
+            volleyUtils[JSONObject::class.java, XtHttpUtil.GET_CALLINFO, REQUEST_TAG, onFinishedListener]
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     /**
      * 减少免费会见次数
      */
-    override fun updateFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    override fun updateFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         try {
             val url = String.format("%s/%s/access", Constants.REQUEST_FREE_MEETING_TIME,
                     sharedPreferences.getString(Constants.USER_ACCOUNT, ""))
@@ -27,16 +57,16 @@ class CallZijingModel : BaseModel(), ICallZijingModel {
             e.printStackTrace()
         }
     }
-    override fun queryUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    override fun queryUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         volleyUtils.get(JSONObject::class.java,XtHttpUtil.GET_RECORD_NEAR_STATUS, REQUEST_TAG, onFinishedListener)
 
     }
 
-    override fun startUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<String>) {
+    override fun startUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
         volleyUtils.get(String::class.java,XtHttpUtil.START_NEAR_RECORD ,REQUEST_TAG,onFinishedListener)
     }
 
-    override fun stopUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<String>) {
+    override fun stopUSBRecord(onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
         try {
             volleyUtils.get(String::class.java,XtHttpUtil.STOP_NEAR_RECORD, REQUEST_TAG, onFinishedListener)
         } catch (e: Exception) {
@@ -44,7 +74,7 @@ class CallZijingModel : BaseModel(), ICallZijingModel {
         }
     }
 
-    override fun cameraControl(v: String,onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    override fun cameraControl(v: String,onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         try {
             // 遥控器控制器
             val params = JSONObject()
@@ -56,7 +86,7 @@ class CallZijingModel : BaseModel(), ICallZijingModel {
 
     }
 
-    override fun hangUp(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    override fun hangUp(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         try {
             val params = JSONObject()
             volleyUtils.post(XtHttpUtil.HANGUP, params, REQUEST_TAG, onFinishedListener)
@@ -66,7 +96,7 @@ class CallZijingModel : BaseModel(), ICallZijingModel {
 
     }
 
-    override  fun setIsQuite(quiet: Boolean, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    override  fun setIsQuite(quiet: Boolean, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         try {
             val params = JSONObject()
             params.put("k", "enable-line-out")
@@ -78,7 +108,7 @@ class CallZijingModel : BaseModel(), ICallZijingModel {
 
     }
 
-    override fun sendPassWord(password: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    override fun sendPassWord(password: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         try {
             val params = JSONObject("{\"key\":\"$password\"}")
             volleyUtils.post(XtHttpUtil.SENDDTMF, params, REQUEST_TAG, onFinishedListener)
@@ -88,7 +118,7 @@ class CallZijingModel : BaseModel(), ICallZijingModel {
 
     }
 
-    override fun switchMuteStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    override fun switchMuteStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         try {
             volleyUtils.post(XtHttpUtil.MUTE_AUDIIN, JSONObject(), REQUEST_TAG, onFinishedListener)
         } catch (authFailureError: AuthFailureError) {

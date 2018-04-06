@@ -51,6 +51,8 @@ class LoginActivity : SuperActivity(), ILoginView {
         etPassword.setText("9997")
         mPresenter = LoginPresenter(this, this)
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
+        mProgress.setCanceledOnTouchOutside(true)
+        mProgress.setCancelable(true)
         stopRefreshAnim()
 
     }

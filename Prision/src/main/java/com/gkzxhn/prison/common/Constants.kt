@@ -19,7 +19,7 @@ object Constants {
     val SD_PHOTO_PATH = SD_ROOT_PHOTO_PATH + "cutPhoto/"//拍照存储或压缩图片的图片路径,启动时自动删除
     val SD_VIDEO_PATH = SD_ROOT_PATH + "/video/"
     val IS_DEBUG_MODEL = false//debug模式打印日志到控制台,发布版本不打印
-    val REQUEST_TIMEOUT = 60000//超时时间1分钟
+    val REQUEST_TIMEOUT = 30000//超时时间半分钟
     /*-------------------------------User Tab-------------------------------------------------*/
     val USER_TABLE = "user_table"
     val USER_ACCOUNT_TABLE = "user_account_table"//记住账号密码
@@ -47,7 +47,7 @@ object Constants {
     val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME_XLS + "/api/v1/meetings"// 取消会见
     val REQUEST_MEETING_DETAIL_URL = DOMAIN_NAME_XLS + "/api/v1/families"// 会见详情
     val REQUEST_VERSION_URL = DOMAIN_NAME_XLS + "/api/v1/versions/2"//版本更新
-    val REQUEST_CRASH_LOG_URL = DOMAIN_NAME_XLS + "/api/v1/loggers"//版本更新
+    val REQUEST_CRASH_LOG_URL = DOMAIN_NAME_XLS + "/api/v1/loggers"//奔溃日志
     val REQUEST_MEETING_ROOM = DOMAIN_NAME_XLS + "/api/v1/terminals"//会议室信息
 
     val REQUEST_FREE_MEETING_TIME = DOMAIN_NAME_XLS + "/api/v1/jails"//免费呼叫次数

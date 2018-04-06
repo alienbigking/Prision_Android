@@ -14,9 +14,9 @@ class TestModel :BaseModel() {
      * 获取免费呼叫次数
      * @param onFinishedListener
      */
-    fun requestFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+    fun request(url:String,onFinishedListener: VolleyUtils.OnFinishedListener<String>) {
         try {
-            volleyUtils[JSONObject::class.java, XtHttpUtil.ADD_ACCOUNT, REQUEST_TAG, onFinishedListener]
+            volleyUtils[String::class.java, url , REQUEST_TAG, onFinishedListener]
         } catch (authFailureError: AuthFailureError) {
             authFailureError.printStackTrace()
         }

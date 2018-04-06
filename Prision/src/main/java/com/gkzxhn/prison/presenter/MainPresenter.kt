@@ -3,15 +3,12 @@ package com.gkzxhn.prison.presenter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
-import android.os.Build
 import android.util.Log
 import android.widget.Toast
 
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.activity.CallZiJingActivity
-import com.gkzxhn.prison.activity.MainActivity
 import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
@@ -32,7 +29,6 @@ import com.starlight.mobile.android.lib.util.JSONUtil
 
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.concurrent.Executors
 
 /**
  * Created by Raleigh.Luo on 17/4/12.
@@ -48,11 +44,12 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
 
     fun requestZijing() {
         requestZijingTime++
-        mModel.requestZijing(object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.getCallHistory(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == 0) {
                     mView?.startZijingService()
+                    checkCallStatus()
                 } else {
                     mView?.zijingServiceFailed()
                 }
@@ -66,6 +63,22 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                 }
             }
         })
+    }
+    fun checkCallStatus(){
+        mModel.getCallInfor(object :VolleyUtils.OnFinishedListener<JSONObject>{
+            override fun onSuccess(response: JSONObject) {
+                val code = response.getInt("code")
+                if (code == 0 ) {//正在拨打电话
+                    //挂断
+                    mModel.hangUp(null)
+                }
+            }
+
+            override fun onFailed(error: VolleyError) {
+            }
+
+        })
+
     }
 
     fun requestFreeTime() {
@@ -205,7 +218,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             }
         }
         val finalStrings = strings
-        mModel.callFang(account, requestCode, object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.dial(account, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 Log.d(TAG, "DIAL" + response.toString())
                 try {

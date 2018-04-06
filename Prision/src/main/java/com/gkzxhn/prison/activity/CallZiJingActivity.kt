@@ -11,6 +11,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.animation.AnimationUtils
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
@@ -58,12 +59,16 @@ import kotlinx.android.synthetic.main.activity_call_zijing.iv_id_card_02
 as mIv_id_card_02
 import kotlinx.android.synthetic.main.activity_call_zijing.tv_count_down
 as tv_count_down
+import kotlinx.android.synthetic.main.activity_call_zijing.rl_bottom
+as rlBottomPanel
+import kotlinx.android.synthetic.main.activity_call_zijing.tv_header_count_down
+as tvHeaderCountDown
 
 /**
  * Created by 方 on 2017/11/16.
  */
 
-class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingView {
+class CallZiJingActivity : SuperActivity(), ICallZijingView {
     private val TAG = CallZiJingActivity::class.java.simpleName
     private lateinit var mPresenter: CallZijingPresenter
 
@@ -193,7 +198,8 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
 
                     override fun onNext(s: String) {
                         Log.i(TAG, "count_down : " + s)
-                        tv_count_down.text = s
+                        tv_count_down.text = getString(R.string.the_leave_time)+s
+                        tvHeaderCountDown.text=s
                     }
                 })
     }
@@ -228,18 +234,8 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
 
         }
         setIdCheckData()
-        setClickListener()
         registerReceiver()
     }
-
-
-    private fun setClickListener() {
-        mMute_txt.setOnClickListener(this)
-        mQuite_txt.setOnClickListener(this)
-        mExit_img.setOnClickListener(this)
-        mLl_check_id.setOnClickListener(this)
-    }
-
     override fun onDestroy() {
         if (null != mCancelVideoDialog && mCancelVideoDialog.isShowing) {
             mCancelVideoDialog.dismiss()
@@ -258,7 +254,7 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
 
-    override fun onClick(v: View) {
+    fun onClickListener(v: View) {
         when (v.id) {
             R.id.mute_text ->
                 //哑音
@@ -266,14 +262,37 @@ class CallZiJingActivity : SuperActivity(), View.OnClickListener, ICallZijingVie
             R.id.quiet_text ->
                 //修改线性输出状态
                 mPresenter.setIsQuite(!isQuite)
-            R.id.exit_Img ->
-                //挂断
+            R.id.exit_Img ->{  //挂断
                 showHangup()
+            }
             R.id.ll_check_id -> startScaleAnim(mLl_check_id)
+            R.id.fl_call_zijing ->{//点击缩放底部
+                showOrHideBottomPanel(rlBottomPanel.visibility==View.VISIBLE)
+            }
         }
     }
 
-
+    private fun showOrHideBottomPanel(isShown: Boolean) {
+        if (isShown) {// 标题显示动画
+            val bottomHideAnim = AnimationUtils.loadAnimation(this,
+                    com.starlight.mobile.android.lib.R.anim.slide_out_to_bottom)
+            //设置动画时间
+            bottomHideAnim.duration = 400
+            rlBottomPanel.startAnimation(bottomHideAnim)
+            rlBottomPanel.visibility = View.GONE
+            //头部显示
+            tvHeaderCountDown.visibility=View.VISIBLE
+        } else {// 标题隐藏动画
+            val bottomShowAnim = AnimationUtils.loadAnimation(this,
+                    com.starlight.mobile.android.lib.R.anim.slide_in_from_bottom)
+            //设置动画时间
+            bottomShowAnim.duration = 400
+            rlBottomPanel.startAnimation(bottomShowAnim)
+            rlBottomPanel.visibility = View.VISIBLE
+            //头部不现实
+            tvHeaderCountDown.visibility=View.GONE
+        }
+    }
     /**
      * 设置扬声器UI
      *

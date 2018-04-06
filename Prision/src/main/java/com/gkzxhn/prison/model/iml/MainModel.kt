@@ -16,7 +16,7 @@ import java.util.HashMap
  * Created by Raleigh.Luo on 17/4/12.
  */
 
-class MainModel : BaseModel(), IMainModel {
+class MainModel :CallZijingModel(), IMainModel {
 
 
     /**
@@ -34,14 +34,6 @@ class MainModel : BaseModel(), IMainModel {
 
     }
 
-    override fun requestZijing(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
-        try {
-            volleyUtils[JSONObject::class.java, XtHttpUtil.GET_DIAL_HISTORY, REQUEST_TAG, onFinishedListener]
-        } catch (authFailureError: AuthFailureError) {
-            authFailureError.printStackTrace()
-        }
-
-    }
 
     override fun requestVersion(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
         try {
@@ -61,7 +53,6 @@ class MainModel : BaseModel(), IMainModel {
         } catch (authFailureError: AuthFailureError) {
             authFailureError.printStackTrace()
         }
-
     }
 
     override fun request(date: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
@@ -74,34 +65,4 @@ class MainModel : BaseModel(), IMainModel {
         }
 
     }
-
-    override fun callFang(account: String, requestCode: Int, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
-        var account = account
-        var strings: Array<String>? = null
-        var password = ""
-        if (account.contains("##")) {
-            strings = account.split("##".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            account = strings[0]
-            if (strings.size > 0) {
-                password = strings[1]
-            }
-        }
-        val protocol = sharedPreferences.getString(Constants.PROTOCOL, "h323")
-        val rate = sharedPreferences.getInt(Constants.TERMINAL_RATE, 512)
-        var params: JSONObject=JSONObject()
-        try {
-            params.put("url", "$protocol:$account**$password")
-            params.put("rate",rate)
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
-        try {
-            volleyUtils.post(XtHttpUtil.DIAL, params!!, REQUEST_TAG, onFinishedListener)
-        } catch (authFailureError: AuthFailureError) {
-            authFailureError.printStackTrace()
-        }
-
-    }
-
 }

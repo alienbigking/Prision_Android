@@ -61,6 +61,31 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
         })
     }
 
+    fun checkCallStatus(){
+        mModel.getCallInfor(object :VolleyUtils.OnFinishedListener<JSONObject>{
+            override fun onSuccess(response: JSONObject) {
+                val code = response.getInt("code")
+                if (code == 0 ) {//正在拨打电话
+                    //挂断
+                    mModel.hangUp(object :VolleyUtils.OnFinishedListener<JSONObject>{
+                        override fun onSuccess(response: JSONObject) {
+                            mView?.showToast(response.toString())
+                        }
+
+                        override fun onFailed(error: VolleyError) {
+                            mView?.showToast(error.toString())
+                        }
+
+                    })
+                }
+            }
+
+            override fun onFailed(error: VolleyError) {
+            }
+
+        })
+
+    }
     /**
      * 判断当前云信id状态
      */
@@ -96,9 +121,9 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
     }
 
     fun dial(account: String) {
-        mModel.dial(account, object : VolleyUtils.OnFinishedListener<String> {
-            override fun onSuccess(responseStr: String) {
-                val response=JSONUtil.getJSONObject(responseStr)
+        mModel.dial(account, object : VolleyUtils.OnFinishedListener<JSONObject> {
+            override fun onSuccess(response: JSONObject) {
+//                val response=JSONUtil.getJSONObject(responseStr)
                 Log.d(TAG, "DIAL" + response.toString())
                 try {
                     val code = response.getInt("code")

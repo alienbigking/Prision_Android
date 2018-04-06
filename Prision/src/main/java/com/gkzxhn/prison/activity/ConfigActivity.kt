@@ -58,6 +58,8 @@ class ConfigActivity : SuperActivity() {
 
     private fun init() {
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
+        mProgress.setCancelable(true)
+        mProgress.setCanceledOnTouchOutside(true)
         stopRefreshAnim()
         mRateArray = resources.getStringArray(R.array.rate_array)
         val adapter = ArrayAdapter(this,
