@@ -35,7 +35,7 @@ class GKApplication : Application() {
      * @return
      */
     private val options = DisplayImageOptions.Builder()
-            .showImageOnLoading(R.mipmap.ic_imageloading)//默认加载的图片
+            .showImageOnLoading(R.color.common_hint_text_color)//默认加载的图片
             .showImageForEmptyUri(R.mipmap.ic_imageload_failed)//下载地址不存在
 
             .showImageOnFail(R.mipmap.ic_imageload_failed).cacheInMemory(false).cacheOnDisk(true)//加载失败的图

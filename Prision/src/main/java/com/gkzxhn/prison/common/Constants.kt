@@ -14,18 +14,11 @@ object Constants {
     val CACHE_FILE = GKApplication.instance.filesDir.absolutePath
     val APK_C9_DIR = "data/app"
 
-    val SD_IMAGE_CACHE_PATH = SD_ROOT_PATH + "/imageCache/"//图片下载的缓存
-    val SD_ROOT_PHOTO_PATH = SD_ROOT_PATH + "/photo/"//图片，不自动删除
-    val SD_PHOTO_PATH = SD_ROOT_PHOTO_PATH + "cutPhoto/"//拍照存储或压缩图片的图片路径,启动时自动删除
-    val SD_VIDEO_PATH = SD_ROOT_PATH + "/video/"
     val IS_DEBUG_MODEL = false//debug模式打印日志到控制台,发布版本不打印
     val REQUEST_TIMEOUT = 30000//超时时间半分钟
     /*-------------------------------User Tab-------------------------------------------------*/
     val USER_TABLE = "user_table"
-    val USER_ACCOUNT_TABLE = "user_account_table"//记住账号密码
     val USER_IS_UNAUTHORIZED = "isUnauthorized"
-    val USER_ID = "user_id"
-    val IS_FIRST_IN = "is_first_in"
     val USER_ACCOUNT = "user_account"//云信帐号
     val USER_PASSWORD = "user_password"//云信密码
     val TERMINAL_ACCOUNT = "terminal_account"//终端帐号
@@ -71,48 +64,23 @@ object Constants {
     val MAIN_TAB = 0x206
     /*-------------------------------action-------------------------------------------------*/
 
-    val ONLINE_FAILED_ACTION = "com.gkzxhn.prison.ONLINE_FAILED_ACTION"//连线失败
     val ONLINE_SUCCESS_ACTION = "com.gkzxhn.prison.ONLINE_SUCCESS_ACTION"//连线成功
     //云信被踢下线
     val NIM_KIT_OUT = "com.gkzxhn.prison.NIM_KIT_OUT"
 
-    //退出视频会议
-    val MEETING_FORCE_CLOSE_ACTION = "com.gkzxhn.prison.MEETING_FORCE_CLOSE_ACTION"
-    //接收双流
-    val MEETING_ASSSENDSREAMSTATUSNTF_ACTION = "com.gkzxhn.prison.MEETING_ASSSENDSREAMSTATUSNTF_ACTION"
-    //根据呼叫状态选择是否切换界面
-    val MEETING_SWITCHVCONFVIEW_ACTION = "com.gkzxhn.prison.MEETING_SWITCHVCONFVIEW_ACTION"
-    //设置哑音图标
-    val MEETING_MUTEIMAGE_ACTION = "com.gkzxhn.prison.MEETING_MUTEIMAGE_ACTION"
-    //不设置哑音图标
-    val MEETING_NOT_MUTEIMAGE_ACTION = "com.gkzxhn.prison.MEETING_NOT_MUTEIMAGE_ACTION"
-    // 设置静音
-    val MEETING_QUIETIMAGE_ACTION = "com.gkzxhn.prison.MEETING_QUIETIMAGE_ACTION"
-    // 不设置静音
-    val MEETING_NOT_QUIETIMAGE_ACTION = "com.gkzxhn.prison.MEETING_NOT_QUIETIMAGE_ACTION"
-    // 刷新音视频下面的工具栏
-    val MEETING_REMOVEREQCHAIRMANHANDLER_ACTION = "com.gkzxhn.prison.MEETING_REMOVEREQCHAIRMANHANDLER_ACTION"
-    // 刷新音视频下面的工具栏
-    val MEETING_REMOVEREQSPEAKERHANDLER_ACTION = "com.gkzxhn.prison.MEETING_REMOVEREQSPEAKERHANDLER_ACTION"
-
-    //开始录屏
-    val START_RECORDSCREEN_ACTION = "com.gkzxhn.prison.START_RECORDSCREEN_ACTION"
-    //结束录屏
-    val STOP_RECORDSCREEN_ACTION = "com.gkzxhn.prison.STOP_RECORDSCREEN_ACTION"
 
     //免费会见
     val CALL_FREE_ACTION = "com.gkzxhn.prison.CALL_FREE_ACTION"
     val CALL_DEFUALT_ACTION = "com.gkzxhn.prison.CALL_DEFUALT_ACTION"
 
-    /**
-     * C9上行消息发送广播
-     */
-    val ZIJING_ACTION = "zijing_action"
-    //紫荆上报消息
-    val ZIJING_JSON = "jsonObject"
+    //家属加入会议失败
+    val FAMILY_FAILED_JOIN_METTING = "com.gkzxhn.prison.CALL_HANG_UP"
+    //家属加入会议
+    val FAMILY_JOIN_METTING = "com.gkzxhn.prison.FAMILY_JOIN_METTING"
+    //监狱加入会议
+    val PRISION_JOIN_METTING = "com.gkzxhn.prison.PRISION_JOIN_METTING"
     //紫荆会议主之人密码密码
     val ZIJING_PASSWORD = "zijing_password"
-    val HANGUP = "hangup"
     val ACCID = "accid"
     val PROTOCOL = "protocol"
     val TIME_LIMIT = "time_limit"
@@ -120,6 +88,4 @@ object Constants {
     val USER_ACCOUNT_CACHE = "user_account_cache"
     val USER_PASSWORD_CACHE = "user_password_cache"
     val END_REASON = "end_reason"
-    //远端连接
-    val TIME_CONNECT = "time_connect"
 }

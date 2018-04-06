@@ -321,10 +321,10 @@ class VolleyUtils{
 
     }
 
-    private fun getStringListener(onFinishedListener: OnFinishedListener<String>): Response.Listener<String>{
+    private fun getStringListener(onFinishedListener: OnFinishedListener<String>?): Response.Listener<String>{
         return Response.Listener<String> { response ->
             try {
-                onFinishedListener.onSuccess(response)
+                onFinishedListener?.onSuccess(response)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

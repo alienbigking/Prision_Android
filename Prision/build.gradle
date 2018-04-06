@@ -52,8 +52,6 @@ dependencies {
     implementation 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
     implementation 'com.netease.nimlib:basesdk:3.2.0'
     implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'io.reactivex:rxjava:1.2.9'
-    implementation 'io.reactivex:rxandroid:1.2.1'
     implementation files('libs/httpcore-4.2.4.jar')
     implementation files('libs/okhttp-2.7.5.jar')
     implementation files('libs/okhttp-urlconnection-2.2.0.jar')
