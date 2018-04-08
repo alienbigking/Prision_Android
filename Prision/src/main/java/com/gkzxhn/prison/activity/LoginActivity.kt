@@ -68,8 +68,6 @@ class LoginActivity : SuperActivity(), ILoginView {
             //关闭请求
             mPresenter.onDestory()
         }
-
-
     }
 
     /**

@@ -70,6 +70,7 @@
                 android:paddingLeft="5dip"
                 android:paddingTop="5dip"
                 android:paddingBottom="5dip"
+                android:tint="@color/common_gray_title_color"
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/ic_search"
                 android:scaleType="fitXY"

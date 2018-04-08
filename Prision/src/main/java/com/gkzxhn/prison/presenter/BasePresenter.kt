@@ -49,7 +49,6 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
         if (mContext != null && getSharedPreferences().getBoolean(Constants.USER_IS_UNAUTHORIZED, false)==false) {
             Toast.makeText(GKApplication.instance.applicationContext, R.string.user_not_authorized, Toast.LENGTH_SHORT).show()
             GKApplication.instance.loginOff()
-            (mContext as Activity).finish()
             //清除别名
         }
     }

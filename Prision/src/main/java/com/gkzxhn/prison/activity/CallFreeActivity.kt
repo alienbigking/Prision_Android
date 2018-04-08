@@ -192,6 +192,11 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         initSearchBtn()
     }
 
+    override fun onDestroy() {
+        mPresenter.onDestory()
+        super.onDestroy()
+    }
+
     /**
      * 加载动画
      */

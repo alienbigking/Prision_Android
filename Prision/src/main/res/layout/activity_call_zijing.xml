@@ -46,7 +46,7 @@
                 android:layout_height="match_parent">
                 <com.gkzxhn.prison.customview.EqualHeightImageView
                     android:id="@+id/iv_avatar"
-                    android:src="@mipmap/ic_imageloading"
+                    android:src="@color/common_line_color"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="1"
                     android:scaleType="fitXY"
@@ -72,7 +72,7 @@
                 android:scaleType="fitXY"
                 android:layout_margin="5dip"
                 android:background="@drawable/id_card_shape"
-                android:src="@mipmap/ic_imageloading"
+                android:src="@color/common_line_color"
                 android:id="@+id/iv_id_card_01"
                 android:layout_height="match_parent"/>
 
@@ -81,7 +81,7 @@
                 android:scaleType="fitXY"
                 android:layout_margin="5dip"
                 android:background="@drawable/id_card_shape"
-                android:src="@mipmap/ic_imageloading"
+                android:src="@color/common_line_color"
                 android:id="@+id/iv_id_card_02"
                 android:layout_height="match_parent"/>
         </LinearLayout>
@@ -103,7 +103,7 @@
 
         <TextView
             android:id="@+id/tv_count_down"
-            android:text="@string/the_leave_time"
+            android:text=""
             android:textColor="@android:color/white"
             android:textSize="26sp"
             android:layout_centerVertical="true"

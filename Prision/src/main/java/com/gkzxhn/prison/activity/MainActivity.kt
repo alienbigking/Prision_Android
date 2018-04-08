@@ -349,6 +349,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     }
 
     override fun onDestroy() {
+        mPresenter.onDestory()
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
         if(mProgress.isShowing)mProgress.dismiss()
         if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.dismiss()

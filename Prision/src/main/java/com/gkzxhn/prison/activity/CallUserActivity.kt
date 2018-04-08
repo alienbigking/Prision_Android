@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -28,10 +27,8 @@ import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.CustomNotification
-import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 
-import org.json.JSONException
 import org.json.JSONObject
 
 import kotlinx.android.synthetic.main.i_common_loading_layout.common_loading_layout_tv_load
@@ -47,6 +44,8 @@ as ivCard02
  */
 
 class CallUserActivity : SuperActivity(), ICallUserView {
+
+
     //请求对象
     private lateinit var mPresenter: CallUserPresenter
     private lateinit var mCustomDialog: CustomDialog
@@ -58,14 +57,17 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     //昵称
     private lateinit var nickName: String
     private lateinit var id: String
-    //是否点击了呼叫按钮
-    private var isClickCall = false
+    //是否正在连线
+    private var isConnecting = false
+    //是否正在视频会见
+    private var isVideoMetting= false
     //用户账号
     private var mAccount: String? = null
     private var mIDWidth: Int = 0
     private var mCallRequestCode = Constants.EXTRA_CODE
     private val DOWN_TIME: Long = 10000//倒计时 10秒
     private val TAG = CallUserActivity::class.java.simpleName
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +78,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         registerReceiver()
     }
 
+    override fun reset() {
+        isConnecting=false
+        isVideoMetting=false
+    }
     /**
      * 初始化
      */
@@ -87,6 +93,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         nickName = intent.getStringExtra(Constants.EXTRA_TAB)
         mProgress = ProgressDialog.show(this, null, getString(R.string.check_other_status))
         mProgress.setCanceledOnTouchOutside(true)
+        mProgress.setCancelable(true)
+        mProgress.setOnDismissListener {
+            isConnecting =false
+        }
         stopProgress()
         preferences = mPresenter.getSharedPreferences()
         mAccount = preferences?.getString(Constants.TERMINAL_ACCOUNT, "")
@@ -155,7 +165,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * 连线对方账号
      */
     private fun online(account: String?) {
-        isClickCall = true
+        isConnecting = true
         if (account != null && account.length > 0) {
             if (mPresenter.checkStatusCode() == StatusCode.LOGINED) {
                 startProgress()
@@ -184,6 +194,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         }
     }
 
+
     /**
      * 获取信息成功
      */
@@ -208,13 +219,13 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * @param password
      */
     override fun dialSuccess(password: String) {
-        //关闭显示进度条
-        stopProgress()
         //跳转到视频界面
-        val intent = Intent(this, CallZiJingActivity::class.java)
+        val intent = Intent(this, VideoMettingActivity::class.java)
         intent.action=getIntent().action
         intent.putExtra(Constants.ZIJING_PASSWORD, password)
         startActivityForResult(intent, mCallRequestCode)
+        //关闭显示进度条
+        stopProgress()
     }
 
     /**
@@ -247,6 +258,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
     override fun onResume() {
         super.onResume()
+        isVideoMetting=false
         //检查是否正在通话，有就挂断
         mPresenter.checkCallStatus()
     }
@@ -263,6 +275,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     }
 
     override fun onDestroy() {
+        mPresenter.onDestory()
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
         //关闭窗口，避免窗口溢出
         if(mCustomDialog.isShowing)mCustomDialog.dismiss()
@@ -273,19 +286,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
     override fun onPause() {
         super.onPause()
-        isClickCall = false
+        isConnecting = false
     }
 
-    fun stopVConfVideo() {
-        isClickCall = false
-        stopProgress()
-        if (mCustomDialog != null) {
-            mCustomDialog.content=getString(R.string.other_offline)
-            mCustomDialog.cancelText=getString(R.string.cancel)
-            mCustomDialog.confirmText=getString(R.string.call_back)
-            if (!mCustomDialog.isShowing) mCustomDialog.show()
-        }
-    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == Constants.EXTRA_CODE){
@@ -334,6 +338,21 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             stopVConfVideo()
         }
     }
+    /**
+     * 对方不在线
+     */
+    fun stopVConfVideo() {
+        if(isConnecting) {
+            isConnecting = false
+            stopProgress()
+            if (mCustomDialog != null) {
+                mCustomDialog.content = getString(R.string.other_offline)
+                mCustomDialog.cancelText = getString(R.string.cancel)
+                mCustomDialog.confirmText = getString(R.string.call_back)
+                if (!mCustomDialog.isShowing) mCustomDialog.show()
+            }
+        }
+    }
 
     /**
      * 加载动画
@@ -362,7 +381,9 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             stopRefreshAnim()
             if (intent.action == Constants.ONLINE_SUCCESS_ACTION) {
                 //对方在线，进行呼叫
-                if (isClickCall) {
+                if (isConnecting&&!isVideoMetting) {
+                    isConnecting =false
+                    isVideoMetting=true
                     mCallRequestCode = Constants.EXTRA_CODE
                     stopProgress()
                     mTimer.cancel()

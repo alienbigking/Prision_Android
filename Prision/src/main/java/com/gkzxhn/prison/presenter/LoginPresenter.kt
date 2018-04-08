@@ -25,30 +25,17 @@ import org.json.JSONObject
  */
 
 class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginModel, ILoginView>(context, LoginModel(), view) {
-
-     fun getNetworkStatus(){
-        mModel.getNetworkStatus(object :VolleyUtils.OnFinishedListener<JSONObject>{
-            override fun onSuccess(response: JSONObject) {
-                mView?.showToast(response.toString())
-            }
-
-            override fun onFailed(error: VolleyError) {
-                mView?.showToast(error.toString())
-            }
-        })
-    }
     /**
      * 获取会见会议室号等
      * @param account
      * @param password
      */
     private fun getMeetingRoom(account: String, password: String) {
-        mModel.getMeetingRoom(account, password, object : VolleyUtils.OnFinishedListener<String> {
-            override fun onSuccess(response: String) {
-                val responseJson=JSONUtil.getJSONObject(response)
-                val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(responseJson, "code"))
+        mModel.getMeetingRoom(account, password, object : VolleyUtils.OnFinishedListener<JSONObject> {
+            override fun onSuccess(response: JSONObject) {
+                val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    var content=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(responseJson,"DataBean"),"content")
+                    var content = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response, "DataBean"), "content")
                     val edit = getSharedPreferences().edit()
                     edit.putString(Constants.USER_ACCOUNT, account)
                     edit.putString(Constants.USER_PASSWORD, password)
@@ -64,7 +51,6 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                     mView?.stopRefreshAnim()
                     mView?.onSuccess()
                 }
-
             }
 
             override fun onFailed(error: VolleyError) {

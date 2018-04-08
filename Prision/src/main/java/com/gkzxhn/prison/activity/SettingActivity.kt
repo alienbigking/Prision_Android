@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
 import android.widget.RadioGroup
 
@@ -111,8 +110,10 @@ class SettingActivity : SuperActivity(), ISettingView {
             R.id.common_head_layout_iv_left -> { //返回
                 finish()
             }
-            R.id.setting_layout_tv_call_free ->//免费会见
+            R.id.setting_layout_tv_call_free ->{//免费会见
+                android.R.anim.fade_in
                 startActivityForResult(Intent(this, CallFreeActivity::class.java), Constants.EXTRAS_CODE)
+            }
         }
 
     }
@@ -203,6 +204,7 @@ class SettingActivity : SuperActivity(), ISettingView {
     }
 
     override fun onDestroy() {
+        mPresenter.onDestory()
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
         if ( mExitDialog.isShowing) mExitDialog.dismiss()
         if (updateDialog.isShowing) updateDialog.dismiss()

@@ -45,6 +45,7 @@
         android:text="@string/terminal_account"
         />
 
+
     <EditText
         android:id="@+id/config_layout_et_account"
         android:layout_width="match_parent"
@@ -60,6 +61,24 @@
         android:layout_toRightOf="@+id/config_layout_tv_terminal_account_title"
         android:layout_below="@+id/config_layout_tv_notice"
         android:hint="@string/terminal_account_hint"
+        />
+    <ImageView
+        android:id="@+id/config_layout_iv_terminal_account_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="40dip"
+        android:paddingRight="@dimen/margin"
+        android:paddingLeft="5dip"
+        android:layout_alignBottom="@+id/config_layout_et_account"
+        android:layout_alignTop="@+id/config_layout_et_account"
+        android:visibility="visible"
+        android:tint="@color/common_line_color"
+        android:paddingTop="5dip"
+        android:paddingBottom="5dip"
+        android:layout_alignRight="@+id/config_layout_tv_notice"
+        android:onClick="onClickListener"
+        android:layout_gravity="center_vertical|right"
+        android:src="@mipmap/ic_clear_search_api_holo_light"
+        android:scaleType="centerInside"
         />
 
     <TextView

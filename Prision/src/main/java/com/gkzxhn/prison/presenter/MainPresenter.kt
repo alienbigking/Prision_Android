@@ -8,7 +8,7 @@ import android.widget.Toast
 
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
-import com.gkzxhn.prison.activity.CallZiJingActivity
+import com.gkzxhn.prison.activity.VideoMettingActivity
 import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
@@ -190,7 +190,6 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             StatusCode.KICKOUT-> {// 被其他端挤掉
                 Toast.makeText(GKApplication.instance, R.string.kickout, Toast.LENGTH_SHORT).show()
                 GKApplication.instance.loginOff()
-                (mWeakContext!!.get() as Activity).finish()
             }
             StatusCode.CONNECTING ->{// 正在连接
                 mView?.showToast(R.string.yunxin_offline)
@@ -212,7 +211,6 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                             .setCallback(null)
                 } else {//退出到登录界面
                     GKApplication.instance.loginOff()
-                    (mView as Activity).finish()
                 }
             }
         }
@@ -246,7 +244,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                 try {
                     val code = response.getInt("code")
                     if (code == 0) {
-                        val intent = Intent(mView as Activity, CallZiJingActivity::class.java)
+                        val intent = Intent(mView as Activity, VideoMettingActivity::class.java)
                         if (null != finalStrings && finalStrings.size > 1) {
                             intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1])
                         }
@@ -267,4 +265,5 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             }
         })
     }
+
 }

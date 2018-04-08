@@ -161,6 +161,8 @@ object XtHttpUtil {
     val SET_QOS = URL + "/api/v1/preferences/qos/set/"
     //恢复服务默认质量
     val RESET_QOS = URL + "/api/v1/preferences/qos/reset/"
+//    {"v":{"mac":"B4-99-4C-D0-42-8A","conflict":false,"is_wifi":false,
+// "ip":"10.10.10.114","connected":true},"code":0}
     //获取网络状态
     val GET_NETWORK_STATUS = URL + "/api/v1/network/status/"
 

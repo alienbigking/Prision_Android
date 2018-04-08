@@ -63,9 +63,9 @@ as tvHeaderCountDown
  * Created by 方 on 2017/11/16.
  */
 
-class CallZiJingActivity : SuperActivity(), ICallZijingView {
+class VideoMettingActivity : SuperActivity(), ICallZijingView {
 
-    private val TAG = CallZiJingActivity::class.java.simpleName
+    private val TAG = VideoMettingActivity::class.java.simpleName
     //请求Presenter
     private lateinit var mPresenter: CallZijingPresenter
     //关闭视频会见对话框
@@ -76,20 +76,59 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
     private var isScaled = false
     //提示通话时间已到 对话框
     private lateinit var mHintDialog:CustomDialog
-    private var DOWN_TIME: Long = 30*60*1000//倒计时 默认半小时
+    private lateinit var mTimer:CountDownTimer
     private var FIMALY_IS_JOIN=false;//家属是否已经加入会议室
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_zijing)
+
         //初始化Present
         mPresenter = CallZijingPresenter(this, this)
+        //初始化倒计时时间 必须presenter初始化后
+        initCountDownTimer()
         //遥控器控制器
         mPresenter.cameraControl("direct")
+
         //初始化挂断对话框
         initHangUpDialog()
         setIdCheckData()
         registerReceiver()
+    }
+
+    /**
+     * 初始化倒计时时间
+     */
+    private fun initCountDownTimer(){
+        val time = mPresenter.getSharedPreferences().getLong(Constants.TIME_LIMIT, 20)
+        //倒计时time分钟
+        var DOWN_TIME=time*60*1000//倒计时
+        /**
+         * 延迟time秒执行 倒计时
+         */
+        mTimer = object : CountDownTimer(DOWN_TIME, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val second = millisUntilFinished / 1000//秒
+                if (second == 30L) {//30秒时
+                    runOnUiThread {
+                        tv_count_down.setTextColor(resources.getColor(R.color.red_text))
+                        tvHeaderCountDown.setTextColor(resources.getColor(R.color.red_text))
+                    }
+                }
+                //分钟
+                val min = second / 60
+                val seconds = second - min * 60
+                val time= min.toString() + getString(R.string.minute) + seconds.toString() +  getString(R.string.second)
+                tv_count_down.text = getString(R.string.the_leave_time)+time
+                tvHeaderCountDown.text=time
+            }
+
+            override fun onFinish() {
+                tv_count_down.text=getString(R.string.the_leave_time)+getString(R.string.metting_has_time_out)
+                tvHeaderCountDown.text=getString(R.string.metting_has_time_out)
+                //倒计时完成
+                if(!mHintDialog.isShowing)mHintDialog.show()
+            }
+        }
     }
 
     /**
@@ -109,7 +148,7 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
         mHintDialog.title=getString(R.string.hint)
         mHintDialog.content=getString(R.string.call_time_has_arrived)
         mHintDialog.cancelText=getString(R.string.cancel)
-        mHintDialog.confirmText=getString(R.string.config_time)
+        mHintDialog.confirmText=getString(R.string.ok)
         mHintDialog.onClickListener= View.OnClickListener { v->
             if(v.id==R.id.custom_dialog_layout_tv_confirm) {
                 //发送挂断消息给对方
@@ -120,6 +159,7 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
         }
     }
     override fun onDestroy() {
+        mPresenter.onDestory()
         //关闭窗口，避免窗口溢出
         if (mCloseVideoDialog.isShowing) mCloseVideoDialog.dismiss()
         if (mHintDialog.isShowing) mHintDialog.dismiss()
@@ -339,9 +379,7 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
                         mPresenter.startUSBRecord()
                     }
                     FIMALY_IS_JOIN=true;
-                    val time = mPresenter.getSharedPreferences().getLong(Constants.TIME_LIMIT, 20)
-                    //倒计时time分钟
-                    DOWN_TIME=time*60*1000
+
                     mTimer.start()
                     //免费呼叫次数更新
                     if(getIntent().action==Constants.CALL_FREE_ACTION) {
@@ -378,8 +416,8 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
                                     val data = Intent()
                                     data.putExtra(Constants.CALL_AGAIN, true)
                                     data.putExtra(Constants.END_REASON, reason)
-                                    this@CallZiJingActivity.setResult(Activity.RESULT_FIRST_USER, data)
-                                    this@CallZiJingActivity.finish()
+                                    this@VideoMettingActivity.setResult(Activity.RESULT_FIRST_USER, data)
+                                    this@VideoMettingActivity.finish()
                                 }
                             } catch (e1: JSONException) {
                                 e1.printStackTrace()
@@ -405,28 +443,7 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
         }
     }
 
-    /**
-     * 延迟time秒执行 倒计时
-     */
-    private val mTimer = object : CountDownTimer(DOWN_TIME, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            val second = millisUntilFinished / 1000//秒
-            if (second == 30L) {//30秒时
-                runOnUiThread { tv_count_down.setTextColor(resources.getColor(R.color.red_text)) }
-            }
-            //分钟
-            val min = second / 60
-            val seconds = second - min * 60
-            val time= min.toString() + getString(R.string.minute) + seconds.toString() +  getString(R.string.second)
-            tv_count_down.text = getString(R.string.the_leave_time)+time
-            tvHeaderCountDown.text=time
-        }
 
-        override fun onFinish() {
-            //倒计时完成
-            if(!mHintDialog.isShowing)mHintDialog.show()
-        }
-    }
 
     override fun startRefreshAnim() {
 

@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/id_card_shape"
-                android:src="@mipmap/ic_imageloading"
+                android:src="@color/common_line_color"
                 android:scaleType="fitXY"
                 android:layout_margin="10dp"/>
 
@@ -40,7 +40,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/id_card_shape"
-                android:src="@mipmap/ic_imageloading"
+                android:src="@color/common_line_color"
                 android:scaleType="fitXY"
                 android:layout_margin="10dp"/>
         </LinearLayout>

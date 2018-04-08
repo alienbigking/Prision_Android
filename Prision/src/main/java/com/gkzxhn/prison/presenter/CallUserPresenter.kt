@@ -97,7 +97,6 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
             StatusCode.KICKOUT -> {// 被其他端挤掉
                 Toast.makeText(GKApplication.instance, R.string.kickout, Toast.LENGTH_SHORT).show()
                 GKApplication.instance.loginOff()
-                (mView as Activity).finish()
             }
             StatusCode.CONNECTING,// 正在连接
             StatusCode.LOGINING,// 正在登录
@@ -115,7 +114,6 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                             .setCallback(null)
                 } else {//退出到登录界面
                     GKApplication.instance.loginOff()
-                    (mView as Activity).finish()
                 }
             }
         }
@@ -136,15 +134,18 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                         val strings = account.split("##".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                         mView?.dialSuccess(if (strings.size > 1) strings[1] else "")
                     } else {
+                        mView?.reset()
                         mView?.showToast("拨号失败 code:  " + code)
                         Log.i(TAG, "onResponse: 参数无效 code:  " + code)
                     }
                 } catch (e: JSONException) {
+                    mView?.reset()
                     Log.e(TAG, "onResponse: >>> " + e.message)
                     //                            e.printStackTrace();
                 }
             }
             override fun onFailed(error: VolleyError) {
+                mView?.reset()
                 mView?.showToast("ResetQuest...  " + error.toString())
             }
         })

@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.gkzxhn.prison.R
+import com.gkzxhn.prison.common.GKApplication
 
 /**
  * Created by Raleigh.Luo on 17/3/9.
@@ -18,6 +19,7 @@ open class SuperActivity : AppCompatActivity() {
     //自动化测试使用
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        GKApplication.instance.pushActivity(this)
         mToast = Toast(this)
         val view=View.inflate(this, R.layout.toast_layout,null)
         mToast.view=view
@@ -55,6 +57,7 @@ open class SuperActivity : AppCompatActivity() {
     override fun finish() {
         cancelToast()
         super.finish()
+        GKApplication.instance.popActivity(this)
     }
 
     override fun onResume() {

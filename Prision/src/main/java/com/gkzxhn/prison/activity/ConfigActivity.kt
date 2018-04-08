@@ -157,6 +157,9 @@ class ConfigActivity : SuperActivity() {
                     finish()
                 }
             }
+            R.id.config_layout_iv_terminal_account_clear ->{
+                etAccount.setText("")//置空
+            }
         }
     }
 

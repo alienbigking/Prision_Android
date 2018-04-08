@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hint"
+        android:id="@+id/Hint"
+        />
+    <View android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:background="@color/common_light_text_color"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HANGUP"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/HANGUP"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_NETWORK_STATUS"
+        android:layout_marginBottom="10dip"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:id="@+id/GET_NETWORK_STATUS"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_ACCOUNT"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/GET_ACCOUNT"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_INPUTFORMAT"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/GET_INPUTFORMAT"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_ZJY_OEM"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/GET_ZJY_OEM"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_CALLINFO"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/GET_CALLINFO"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_MAIN_SOURCE"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/GET_MAIN_SOURCE"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_CALL_LOOKBACK"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/GET_CALL_LOOKBACK"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_RTMP"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/GET_RTMP"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET_LOCK_STATUS"
+        android:clickable="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/GET_LOCK_STATUS"
+        />
+
+</LinearLayout>
