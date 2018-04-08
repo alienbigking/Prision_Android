@@ -42,6 +42,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
         requestZijingTime = 0
     }
 
+    /**
+     * 发请求，检测设备视频会议是否已经准备好
+     */
     fun requestZijing() {
         requestZijingTime++
         mModel.getCallHistory(object : VolleyUtils.OnFinishedListener<JSONObject> {
@@ -64,6 +67,10 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             }
         })
     }
+
+    /**
+     * 检查是否正在呼叫 是则挂断
+     */
     fun checkCallStatus(){
         mModel.getCallInfor(object :VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {
@@ -81,6 +88,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
 
     }
 
+    /**
+     * 请求免费会见次数
+     */
     fun requestFreeTime() {
         mModel.requestFreeTime(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
@@ -97,6 +107,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
         })
     }
 
+    /**
+     * 请求会见列表
+     */
     fun request(date: String) {
         mView?.startRefreshAnim()
         mModel.request(date, object : VolleyUtils.OnFinishedListener<JSONObject> {
@@ -128,6 +141,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
         })
     }
 
+    /**
+     *  取消会见
+     */
     fun requestCancel(id: String, reason: String) {
         mView?.showProgress()
         mModel.requestCancel(id, reason, object : VolleyUtils.OnFinishedListener<String> {
@@ -149,6 +165,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
 
     }
 
+    /**
+     *  请求版本信息
+     */
     fun requestVersion() {
         mModel.requestVersion(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
@@ -206,7 +225,10 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
     }
 
 
-    fun callFang(account: String, requestCode: Int) {
+    /**
+     * 拨号 进入视频会议
+     */
+    fun dial(account: String, requestCode: Int) {
         var account = account
         var strings: Array<String>? = null
         var password = ""

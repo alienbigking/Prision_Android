@@ -6,6 +6,7 @@ import android.util.Log
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
+import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.ICallZijingModel
 import com.gkzxhn.prison.model.iml.CallZijingModel
 import com.gkzxhn.prison.view.ICallZijingView
@@ -34,10 +35,13 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
 
         })
     }
+
+    /** 查询视频会见信息 无会见code=-1
+     *
+     */
     fun getCallInfor(){
         mModel.getCallInfor(object :VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {
-                Log.d("raleigh_Test", "getCallInfor" + response.toString())
                 mView?.showToast(response.toString())
             }
 
@@ -46,7 +50,11 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
 
         })
     }
-    fun hangUp() {
+
+    /**
+     *  挂断
+     */
+    fun hangUp(reason: String) {
         //挂断
         mModel.hangUp(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
@@ -55,6 +63,7 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
                     val code = response.getInt("code")
                     if (code == 0) {
                         //成功
+                        mView?.hangUpSuccess(reason)
                     } else {
                         Log.i(TAG, "onResponse: code :  " + code)
                     }
@@ -71,6 +80,9 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
         })
     }
 
+    /**
+     * 设置是否静音
+     */
     fun setIsQuite(quiet: Boolean) {
         //设置静音状态  true表示设置成静音
         mModel.setIsQuite(quiet, object : VolleyUtils.OnFinishedListener<JSONObject> {
@@ -97,31 +109,10 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
 
     }
 
-    fun sendPassWord(password: String) {
-        //发送DTMF
-        mModel.sendPassWord(password, object : VolleyUtils.OnFinishedListener<JSONObject>{
-            override fun onSuccess(response: JSONObject) {
-                Log.d("CallZijingPresenter", "SENDDTMF" + response.toString())
-                try {
-                    val code = response.getInt("code")
-                    if (code == 0) {
-                        //成功
-                    } else {
-                        Log.i("CallZijingPresenter", "sendPassWord: code :  " + code)
-                    }
-                } catch (e: JSONException) {
-                    Log.e("CallZijingPresenter", "sendPassWord: >>> " + e.message)
-                    //                            e.printStackTrace();
-                }
 
-            }
-
-            override fun onFailed(error: VolleyError) {
-                Log.d("CallZijingPresenter", "ResetQuest..." + error.toString())
-            }
-        })
-    }
-
+    /**
+     * 切换哑音
+     */
     fun switchMuteStatus() {
         //修改哑音状态
         mModel.switchMuteStatus(object : VolleyUtils.OnFinishedListener<JSONObject>{
@@ -178,6 +169,10 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
 
         })
     }
+
+    /**
+     * 获取免费会见次数
+     */
     fun updateFreeTime(){
         mModel.updateFreeTime(object :VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {

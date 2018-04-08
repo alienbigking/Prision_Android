@@ -8,6 +8,13 @@ import org.json.JSONObject
  */
 
 interface ICallUserModel : ICallZijingModel {
+    /**
+     *  请求免费会见次数
+     */
     fun requestFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
+
+    /**
+     *  请求数据
+     */
     fun request(id: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
 }

@@ -32,6 +32,9 @@ class CallUserModel : CallZijingModel(), ICallUserModel {
 
     }
 
+    /**
+     * 获取家属信息
+     */
     override fun request(id: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
         val url = String.format("%s/%s", Constants.REQUEST_MEETING_DETAIL_URL, id)
         try {

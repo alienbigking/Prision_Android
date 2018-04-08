@@ -8,6 +8,7 @@ import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ILoginModel
 import com.gkzxhn.prison.model.iml.LoginModel
+import com.gkzxhn.prison.utils.Utils
 import com.gkzxhn.prison.view.ILoginView
 import com.gkzxhn.wisdom.async.VolleyUtils
 import com.netease.nimlib.sdk.NIMClient
@@ -17,12 +18,25 @@ import com.netease.nimlib.sdk.auth.LoginInfo
 import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.util.HttpStatus
 import com.starlight.mobile.android.lib.util.JSONUtil
+import org.json.JSONObject
 
 /**
  * Created by Raleigh.Luo on 17/4/10.
  */
 
 class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginModel, ILoginView>(context, LoginModel(), view) {
+
+     fun getNetworkStatus(){
+        mModel.getNetworkStatus(object :VolleyUtils.OnFinishedListener<JSONObject>{
+            override fun onSuccess(response: JSONObject) {
+                mView?.showToast(response.toString())
+            }
+
+            override fun onFailed(error: VolleyError) {
+                mView?.showToast(error.toString())
+            }
+        })
+    }
     /**
      * 获取会见会议室号等
      * @param account

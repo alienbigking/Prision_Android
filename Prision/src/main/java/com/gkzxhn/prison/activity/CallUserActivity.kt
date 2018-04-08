@@ -42,85 +42,46 @@ as ivCard01
 import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_iv_card_02
 as ivCard02
 
-/**
+/**呼叫用户
  * Created by Raleigh.Luo on 17/4/11.
  */
 
 class CallUserActivity : SuperActivity(), ICallUserView {
+    //请求对象
     private lateinit var mPresenter: CallUserPresenter
     private lateinit var mCustomDialog: CustomDialog
     private var mShowTerminalDialog: CustomDialog?=null
     private lateinit var mProgress: ProgressDialog
     private var preferences: SharedPreferences? = null
+    //手机号码
     private lateinit var phone: String
+    //昵称
     private lateinit var nickName: String
     private lateinit var id: String
-    private var isClickCall = false//是否点击了呼叫按钮
+    //是否点击了呼叫按钮
+    private var isClickCall = false
+    //用户账号
     private var mAccount: String? = null
     private var mIDWidth: Int = 0
     private var mCallRequestCode = Constants.EXTRA_CODE
-
-
-    /**
-     * 加载动画
-     */
-    private val handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            if (msg.what == Constants.START_REFRESH_UI) {//开始加载动画
-                tvLoading.visibility = View.VISIBLE
-                if (!tvLoading.isPlaying) {
-
-                    tvLoading.showAndPlay()
-                }
-            } else if (msg.what == Constants.STOP_REFRESH_UI) {//停止加载动画
-                if (tvLoading.isPlaying || tvLoading.isShown) {
-                    tvLoading.hideAndStop()
-                    tvLoading.visibility = View.GONE
-                }
-            }
-        }
-    }
-    private val mBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            stopRefreshAnim()
-            if (intent.action == Constants.ONLINE_SUCCESS_ACTION) {
-                //对方在线，进行呼叫
-                if (isClickCall) {
-                    mCallRequestCode = Constants.EXTRA_CODE
-                    stopProgress()
-                    mTimer.cancel()
-                    mPresenter.dial(mAccount?:"")
-                }
-            } else if (intent.action == Constants.ONLINE_FAILED_ACTION) {
-            } else if (intent.action == Constants.NIM_KIT_OUT) {
-                finish()
-            }
-        }
-    }
-
     private val DOWN_TIME: Long = 10000//倒计时 10秒
-    private val mTimer = object : CountDownTimer(DOWN_TIME, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            //            long second = millisUntilFinished / 1000;
-        }
-
-        override fun onFinish() {
-            stopVConfVideo()
-        }
-    }
-
     private val TAG = CallUserActivity::class.java.simpleName
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.call_user_layout)
+        //初始化
         init()
+        //注册接收器
         registerReceiver()
     }
 
+    /**
+     * 初始化
+     */
     private fun init() {
         mPresenter = CallUserPresenter(this, this)
+        //获取传递过来时的数据
         id = intent.getStringExtra(Constants.EXTRA)
         phone = intent.getStringExtra(Constants.EXTRAS)
         nickName = intent.getStringExtra(Constants.EXTRA_TAB)
@@ -133,6 +94,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             initTerminalDialog()
             if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
         }
+        //初始化对话框
         mCustomDialog = CustomDialog(this)
         mCustomDialog.onClickListener=View.OnClickListener { view ->
             if (view.id == R.id.custom_dialog_layout_tv_confirm) {
@@ -142,6 +104,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         val viewTreeObserver = ivCard01.viewTreeObserver
         viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
+                val ID_RATIO= 856f / 540f
                 ivCard01.viewTreeObserver.removeGlobalOnLayoutListener(this)
                 mIDWidth = ivCard01.measuredWidth
                 val layoutParams = ivCard01.layoutParams as LinearLayout.LayoutParams
@@ -151,7 +114,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                 ivCard02.layoutParams = layoutParams
             }
         })
-        mPresenter.request(phone)//请求详情
+        //请求详情
+        mPresenter.request(phone)
     }
 
     /**
@@ -172,18 +136,24 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             }
         }
     }
-
-
+    /**
+     *响应点击事件
+     */
     fun onClickListener(view: View) {
         when (view.id) {
+        //左上角返回
             R.id.common_head_layout_iv_left -> finish()
             R.id.call_user_layout_bt_call -> {
+                //呼叫
                 val account = preferences?.getString(Constants.TERMINAL_ACCOUNT, "")
                 online(account)
             }
         }
     }
 
+    /**
+     * 连线对方账号
+     */
     private fun online(account: String?) {
         isClickCall = true
         if (account != null && account.length > 0) {
@@ -197,33 +167,31 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                 // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
                 // 这里以类型 “1” 作为“正在输入”的状态通知。
                 val json = JSONObject()
-                try {
-                    json.put("code", -1)
-                    //                        json.put("msg", account);
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-
+                json.put("code", -1)
+                //                        json.put("msg", account);
                 notification.content = json.toString()
                 NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
+                //开始倒计时
                 mTimer.start()
             } else {
+                //云信已掉线
                 showToast(R.string.yunxin_offline)
             }
-        } else {
+        } else {//未设置终端
             initTerminalDialog()
+            //显示设置终端对话框
             if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
         }
     }
 
+    /**
+     * 获取信息成功
+     */
     override fun onSuccess() {
         val img_urls = mPresenter.entity?.imageUrl?.split("|")
-        val options = DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .build()
         img_urls?.let {
-            ivCard01.post { ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[0], ivCard01, options) }
-            ivCard02.post { ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[1], ivCard02, options) }
+            ivCard01.post { ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[0], ivCard01) }
+            ivCard02.post { ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[1], ivCard02) }
             findViewById(R.id.call_user_layout_bt_call).isEnabled = true
             val editor = mPresenter.getSharedPreferences().edit()
             editor.putString(Constants.OTHER_CARD + 1, img_urls[0])
@@ -231,7 +199,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             editor.putString(Constants.OTHER_CARD + 3, img_urls[2])
             editor.putString(Constants.EXTRA, mPresenter.entity?.accid)
             editor.putString(Constants.EXTRAS, id)
-            editor.commit()
+            editor.apply()
         }
     }
 
@@ -240,52 +208,55 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * @param password
      */
     override fun dialSuccess(password: String) {
+        //关闭显示进度条
         stopProgress()
+        //跳转到视频界面
         val intent = Intent(this, CallZiJingActivity::class.java)
         intent.action=getIntent().action
-        if (password != null) {
-            intent.putExtra(Constants.ZIJING_PASSWORD, password)
-        }
+        intent.putExtra(Constants.ZIJING_PASSWORD, password)
         startActivityForResult(intent, mCallRequestCode)
     }
 
+    /**
+     * 关闭数据加载动画
+     */
     override fun startRefreshAnim() {
         handler.sendEmptyMessage(Constants.START_REFRESH_UI)
     }
 
+    /**
+     * 开始数据加载动画
+     */
     override fun stopRefreshAnim() {
         handler.sendEmptyMessage(Constants.STOP_REFRESH_UI)
     }
 
+    /**
+     * 开始进度条
+     */
     fun startProgress() {
         if (!mProgress.isShowing) mProgress.show()
     }
 
+    /**
+     * 关闭进度条
+     */
     fun stopProgress() {
         if (mProgress.isShowing) mProgress.dismiss()
     }
 
     override fun onResume() {
         super.onResume()
-        if (mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
-        if (  mCustomDialog.isShowing) mCustomDialog.measureWindow()
         //检查是否正在通话，有就挂断
         mPresenter.checkCallStatus()
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
-        if (  mCustomDialog.isShowing) mCustomDialog.measureWindow()
-
-    }
 
     /**
      * 注册广播监听器
      */
     private fun registerReceiver() {
         val intentFilter = IntentFilter()
-        intentFilter.addAction(Constants.ONLINE_FAILED_ACTION)
         intentFilter.addAction(Constants.ONLINE_SUCCESS_ACTION)
         intentFilter.addAction(Constants.NIM_KIT_OUT)
         registerReceiver(mBroadcastReceiver, intentFilter)
@@ -293,6 +264,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
     override fun onDestroy() {
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
+        //关闭窗口，避免窗口溢出
+        if(mCustomDialog.isShowing)mCustomDialog.dismiss()
+        if(mShowTerminalDialog?.isShowing?:false)mShowTerminalDialog?.dismiss()
+        if(mProgress.isShowing)mProgress.dismiss()
         super.onDestroy()
     }
 
@@ -313,31 +288,90 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == Constants.EXTRA_CODE && resultCode == Activity.RESULT_CANCELED) {
-            if (data != null) {
-                val call_again = data.getBooleanExtra(Constants.CALL_AGAIN, false)
-                val reason = data.getStringExtra(Constants.END_REASON)
-                if (call_again) {
-                    //换协议呼叫
-                    var protocol = preferences?.getString(Constants.PROTOCOL, "h323")
-                    if ("h323" == protocol) {
-                        protocol = "sip"
-                    } else {
-                        protocol = "h323"
+        if (requestCode == Constants.EXTRA_CODE){
+            data?.let {
+                if (resultCode == Activity.RESULT_FIRST_USER) {
+                    //连线失败，重新呼叫
+                    val call_again = data.getBooleanExtra(Constants.CALL_AGAIN, false)
+                    val reason = data.getStringExtra(Constants.END_REASON)
+                    if (call_again) {
+                        //换协议呼叫
+                        var protocol = preferences?.getString(Constants.PROTOCOL, "h323")
+                        if ("h323" == protocol) {
+                            protocol = "sip"
+                        } else {
+                            protocol = "h323"
+                        }
+                        val edit = preferences?.edit()
+                        edit?.putString(Constants.PROTOCOL, protocol)
+                        edit?.apply()
+                        Log.i(TAG, "protocol : " + protocol)
+                        showToast("呼叫失败,原因:" + reason + "/n切换成" + protocol + "协议重新进行呼叫...")
+                        mCallRequestCode = Constants.EXTRAS_CODE
+                        mPresenter.dial(mAccount?:"")
                     }
-                    val edit = preferences?.edit()
-                    edit?.putString(Constants.PROTOCOL, protocol)
-                    edit?.apply()
-                    Log.i(TAG, "protocol : " + protocol)
-                    showToast("呼叫失败,原因:" + reason + "/n切换成" + protocol + "协议重新进行呼叫...")
-                    mCallRequestCode = Constants.EXTRAS_CODE
-                    mPresenter.dial(mAccount?:"")
+                }else if(resultCode == Activity.RESULT_CANCELED){
+                    //对方挂断
+                    val hint=data.getStringExtra(Constants.EXTRA)
+                    if(!hint.isEmpty()){
+                        showToast(hint)
+                    }
                 }
+
             }
         }
     }
 
-    companion object {
-        private val ID_RATIO = 856f / 540f
+    /**
+     * 倒计时
+     */
+    private val mTimer = object : CountDownTimer(DOWN_TIME, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            //            long second = millisUntilFinished / 1000;
+        }
+
+        override fun onFinish() {
+            stopVConfVideo()
+        }
+    }
+
+    /**
+     * 加载动画
+     */
+    private val handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            if (msg.what == Constants.START_REFRESH_UI) {//开始加载动画
+                tvLoading.visibility = View.VISIBLE
+                if (!tvLoading.isPlaying) {
+
+                    tvLoading.showAndPlay()
+                }
+            } else if (msg.what == Constants.STOP_REFRESH_UI) {//停止加载动画
+                if (tvLoading.isPlaying || tvLoading.isShown) {
+                    tvLoading.hideAndStop()
+                    tvLoading.visibility = View.GONE
+                }
+            }
+        }
+    }
+    /**
+     * 广播接收器
+     */
+    private val mBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            stopRefreshAnim()
+            if (intent.action == Constants.ONLINE_SUCCESS_ACTION) {
+                //对方在线，进行呼叫
+                if (isClickCall) {
+                    mCallRequestCode = Constants.EXTRA_CODE
+                    stopProgress()
+                    mTimer.cancel()
+                    mPresenter.dial(mAccount?:"")
+                }
+            } else if (intent.action == Constants.NIM_KIT_OUT) {
+                //云信被踢下线
+                finish()
+            }
+        }
     }
 }

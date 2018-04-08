@@ -23,16 +23,26 @@ import org.json.JSONObject
  */
 
 class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<ICallUserModel, ICallFreeView>(context, CallUserModel(), view) {
-    var entity: MeetingDetailEntity? = null
+    var entity: MeetingDetailEntity? = null//搜索到的家属信息
+    /**
+     *  清空家属实体
+     */
     fun clearEntity() {
         entity = null
     }
+
+    /**
+     * 获取免费会见次数
+     */
     fun requestFreeTime() {
         mModel.requestFreeTime(object : VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    mView?.updateFreeTime(ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "access_times")))
+                    val freetime=ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "access_times"))
+                    mView?.updateFreeTime(freetime)
+                    //保存到sharepreferences
+                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME,freetime).apply()
                 }
             }
             override fun onFailed(error: VolleyError) {
@@ -40,6 +50,9 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
         })
     }
 
+    /**
+     *  通过手机号码查询家属信息
+     */
     fun request(id: String) {
         mView?.startRefreshAnim()
         mModel.request(id, object : VolleyUtils.OnFinishedListener<JSONObject> {

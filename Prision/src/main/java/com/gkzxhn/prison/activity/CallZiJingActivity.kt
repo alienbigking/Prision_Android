@@ -1,12 +1,12 @@
 package com.gkzxhn.prison.activity
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
@@ -17,6 +17,7 @@ import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.customview.CancelVideoDialog
+import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.presenter.CallZijingPresenter
 import com.gkzxhn.prison.view.ICallZijingView
 import com.netease.nimlib.sdk.NIMClient
@@ -30,14 +31,6 @@ import com.starlight.mobile.android.lib.util.JSONUtil
 
 import org.json.JSONException
 import org.json.JSONObject
-
-import java.util.concurrent.TimeUnit
-
-import rx.Observable
-import rx.Observer
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_call_zijing.tv_call_zijing
 as mText
@@ -64,184 +57,75 @@ as rlBottomPanel
 import kotlinx.android.synthetic.main.activity_call_zijing.tv_header_count_down
 as tvHeaderCountDown
 
-/**
+
+
+/**视频会见界面
  * Created by 方 on 2017/11/16.
  */
 
 class CallZiJingActivity : SuperActivity(), ICallZijingView {
+
     private val TAG = CallZiJingActivity::class.java.simpleName
+    //请求Presenter
     private lateinit var mPresenter: CallZijingPresenter
-
-    private var mTimeSubscribe: Subscription? = null
-
-    private lateinit var mCancelVideoDialog: CancelVideoDialog
-    private val isQuite: Boolean = false    //是否静音
-
-    private var isScaled = false  //审核界面是否已缩放
-
-    private val mBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (Constants.ZIJING_ACTION.equals(intent.action)) {
-                val hangup = intent.getBooleanExtra(Constants.HANGUP, false)
-                if (hangup) {
-                    mPresenter.hangUp()
-                }
-                val time_connect = intent.getBooleanExtra(Constants.TIME_CONNECT, false)
-                if (time_connect) {
-                    if (mTimeSubscribe !=
-                            null) {
-                        mTimeSubscribe?.unsubscribe()
-                        val sharedPreferences = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
-                        val time = sharedPreferences.getLong(Constants.TIME_LIMIT, 20)
-                        startTime(time * 60)
-                    }
-                }
-                val jsonStr = intent.getStringExtra(Constants.ZIJING_JSON)
-                if (TextUtils.isEmpty(jsonStr)) {
-                    return
-                }
-                Log.w(TAG, "jsonStr received : " + jsonStr)
-                var e: String? = null
-                try {
-                    e = JSONUtil.getJSONObjectStringValue(JSONObject(jsonStr), "e")
-                } catch (e1: JSONException) {
-                    e1.printStackTrace()
-                }
-
-                if (e == null) {
-                    return
-                }
-                when (e) {
-                    "setup_call_calling" -> mText.text = "正在连接..."
-                    "ring_call" -> mText.text = "等待接听..."
-                    "established_call" -> {
-                        //呼叫建立
-                        mText.visibility = View.GONE
-                        mContent.setBackgroundColor(resources.getColor(R.color.zijing_video_bg))
-                        callAccount()
-                        if(mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD,true)){
-                            //停止录屏
-                            mPresenter.startUSBRecord()
-                            //免费呼叫次数更新
-                            if(getIntent().action==Constants.CALL_FREE_ACTION) {
-                                mPresenter.updateFreeTime()
-                            }
-                        }
-                    }
-                    "cleared_call" -> {
-                        val jsonObject = JSONUtil.getJSONObject(jsonStr)
-                        var objv: JSONObject? = null
-                        try {
-                            objv = jsonObject.getJSONObject("v")
-                            val reason = objv.getString("reason")
-                            if ("Ended by local user" != reason) {
-                                //                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
-                                val data = Intent()
-                                data.putExtra(Constants.CALL_AGAIN, true)
-                                data.putExtra(Constants.END_REASON, reason)
-                                this@CallZiJingActivity.setResult(Activity.RESULT_CANCELED, data)
-                            }
-                        } catch (e1: JSONException) {
-                            e1.printStackTrace()
-                        }
-                        showToast("已挂断")
-                        this@CallZiJingActivity.finish()
-                    }
-                    "missed_call" -> {
-                        mText.text = "对方未接听..."
-                        showToast("对方未接听")
-                        this@CallZiJingActivity.finish()
-                    }
-                    "error" -> {
-                        mText.text = "呼叫错误"
-                        this@CallZiJingActivity.finish()
-                    }
-                    "MuteOn" ->
-                        //麦克风静音
-                        mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                                resources.getDrawable(R.drawable.vconf_microphone_off_selector), null, null)
-                    "MuteOff" ->
-                        //麦克风静音
-                        mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                                resources.getDrawable(R.drawable.vconf_microphone_on_selector), null, null)
-                }
-            }
-        }
-    }
-
-    /**
-     * 延迟time秒执行
-     * @param time
-     */
-    private fun startTime(time: Long) {
-        mTimeSubscribe = Observable.interval(0, 1, TimeUnit.SECONDS)
-                .take(time+ 1, TimeUnit.SECONDS)
-                .map { aLong ->
-                    val delay = time - aLong
-                    if (delay == 30L) {
-                        runOnUiThread { tv_count_down.setTextColor(resources.getColor(R.color.red_text)) }
-                    }
-                    val min = delay / 60
-                    val seconds = delay - min * 60
-                    min.toString() + "分" + seconds + "秒"
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<String> {
-                    override fun onCompleted() {
-                        showTimeUp()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.e(TAG, e.message)
-                    }
-
-                    override fun onNext(s: String) {
-                        Log.i(TAG, "count_down : " + s)
-                        tv_count_down.text = getString(R.string.the_leave_time)+s
-                        tvHeaderCountDown.text=s
-                    }
-                })
-    }
-
-    /**
-     * 提示通话时间已到
-     */
-    private fun showTimeUp() {
-        val builder = AlertDialog.Builder(this)
-        builder
-                .setTitle(R.string.reminder)
-                .setMessage("通话时间已到,是否结束通话?")
-                .setPositiveButton(R.string.ok) { dialog, which ->
-                    sendHangupMessage()
-                    mPresenter.hangUp()
-                }
-                .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
-                .setCancelable(true)
-        val dialog = builder.create()
-        dialog.show()
-    }
+    //关闭视频会见对话框
+    private lateinit var mCloseVideoDialog: CancelVideoDialog
+    //是否静音
+    private val isQuite: Boolean = false
+    //审核界面是否已缩放
+    private var isScaled = false
+    //提示通话时间已到 对话框
+    private lateinit var mHintDialog:CustomDialog
+    private var DOWN_TIME: Long = 30*60*1000//倒计时 默认半小时
+    private var FIMALY_IS_JOIN=false;//家属是否已经加入会议室
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_zijing)
+        //初始化Present
         mPresenter = CallZijingPresenter(this, this)
+        //遥控器控制器
         mPresenter.cameraControl("direct")
-        mCancelVideoDialog = CancelVideoDialog(this, true)
-        mCancelVideoDialog.onClickListener=View.OnClickListener {
-            sendHangupMessage()
-            mPresenter.hangUp()
-
-        }
+        //初始化挂断对话框
+        initHangUpDialog()
         setIdCheckData()
         registerReceiver()
     }
-    override fun onDestroy() {
-        if (null != mCancelVideoDialog && mCancelVideoDialog.isShowing) {
-            mCancelVideoDialog.dismiss()
+
+    /**
+     * 初始化挂断对话框
+     */
+    private fun initHangUpDialog(){
+        //取消会见 提示对话框
+        mCloseVideoDialog = CancelVideoDialog(this, true)
+        mCloseVideoDialog.onClickListener=View.OnClickListener {
+            //发送挂断消息给对方
+            sendHangupMessage()
+            //挂断
+            mPresenter.hangUp("")
         }
-        mTimeSubscribe?.unsubscribe()
+        //提示通话时间已到
+        mHintDialog= CustomDialog(this)
+        mHintDialog.title=getString(R.string.hint)
+        mHintDialog.content=getString(R.string.call_time_has_arrived)
+        mHintDialog.cancelText=getString(R.string.cancel)
+        mHintDialog.confirmText=getString(R.string.config_time)
+        mHintDialog.onClickListener= View.OnClickListener { v->
+            if(v.id==R.id.custom_dialog_layout_tv_confirm) {
+                //发送挂断消息给对方
+                sendHangupMessage()
+                //挂断
+                mPresenter.hangUp("")
+            }
+        }
+    }
+    override fun onDestroy() {
+        //关闭窗口，避免窗口溢出
+        if (mCloseVideoDialog.isShowing) mCloseVideoDialog.dismiss()
+        if (mHintDialog.isShowing) mHintDialog.dismiss()
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
+        //停止倒计时
+        mTimer.cancel()
         super.onDestroy()
     }
 
@@ -250,30 +134,33 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
      */
     private fun registerReceiver() {
         val intentFilter = IntentFilter()
-        intentFilter.addAction(Constants.ZIJING_ACTION)
+        intentFilter.addAction(Constants.PRISION_JOIN_METTING)
+        intentFilter.addAction(Constants.FAMILY_FAILED_JOIN_METTING)
+        intentFilter.addAction(Constants.FAMILY_JOIN_METTING)
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
 
     fun onClickListener(v: View) {
         when (v.id) {
-            R.id.mute_text ->
-                //哑音
+            R.id.mute_text ->//哑音
                 mPresenter.switchMuteStatus()
-            R.id.quiet_text ->
-                //修改线性输出状态
+            R.id.quiet_text ->  //修改线性输出状态
                 mPresenter.setIsQuite(!isQuite)
-            R.id.exit_Img ->{  //挂断
+            R.id.exit_Img ->  //挂断
                 showHangup()
-            }
-            R.id.ll_check_id -> startScaleAnim(mLl_check_id)
-            R.id.fl_call_zijing ->{//点击缩放底部
+            R.id.ll_check_id ->//身份证缩放
+                startScaleAnim(mLl_check_id)
+            R.id.fl_call_zijing ->{//点击示或隐藏底部
                 showOrHideBottomPanel(rlBottomPanel.visibility==View.VISIBLE)
             }
         }
     }
 
+    /**
+     * 显示或隐藏底部条
+     */
     private fun showOrHideBottomPanel(isShown: Boolean) {
-        if (isShown) {// 标题显示动画
+        if (isShown) {// 显示动画
             val bottomHideAnim = AnimationUtils.loadAnimation(this,
                     com.starlight.mobile.android.lib.R.anim.slide_out_to_bottom)
             //设置动画时间
@@ -282,7 +169,7 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
             rlBottomPanel.visibility = View.GONE
             //头部显示
             tvHeaderCountDown.visibility=View.VISIBLE
-        } else {// 标题隐藏动画
+        } else {// 隐藏动画
             val bottomShowAnim = AnimationUtils.loadAnimation(this,
                     com.starlight.mobile.android.lib.R.anim.slide_in_from_bottom)
             //设置动画时间
@@ -318,13 +205,9 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
         // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
         // 这里以类型 “1” 作为“正在输入”的状态通知。
         val json = JSONObject()
-        try {
-            json.put("code", -2)//-2表示挂断
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
+        json.put("code", -2)//-2表示挂断
         notification.content = json.toString()
+        //发送云信消息 给对方
         NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
     }
 
@@ -332,10 +215,12 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
      * 设置审核身份布局
      */
     private fun setIdCheckData() {
+        //获取图片信息
         val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
         val avatarUri = Constants.DOMAIN_NAME_XLS + "/" + sharedPreferences.getString(Constants.OTHER_CARD + 3, "")
         val idCardUri1 = Constants.DOMAIN_NAME_XLS + "/" + sharedPreferences.getString(Constants.OTHER_CARD + 1, "")
         val idCardUri2 = Constants.DOMAIN_NAME_XLS + "/" + sharedPreferences.getString(Constants.OTHER_CARD + 2, "")
+        //加载图片信息
         ImageLoader.getInstance().displayImage(avatarUri, mIv_avatar)
         ImageLoader.getInstance().displayImage(idCardUri1, mIv_id_card_01)
         ImageLoader.getInstance().displayImage(idCardUri2, mIv_id_card_02)
@@ -373,18 +258,15 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Log.i(TAG, "onKeyDown: getkeycode >>>>>> " + event.keyCode)
         when (event.keyCode) {
-            221 -> {
-                //挂断按键
+            221 -> { //挂断按键
                 showHangup()
                 return true
             }
-            225 -> {
-                //显示/缩放审核界面
+            225 -> { //显示/缩放审核界面
                 startScaleAnim(mLl_check_id)
                 return true
             }
-            218 -> {
-                //静音
+            218 -> {//静音
                 mPresenter.setIsQuite(!isQuite)
                 return true
             }
@@ -392,9 +274,15 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
         return false
     }
 
+    /**
+     * 显示关闭会见对话框
+     */
     private fun showHangup() {
-
-        if (!mCancelVideoDialog.isShowing) mCancelVideoDialog.show()
+        if(FIMALY_IS_JOIN){//家属已加入会议 则提示挂断原因
+            if (!mCloseVideoDialog.isShowing) mCloseVideoDialog.show()
+        }else{//直接挂断
+            mPresenter.hangUp("")
+        }
     }
 
     /**
@@ -423,9 +311,121 @@ class CallZiJingActivity : SuperActivity(), ICallZijingView {
             }
 
             notification.content = json.toString()
+            //发送云信消息
             NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
         }
-        startTime(time * 60)
+    }
+
+    override fun hangUpSuccess(hint :String) {
+        val intent=Intent()
+        intent.putExtra(Constants.EXTRA,hint)
+        setResult(Activity.RESULT_CANCELED,intent)
+        finish()
+    }
+
+    /**
+     * 广播接收器
+     */
+    private val mBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when(intent.action){
+                Constants.FAMILY_FAILED_JOIN_METTING ->{//家属加入会议失败
+                    //家属已加入 －家属挂断   ／ 家属未加入 人脸失败失败
+                    mPresenter.hangUp(getString(if(FIMALY_IS_JOIN)R.string.video_metting_hangup else R.string.video_metting_failed))
+                }
+                Constants.FAMILY_JOIN_METTING ->{//家属加入会议成功
+                    if(mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD,true)){
+                        //开始录屏
+                        mPresenter.startUSBRecord()
+                    }
+                    FIMALY_IS_JOIN=true;
+                    val time = mPresenter.getSharedPreferences().getLong(Constants.TIME_LIMIT, 20)
+                    //倒计时time分钟
+                    DOWN_TIME=time*60*1000
+                    mTimer.start()
+                    //免费呼叫次数更新
+                    if(getIntent().action==Constants.CALL_FREE_ACTION) {
+                        mPresenter.updateFreeTime()
+                    }
+                }
+                Constants.PRISION_JOIN_METTING ->{//监狱端进入会见房间
+                    val jsonStr = intent.getStringExtra(Constants.EXTRA)
+
+                    if (TextUtils.isEmpty(jsonStr)) {
+                        return
+                    }
+                    var  e = JSONUtil.getJSONObjectStringValue(JSONObject(jsonStr), "e")
+                    if (e.isEmpty()) {
+                        return
+                    }
+                    when (e) {
+                        "setup_call_calling" -> mText.text = getString(R.string.connecting)
+                        "ring_call" -> mText.text =  getString(R.string.wait_answer)
+                        "established_call" -> {
+                            //呼叫建立
+                            mText.visibility = View.GONE
+                            mContent.setBackgroundColor(resources.getColor(R.color.zijing_video_bg))
+                            callAccount()
+                        }
+                        "cleared_call" -> {
+                            try {
+                                val jsonObject = JSONUtil.getJSONObject(jsonStr)
+                                var objv = jsonObject.getJSONObject("v")
+                                val reason = objv!!.getString("reason")
+                                if ("Ended by local user" != reason) {
+                                    //连接失败 重新连接 切换协议
+                                    //                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
+                                    val data = Intent()
+                                    data.putExtra(Constants.CALL_AGAIN, true)
+                                    data.putExtra(Constants.END_REASON, reason)
+                                    this@CallZiJingActivity.setResult(Activity.RESULT_FIRST_USER, data)
+                                    this@CallZiJingActivity.finish()
+                                }
+                            } catch (e1: JSONException) {
+                                e1.printStackTrace()
+                            }
+                        }
+                        "missed_call" -> {//对方未接听
+                            hangUpSuccess(getString(R.string.family_no_answer))
+                        }
+                        "error" -> {//呼叫错误
+                            hangUpSuccess(getString(R.string.call_error))
+                        }
+                        "MuteOn" ->
+                            //麦克风静音
+                            mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
+                                    resources.getDrawable(R.drawable.vconf_microphone_off_selector), null, null)
+                        "MuteOff" ->
+                            //麦克风静音
+                            mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
+                                    resources.getDrawable(R.drawable.vconf_microphone_on_selector), null, null)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 延迟time秒执行 倒计时
+     */
+    private val mTimer = object : CountDownTimer(DOWN_TIME, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            val second = millisUntilFinished / 1000//秒
+            if (second == 30L) {//30秒时
+                runOnUiThread { tv_count_down.setTextColor(resources.getColor(R.color.red_text)) }
+            }
+            //分钟
+            val min = second / 60
+            val seconds = second - min * 60
+            val time= min.toString() + getString(R.string.minute) + seconds.toString() +  getString(R.string.second)
+            tv_count_down.text = getString(R.string.the_leave_time)+time
+            tvHeaderCountDown.text=time
+        }
+
+        override fun onFinish() {
+            //倒计时完成
+            if(!mHintDialog.isShowing)mHintDialog.show()
+        }
     }
 
     override fun startRefreshAnim() {

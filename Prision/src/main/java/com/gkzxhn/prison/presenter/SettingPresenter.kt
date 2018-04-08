@@ -21,6 +21,9 @@ import org.json.JSONObject
  */
 
 class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISettingModel, ISettingView>(context, SettingModel(), view) {
+    /**
+     * 请求免费会见次数
+     */
     fun requestFreeTime() {
         mModel.requestFreeTime(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
@@ -38,6 +41,9 @@ class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISe
         })
     }
 
+    /**
+     * 请求版本信息
+     */
     fun requestVersion() {
         mModel.requestVersion(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {

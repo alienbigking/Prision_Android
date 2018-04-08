@@ -9,7 +9,10 @@ import com.gkzxhn.wisdom.async.VolleyUtils
  * Created by Raleigh.Luo on 18/3/28.
  */
 
-class LoginModel : BaseModel(), ILoginModel {
+class LoginModel : CallZijingModel(), ILoginModel {
+    /**
+     * 获取终端信息
+     */
     override fun getMeetingRoom(account: String, password: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>) {
         try {
             val url = Constants.REQUEST_MEETING_ROOM + "/" + account + "/detail"

@@ -133,7 +133,10 @@ class EReportService : Service() {
                 if (response.getString("e") == "qid_invalid") {
                     ResetQuest()
                 } else {
-                    sendLocalBroad(response, Constants.ZIJING_ACTION)
+                    val intent = Intent()
+                    intent.action = Constants.PRISION_JOIN_METTING
+                    intent.putExtra(Constants.EXTRA, response.toString())
+                    sendBroadcast(intent)
                 }
                 GetQueryQuest(a + 1)
             }
@@ -146,15 +149,6 @@ class EReportService : Service() {
     }
 
 
-    //发送本地广播
-    private fun sendLocalBroad(response: JSONObject, action: String) {
-
-        val intent = Intent()
-        intent.action = action
-        intent.putExtra(Constants.ZIJING_JSON, response.toString())
-        sendBroadcast(intent)
-        //        Log.d(TAG,response.toString());
-    }
 
 
     override fun onBind(intent: Intent): IBinder? {

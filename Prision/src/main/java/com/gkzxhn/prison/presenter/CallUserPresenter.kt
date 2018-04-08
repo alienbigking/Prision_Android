@@ -39,6 +39,9 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
         checkStatusCode()
     }
 
+    /**
+     * 请求用户信息
+     */
     fun request(id: String) {
         mView?.startRefreshAnim()
         mModel.request(id, object : VolleyUtils.OnFinishedListener<JSONObject> {
@@ -61,6 +64,9 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
         })
     }
 
+    /**
+     *  检查呼叫信息
+     */
     fun checkCallStatus(){
         mModel.getCallInfor(object :VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {
@@ -69,20 +75,16 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                     //挂断
                     mModel.hangUp(object :VolleyUtils.OnFinishedListener<JSONObject>{
                         override fun onSuccess(response: JSONObject) {
-                            mView?.showToast(response.toString())
                         }
 
                         override fun onFailed(error: VolleyError) {
-                            mView?.showToast(error.toString())
                         }
-
                     })
                 }
             }
 
             override fun onFailed(error: VolleyError) {
             }
-
         })
 
     }
@@ -120,6 +122,9 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
         return code
     }
 
+    /**
+     * 拨号 进入视频会议
+     */
     fun dial(account: String) {
         mModel.dial(account, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {

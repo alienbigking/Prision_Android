@@ -1,56 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/common_bg_color"
-    xmlns:mAttr="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <com.starlight.mobile.android.lib.view.CusHeadView
-        style="@style/common_head_blue_style"
-        mAttr:chHead_title="@string/login"
-        mAttr:chHead_title_padding_left="0dip"
-        android:id="@+id/loign_layout_ch_head"
-        />
-    <TextView
-        android:id="@+id/loign_layout_tv_notice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/loign_layout_ch_head"
-        android:layout_marginLeft="@dimen/margin"
-        android:text="@string/please_input_user_infor"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginRight="@dimen/margin"
-        android:layout_marginBottom="10dip"
-        android:layout_centerHorizontal="true"
-        android:textSize="24sp"
-        android:textColor="@color/common_gray_title_color"
-        android:layout_marginTop="@dimen/margin"/>
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:fillViewport="true"
+    >
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:background="@color/common_bg_color"
+        xmlns:mAttr="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.starlight.mobile.android.lib.view.CusHeadView
+            style="@style/common_head_blue_style"
+            mAttr:chHead_title="@string/login"
+            mAttr:chHead_title_padding_left="0dip"
+            android:id="@+id/loign_layout_ch_head"
+            />
+        <TextView
+            android:id="@+id/loign_layout_tv_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loign_layout_ch_head"
+            android:layout_marginLeft="@dimen/margin"
+            android:text="@string/please_input_user_infor"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginBottom="10dip"
+            android:layout_centerHorizontal="true"
+            android:textSize="24sp"
+            android:textColor="@color/common_gray_title_color"
+            android:layout_marginTop="@dimen/margin"/>
 
-    <EditText
-        android:id="@+id/loign_layout_et_username"
-        style="@style/login_edit_style"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:layout_below="@+id/loign_layout_tv_notice"
-        android:layout_marginLeft="@dimen/margin"
-        android:hint="@string/account" />
+        <EditText
+            android:id="@+id/loign_layout_et_username"
+            style="@style/login_edit_style"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_below="@+id/loign_layout_tv_notice"
+            android:layout_marginLeft="@dimen/margin"
+            android:hint="@string/account" />
 
-    <EditText
-        android:id="@+id/loign_layout_et_password"
-        style="@style/login_edit_style"
-        android:layout_marginTop="1dp"
-        android:layout_below="@+id/loign_layout_et_username"
-        android:hint="@string/password"
-        android:gravity="center"
-        android:inputType="textPassword"/>
+        <EditText
+            android:id="@+id/loign_layout_et_password"
+            style="@style/login_edit_style"
+            android:layout_marginTop="1dp"
+            android:layout_below="@+id/loign_layout_et_username"
+            android:hint="@string/password"
+            android:gravity="center"
+            android:inputType="textPassword"/>
 
-    <Button
-        android:id="@+id/loign_layout_btn_login"
-        android:text="@string/login"
-        android:layout_marginTop="70dip"
-        android:layout_below="@+id/loign_layout_et_password"
-        style="@style/common_blue_btn_style"
-        android:layout_centerHorizontal="true"
-        />
+        <Button
+            android:id="@+id/loign_layout_btn_login"
+            android:text="@string/login"
+            android:layout_marginTop="70dip"
+            android:layout_below="@+id/loign_layout_et_password"
+            style="@style/common_blue_btn_style"
+            android:layout_centerHorizontal="true"
+            />
 
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

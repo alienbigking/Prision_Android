@@ -37,13 +37,161 @@ import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_iv_clear
 as ivSearchClear
 import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_tv_search
 as tvSearch
-/**
+/**免费会见
  * Created by Raleigh.Luo on 18/3/29.
  */
 
 class CallFreeActivity : SuperActivity(), ICallFreeView {
+    //请求
     private lateinit  var   mPresenter: CallFreePresenter
+    //免费呼叫次数
     private var mCallFreeTime = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.call_free_layout)
+        stopRefreshAnim()
+        mPresenter = CallFreePresenter(this, this)
+        //请求免费次数
+        mPresenter.requestFreeTime()
+        etPhone.setText("18163657553")//TODO
+        //设置输入框监听器
+        etPhone?.addTextChangedListener(mTextWatcher)
+        etPhone?.setOnEditorActionListener { v, actionId, event ->
+            //点击搜索键
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (mCallFreeTime > 0) {//有免费次数才可进行搜索
+                    val phone = etPhone?.text.toString().trim()
+                    if (!phone.isEmpty()) {
+                        recovery()//恢复页面
+                        //搜索手机号码
+                        mPresenter.request(phone)
+                    }
+                }
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    /**
+     * 初始化［搜索］按钮
+     */
+    private fun initSearchBtn() {
+        if (mCallFreeTime > 0) {//有免费呼叫次数，则可点击
+            val padingBottom = tvSearch.paddingBottom
+            val padingLeft = tvSearch.paddingLeft
+            val padingRight = tvSearch.paddingRight
+            val padingTop = tvSearch.paddingTop
+            //不可点击
+            tvSearch.isEnabled = true
+            tvSearch.setBackgroundResource(R.drawable.search_btn_selector)
+            tvSearch.setPadding(padingLeft, padingTop, padingRight, padingBottom)
+        } else {//没有免费呼叫次数，显示不点击
+            val padingBottom = tvSearch.paddingBottom
+            val padingLeft = tvSearch.paddingLeft
+            val padingRight = tvSearch.paddingRight
+            val padingTop = tvSearch.paddingTop
+            tvSearch.setBackgroundResource(R.drawable.search_btn_uneable_selector)
+            tvSearch.isEnabled = false
+            tvSearch.setPadding(padingLeft, padingTop, padingRight, padingBottom)
+        }
+    }
+
+    fun onClickListener(view: View) {
+        when (view.id) {
+            //点击返回
+            R.id.common_head_layout_iv_left -> finish()
+            R.id.call_free_layout_tv_search//搜索
+            -> {
+                val phone = etPhone?.text.toString().trim()
+                if (!phone.isEmpty()) {
+                    recovery()//恢复页面
+                    mPresenter.request(phone)//请求
+                }
+            }
+            //点击搜索到的项
+            R.id.call_free_layout_rl_item
+            ->{
+                //项不为空
+                mPresenter.entity?.let {
+                    //有免费次数
+                    if (mCallFreeTime > 0) {
+                        val intent = Intent(this, CallUserActivity::class.java)
+                        intent.action=Constants.CALL_FREE_ACTION
+                        intent.putExtra(Constants.EXTRA, "")
+                        intent.putExtra(Constants.EXTRAS, mPresenter.entity?.phone)
+                        intent.putExtra(Constants.EXTRA_TAB, mPresenter.entity?.prisonerName)
+                        startActivity(intent)
+                    } else {//没有免费次数
+                        showToast(R.string.no_call_free_time)
+                    }
+                }
+            }
+            //清空搜索内容
+            R.id.call_free_layout_iv_clear -> {
+                etPhone?.setText("")//清空
+                recovery()//恢复状态
+            }
+        }
+    }
+
+    /**
+     * 恢复初始状态
+     */
+    private fun recovery() {
+        mPresenter.clearEntity()
+        tvFamilyName.setText(R.string.family_name_default)
+        tvPhone.setText(R.string.family_phone_default)
+        tvPrisionName.setText(R.string.prision_name_default)
+        tvPrisionNumber.setText(R.string.prision_number_default)
+        tvClickCall.visibility = View.GONE
+    }
+
+    /**
+     * 开始加载动画
+     */
+    override fun startRefreshAnim() {
+        handler.sendEmptyMessage(Constants.START_REFRESH_UI)
+    }
+
+    /**
+     * 停止加载动画
+     */
+    override fun stopRefreshAnim() {
+        handler.sendEmptyMessage(Constants.STOP_REFRESH_UI)
+    }
+
+
+    /**
+     * 搜索手机号码成功
+     */
+    override fun onSuccess() {
+        tvFamilyName.setText(mPresenter.entity?.name)
+        tvPhone.setText(mPresenter.entity?.phone)
+        tvPrisionName.setText(mPresenter.entity?.prisonerName)
+        tvPrisionNumber.setText(mPresenter.entity?.prisonerNumber + " " + mPresenter.entity?.relationship)
+        tvClickCall.visibility = View.VISIBLE
+    }
+
+    /**
+     * 获取到了免费会见次数
+     */
+    override fun updateFreeTime(time: Int) {
+        mCallFreeTime = time
+        tvFreeTime.text = mCallFreeTime.toString()
+        //初始化搜索按钮
+        initSearchBtn()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mCallFreeTime = mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0)
+        tvFreeTime.text = mCallFreeTime.toString()
+        initSearchBtn()
+    }
+
     /**
      * 加载动画
      */
@@ -63,6 +211,9 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         }
     }
 
+    /**
+     * phone输入框监听
+     */
     private val mTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
@@ -73,125 +224,10 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         }
 
         override fun afterTextChanged(s: Editable) {
+            //清除按钮 是否显示
             ivSearchClear.visibility = if (etPhone.text.length > 0) View.VISIBLE else View.GONE
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.call_free_layout)
-        etPhone?.addTextChangedListener(mTextWatcher)
-        etPhone?.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                if (mCallFreeTime > 0) {
-                    val phone = etPhone?.text.toString().trim()
-                    if (!phone.isEmpty()) {
-                        recovery()//恢复页面
-                        mPresenter.request(phone)//请求
-                    }
-                }
-                true
-            } else {
-                false
-            }
-        }
-        stopRefreshAnim()
-        mPresenter = CallFreePresenter(this, this)
-        mPresenter.requestFreeTime()
-        etPhone.setText("18163657553")//TODO
-
-    }
-
-    private fun initSearchBtn() {
-        if (mCallFreeTime > 0) {
-            val padingBottom = tvSearch.paddingBottom
-            val padingLeft = tvSearch.paddingLeft
-            val padingRight = tvSearch.paddingRight
-            val padingTop = tvSearch.paddingTop
-            tvSearch.isEnabled = true
-            tvSearch.setBackgroundResource(R.drawable.search_btn_selector)
-            tvSearch.setPadding(padingLeft, padingTop, padingRight, padingBottom)
-        } else {
-            val padingBottom = tvSearch.paddingBottom
-            val padingLeft = tvSearch.paddingLeft
-            val padingRight = tvSearch.paddingRight
-            val padingTop = tvSearch.paddingTop
-            tvSearch.setBackgroundResource(R.drawable.search_btn_uneable_selector)
-            tvSearch.isEnabled = false
-            tvSearch.setPadding(padingLeft, padingTop, padingRight, padingBottom)
-        }
-    }
-
-    fun onClickListener(view: View) {
-        when (view.id) {
-            R.id.common_head_layout_iv_left -> finish()
-            R.id.call_free_layout_tv_search//搜索
-            -> {
-                val phone = etPhone?.text.toString().trim()
-                if (!phone.isEmpty()) {
-                    recovery()//恢复页面
-                    mPresenter.request(phone)//请求
-                }
-            }
-            R.id.call_free_layout_rl_item//点击项
-            ->{
-                mPresenter.entity?.let {
-                    if (mCallFreeTime > 0) {
-                        val intent = Intent(this, CallUserActivity::class.java)
-                        intent.action=Constants.CALL_FREE_ACTION
-                        intent.putExtra(Constants.EXTRA, "")
-                        intent.putExtra(Constants.EXTRAS, mPresenter.entity?.phone)
-                        intent.putExtra(Constants.EXTRA_TAB, mPresenter.entity?.prisonerName)
-                        startActivity(intent)
-                    } else {
-                        showToast(R.string.no_call_free_time)
-                    }
-                }
-            }
-            R.id.call_free_layout_iv_clear -> {
-                etPhone?.setText("")
-                recovery()
-            }
-        }
-    }
-
-    private fun recovery() {
-        mPresenter.clearEntity()
-        tvFamilyName.setText(R.string.family_name_default)
-        tvPhone.setText(R.string.family_phone_default)
-        tvPrisionName.setText(R.string.prision_name_default)
-        tvPrisionNumber.setText(R.string.prision_number_default)
-        tvClickCall.visibility = View.GONE
-    }
-
-    override fun startRefreshAnim() {
-        handler.sendEmptyMessage(Constants.START_REFRESH_UI)
-    }
-
-    override fun stopRefreshAnim() {
-        handler.sendEmptyMessage(Constants.STOP_REFRESH_UI)
-    }
-
-
-    override fun onSuccess() {
-        tvFamilyName.setText(mPresenter.entity?.name)
-        tvPhone.setText(mPresenter.entity?.phone)
-        tvPrisionName.setText(mPresenter.entity?.prisonerName)
-        tvPrisionNumber.setText(mPresenter.entity?.prisonerNumber + " " + mPresenter.entity?.relationship)
-        tvClickCall.visibility = View.VISIBLE
-    }
-
-    override fun updateFreeTime(time: Int) {
-        mCallFreeTime = time
-        tvFreeTime.text = mCallFreeTime.toString()
-        initSearchBtn()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mCallFreeTime = mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0)
-        tvFreeTime.text = mCallFreeTime.toString()
-        initSearchBtn()
-    }
 
 }

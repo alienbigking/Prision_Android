@@ -26,12 +26,6 @@ class SplashActivity : Activity() {
 
         override fun handleMessage(msg: Message) {
             when (msg.what) {
-                0//启动动画
-                -> {
-                    var intent = Intent(this@SplashActivity, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
                 1//跳转登录界面
                 -> {
                     intent = Intent(this@SplashActivity, LoginActivity::class.java)
@@ -72,9 +66,6 @@ class SplashActivity : Activity() {
         tvVersionName.text = getString(R.string.app_v) + versionName
 
         val preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
-        //        if(preferences.getBoolean(Constants.IS_FIRST_IN,true)) {
-        //            mHandler.sendEmptyMessageDelayed(0, SPLASH_DELAY_MILLIS);
-        //        }else
         if (preferences.getString(Constants.USER_ACCOUNT, "").length == 0) {//未登录 未认证
             mHandler.sendEmptyMessage(1)
         } else {//已登录

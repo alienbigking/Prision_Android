@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -186,7 +185,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         if (BuildConfig.DEBUG) {
             findViewById(R.id.main_layout_ch_head).setOnClickListener {
                 val account = mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "")
-                mPresenter.callFang(account, 1)
+                mPresenter.dial(account, 1)
             }
         }
         mPresenter.requestVersion()
@@ -342,18 +341,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     override fun onResume() {
         super.onResume()
-        if ( updateDialog?.isShowing?:false) updateDialog?.measureWindow()
-        if (  mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
-        if (  mCancelVideoDialog.isShowing) mCancelVideoDialog.measureWindow()
         onRefresh()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        if (  updateDialog?.isShowing?:false) updateDialog?.measureWindow()
-        if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.measureWindow()
-        if ( mCancelVideoDialog.isShowing) mCancelVideoDialog.measureWindow()
-
     }
 
     override fun stopRefreshAnim() {
@@ -362,6 +350,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     override fun onDestroy() {
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
+        if(mProgress.isShowing)mProgress.dismiss()
         if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.dismiss()
         if (  mCancelVideoDialog.isShowing) mCancelVideoDialog.dismiss()
         if ( updateDialog?.isShowing?:false) updateDialog?.dismiss()

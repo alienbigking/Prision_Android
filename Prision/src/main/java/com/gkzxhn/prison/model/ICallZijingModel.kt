@@ -8,6 +8,11 @@ import org.json.JSONObject
  */
 
 interface ICallZijingModel : IBaseModel {
+    /**
+     * 请求网络信息
+     */
+    fun getNetworkStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
 
     /**
      * 获取呼叫记录－测试
@@ -58,6 +63,8 @@ interface ICallZijingModel : IBaseModel {
      * 设置静音
      */
     fun setIsQuite(quiet: Boolean, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
-    fun sendPassWord(password: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+    /**
+     * 修改哑音状态
+     */
     fun switchMuteStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
 }

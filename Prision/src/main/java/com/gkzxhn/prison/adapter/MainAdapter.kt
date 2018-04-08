@@ -27,11 +27,14 @@ as tvCancel
 
 class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHolder>() {
 
-    private var mDatas: MutableList<MeetingEntity> = ArrayList()
+    private var mDatas: ArrayList<MeetingEntity> = ArrayList()
     private var onItemClickListener: OnItemClickListener? = null
     private var mCurrentIndex = -1
 
 
+    /**
+     *  获取当前项实体
+     */
     fun getCurrentItem(): MeetingEntity{
         return mDatas[mCurrentIndex];
     }
@@ -39,11 +42,17 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
         this.onItemClickListener = onItemClickListener
     }
 
+    /**
+     *  移除当前操作项
+     */
     fun removeCurrentItem() {
         this.mDatas.removeAt(mCurrentIndex)
         notifyItemRemoved(mCurrentIndex)
     }
 
+    /**
+     * 更新数据
+     */
     fun updateItems(mDatas: List<MeetingEntity>?) {
         this.mDatas.clear()
         if (mDatas != null && mDatas.size > 0) {

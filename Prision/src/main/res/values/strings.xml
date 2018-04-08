@@ -46,6 +46,8 @@
     <string name="video_service_connect_success">连接成功</string>
     <string name="video_service_connect_failed">连接失败</string>
     <!--远程会见-->
+    <string name="video_metting_failed">对方未通过人脸识别或已拒绝</string>
+    <string name="video_metting_hangup">对方已挂断</string>
     <string name="the_leave_time">剩余通话时间： </string>
     <string name="id_card_hint">身份审核\n点击缩放</string>
     <string name="open">开启USB录屏</string>
@@ -79,6 +81,9 @@
     <string name="login_yunxin">正在登录云信...</string>
     <!--Dialog-->
     <string name="hint">提示</string>
+    <string name="minute">分</string>
+    <string name="second">秒</string>
+    <string name="call_time_has_arrived">通话时间已到,是否结束通话?</string>
     <string name="please_set_terminal_infor">请先设置终端信息</string>
     <string name="to_setting">马上设置</string>
     <string name="please_select_cancel_video_reason">请选择挂断本次会见的原因</string>
@@ -130,6 +135,13 @@
     <string name="delay_meeting_failed">延长会议失败</string>
 
     <!-- vconf -->
+    <string name="connecting">正在连接...</string>
+    <string name="wait_answer">等待接听...</string>
+    <string name="has_hang_up">已挂断</string>
+    <string name="family_no_answer">对方未接听...</string>
+    <string name="family_no_answer2">对方未接听</string>
+    <string name="call_error">呼叫错误</string>
+
     <string name="vconf_shortNum">会议号码</string>
     <string name="vconf_time">会议时间</string>
     <string name="vconf_timeLen">会议时长</string>

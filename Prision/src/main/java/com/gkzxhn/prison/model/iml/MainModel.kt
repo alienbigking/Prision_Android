@@ -34,7 +34,9 @@ class MainModel :CallZijingModel(), IMainModel {
 
     }
 
-
+    /**
+     * 获取版本信息
+     */
     override fun requestVersion(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
         try {
             volleyUtils[JSONObject::class.java, Constants.REQUEST_VERSION_URL, REQUEST_TAG, onFinishedListener]
@@ -44,6 +46,9 @@ class MainModel :CallZijingModel(), IMainModel {
 
     }
 
+    /**
+     *  取消会见
+     */
     override fun requestCancel(id: String, reason: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
         val url = String.format("%s/%s", Constants.REQUEST_CANCEL_MEETING_URL, id)
         try {
@@ -55,6 +60,9 @@ class MainModel :CallZijingModel(), IMainModel {
         }
     }
 
+    /**
+     * 根据日期获取会见列表
+     */
     override fun request(date: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
         val account = sharedPreferences.getString(Constants.USER_ACCOUNT, "")
         val url = String.format("%s/%s/meetings?application_date=%s", Constants.REQUEST_MEETING_LIST_URL, account, date)

@@ -198,30 +198,19 @@ class NimInitUtil {
      */
     private fun observeCustomNotification() {
         NIMClient.getService(MsgServiceObserve::class.java).observeCustomNotification({ customNotification ->
-            //                Log.i(TAG, "custom notification ApnsText : " + customNotification.getApnsText());
-            //                Log.i(TAG, "custom notification Content : " + customNotification.getContent());
-            //                Log.i(TAG, "custom notification FromAccount : " + customNotification.getFromAccount());
-            //                Log.i(TAG, "custom notification SessionId : " + customNotification.getSessionId());
-            //                Log.i(TAG, "custom notification Time : " + customNotification.getTime());
-            //                Log.i(TAG, "custom notification SessionType : " + customNotification.getSessionType());
-            //                // 第三方 APP 在此处理自定义通知：存储，处理，展示给用户等
-            //                Log.i(TAG, "receive custom notification: " + customNotification.getContent()
-            //                        + " from :" + customNotification.getSessionId() + "/" + customNotification.getSessionType());
             val content = customNotification.content
             try {
                 val json = JSONObject(content)
                 if (json.has("code")) {
-                    val code = Integer.valueOf(json.getString("code"))!!
+                    val code = Integer.valueOf(json.getString("code"))
                     if (code == -1) {//呼叫 连线成功
                         GKApplication.instance.sendBroadcast(Intent(Constants.ONLINE_SUCCESS_ACTION))
                     } else if (code == -2) {//挂断 联系失败
-                        val intent = Intent(Constants.ZIJING_ACTION)
-                        intent.putExtra(Constants.HANGUP, true)
+                        val intent = Intent(Constants.FAMILY_FAILED_JOIN_METTING)
                         GKApplication.instance.sendBroadcast(intent)
                     } else if (code == 0) {
                         //表示远端进入通话 更新计时器
-                        val intent = Intent(Constants.ZIJING_ACTION)
-                        intent.putExtra(Constants.TIME_CONNECT, true)
+                        val intent = Intent(Constants.FAMILY_JOIN_METTING)
                         GKApplication.instance.sendBroadcast(intent)
                     }
                 }

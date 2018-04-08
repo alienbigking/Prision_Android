@@ -21,7 +21,6 @@ import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.CustomNotification
-import com.starlight.mobile.android.lib.util.CommonHelper
 
 import org.json.JSONException
 import org.json.JSONObject
@@ -107,13 +106,13 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-
             notification.content = json.toString()
-
             // 发送自定义通知
             NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
         }
-        mModel.requestCancel(meetingId, content, null)
+        if(!meetingId.isEmpty()) {//meetingid不能为空
+            mModel.requestCancel(meetingId, content, null)
+        }
     }
 
     fun measureWindow() {

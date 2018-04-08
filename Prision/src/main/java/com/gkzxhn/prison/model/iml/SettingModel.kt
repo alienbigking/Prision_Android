@@ -27,6 +27,9 @@ class SettingModel : BaseModel(), ISettingModel {
 
     }
 
+    /**
+     * 请求版本信息
+     */
     override fun requestVersion(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
         try {
             volleyUtils[JSONObject::class.java, Constants.REQUEST_VERSION_URL, REQUEST_TAG, onFinishedListener]
