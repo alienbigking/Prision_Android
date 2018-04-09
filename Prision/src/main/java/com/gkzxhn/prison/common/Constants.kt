@@ -62,6 +62,7 @@ object Constants {
     val EXTRAS_CODE = 0x106
     /*-------------------------------Request Tab-------------------------------------------------*/
     val MAIN_TAB = 0x206
+    val CLOSE_GUI_TAB = 0x207
     /*-------------------------------action-------------------------------------------------*/
 
     val ONLINE_SUCCESS_ACTION = "com.gkzxhn.prison.ONLINE_SUCCESS_ACTION"//连线成功
@@ -69,6 +70,8 @@ object Constants {
     val NIM_KIT_OUT = "com.gkzxhn.prison.NIM_KIT_OUT"
 
 
+    //C9包名
+    val C9_PACKAGE_NAME="cn.com.rocware.c9gui"
     //免费会见
     val CALL_FREE_ACTION = "com.gkzxhn.prison.CALL_FREE_ACTION"
     val CALL_DEFUALT_ACTION = "com.gkzxhn.prison.CALL_DEFUALT_ACTION"

@@ -46,19 +46,6 @@ class MainModel :CallZijingModel(), IMainModel {
 
     }
 
-    /**
-     *  取消会见
-     */
-    override fun requestCancel(id: String, reason: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
-        val url = String.format("%s/%s", Constants.REQUEST_CANCEL_MEETING_URL, id)
-        try {
-            val params = HashMap<String, String>()
-            params.put("remarks", reason)
-            volleyUtils.patch(url, params, REQUEST_TAG, onFinishedListener)
-        } catch (authFailureError: AuthFailureError) {
-            authFailureError.printStackTrace()
-        }
-    }
 
     /**
      * 根据日期获取会见列表

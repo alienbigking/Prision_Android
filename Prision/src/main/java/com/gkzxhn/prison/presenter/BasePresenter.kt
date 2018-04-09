@@ -58,14 +58,16 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
      *
      * @param params
      */
-    protected fun startAsynTask(TAB: Int, taskFinishedListener: AsynHelper.TaskFinishedListener, vararg params: Any) {
+    fun startAsynTask(TAB: Int, taskFinishedListener: AsynHelper.TaskFinishedListener?, vararg params: Any) {
         try {
             asynHelper?.let {
                 if (asynHelper?.status == AsyncTask.Status.RUNNING) asynHelper?.cancel(true)
             }
             asynHelper = null
             asynHelper = AsynHelper(TAB)
-            asynHelper?.setOnTaskFinishedListener(taskFinishedListener)
+            if(taskFinishedListener!=null) {
+                asynHelper?.setOnTaskFinishedListener(taskFinishedListener)
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 asynHelper?.executeOnExecutor(Executors.newCachedThreadPool(), *params)
             } else {

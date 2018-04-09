@@ -19,11 +19,6 @@ interface IMainModel : ICallZijingModel {
     fun requestVersion(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
 
     /**
-     *  取消会见
-     */
-    fun requestCancel(id: String, reason: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
-
-    /**
      *  获取指定日期会见列表
      */
     fun request(date: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)

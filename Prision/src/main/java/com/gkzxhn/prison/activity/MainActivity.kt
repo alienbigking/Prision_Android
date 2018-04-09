@@ -169,6 +169,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
         //初始化进度条
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
+        mProgress.setCanceledOnTouchOutside(true)
+        mProgress.setCancelable(true)
+
         dismissProgress()
         mCancelVideoDialog = CancelVideoDialog(this, false)
         mCancelVideoDialog.onClickListener=View.OnClickListener {
@@ -273,6 +276,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     }
 
     override fun showProgress() {
+        mProgress.setMessage(getString(R.string.please_waiting))
         if (mProgress != null && !mProgress.isShowing) mProgress.show()
     }
 
@@ -341,6 +345,8 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     override fun onResume() {
         super.onResume()
+        //关闭GUI
+        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
         onRefresh()
     }
 
@@ -370,14 +376,10 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         Log.i(TAG, "onKeyDown: getkeycode >>>>>> " + event.keyCode)
         when (event.keyCode) {
             222 -> {
+                mProgress.setMessage(getString(R.string.turn_off_ing))
+                if(!mProgress.isShowing)mProgress.show()
                 //关机按键
-                val request = JsonObjectRequest(Request.Method.GET,
-                        XtHttpUtil.POWEROFF, null,
-                        Response.Listener {
-                            //成功关机
-                            showToast("正在关机...")
-                        }, Response.ErrorListener { error -> Log.e(TAG, "onErrorResponse: error..." + error.toString()) })
-                SingleRequestQueue.instance.add(request, "")
+                mPresenter.turnOff()
                 return true
             }
         }

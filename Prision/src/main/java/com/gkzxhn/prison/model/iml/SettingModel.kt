@@ -3,6 +3,7 @@ package com.gkzxhn.prison.model.iml
 import com.android.volley.AuthFailureError
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ISettingModel
+import com.gkzxhn.prison.utils.XtHttpUtil
 import com.gkzxhn.wisdom.async.VolleyUtils
 
 import org.json.JSONObject
@@ -11,7 +12,8 @@ import org.json.JSONObject
  * Created by Raleigh.Luo on 18/3/30.
  */
 
-class SettingModel : BaseModel(), ISettingModel {
+class SettingModel : CallZijingModel(), ISettingModel {
+
     /**
      * 获取免费呼叫次数
      * @param onFinishedListener

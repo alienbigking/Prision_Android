@@ -7,5 +7,5 @@ package com.gkzxhn.prison.view
 interface ICallUserView : IBaseView {
     fun onSuccess()
     fun dialSuccess(password: String)
-    fun reset()
+    fun dialFailed()
 }

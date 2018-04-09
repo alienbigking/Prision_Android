@@ -62,13 +62,6 @@ open class SuperActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-//        try {
-//            val p = Runtime.getRuntime().exec("adb shell am force-stop  cn.com.rocware.c9gui")
-//            val status = p.waitFor()
-//            showToast("关闭 gui status="+status)
-//            if (status == 0) {
-//
-//            }
-//        }catch (e: Exception){}
+
     }
 }

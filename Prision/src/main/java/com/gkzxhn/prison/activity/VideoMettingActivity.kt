@@ -155,7 +155,40 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 sendHangupMessage()
                 //挂断
                 mPresenter.hangUp("")
+                //时间到了，挂断
+                timeOutHangUp()
             }
+        }
+    }
+    private fun timeOutHangUp(){
+        val array=resources.getStringArray( R.array.cancel_video_reason)
+        val mContent=if(FIMALY_IS_JOIN)array[0] else array[4]
+        val sharedPreferences = mPresenter.getSharedPreferences()
+        val otherAccount = sharedPreferences.getString(Constants.EXTRA, "")//对方云信帐号
+        val meetingId = sharedPreferences.getString(Constants.EXTRAS, "")//记录ID
+        if (otherAccount != null && otherAccount.length > 0) {
+            //// 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+            //            NIMClient.getService(MsgService.class).sendMessage(message, false);
+            // 构造自定义通知，指定接收者
+            val notification = CustomNotification()
+            notification.sessionId = otherAccount
+            notification.sessionType = SessionTypeEnum.P2P
+
+            // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
+            // 这里以类型 “1” 作为“正在输入”的状态通知。
+            val json = JSONObject()
+            try {
+                json.put("msg", mContent)
+                json.put("code", 0)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            notification.content = json.toString()
+            // 发送自定义通知
+            NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
+        }
+        if(!meetingId.isEmpty()) {//meetingid不能为空
+            mPresenter.requestCancel(meetingId, mContent)
         }
     }
     override fun onDestroy() {
@@ -321,7 +354,12 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         if(FIMALY_IS_JOIN){//家属已加入会议 则提示挂断原因
             if (!mCloseVideoDialog.isShowing) mCloseVideoDialog.show()
         }else{//直接挂断
+            //发送挂断消息给对方
+            sendHangupMessage()
+            //挂断
             mPresenter.hangUp("")
+            //时间到了，挂断
+            timeOutHangUp()
         }
     }
 

@@ -3,6 +3,7 @@ package com.gkzxhn.prison.presenter
 import android.content.Context
 
 import com.android.volley.VolleyError
+import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.model.ISettingModel
@@ -56,6 +57,29 @@ class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISe
             override fun onFailed(error: VolleyError) {
                 mView?.updateVersion(null);
             }
+        })
+    }
+
+    fun checkNetworkStatus(){
+        mModel.getNetworkStatus(object : VolleyUtils.OnFinishedListener<JSONObject> {
+            override fun onSuccess(response: JSONObject) {
+                val code = response.getInt("code")
+                var isConnected=false
+                if (code == 0) {
+                    try {
+                        val v = JSONUtil.getJSONObject(response, "v")
+                        if (v.getBoolean("connected")) {
+                            isConnected = true
+                        }
+                    }catch (e:Exception){}
+                }
+                mView?.networkStatus(isConnected)
+            }
+
+            override fun onFailed(error: VolleyError) {
+                mView?.networkStatus(false)
+            }
+
         })
     }
 

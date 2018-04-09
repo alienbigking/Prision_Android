@@ -187,6 +187,7 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
 
     override fun onResume() {
         super.onResume()
+        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
         mCallFreeTime = mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0)
         tvFreeTime.text = mCallFreeTime.toString()
         initSearchBtn()

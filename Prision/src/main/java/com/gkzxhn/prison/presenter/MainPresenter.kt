@@ -41,6 +41,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
     fun resetTime() {
         requestZijingTime = 0
     }
+    fun turnOff(){
+        mModel.turnOff(null)
+    }
 
     /**
      * 发请求，检测设备视频会议是否已经准备好
@@ -111,6 +114,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
      * 请求会见列表
      */
     fun request(date: String) {
+//        checkGUI()
         mView?.startRefreshAnim()
         mModel.request(date, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
@@ -121,7 +125,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                     if (code == HttpStatus.SC_OK) {
                         val resultJson = JSONUtil.getJSONObjectStringValue(response, "meetings")
                         startAsynTask(Constants.MAIN_TAB, object : AsynHelper.TaskFinishedListener {
-                            override fun back(`object`: Any) {
+                            override fun back(`object`: Any?) {
                                 mView?.updateItems(`object` as List<MeetingEntity>)
                                 mView?.stopRefreshAnim()
                             }

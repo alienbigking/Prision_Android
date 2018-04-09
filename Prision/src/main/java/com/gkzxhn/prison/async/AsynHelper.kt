@@ -1,6 +1,7 @@
 package com.gkzxhn.prison.async
 
 import android.os.AsyncTask
+import android.widget.Toast
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
@@ -10,6 +11,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 import java.util.ArrayList
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
+import android.util.Log
+
 
 /**
  * Created by Raleigh on 15/8/20.
@@ -33,7 +39,7 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
 
     /** On load task finished listener  */
     interface TaskFinishedListener {
-        fun back(`object`: Any)
+        fun back(`object`: Any?)
     }
 
     override fun doInBackground(vararg params: Any): Any? {
@@ -60,6 +66,22 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
                     }
                     result = lastData
                 }
+                Constants.CLOSE_GUI_TAB ->{
+                    try {
+                        val mActivityManager = GKApplication.instance.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+                        val appProcessList = mActivityManager
+                                .getRunningAppProcesses()
+                        for (appProcess in appProcessList) {
+                            if (appProcess.processName.equals(Constants.C9_PACKAGE_NAME)) {
+                                //关闭GUI
+                                val p = Runtime.getRuntime().exec("adb shell am force-stop  cn.com.rocware.c9gui")
+                                //status=0 关闭成功
+                                val status = p.waitFor()
+                                break
+                            }
+                        }
+                    }catch (e: Exception){}
+                }
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -69,7 +91,7 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
     }
 
 
-    override fun onPostExecute(result: Any) {
+    override fun onPostExecute(result: Any?) {
         try {
             taskFinishedListener?.back(result)
         } catch (e: Exception) {

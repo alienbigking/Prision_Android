@@ -153,11 +153,44 @@
         android:id="@+id/setting_layout_v_update_hint"
         android:background="@color/common_line_color"
         />
+    <!--检查网络-->
+    <TextView
+        android:id="@+id/setting_layout_tv_check_network"
+        android:clickable="true"
+        android:textColor="@drawable/black_blue_text_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dip"
+        android:background="@android:color/white"
+        android:layout_below="@+id/setting_layout_v_update_hint"
+        android:onClick="onClickListener"
+        android:textSize="26sp"
+        android:text="@string/check_network"
+        />
+    <TextView
+        android:id="@+id/setting_layout_tv_check_network_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:text="@string/check_network_hint"
+        android:layout_alignBottom="@+id/setting_layout_tv_check_network"
+        android:layout_alignTop="@+id/setting_layout_tv_check_network"
+        android:textSize="20sp"
+        android:layout_marginRight="70dip"
+        android:textColor="@color/common_gray_title_color"
+        />
+    <View android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:layout_below="@+id/setting_layout_tv_check_network"
+        android:id="@+id/setting_layout_v_check_network"
+        android:background="@color/common_line_color"
+        />
     <!--注销-->
     <TextView
         android:id="@+id/setting_layout_tv_logout"
         android:clickable="true"
-        android:layout_below="@+id/setting_layout_v_update_hint"
+        android:layout_below="@+id/setting_layout_v_check_network"
         android:onClick="onClickListener"
         android:background="@android:color/white"
         android:textColor="@drawable/black_blue_text_selector"

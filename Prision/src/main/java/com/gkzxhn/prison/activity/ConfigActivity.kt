@@ -176,5 +176,4 @@ class ConfigActivity : SuperActivity() {
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
         super.onDestroy()
     }
-
 }

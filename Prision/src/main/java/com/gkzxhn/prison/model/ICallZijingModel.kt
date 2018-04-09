@@ -8,6 +8,11 @@ import org.json.JSONObject
  */
 
 interface ICallZijingModel : IBaseModel {
+    fun  requestCancel(id: String, reason: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+    /**
+     * 关机
+     */
+    fun turnOff(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
     /**
      * 请求网络信息
      */

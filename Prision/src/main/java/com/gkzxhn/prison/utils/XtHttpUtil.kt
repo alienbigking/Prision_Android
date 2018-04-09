@@ -74,7 +74,7 @@ object XtHttpUtil {
     //设置呼叫选项
     val SET_DIAL_CHOOSE = URL + "/api/v1/preferences/call/set/"
     //恢复呼叫默认选项设置
-    val RESET_DISL_CHOOSE = URL + "/api/v1/preferences/call/reset/"
+    val RESET_DISL_CHOOSE = URL + "/api/v1/preferences/call/dialFailed/"
 
 
     /*  - - - - - - 2.3- - - - - - - - - */
@@ -147,20 +147,20 @@ object XtHttpUtil {
     //修改网络设置
     val SET_NETWORK = URL + "/api/v1/network/config-set/"
     //重置网络设置
-    val RESET_NETWORK = URL + "/api/v1/network/config-reset/"
+    val RESET_NETWORK = URL + "/api/v1/network/config-dialFailed/"
 
     //获取防火墙设置
     val GET_FIREWALL = URL + "/api/v1/preferences/firewall/get/0/"
     //修改防火墙设置
     val SET_FIREWALL = URL + "/api/v1/preferences/firewall/set/"
     //恢复防火墙默认设置
-    val RESET_FIREWALL = URL + "/api/v1/preferences/firewall/reset/"
+    val RESET_FIREWALL = URL + "/api/v1/preferences/firewall/dialFailed/"
     //获取服务质量
     val GET_QOS = URL + "/api/v1/preferences/qos/get/0/"
     //修改服务质量
     val SET_QOS = URL + "/api/v1/preferences/qos/set/"
     //恢复服务默认质量
-    val RESET_QOS = URL + "/api/v1/preferences/qos/reset/"
+    val RESET_QOS = URL + "/api/v1/preferences/qos/dialFailed/"
 //    {"v":{"mac":"B4-99-4C-D0-42-8A","conflict":false,"is_wifi":false,
 // "ip":"10.10.10.114","connected":true},"code":0}
     //获取网络状态
@@ -171,7 +171,7 @@ object XtHttpUtil {
     //修改VPN设置
     val SET_VPN = URL + "/api/v1/preferences/vpn/set/"
     //重置VPN设置
-    val RESET_VPN = URL + "/api/v1/preferences/vpn/reset/"
+    val RESET_VPN = URL + "/api/v1/preferences/vpn/dialFailed/"
 
     /*  - - - - - - 2.7- - - - - - - - - */
     //获取终端名称及其编码方式
@@ -179,7 +179,7 @@ object XtHttpUtil {
     //修改终端名称及其编码方式
     val SET_GENGRAL = URL + "/api/v1/preferences/general/set/"
     //恢复终端名称及其编码方式的默认设置
-    val RESET_GENGRAL = URL + "/api/v1/preferences/general/reset/"
+    val RESET_GENGRAL = URL + "/api/v1/preferences/general/dialFailed/"
 
     //查询紫荆云账号信息
     val GET_AUTHENTICATION = URL + "/api/v1/account/authentication/info/get/"
@@ -223,20 +223,20 @@ object XtHttpUtil {
     //修改音频输入设置
     val SET_AUDIIN = URL + "/api/v1/preferences/audioin/set/"
     //恢复音频默认输入设置
-    val RESET_AUDIIN = URL + "/api/v1/preferences/audioin/reset/"
+    val RESET_AUDIIN = URL + "/api/v1/preferences/audioin/dialFailed/"
     //获取音频输出设置
     val GET_AUDIOUT = URL + "/api/v1/preferences/audioout/get/0/"
     //修改音频输出设置
     val SET_AUDIOUT = URL + "/api/v1/preferences/audioout/set/"
     //恢复音频默认输出设置
-    val RESET_AUDIOUT = URL + "/api/v1/preferences/audioout/reset/"
+    val RESET_AUDIOUT = URL + "/api/v1/preferences/audioout/dialFailed/"
 
     //获取回声消除设置
     val GET_ACE = URL + "/api/v1/preferences/aec/get/0/"
     //修改回声消除设置
     val SET_ACE = URL + "/api/v1/preferences/aec/set/"
     //恢复回声消除默认设置
-    val RESET_ACE = URL + "/api/v1/preferences/aec/reset/"
+    val RESET_ACE = URL + "/api/v1/preferences/aec/dialFailed/"
 
     /*  - - - - - - 2.9- - - - - - - - - */
     //显示模式切换
@@ -262,14 +262,14 @@ object XtHttpUtil {
     //设置视频输入参数
     val SET_INPUTFORMAT = URL + "/api/v1/camera/visca/net/set/"
     //恢复视频输入默认参数
-    val RESET_INPUTFORMAT = URL + "/api/v1/camera/visca/net/reset/"
+    val RESET_INPUTFORMAT = URL + "/api/v1/camera/visca/net/dialFailed/"
 
     //获取视频输出参数
     val GET_OUTPUTFORMAT = URL + "/api/v1/outputFormat/get/0/"
     //设置视频输出参数
     val SET_OUTPUTFORMAT = URL + "/api/v1/outputFormat/set/"
     //恢复视频输出默认参数
-    val RESET_OUTPUTFORMAT = URL + "/api/v1/outputFormat/reset/"
+    val RESET_OUTPUTFORMAT = URL + "/api/v1/outputFormat/dialFailed/"
     //获取视频源信息
     val GET_VIDEOSOURCE = URL + "/api/v1/video/source/in/info/"
 
@@ -279,19 +279,19 @@ object XtHttpUtil {
     //修改系统安全设置
     val SET_SYSTEM_SEC = URL + "/api/v1/preferences/security/system/set/"
     //恢复系统安全默认设置
-    val RESET_SYSTEM_SEC = URL + "/api/v1/preferences/security/system/reset/"
+    val RESET_SYSTEM_SEC = URL + "/api/v1/preferences/security/system/dialFailed/"
     //获取H323加密能力设置
     val GET_H323_SEC = URL + "/api/v1/preferences/security/cryptos/h323/get/0/"
     //修改H323加密能力设置
     val SET_H323_SEC = URL + "/api/v1/preferences/security/cryptos/h323/set/"
     //恢复H323加密能力设置
-    val RESET_H323_SEC = URL + "/api/v1/preferences/security/cryptos/h323/reset/"
+    val RESET_H323_SEC = URL + "/api/v1/preferences/security/cryptos/h323/dialFailed/"
     //获取SIP加密能力设置
     val GET_SIP_SEC = URL + "/api/v1/preferences/security/cryptos/sip/get/0/"
     //修改SIP加密能力设置
     val SET_SIP_SEC = URL + "/api/v1/preferences/security/cryptos/sip/set/"
     //恢复SIP加密能力设置
-    val RESET_SIP_SEC = URL + "/api/v1/preferences/security/cryptos/sip/reset/"
+    val RESET_SIP_SEC = URL + "/api/v1/preferences/security/cryptos/sip/dialFailed/"
 
     /*  - - - - - - 2.11  - - - - - - - - - */
     //获取H323协议设置
@@ -299,13 +299,13 @@ object XtHttpUtil {
     //修改H323协议设置
     val SET_H323_PREF = URL + "/api/v1/preferences/h323/set/"
     //恢复H323协议默认设置
-    val RESET_H323_PREF = URL + "/api/v1/preferences/h323/reset/"
+    val RESET_H323_PREF = URL + "/api/v1/preferences/h323/dialFailed/"
     //获取SIP协议设置
     val GET_SIP_PREF = URL + "/api/v1/preferences/sip/get/0/"
     //修改SIP协议设置
     val SET_SIP_PREF = URL + "/api/v1/preferences/sip/set/"
     //恢复SIP协议默认设置
-    val RESET_SIP_PREF = URL + "/api/v1/preferences/sip/reset/"
+    val RESET_SIP_PREF = URL + "/api/v1/preferences/sip/dialFailed/"
 
     /*  - - - - - - 2.12.1   - - - - - - - - - */
     //获取升级设置
@@ -313,7 +313,7 @@ object XtHttpUtil {
     //修改升级设置
     val SET_UPGRADE = URL + "/api/v1/preferences/upgrade/set/"
     //恢复升级默认设置
-    val RESET_UPGRADE = URL + "/api/v1/preferences/upgrade/reset/"
+    val RESET_UPGRADE = URL + "/api/v1/preferences/upgrade/dialFailed/"
     //查询版本系统信息
     val VERSIONS_INFO = URL + "/api/v1/sysinfo/get/0/"
 
@@ -321,7 +321,7 @@ object XtHttpUtil {
     //获取内置MCU查询
     val GET_MCU = URL + "/api/v1/preferences/emcu/get/0/"
     val SET_MCU = URL + "/api/v1/preferences/emcu/set/"
-    val RESET_MCU = URL + "/api/v1/preferences/emcu/reset/"
+    val RESET_MCU = URL + "/api/v1/preferences/emcu/dialFailed/"
 
 
     //获取字幕色设置
@@ -329,14 +329,14 @@ object XtHttpUtil {
     //修改字幕设置
     val SET_ZIMU = URL + "/api/v1/camera/string/dispaly/set/"
     //重置字幕设置
-    val RESET_ZIMU = URL + "/api/v1/camera/string/dispaly/reset/"
+    val RESET_ZIMU = URL + "/api/v1/camera/string/dispaly/dialFailed/"
 
     //获取电源设置
     val GET_POWER = URL + "/api/v1/preferences/power/get/0/"
     //修改电源设置
     val SET_POWER = URL + "/api/v1/preferences/power/set/"
     //重置电源设置
-    val RESET_POWER = URL + "/api/v1/preferences/power/reset/"
+    val RESET_POWER = URL + "/api/v1/preferences/power/dialFailed/"
 
 
     //获取显示名称设置
@@ -344,7 +344,7 @@ object XtHttpUtil {
     //修改显示名称设置
     val SET_SHOWNAME = URL + "/api/v1/preferences/general/set/"
     //重置显示名称设置
-    val RESET_SHOWNAME = URL + "/api/v1/preferences/general/reset/"
+    val RESET_SHOWNAME = URL + "/api/v1/preferences/general/dialFailed/"
 
 
     /**
@@ -394,14 +394,14 @@ object XtHttpUtil {
     //修改呼叫选项设置
     val SET_CALLCHOOSE = URL + "/api/v1/preferences/call/set/"
     //重置呼叫选项设置
-    val RESET_CALLCHOOSE = URL + "/api/v1/preferences/call/reset/"
+    val RESET_CALLCHOOSE = URL + "/api/v1/preferences/call/dialFailed/"
 
     //获取音频能力设置
     val GET_AUDIOABL = URL + "/api/v1/preferences/codecs/audio/get/0/"
     //修改音频能力设置
     val SET_AUDIOABL = URL + "/api/v1/preferences/codecs/audio/set/"
     //重置音频能力设置
-    val RESET_AUDIOABL = URL + "/api/v1/preferences/codecs/audio/reset/"
+    val RESET_AUDIOABL = URL + "/api/v1/preferences/codecs/audio/dialFailed/"
 
 
     //获取USB能力设置
@@ -409,7 +409,7 @@ object XtHttpUtil {
     //修改USB能力设置
     val SET_USBABL = URL + "/api/v1/preferences/usbaudio/set/"
     //重置USB能力设置
-    val RESET_USBABL = URL + "/api/v1/preferences/usbaudio/reset/"
+    val RESET_USBABL = URL + "/api/v1/preferences/usbaudio/dialFailed/"
 
 
     //获取HDMI-1布局设置
@@ -417,42 +417,42 @@ object XtHttpUtil {
     //修改HDMI-1布局设置
     val SET_HDMI1LAY = URL + "/api/v1/preferences/layout/1/set/"
     //重置HDMI-1布局设置
-    val RESET_HDMI1LAY = URL + "/api/v1/preferences/layout/1/reset/"
+    val RESET_HDMI1LAY = URL + "/api/v1/preferences/layout/1/dialFailed/"
 
     //获取HDMI-2布局设置
     val GET_HDMI2LAY = URL + "/api/v1/preferences/layout/2/get/0/"
     //修改HDMI-2布局设置
     val SET_HDMI2LAY = URL + "/api/v1/preferences/layout/2/set/"
     //重置HDMI-2布局设置
-    val RESET_HDMI2LAY = URL + "/api/v1/preferences/layout/2/reset/"
+    val RESET_HDMI2LAY = URL + "/api/v1/preferences/layout/2/dialFailed/"
 
     //获取视频能力设置
     val GET_VEDIOABL = URL + "/api/v1/preferences/codecs/video/get/0/"
     //修改视频能力设置
     val SET_VEDIOABL = URL + "/api/v1/preferences/codecs/video/set/"
     //重置视频能力设置
-    val RESET_VEDIOABL = URL + "/api/v1/preferences/codecs/video/reset/"
+    val RESET_VEDIOABL = URL + "/api/v1/preferences/codecs/video/dialFailed/"
 
     //获取系统安全设置
     val GET_SYSSOFT = URL + "/api/v1/preferences/security/system/get/0/"
     //修改系统安全设置
     val SET_SYSSOFT = URL + "/api/v1/preferences/security/system/set/"
     //重置系统安全设置
-    val RESET_SYSSOFT = URL + "/api/v1/preferences/security/system/reset/"
+    val RESET_SYSSOFT = URL + "/api/v1/preferences/security/system/dialFailed/"
 
     //获取H323媒体安全设置
     val GET_H323SOFT = URL + "/api/v1/preferences/security/cryptos/h323/get/0/"
     //修改H323媒体安全设置
     val SET_H323SOFT = URL + "/api/v1/preferences/security/cryptos/h323/set/"
     //重置H323媒体安全设置
-    val RESET_H323SOFT = URL + "/api/v1/preferences/security/cryptos/h323/reset/"
+    val RESET_H323SOFT = URL + "/api/v1/preferences/security/cryptos/h323/dialFailed/"
 
     //获取SIP媒体安全设置
     val GET_SIPSOFT = URL + "/api/v1/preferences/security/cryptos/sip/get/0/"
     //修改SIP媒体安全设置
     val SET_SIPSOFT = URL + "/api/v1/preferences/security/cryptos/sip/set/"
     //重置SIP媒体安全设置
-    val RESET_SIPSOFT = URL + "/api/v1/preferences/security/cryptos/sip/reset/"
+    val RESET_SIPSOFT = URL + "/api/v1/preferences/security/cryptos/sip/dialFailed/"
 
     //音频环回查询
     val GET_LOOP_AUDIO = URL + "/api/v1/loop/audio/io/get/0/"
@@ -478,14 +478,14 @@ object XtHttpUtil {
     //设置本地录播配置
     val SET_RECORDED_LOCAL = URL + "/api/v1/record/parameters/set/"
     //恢复本地默认设置
-    val RESET_RECORDED_LOCAL = URL + "/api/v1/record/parameters/reset/"
+    val RESET_RECORDED_LOCAL = URL + "/api/v1/record/parameters/dialFailed/"
 
     //获取远程录播配置
     val GET_RECORD_FAR = URL + "/api/v1/preferences/record/get/0/"
     //设置远程录播配置
     val SET_RECORDED_FAR = URL + "/api/v1/preferences/record/set/"
     //恢复远程默认设置
-    val RESET_RECORDED_FAR = URL + "/api/v1/preferences/record/reset/"
+    val RESET_RECORDED_FAR = URL + "/api/v1/preferences/record/dialFailed/"
 
     //本地录播状态查询
     //  {"code":0,"v":{"status":"start"}}  /  {"code":0,"v":{"status":"stop"}}
@@ -512,7 +512,7 @@ object XtHttpUtil {
     //音频位置设置
     val SET_AUDIO_POS = URL + "/api/v1/preferences/audiopos/set/"
     //音频位置恢复
-    val RESET_AUDIO_POS = URL + "/api/v1/preferences/audiopos/reset/"
+    val RESET_AUDIO_POS = URL + "/api/v1/preferences/audiopos/dialFailed/"
 
     //地址簿中分组查询
     val GET_ADDRESS_GROUP = URL + "/api/v1/simplebook/tags/"
@@ -532,7 +532,7 @@ object XtHttpUtil {
     //日志级别设置
     val SET_LOG = URL + "/api/v1/preferences/log/set/"
     //日志级别恢复
-    val RESET_LOG = URL + "/api/v1/preferences/log/reset/"
+    val RESET_LOG = URL + "/api/v1/preferences/log/dialFailed/"
 
 
     //安全选项获取
@@ -559,7 +559,7 @@ object XtHttpUtil {
     val GET_BUILT_MENU = URL + "/api/v1/camera/menu/calling/"
 
     //恢复出厂设置
-    val GET_RESET_SETTING = URL + "/api/v1/camera/settings/reset/"
+    val GET_RESET_SETTING = URL + "/api/v1/camera/settings/dialFailed/"
 
 
     //ota
@@ -621,7 +621,7 @@ object XtHttpUtil {
     val SET_ACCOUNT_INFO = URL + "/api/v1/userweb/parameters/set/"
 
     //重置账号信息
-    val RESET_ACCOUNT_INFO = URL + "/api/v1/userweb/parameters/reset/"
+    val RESET_ACCOUNT_INFO = URL + "/api/v1/userweb/parameters/dialFailed/"
 
     //网络设置信息获取
     val SET_NETWORK_INFO = URL + "/api/v1/network/config-report/"

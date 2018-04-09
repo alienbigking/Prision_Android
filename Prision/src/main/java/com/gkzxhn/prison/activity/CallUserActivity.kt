@@ -23,6 +23,7 @@ import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.presenter.CallUserPresenter
 import com.gkzxhn.prison.view.ICallUserView
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
@@ -30,6 +31,7 @@ import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.nostra13.universalimageloader.core.ImageLoader
 
 import org.json.JSONObject
+import javax.security.auth.callback.Callback
 
 import kotlinx.android.synthetic.main.i_common_loading_layout.common_loading_layout_tv_load
 as tvLoading
@@ -38,6 +40,9 @@ import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_iv_card_
 as ivCard01
 import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_iv_card_02
 as ivCard02
+
+import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_bt_call
+as btnCall
 
 /**呼叫用户
  * Created by Raleigh.Luo on 17/4/11.
@@ -67,6 +72,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     private var mCallRequestCode = Constants.EXTRA_CODE
     private val DOWN_TIME: Long = 10000//倒计时 10秒
     private val TAG = CallUserActivity::class.java.simpleName
+    //发送云信消息成功
+    private var mSendOnlineSuccess=false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,14 +85,18 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         registerReceiver()
     }
 
-    override fun reset() {
+    override fun dialFailed() {
+        showToast(R.string.error_to_meetting)
         isConnecting=false
         isVideoMetting=false
+        stopProgress()
+        mTimer.cancel()
     }
     /**
      * 初始化
      */
     private fun init() {
+        btnCall.isEnabled=true
         mPresenter = CallUserPresenter(this, this)
         //获取传递过来时的数据
         id = intent.getStringExtra(Constants.EXTRA)
@@ -165,6 +176,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * 连线对方账号
      */
     private fun online(account: String?) {
+        mSendOnlineSuccess=false
         isConnecting = true
         if (account != null && account.length > 0) {
             if (mPresenter.checkStatusCode() == StatusCode.LOGINED) {
@@ -180,7 +192,21 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                 json.put("code", -1)
                 //                        json.put("msg", account);
                 notification.content = json.toString()
-                NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
+                NIMClient.getService(MsgService::class.java).sendCustomNotification(notification).
+                        setCallback(object :RequestCallback<Void>{
+                            override fun onException(exception: Throwable?) {
+                                mSendOnlineSuccess=false
+                            }
+
+                            override fun onSuccess(param: Void?) {
+                                mSendOnlineSuccess=true
+                            }
+
+                            override fun onFailed(code: Int) {
+                                mSendOnlineSuccess=false
+                            }
+
+                        })
                 //开始倒计时
                 mTimer.start()
             } else {
@@ -219,6 +245,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * @param password
      */
     override fun dialSuccess(password: String) {
+        btnCall.setBackgroundResource(R.drawable.common_grey_btn_shape)
+        btnCall.isEnabled=false
         //跳转到视频界面
         val intent = Intent(this, VideoMettingActivity::class.java)
         intent.action=getIntent().action
@@ -258,9 +286,14 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
     override fun onResume() {
         super.onResume()
+        //关闭GUI
+        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
         isVideoMetting=false
         //检查是否正在通话，有就挂断
         mPresenter.checkCallStatus()
+        if(!btnCall.isEnabled){
+            mTimer.start()
+        }
     }
 
 
@@ -331,11 +364,21 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      */
     private val mTimer = object : CountDownTimer(DOWN_TIME, 1000) {
         override fun onTick(millisUntilFinished: Long) {
-            //            long second = millisUntilFinished / 1000;
+            if(!btnCall.isEnabled) {//呼叫等待10秒的倒计时
+                val second = millisUntilFinished / 1000
+                btnCall.setText(String.format("%s(%sS)",getString(R.string.call),second))
+            }
         }
 
         override fun onFinish() {
-            stopVConfVideo()
+            if(!btnCall.isEnabled){//呼叫等待10秒的倒计时
+                btnCall.isEnabled=true
+                btnCall.setBackgroundResource(R.drawable.common_blue_btn_selector)
+                btnCall.setText(getString(R.string.call))
+            }else{//是否在线倒计时
+                stopVConfVideo()
+            }
+
         }
     }
     /**
@@ -345,12 +388,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         if(isConnecting) {
             isConnecting = false
             stopProgress()
-            if (mCustomDialog != null) {
-                mCustomDialog.content = getString(R.string.other_offline)
-                mCustomDialog.cancelText = getString(R.string.cancel)
-                mCustomDialog.confirmText = getString(R.string.call_back)
-                if (!mCustomDialog.isShowing) mCustomDialog.show()
-            }
+            mCustomDialog.content = getString(if(mSendOnlineSuccess)R.string.other_offline else R.string.own_offline)
+            mCustomDialog.cancelText = getString(R.string.cancel)
+            mCustomDialog.confirmText = getString(R.string.call_back)
+            if (!mCustomDialog.isShowing) mCustomDialog.show()
         }
     }
 
@@ -385,7 +426,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                     isConnecting =false
                     isVideoMetting=true
                     mCallRequestCode = Constants.EXTRA_CODE
-                    stopProgress()
                     mTimer.cancel()
                     mPresenter.dial(mAccount?:"")
                 }

@@ -7,7 +7,7 @@ import org.json.JSONObject
  * Created by Raleigh.Luo on 18/3/30.
  */
 
-interface ISettingModel : IBaseModel {
+interface ISettingModel : ICallZijingModel {
     /**
      *  获取免费会见次数
      */

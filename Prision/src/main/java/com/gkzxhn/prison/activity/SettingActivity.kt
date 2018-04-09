@@ -23,14 +23,22 @@ import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_update_hi
 as tvUpdateHint
 import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_call_free_hint
 as tvCallFreeTime
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_check_network_hint
+as tvNetworkHint
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_check_network
+as tvNetwork
 import kotlinx.android.synthetic.main.setting_layout.setting_layout_rg_usb
 as mRadioGroup
+
+
 
 /**系统设置
  * Created by Raleigh.Luo on 17/4/12.
  */
 
 class SettingActivity : SuperActivity(), ISettingView {
+
+
     //请求presenter
     private lateinit var mPresenter: SettingPresenter
     //app更新对话框
@@ -111,13 +119,35 @@ class SettingActivity : SuperActivity(), ISettingView {
                 finish()
             }
             R.id.setting_layout_tv_call_free ->{//免费会见
-                android.R.anim.fade_in
                 startActivityForResult(Intent(this, CallFreeActivity::class.java), Constants.EXTRAS_CODE)
+            }
+            R.id.setting_layout_tv_check_network ->{
+                tvNetworkHint.setTextColor(resources.getColor(R.color.common_gray_title_color))
+                tvNetworkHint.setText(R.string.check_network_ing)
+                //按钮不可点击
+                tvNetwork.isEnabled=false
+                //关闭GUI
+                mPresenter.checkNetworkStatus()
             }
         }
 
     }
 
+    /**
+     * 加速完成
+     */
+    override fun networkStatus(isConnected: Boolean) {
+        //按钮可点击
+        tvNetwork.isEnabled=true
+        if(isConnected){
+            tvNetworkHint.setTextColor(resources.getColor(R.color.connect_success))
+            tvNetworkHint.setText(R.string.check_network_normal)
+
+        }else{
+            tvNetworkHint.setTextColor(resources.getColor(R.color.red_text))
+            tvNetworkHint.setText(R.string.check_network_innormal)
+        }
+      }
     //开启／关闭Usb录屏监听
     private val mOnCheckedChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
         when (checkedId) {
@@ -209,6 +239,12 @@ class SettingActivity : SuperActivity(), ISettingView {
         if ( mExitDialog.isShowing) mExitDialog.dismiss()
         if (updateDialog.isShowing) updateDialog.dismiss()
         super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //关闭GUI
+        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
     }
 
     /**

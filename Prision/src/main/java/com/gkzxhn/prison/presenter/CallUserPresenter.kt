@@ -1,8 +1,6 @@
 package com.gkzxhn.prison.presenter
 
-import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 
@@ -134,19 +132,16 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                         val strings = account.split("##".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                         mView?.dialSuccess(if (strings.size > 1) strings[1] else "")
                     } else {
-                        mView?.reset()
-                        mView?.showToast("拨号失败 code:  " + code)
+                        mView?.dialFailed()
                         Log.i(TAG, "onResponse: 参数无效 code:  " + code)
                     }
                 } catch (e: JSONException) {
-                    mView?.reset()
-                    Log.e(TAG, "onResponse: >>> " + e.message)
-                    //                            e.printStackTrace();
+                    mView?.dialFailed()
+
                 }
             }
             override fun onFailed(error: VolleyError) {
-                mView?.reset()
-                mView?.showToast("ResetQuest...  " + error.toString())
+                mView?.dialFailed()
             }
         })
     }

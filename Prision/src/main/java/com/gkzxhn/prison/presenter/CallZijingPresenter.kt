@@ -24,6 +24,13 @@ import org.json.JSONObject
 
 class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresenter<ICallZijingModel, ICallZijingView>(context, CallZijingModel(), view) {
     private val TAG = CallZijingPresenter::class.java.simpleName
+
+    /**
+     *  取消会见
+     */
+    fun requestCancel(id: String, reason: String) {
+        mModel.requestCancel(id, reason, null)
+    }
     //// 遥控器控制器
     fun cameraControl(v:String){
         mModel.cameraControl(v,object :VolleyUtils.OnFinishedListener<JSONObject>{

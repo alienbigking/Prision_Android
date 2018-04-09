@@ -53,7 +53,7 @@
     <string name="open">开启USB录屏</string>
     <string name="close">关闭USB录屏</string>
     <string name="metting_has_time_out">已超时</string>
-
+    <string name="error_to_meetting">拨号失败，请检查终端网络配置</string>
     <string name="remote_interview">远程会见</string>
     <string name="meeting_notice"><![CDATA[注意：\n        请确保视频内都是您的亲人，不是请及时告知狱警。\n        请注意通话不涉及犯罪、国家机密等内容，否则您将失去并可能永久失去远程会见机会。\n        请注意时间长短，不要影响后面的狱友使用。\n        若您在通话过程中有任何问题，请及时联系狱警沟通解决。]]></string>
     <string name="call">呼叫</string>
@@ -91,6 +91,7 @@
     <string name="please_select_cancel_meeting_reason">请选择取消本次会见的原因</string>
     <string name="check_other_status">正在连线...</string>
     <string name="other_offline">对方不在线，请稍候再呼叫</string>
+    <string name="own_offline">连线失败，请终端网络</string>
     <string name="call_back">重新呼叫</string>
     <string name="continue_call">继续呼叫</string>
     <string name="cancel_record">取消录制</string>
@@ -121,7 +122,14 @@
     <string name="setting">设置</string>
     <string name="end_setting">终端设置</string>
     <string name="logout">退出当前账号</string>
+    <string name="turn_off">关机</string>
+    <string name="turn_off_ing">正在关机...</string>
     <string name="check_update">检查更新</string>
+    <string name="check_network">检测网络</string>
+    <string name="check_network_ing">正在检测网络...</string>
+    <string name="check_network_normal">网络正常</string>
+    <string name="check_network_innormal">网络异常，请检查接入网络</string>
+    <string name="check_network_hint">加载太慢？查查网络</string>
     <string name="setting_terminal_infor">设置终端信息</string>
     <string name="terminal_account">终端帐号</string>
     <string name="terminal_account_hint">请填写会议室号,主持人密码和参与密码,用##隔开</string>

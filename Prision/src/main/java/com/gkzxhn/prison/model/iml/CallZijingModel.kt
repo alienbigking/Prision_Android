@@ -8,12 +8,31 @@ import com.gkzxhn.prison.utils.XtHttpUtil
 import com.gkzxhn.wisdom.async.VolleyUtils
 
 import org.json.JSONObject
+import java.util.HashMap
 
 /**
  * Created by Raleigh.Luo on 18/3/30.
  */
 
 open class CallZijingModel : BaseModel(), ICallZijingModel {
+    /**
+     *  取消会见
+     */
+    override fun requestCancel(id: String, reason: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
+        val url = String.format("%s/%s", Constants.REQUEST_CANCEL_MEETING_URL, id)
+        try {
+            val params = HashMap<String, String>()
+            params.put("remarks", reason)
+            volleyUtils.patch(url, params, REQUEST_TAG, onFinishedListener)
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+    }
+
+    override fun turnOff(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
+        volleyUtils[JSONObject::class.java, XtHttpUtil.POWEROFF, REQUEST_TAG, onFinishedListener]
+    }
+
     /**
      * 获取网络请求
      */

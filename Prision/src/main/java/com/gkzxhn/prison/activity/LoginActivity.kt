@@ -120,4 +120,10 @@ class LoginActivity : SuperActivity(), ILoginView {
         mPresenter.onDestory()
         super.onDestroy()
     }
+
+    override fun onResume() {
+        super.onResume()
+        //关闭GUI
+        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
+    }
 }
