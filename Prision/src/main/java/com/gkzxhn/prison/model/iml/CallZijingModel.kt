@@ -87,7 +87,7 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
         try {
             val url = String.format("%s/%s/access", Constants.REQUEST_FREE_MEETING_TIME,
                     sharedPreferences.getString(Constants.USER_ACCOUNT, ""))
-//            volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
+            volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
         } catch (e: Exception) {
             e.printStackTrace()
         }
