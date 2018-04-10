@@ -8,7 +8,7 @@
     <com.starlight.mobile.android.lib.view.CusHeadView
         android:id="@+id/setting_layout_ch_head"
         style="@style/common_head_blue_style"
-        mAttr:chHead_title="@string/meeting_list"
+        mAttr:chHead_title="@string/setting"
         mAttr:chHead_title_padding_left="0dip"
         mAttr:chHead_leftImg="@mipmap/ic_back"
         />
