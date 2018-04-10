@@ -103,7 +103,7 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
             when(code){
                 HttpStatus.SC_REQUEST_TIMEOUT ->{//请求超时
                     stopAnim()
-                    mView?.showToast(if (Utils.getNetworkConnected()) R.string.request_timeout_with_try else R.string.not_available_network_hint)
+                    mView?.showToast(R.string.request_timeout_with_try  )
                 }
                 HttpStatus.SC_BAD_REQUEST,HttpStatus.SC_BAD_GATEWAY,HttpStatus.SC_SERVICE_UNAVAILABLE,
                 HttpStatus.SC_INTERNAL_SERVER_ERROR -> {//服务器错误
@@ -122,7 +122,7 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
             }
         } catch (e: Exception) {
             stopAnim()
-            mView?.showToast(if (Utils.getNetworkConnected()) R.string.request_timeout_with_try else R.string.not_available_network_hint)
+            mView?.showToast(  R.string.request_timeout_with_try  )
         }
     }
 

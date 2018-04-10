@@ -106,9 +106,7 @@ private constructor() : UncaughtExceptionHandler {
                     if (s != null && !s.toString().isEmpty()) b.append("\n" + s.toString())
                 }
             }
-            Log.e("raleigh_test crash",b.toString())
-            //TODO
-//            deal(b.toString())
+            deal(b.toString())
         }
         if (Constants.IS_DEBUG_MODEL) {//打印日志
             ex.printStackTrace()

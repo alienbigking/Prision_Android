@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.gkzxhn.prison">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:versionCode="1"
+    android:versionName="1.1.1"
+    package="com.gkzxhn.prison">
 
     <uses-permission android:name="android.permission.INSTALL_PACKAGES"
-                     tools:ignore="ProtectedPermissions"/>
+        tools:ignore="ProtectedPermissions"/>
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
-                     tools:ignore="ProtectedPermissions"/>
+        tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_SECURE_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_SETTINGS"/>
@@ -104,6 +106,7 @@
         <activity android:name="com.gkzxhn.prison.activity.SplashActivity"
             android:screenOrientation="landscape"
             android:theme="@style/SplashTheme"
+            android:exported="true"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
             >
@@ -160,9 +163,9 @@
             />
 
         <activity android:name=".activity.VideoMettingActivity"
-                  android:screenOrientation="landscape"
-                  android:configChanges="orientation|screenSize"
-                  android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
             />
 
         <meta-data
@@ -223,11 +226,11 @@
 
 
         <service android:name=".service.EReportService"
-                 android:label="@string/app_name"
-                 android:permission="cn.com.rocware.c9gui.service.EReportService"
-                 android:launchMode="singleInstance"
-                 android:exported="false"
-                 android:enabled="true">
+            android:label="@string/app_name"
+            android:permission="cn.com.rocware.c9gui.service.EReportService"
+            android:launchMode="singleInstance"
+            android:exported="false"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>

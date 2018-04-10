@@ -115,34 +115,31 @@ class DownLoadHelper {
 
         override fun doInBackground(vararg params: Void): Int? {
             var responseCode = 0
-            val rootFile = File(Constants.SD_ROOT_PATH)
+            val rootFile = File(Constants.CACHE_FILE)
             if (!rootFile.exists()) {
                 rootFile.mkdirs()
             }
-            val tmpFile = File(Constants.SD_FILE_CACHE_PATH)
-            if (!tmpFile.exists()) {
-                tmpFile.mkdirs()
-            }
 
-            val file = File(Constants.CACHE_FILE + "/" + "app.apk")
+            val file = File(Constants.CACHE_FILE + Constants.APK_NAME)
             //            final File file = new File(Constants.SD_ROOT_PATH + "/" + "app.apk");
             filePath = file.getAbsolutePath()
-            Log.i(DownLoadHelper::class.java.simpleName, "path : " + filePath)
-            val cmd = "chmod 777 " + filePath
-            try {
-                val p = Runtime.getRuntime().exec(cmd)
-                val status = p.waitFor()
-                if (status == 0) {
-                    Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改成功")
-                } else {
-                    Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改失败")
+            if(!file.canWrite()||!file.canRead()) {
+                Log.i(DownLoadHelper::class.java.simpleName, "path : " + filePath)
+                val cmd = "chmod 777 " + filePath
+                try {
+                    val p = Runtime.getRuntime().exec(cmd)
+                    val status = p.waitFor()
+                    if (status == 0) {
+                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改成功")
+                    } else {
+                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改失败")
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
                 }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
             }
-
             try {
                 val url = URL(mUrl)
                 val connection = url
@@ -152,7 +149,6 @@ class DownLoadHelper {
                 val fos = FileOutputStream(file)
                 val buffer = ByteArray(1024)
                 connection.connect()
-                val starttime = System.currentTimeMillis()
                 while (true) {
                     if (inputStream != null) {
                         val numRead = inputStream.read(buffer)
@@ -174,7 +170,6 @@ class DownLoadHelper {
                 fos.close()
                 inputStream?.close()
             } catch (e: Exception) {
-                // TODO Auto-generated catch block
                 e.printStackTrace()
             }
 

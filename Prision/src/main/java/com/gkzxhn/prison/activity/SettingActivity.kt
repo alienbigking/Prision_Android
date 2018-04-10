@@ -105,7 +105,8 @@ class SettingActivity : SuperActivity(), ISettingView {
                 startActivityForResult(intent, Constants.EXTRA_CODE)
             }
             R.id.setting_layout_tv_update -> {
-                //版本更新
+//                updateDialog.show()
+//                //版本更新
                 tvUpdateHint.setText(R.string.check_updating)
                 //请求更新
                 mPresenter.requestVersion()

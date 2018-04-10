@@ -8,12 +8,9 @@ import android.os.Environment
 
 object Constants {
     /*-------------------------------Config-------------------------------------------------*/
-
-    val SD_ROOT_PATH = Environment.getExternalStorageDirectory().path + "/YWTPrision"
-    val SD_FILE_CACHE_PATH = SD_ROOT_PATH + "/cache/"
     val CACHE_FILE = GKApplication.instance.filesDir.absolutePath
-    val APK_C9_DIR = "data/app"
 
+    val APK_NAME="/app.apk"
     val IS_DEBUG_MODEL = false//debug模式打印日志到控制台,发布版本不打印
     val REQUEST_TIMEOUT = 30000//超时时间半分钟
     /*-------------------------------User Tab-------------------------------------------------*/

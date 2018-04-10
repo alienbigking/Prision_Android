@@ -37,6 +37,7 @@
             style="@style/login_edit_style"
             android:layout_marginTop="10dp"
             android:gravity="center"
+            android:inputType="number"
             android:layout_below="@+id/loign_layout_tv_notice"
             android:layout_marginLeft="@dimen/margin"
             android:hint="@string/account" />
@@ -48,7 +49,7 @@
             android:layout_below="@+id/loign_layout_et_username"
             android:hint="@string/password"
             android:gravity="center"
-            android:inputType="textPassword"/>
+            android:inputType="numberPassword"/>
 
         <Button
             android:id="@+id/loign_layout_btn_login"

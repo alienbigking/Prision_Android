@@ -36,20 +36,6 @@ import java.util.regex.Pattern
  * Created by Administrator on 2016/4/7.
  */
 object Utils {
-    /**网络是否连接
-     * @return
-     */
-    fun getNetworkConnected(): Boolean{
-        var result: Boolean = false
-        try {
-            val conn = GKApplication.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val info = conn.activeNetworkInfo
-            info?.let {
-                result = info.isConnected
-            }
-        }catch (e:Exception){}
-        return  result
-    }
     /**
      * 获取屏幕宽高
      * @return

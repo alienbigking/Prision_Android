@@ -111,6 +111,7 @@
     <string name="check_updating">正在检测最新版本...</string>
     <string name="ignore_version">忽略此版本</string>
     <string name="download_failed">下载失败</string>
+    <string name="install_failed">安装失败</string>
     <!--系统设置-->
     <string name="no_call_free_time">免费呼叫次数已用完</string>
 

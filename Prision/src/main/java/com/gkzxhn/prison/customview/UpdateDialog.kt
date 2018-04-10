@@ -33,6 +33,10 @@ import kotlinx.android.synthetic.main.update_dialog_layout.update_dialog_layout_
 as tvProgress
 import kotlinx.android.synthetic.main.update_dialog_layout.update_dialog_layout_progress
 as mProgress
+import android.os.Build
+import android.util.Log
+import java.io.IOException
+
 
 class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_style) {
     private var versionName: String? = null
@@ -42,37 +46,42 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
     private var versionCode: Int = 0
     private val downloadFinishListener = object : DownLoadHelper.DownloadFinishListener {
         override fun onSuccess(filePath: String?) {
-            //安装apk
-            val apkfile = File(filePath)
-            if (!apkfile.exists()) {
-                return
+            try {
+                //安装apk
+                val apkfile = File(filePath)
+                if (!apkfile.exists()) {
+                    return
+                }
+                //打开未知来源权限 允许安装非电子市场提供的应用程序
+                if (Build.VERSION.SDK_INT < 17) {
+                    val flag = Settings.Secure.getInt(context.contentResolver,
+                            Settings.Secure.INSTALL_NON_MARKET_APPS, 0)
+                    if (flag == 0) {
+                        Settings.Secure.putInt(context.contentResolver,
+                                Settings.Secure.INSTALL_NON_MARKET_APPS, 1)
+                    }
+                } else {
+                    val flag = Settings.Global.getInt(context.contentResolver,
+                            android.provider.Settings.Secure.INSTALL_NON_MARKET_APPS, 0)
+                    if (flag == 0) {
+                        Settings.Global.putInt(context.contentResolver,
+                                android.provider.Settings.Secure.INSTALL_NON_MARKET_APPS, 1)
+                    }
+                }
+
+                // 通过Intent安装APK文件
+                val i = Intent(Intent.ACTION_VIEW)
+                i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
+                        "application/vnd.android.package-archive")
+                //为这个新apk开启一个新的activity栈
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i)
+                android.os.Process.killProcess(android.os.Process.myPid());
+
+            }catch (e:Exception){
+                e.printStackTrace()
+                Toast.makeText(getContext(), R.string.install_failed, Toast.LENGTH_SHORT).show()
             }
-            // Change the system setting
-            val contentResolver = GKApplication.instance.getContentResolver()
-            val enabled = Settings.Secure.getInt(contentResolver, Settings.Secure.INSTALL_NON_MARKET_APPS, 0) == 1
-            Settings.Secure.putInt(contentResolver, Settings.Secure.INSTALL_NON_MARKET_APPS, if (enabled) 0 else 1)
-            // 通过Intent安装APK文件
-            val i = Intent(Intent.ACTION_VIEW)
-            i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
-                    "application/vnd.android.package-archive")
-            context.startActivity(i)
-
-            /*String cmd = "chmod 777 " +filePath;
-			try {
-				Runtime.getRuntime().exec(cmd);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			Intent intent = new Intent();
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.setAction(android.content.Intent.ACTION_VIEW);
-			File file = new File(filePath);
-			if (file.exists() && file.isAbsolute()) {
-				intent.setDataAndType(Uri.fromFile(file),
-						"application/vnd.android.package-archive");
-				context.startActivity(intent);
-			}*/
-
             dismiss()
         }
 
@@ -158,6 +167,26 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
             val preferences = getContext().getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
             preferences.edit().putInt(Constants.LAST_IGNORE_VERSION, versionCode).commit()
             mHelper?.onStop()
+
+            val file = File(Constants.CACHE_FILE + "/" + "app.apk")
+            val filePath = file.getAbsolutePath()
+            if(!file.canRead()||!file.canWrite()) {
+                val cmd = "chmod 777 " + filePath
+                try {
+                    val p = Runtime.getRuntime().exec(cmd)
+                    val status = p.waitFor()
+                    if (status == 0) {
+                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改成功")
+                    } else {
+                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改失败")
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+            downloadFinishListener.onSuccess(filePath)
         }
     }
 
