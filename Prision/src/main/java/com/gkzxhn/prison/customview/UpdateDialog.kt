@@ -73,11 +73,7 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
                 val i = Intent(Intent.ACTION_VIEW)
                 i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
                         "application/vnd.android.package-archive")
-                //为这个新apk开启一个新的activity栈
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i)
-                android.os.Process.killProcess(android.os.Process.myPid());
-
             }catch (e:Exception){
                 e.printStackTrace()
                 Toast.makeText(getContext(), R.string.install_failed, Toast.LENGTH_SHORT).show()

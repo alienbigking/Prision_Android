@@ -123,7 +123,7 @@ class DownLoadHelper {
             val file = File(Constants.CACHE_FILE + Constants.APK_NAME)
             //            final File file = new File(Constants.SD_ROOT_PATH + "/" + "app.apk");
             filePath = file.getAbsolutePath()
-            if(!file.canWrite()||!file.canRead()) {
+//            if(!file.canWrite()||!file.canRead()) {
                 Log.i(DownLoadHelper::class.java.simpleName, "path : " + filePath)
                 val cmd = "chmod 777 " + filePath
                 try {
@@ -139,7 +139,7 @@ class DownLoadHelper {
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
-            }
+//            }
             try {
                 val url = URL(mUrl)
                 val connection = url
