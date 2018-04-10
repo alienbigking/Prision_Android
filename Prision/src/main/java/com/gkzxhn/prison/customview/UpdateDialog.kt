@@ -167,26 +167,6 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
             val preferences = getContext().getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
             preferences.edit().putInt(Constants.LAST_IGNORE_VERSION, versionCode).commit()
             mHelper?.onStop()
-
-            val file = File(Constants.CACHE_FILE + "/" + "app.apk")
-            val filePath = file.getAbsolutePath()
-            if(!file.canRead()||!file.canWrite()) {
-                val cmd = "chmod 777 " + filePath
-                try {
-                    val p = Runtime.getRuntime().exec(cmd)
-                    val status = p.waitFor()
-                    if (status == 0) {
-                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改成功")
-                    } else {
-                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改失败")
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-            }
-            downloadFinishListener.onSuccess(filePath)
         }
     }
 

@@ -133,7 +133,7 @@
     <string name="check_network_hint">加载太慢？查查网络</string>
     <string name="setting_terminal_infor">设置终端信息</string>
     <string name="terminal_account">终端帐号</string>
-    <string name="terminal_account_hint">请填写会议室号,主持人密码和参与密码,用##隔开</string>
+    <string name="terminal_account_hint">请填写会议室号##主持人密码##参与密码，如0000##0000##0000</string>
     <string name="rate">码率</string>
     <string name="rate_colon">码\u3000\u3000率(K)</string>
     <string name="please_input_terminal_account">请输入终端帐号</string>
