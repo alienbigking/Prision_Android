@@ -290,15 +290,21 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     private fun setIdCheckData() {
         //获取图片信息
         val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
-        val avatarUri = Constants.DOMAIN_NAME_XLS + "/" + sharedPreferences.getString(Constants.OTHER_CARD + 3, "")
-        val idCardUri1 = Constants.DOMAIN_NAME_XLS + "/" + sharedPreferences.getString(Constants.OTHER_CARD + 1, "")
-        val idCardUri2 = Constants.DOMAIN_NAME_XLS + "/" + sharedPreferences.getString(Constants.OTHER_CARD + 2, "")
+        val avatarUri =getImageUrl(sharedPreferences.getString(Constants.OTHER_CARD + 3, ""))
+        val idCardUri1 = getImageUrl(sharedPreferences.getString(Constants.OTHER_CARD + 1, ""))
+        val idCardUri2 =getImageUrl(sharedPreferences.getString(Constants.OTHER_CARD + 2, ""))
         //加载图片信息
         ImageLoader.getInstance().displayImage(avatarUri, mIv_avatar)
         ImageLoader.getInstance().displayImage(idCardUri1, mIv_id_card_01)
         ImageLoader.getInstance().displayImage(idCardUri2, mIv_id_card_02)
     }
-
+    private fun getImageUrl(url:String):String{
+        if(url.contains("http")){
+            return url
+        }else{
+            return Constants.DOMAIN_NAME_XLS+url
+        }
+    }
     /**
      * 开始属性动画
      *

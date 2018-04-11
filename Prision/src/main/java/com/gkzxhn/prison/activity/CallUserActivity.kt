@@ -227,8 +227,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     override fun onSuccess() {
         val img_urls = mPresenter.entity?.imageUrl?.split("|")
         img_urls?.let {
-            ivCard01.post { ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[0], ivCard01) }
-            ivCard02.post { ImageLoader.getInstance().displayImage(Constants.DOMAIN_NAME_XLS + img_urls[1], ivCard02) }
+            ivCard01.post { ImageLoader.getInstance().displayImage(getImageUrl(img_urls[0]), ivCard01) }
+            ivCard02.post { ImageLoader.getInstance().displayImage(getImageUrl(img_urls[1]), ivCard02) }
             findViewById(R.id.call_user_layout_bt_call).isEnabled = true
             val editor = mPresenter.getSharedPreferences().edit()
             editor.putString(Constants.OTHER_CARD + 1, img_urls[0])
@@ -237,6 +237,13 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             editor.putString(Constants.EXTRA, mPresenter.entity?.accid)
             editor.putString(Constants.EXTRAS, id)
             editor.apply()
+        }
+    }
+    private fun getImageUrl(url:String):String{
+        if(url.contains("http")){
+            return url
+        }else{
+            return Constants.DOMAIN_NAME_XLS+url
         }
     }
 
