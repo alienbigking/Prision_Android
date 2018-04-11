@@ -296,7 +296,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             val currentVersion = packageInfo.versionCode//当前App版本
             val lastIgnoreVersion = mPresenter.getSharedPreferences().getInt(Constants.LAST_IGNORE_VERSION, 0)
             var isIgoreVersion = lastIgnoreVersion == newVersion//若是已忽略的版本，则不弹出升级对话框
-            if (version.isForce) isIgoreVersion = false
+            if (version.isForce==1) isIgoreVersion = false
             if (newVersion > currentVersion && !isIgoreVersion) {//新版本大于当前版本，则弹出更新下载到对话框
                 //版本名
                 val versionName = version.versionName
@@ -305,7 +305,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
                 //是否强制更新
                 val isForceUpdate = version.isForce
                 if (updateDialog == null) updateDialog = UpdateDialog(this)
-                updateDialog?.setForceUpdate(isForceUpdate)
+                updateDialog?.setForceUpdate(isForceUpdate==1)
                 updateDialog?.setDownloadInfor(versionName?:"", newVersion, downloadUrl?:"")
                 updateDialog?.show()//显示对话框
             }

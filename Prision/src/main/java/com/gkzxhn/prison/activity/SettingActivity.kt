@@ -203,7 +203,7 @@ class SettingActivity : SuperActivity(), ISettingView {
                     // 下载地址
                     val downloadUrl = version.downloadUrl
                     //是否强制更新
-                    updateDialog.setForceUpdate(version.isForce)
+                    updateDialog.setForceUpdate(version.isForce==1)
                     updateDialog.setDownloadInfor(versionName ?: "", newVersion, downloadUrl ?: "")
                     updateDialog.show()//显示对话框
                     tvUpdateHint.text = getString(R.string.new_version_colon) + versionName

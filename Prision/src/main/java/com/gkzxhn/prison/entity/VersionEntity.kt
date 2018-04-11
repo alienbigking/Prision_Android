@@ -20,7 +20,6 @@ class VersionEntity {
         get() {
             return if(field=="null")"" else field
         }
-    @SerializedName("isForce")
-    var isForce: Boolean = false
+    var isForce: Int = 0
 
 }
