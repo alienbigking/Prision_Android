@@ -35,7 +35,7 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    var content = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response, "DataBean"), "content")
+                    var content = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response, "data"), "content")
                     val edit = getSharedPreferences().edit()
                     edit.putString(Constants.USER_ACCOUNT, account)
                     edit.putString(Constants.USER_PASSWORD, password)

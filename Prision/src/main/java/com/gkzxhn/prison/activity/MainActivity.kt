@@ -185,12 +185,12 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mPresenter.requestZijing()
         //请求免费呼叫次数
         mPresenter.requestFreeTime()
-        if (BuildConfig.DEBUG) {
-            findViewById(R.id.main_layout_ch_head).setOnClickListener {
-                val account = mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "")
-                mPresenter.dial(account, 1)
-            }
-        }
+//        if (BuildConfig.DEBUG) {
+//            findViewById(R.id.main_layout_ch_head).setOnClickListener {
+//                val account = mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "")
+//                mPresenter.dial(account, 1)
+//            }
+//        }
         mPresenter.requestVersion()
     }
     /**
