@@ -65,6 +65,8 @@ object Constants {
     val ONLINE_SUCCESS_ACTION = "com.gkzxhn.prison.ONLINE_SUCCESS_ACTION"//连线成功
     //云信被踢下线
     val NIM_KIT_OUT = "com.gkzxhn.prison.NIM_KIT_OUT"
+    //上传图片的auth认证
+    val UPLOAD_FILE_AUTHORIZATION = "523b87c4419da5f9186dbe8aa90f37a3876b95e448fe2a"
 
 
     //C9包名
