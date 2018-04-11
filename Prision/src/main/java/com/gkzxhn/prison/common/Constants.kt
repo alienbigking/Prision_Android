@@ -75,6 +75,9 @@ object Constants {
     val MEETTING_CANCELED = "CANCELED"
     val MEETTING_FINISHED = "FINISHED"
     val MEETTING_PASSED = "PASSED"
+    //上传图片的auth认证
+    val UPLOAD_FILE_AUTHORIZATION = "523b87c4419da5f9186dbe8aa90f37a3876b95e448fe2a"
+
     /*-------------------------------action-------------------------------------------------*/
 
     val ONLINE_SUCCESS_ACTION = "com.gkzxhn.prison.ONLINE_SUCCESS_ACTION"//连线成功

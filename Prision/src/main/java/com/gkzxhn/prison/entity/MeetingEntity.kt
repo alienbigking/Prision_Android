@@ -16,7 +16,7 @@ class MeetingEntity {
         get() {
             return if(field=="null")"" else field
         }
-    @SerializedName("meeting_time")
+    @SerializedName("meetingTime")
     var time: String? = null
         get() {
             return if(field=="null")"" else field

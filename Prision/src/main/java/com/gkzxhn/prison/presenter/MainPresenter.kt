@@ -128,7 +128,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                 try {
                     val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                     if (code == HttpStatus.SC_OK) {
-                        val resultJson = JSONUtil.getJSONObjectStringValue(response, "meetings")
+                        val resultJson = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"), "meetings")
                         startAsynTask(Constants.MAIN_TAB, object : AsynHelper.TaskFinishedListener {
                             override fun back(`object`: Any?) {
                                 val mData =`object` as List<MeetingEntity>

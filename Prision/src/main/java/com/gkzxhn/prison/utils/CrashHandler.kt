@@ -120,7 +120,16 @@ private constructor() : UncaughtExceptionHandler {
         packageInfo = pm.getPackageInfo(mContext.packageName,
                 PackageManager.GET_CONFIGURATIONS)
         //上传奔溃日志
-        mCrashModel.uploadLog(message,packageInfo.versionCode,null)
+        mCrashModel.uploadLog(message,packageInfo.versionCode,object :VolleyUtils.OnFinishedListener<JSONObject>{
+            override fun onSuccess(response: JSONObject) {
+                Log.e(TAG,response.toString())
+            }
+
+            override fun onFailed(error: VolleyError) {
+                Log.e(TAG,error.toString())
+            }
+
+        })
         // 关闭USB录屏
         if(mCrashModel.sharedPreferences.getBoolean(Constants.IS_OPEN_USB_RECORD,true)) {
             //查询USB是否正在录屏

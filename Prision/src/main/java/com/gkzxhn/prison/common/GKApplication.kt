@@ -28,6 +28,8 @@ import com.starlight.mobile.android.lib.util.JSONUtil
 import org.json.JSONObject
 
 import java.io.File
+import java.io.IOException
+import java.net.HttpURLConnection
 
 /**
  * Created by Raleigh.Luo on 17/4/10.
@@ -94,7 +96,7 @@ class GKApplication : Application() {
                 // You can pass your own memory cache implementation
                 //不用使用缓存路径
                 .diskCacheFileNameGenerator(HashCodeFileNameGenerator())
-                .imageDownloader(BaseImageDownloader(applicationContext, 5 * 1000, 30 * 1000)) // connectTimeout (5 s), readTimeout (30 s)超时时间
+                .imageDownloader(ImageLoaderWithCookie(applicationContext, 5 * 1000, 30 * 1000)) // connectTimeout (5 s), readTimeout (30 s)超时时间
                 //		  .discCacheFileNameGenerator(new Md5FileNameGenerator())//将保存的时候的URI名称用MD5 加密 ,.new HashCodeFileNameGenerator()//使用HASHCODE对UIL进行加密命名
                 // .imageDownloader(new Httpclie(5 * 1000, 20 * 1000)) //
                 // connectTimeout (5 s), readTimeout (20 s)
@@ -136,6 +138,19 @@ class GKApplication : Application() {
         val edit = sharedPreferences.edit()
         edit.clear()
         edit.apply()
+    }
+    /**
+     * 图片下载 添加Header auth认证
+     */
+    inner class ImageLoaderWithCookie(context: Context, connectTimeout: Int, readTimeout: Int) : BaseImageDownloader(context, connectTimeout, readTimeout) {
+
+        @Throws(IOException::class)
+        override fun createConnection(url: String?, extra: Any?): HttpURLConnection {
+            val connection = super.createConnection(url, extra)
+            //Header auth认证
+            connection.setRequestProperty("Authorization", Constants.UPLOAD_FILE_AUTHORIZATION)//extra就是SessionId，何时传入，见第三步
+            return connection
+        }
     }
 
     companion object {

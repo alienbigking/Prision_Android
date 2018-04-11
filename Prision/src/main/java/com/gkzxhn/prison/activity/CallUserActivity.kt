@@ -98,9 +98,9 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         btnCall.isEnabled=true
         mPresenter = CallUserPresenter(this, this)
         //获取传递过来时的数据
-        id = intent.getStringExtra(Constants.EXTRA)
-        phone = intent.getStringExtra(Constants.EXTRAS)
-        nickName = intent.getStringExtra(Constants.EXTRA_TAB)
+        id = intent.getStringExtra(Constants.EXTRA)?:""
+        phone = intent.getStringExtra(Constants.EXTRAS)?:""
+        nickName = intent.getStringExtra(Constants.EXTRA_TAB)?:""
         mProgress = ProgressDialog.show(this, null, getString(R.string.check_other_status))
         mProgress.setCanceledOnTouchOutside(true)
         mProgress.setCancelable(true)
