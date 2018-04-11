@@ -16,34 +16,28 @@ class MeetingDetailEntity {
         get() {
             return if(field=="null")"" else field
         }
-    var relationship: String? = null
+    var id: String? = null
         get() {
             return if(field=="null")"" else field
         }
-    @SerializedName("image_url")
-    var imageUrl: String? = null
+    var avatarUrl: String? = null
         get() {
             return if(field=="null")"" else field
         }
-    var accid: String? = null
+    var idCardFront: String? = null
         get() {
             return if(field=="null")"" else field
         }
-    @SerializedName("prisoner_number")
-    var prisonerNumber: String? = null//囚号
+    var idCardBack: String? = null
         get() {
             return if(field=="null")"" else field
         }
-    @SerializedName("prisoner_name")
-    var prisonerName: String? = null//囚犯名字
+    var accessToken: String? = null
         get() {
             return if(field=="null")"" else field
         }
-    @Expose
     var phone: String?=null// 电话号码
         get() {
             return if(field=="null")"" else field
         }
-
-
 }

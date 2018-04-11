@@ -67,7 +67,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     //是否正在视频会见
     private var isVideoMetting= false
     //用户账号
-    private var mAccount: String? = null
     private var mIDWidth: Int = 0
     private var mCallRequestCode = Constants.EXTRA_CODE
     private val DOWN_TIME: Long = 10000//倒计时 10秒
@@ -110,8 +109,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         }
         stopProgress()
         preferences = mPresenter.getSharedPreferences()
-        mAccount = preferences?.getString(Constants.TERMINAL_ACCOUNT, "")
-        if (TextUtils.isEmpty(mAccount)) {
+        if (TextUtils.isEmpty(preferences?.getString(Constants.TERMINAL_ROOM_NUMBER, ""))) {
             initTerminalDialog()
             if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
         }
@@ -119,7 +117,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         mCustomDialog = CustomDialog(this)
         mCustomDialog.onClickListener=View.OnClickListener { view ->
             if (view.id == R.id.custom_dialog_layout_tv_confirm) {
-                online(mAccount)
+                online()
             }
         }
         val viewTreeObserver = ivCard01.viewTreeObserver
@@ -165,9 +163,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         //左上角返回
             R.id.common_head_layout_iv_left -> finish()
             R.id.call_user_layout_bt_call -> {
-                //呼叫
-                val account = preferences?.getString(Constants.TERMINAL_ACCOUNT, "")
-                online(account)
+                online()
             }
         }
     }
@@ -175,48 +171,53 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     /**
      * 连线对方账号
      */
-    private fun online(account: String?) {
-        mSendOnlineSuccess=false
-        isConnecting = true
-        if (account != null && account.length > 0) {
-            if (mPresenter.checkStatusCode() == StatusCode.LOGINED) {
-                startProgress()
-                //发送云信消息，检测家属端是否已经准备好可以呼叫
-                val notification = CustomNotification()
-                val accid = mPresenter.entity?.accid
-                notification.sessionId = accid
-                notification.sessionType = SessionTypeEnum.P2P
-                // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
-                // 这里以类型 “1” 作为“正在输入”的状态通知。
-                val json = JSONObject()
-                json.put("code", -1)
-                //                        json.put("msg", account);
-                notification.content = json.toString()
-                NIMClient.getService(MsgService::class.java).sendCustomNotification(notification).
-                        setCallback(object :RequestCallback<Void>{
-                            override fun onException(exception: Throwable?) {
-                                mSendOnlineSuccess=false
-                            }
+    private fun online() {
+        if(mPresenter.entity!=null) {
+            val mettingRoomNumber = preferences?.getString(Constants.TERMINAL_ROOM_NUMBER, "")
+            mSendOnlineSuccess=false
+            isConnecting = true
+            if (mettingRoomNumber != null && mettingRoomNumber.length > 0) {
+                if (mPresenter.checkStatusCode() == StatusCode.LOGINED) {
+                    startProgress()
+                    //发送云信消息，检测家属端是否已经准备好可以呼叫
+                    val notification = CustomNotification()
+                    val accid = mPresenter.entity?.accessToken
+                    notification.sessionId = accid
+                    notification.sessionType = SessionTypeEnum.P2P
+                    // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
+                    // 这里以类型 “1” 作为“正在输入”的状态通知。
+                    val json = JSONObject()
+                    json.put("code", -1)
+                    //                        json.put("msg", account);
+                    notification.content = json.toString()
+                    NIMClient.getService(MsgService::class.java).sendCustomNotification(notification).
+                            setCallback(object :RequestCallback<Void>{
+                                override fun onException(exception: Throwable?) {
+                                    mSendOnlineSuccess=false
+                                }
 
-                            override fun onSuccess(param: Void?) {
-                                mSendOnlineSuccess=true
-                            }
+                                override fun onSuccess(param: Void?) {
+                                    mSendOnlineSuccess=true
+                                }
 
-                            override fun onFailed(code: Int) {
-                                mSendOnlineSuccess=false
-                            }
+                                override fun onFailed(code: Int) {
+                                    mSendOnlineSuccess=false
+                                }
 
-                        })
-                //开始倒计时
-                mTimer.start()
-            } else {
-                //云信已掉线
-                showToast(R.string.yunxin_offline)
+                            })
+                    //开始倒计时
+                    mTimer.start()
+                } else {
+                    //云信已掉线
+                    showToast(R.string.yunxin_offline)
+                }
+            } else {//未设置终端
+                initTerminalDialog()
+                //显示设置终端对话框
+                if(!(mShowTerminalDialog?.isShowing?:false)){
+                    mShowTerminalDialog?.show()
+                }
             }
-        } else {//未设置终端
-            initTerminalDialog()
-            //显示设置终端对话框
-            if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
         }
     }
 
@@ -225,22 +226,20 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * 获取信息成功
      */
     override fun onSuccess() {
-        val img_urls = mPresenter.entity?.imageUrl?.split("|")
-        img_urls?.let {
-            ivCard01.post { ImageLoader.getInstance().displayImage(getImageUrl(img_urls[0]), ivCard01) }
-            ivCard02.post { ImageLoader.getInstance().displayImage(getImageUrl(img_urls[1]), ivCard02) }
-            findViewById(R.id.call_user_layout_bt_call).isEnabled = true
-            val editor = mPresenter.getSharedPreferences().edit()
-            editor.putString(Constants.OTHER_CARD + 1, img_urls[0])
-            editor.putString(Constants.OTHER_CARD + 2, img_urls[1])
-            editor.putString(Constants.OTHER_CARD + 3, img_urls[2])
-            editor.putString(Constants.EXTRA, mPresenter.entity?.accid)
-            editor.putString(Constants.EXTRAS, id)
-            editor.apply()
-        }
+        ivCard01.post { ImageLoader.getInstance().displayImage(getImageUrl(mPresenter.entity?.idCardFront), ivCard01) }
+        ivCard02.post { ImageLoader.getInstance().displayImage(getImageUrl(mPresenter.entity?.idCardBack), ivCard02) }
+        findViewById(R.id.call_user_layout_bt_call).isEnabled = true
+        val editor = mPresenter.getSharedPreferences().edit()
+        editor.putString(Constants.OTHER_CARD + 1, mPresenter.entity?.idCardFront)
+        editor.putString(Constants.OTHER_CARD + 2, mPresenter.entity?.idCardBack)
+        editor.putString(Constants.OTHER_CARD + 3, mPresenter.entity?.avatarUrl)
+        editor.putString(Constants.EXTRA, mPresenter.entity?.accessToken)
+        editor.putString(Constants.EXTRAS, id)
+        editor.apply()
     }
-    private fun getImageUrl(url:String):String{
-        if(url.contains("http")){
+    private fun getImageUrl(url:String?):String{
+        if(url==null)return ""
+        else if(url.contains("http")){
             return url
         }else{
             return Constants.DOMAIN_NAME_XLS+url
@@ -251,13 +250,13 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * 拨号成功 直接进入呼叫界面
      * @param password
      */
-    override fun dialSuccess(password: String) {
+    override fun dialSuccess(hostPassword: String) {
         btnCall.setBackgroundResource(R.drawable.common_grey_btn_shape)
         btnCall.isEnabled=false
         //跳转到视频界面
         val intent = Intent(this, VideoMettingActivity::class.java)
         intent.action=getIntent().action
-        intent.putExtra(Constants.ZIJING_PASSWORD, password)
+        intent.putExtra(Constants.ZIJING_PASSWORD, hostPassword)
         startActivityForResult(intent, mCallRequestCode)
         //关闭显示进度条
         stopProgress()
@@ -352,7 +351,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                         Log.i(TAG, "protocol : " + protocol)
                         showToast("呼叫失败,原因:" + reason + "/n切换成" + protocol + "协议重新进行呼叫...")
                         mCallRequestCode = Constants.EXTRAS_CODE
-                        mPresenter.dial(mAccount?:"")
+                        mPresenter.dial()
                     }
                 }else if(resultCode == Activity.RESULT_CANCELED){
                     //对方挂断
@@ -434,7 +433,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                     isVideoMetting=true
                     mCallRequestCode = Constants.EXTRA_CODE
                     mTimer.cancel()
-                    mPresenter.dial(mAccount?:"")
+                    mPresenter.dial()
                 }
             } else if (intent.action == Constants.NIM_KIT_OUT) {
                 //云信被踢下线

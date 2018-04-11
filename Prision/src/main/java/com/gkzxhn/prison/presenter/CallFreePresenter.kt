@@ -6,12 +6,14 @@ import android.content.SharedPreferences
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
+import com.gkzxhn.prison.entity.FreeFamilyEntity
 import com.gkzxhn.prison.entity.MeetingDetailEntity
 import com.gkzxhn.prison.model.ICallUserModel
 import com.gkzxhn.prison.model.iml.CallUserModel
 import com.gkzxhn.prison.view.ICallFreeView
 import com.gkzxhn.wisdom.async.VolleyUtils
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.util.HttpStatus
 import com.starlight.mobile.android.lib.util.JSONUtil
@@ -41,10 +43,11 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    val freetime=ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "access_times"))
-                    mView?.updateFreeTime(freetime)
+                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(
+                            JSONUtil.getJSONObject(response,"data"), "access_times"))
+                    mView?.updateFreeTime(time)
                     //保存到sharepreferences
-                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME,freetime).apply()
+                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME,time).apply()
                 }
             }
             override fun onFailed(error: VolleyError) {
@@ -55,19 +58,17 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
     /**
      *  通过手机号码查询家属信息
      */
-    fun request(id: String) {
+    fun request(key: String) {
         mView?.startRefreshAnim()
-        mModel.request(id, object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.requestFamily(key, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 mView?.stopRefreshAnim()
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    entity = Gson().fromJson(JSONUtil.getJSONObjectStringValue(response, "family"), MeetingDetailEntity::class.java)
-                    entity?.phone = id
-                    val edit = getSharedPreferences().edit()
-                    edit.putString(Constants.ACCID, entity?.accid)
-                    edit.apply()
-                    mView?.onSuccess()
+                    val familyJson=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"), "infos")
+                    val familys= Gson().fromJson<List<FreeFamilyEntity>>(familyJson,
+                            object : TypeToken<List<FreeFamilyEntity>>() {}.type)
+                    mView?.onSuccess(familys)
                 } else {
                     mView?.showToast(R.string.query_phone_is_error)
                 }
@@ -78,4 +79,5 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
             }
         })
     }
+
 }

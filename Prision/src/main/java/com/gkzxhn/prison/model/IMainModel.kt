@@ -21,5 +21,5 @@ interface IMainModel : ICallZijingModel {
     /**
      *  获取指定日期会见列表
      */
-    fun request(date: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
+    fun request(date: String,currentPage:Int,pageNumber:Int, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
 }

@@ -8,6 +8,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
         xmlns:mAttr="http://schemas.android.com/apk/res-auto"
+        android:background="@color/common_bg_color"
         android:layout_height="match_parent">
         <com.starlight.mobile.android.lib.view.CusHeadView
             android:id="@+id/call_free_layout_ch_head"
@@ -84,7 +85,6 @@
                 android:layout_marginLeft="40dip"
                 android:paddingTop="8dip"
                 android:paddingBottom="8dip"
-                android:inputType="phone"
                 android:maxLength="11"
                 android:lines="1"
                 android:maxLines="1"
@@ -134,23 +134,11 @@
             android:layout_marginRight="@dimen/margin"
             android:layout_alignBottom="@+id/call_free_layout_fl_search_panel"
             />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
+        <include layout="@layout/common_list_layout"
             android:layout_below="@+id/call_free_layout_tv_search"
-            android:layout_height="wrap_content">
-            <include layout="@layout/i_common_loading_layout"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                />
-
-            <include layout="@layout/i_call_free_user_infor_layout"
-                android:layout_width="match_parent"
-                android:layout_margin="@dimen/margin"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin"
+            />
     </RelativeLayout>
 </ScrollView>

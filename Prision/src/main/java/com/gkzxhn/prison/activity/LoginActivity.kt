@@ -51,9 +51,9 @@ class LoginActivity : SuperActivity(), ILoginView {
      */
     private fun init() {
         //显示记住的密码
-        val preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
-        etAccount.setText(preferences.getString(Constants.USER_ACCOUNT_CACHE,""));
-        etPassword.setText(preferences.getString(Constants.USER_PASSWORD_CACHE,""));
+        val preferences = getSharedPreferences(Constants.TEMP_TABLE, Activity.MODE_PRIVATE)
+        etAccount.setText(preferences.getString(Constants.USER_ACCOUNT,""));
+        etPassword.setText(preferences.getString(Constants.USER_PASSWORD,""));
         //初始化Presenter
         mPresenter = LoginPresenter(this, this)
         //初始化进度条

@@ -1,5 +1,6 @@
 package com.gkzxhn.prison.entity
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -11,7 +12,6 @@ class MeetingEntity {
         get() {
             return if(field=="null")"" else field
         }
-    @SerializedName("prisoner_name")
     var name: String? = null
         get() {
             return if(field=="null")"" else field
@@ -21,20 +21,23 @@ class MeetingEntity {
         get() {
             return if(field=="null")"" else field
         }
-    var area: String? = null
+    var familyId: String? = null
         get() {
             return if(field=="null")"" else field
         }
-    @SerializedName("to")
-    var yxAccount: String? = null
+    var prisonerNumber: String? = null
         get() {
             return if(field=="null")"" else field
         }
-    var remarks: String? = null//取消原因
+    var prisonerId: String? = null
         get() {
             return if(field=="null")"" else field
         }
-    var status: String? = null//状态
+    var jailName: String? = null
+        get() {
+            return if(field=="null")"" else field
+        }
+    var jailId: String? = null
         get() {
             return if(field=="null")"" else field
         }

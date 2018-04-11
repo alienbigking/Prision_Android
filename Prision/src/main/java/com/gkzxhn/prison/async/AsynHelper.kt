@@ -49,22 +49,9 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
                 Constants.MAIN_TAB ->{
                     val response = params[0] as String
                     val lastData = ArrayList<MeetingEntity>()
-                    val datas = Gson().fromJson<List<MeetingEntity>>(response, object : TypeToken<List<MeetingEntity>>() {
+                    result= Gson().fromJson<List<MeetingEntity>>(response, object : TypeToken<List<MeetingEntity>>() {
 
                     }.type)
-                    for (entity in datas) {
-                        if (entity.status != "FINISHED") {
-                            if (entity.status == "CANCELED") {
-                                val reson = GKApplication.instance.resources.getStringArray(R.array.cancel_video_reason)
-                                if (entity.remarks == reson[reson.size - 1] || entity.remarks == reson[reson.size - 2]) {
-                                    lastData.add(entity)
-                                }
-                            } else {
-                                lastData.add(entity)
-                            }
-                        }
-                    }
-                    result = lastData
                 }
                 Constants.CLOSE_GUI_TAB ->{
                     try {

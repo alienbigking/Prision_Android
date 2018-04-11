@@ -14,7 +14,7 @@ class LoginModel : BaseModel(), ILoginModel {
      * 获取终端信息
      */
     override fun getMeetingRoom(account: String, password: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
-        val url = Constants.REQUEST_MEETING_ROOM + "/" + account + "/detail"
-        volleyUtils.get(JSONObject::class.java, url, REQUEST_TAG, onFinishedListener)
+        val url = String.format("%s?terminalNumber=%s",Constants.REQUEST_MEETING_ROOM , account )
+        volleyUtils.get(JSONObject::class.java,url, REQUEST_TAG, onFinishedListener)
     }
 }

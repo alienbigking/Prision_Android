@@ -102,7 +102,8 @@ class ConfigActivity : SuperActivity() {
         var index = 1
         preferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
         //获取终端号
-        mAccount = preferences.getString(Constants.TERMINAL_ACCOUNT, "")
+        mAccount = String.format("%s##%s##%s",preferences.getString(Constants.TERMINAL_ROOM_NUMBER, ""),
+                preferences.getString(Constants.TERMINAL_HOST_PASSWORD, ""), preferences.getString(Constants.TERMINAL_GUEST_PASSWORD, ""))
         //获取
         mTimeLimit = preferences.getLong(Constants.TIME_LIMIT, 20L)
         etTime.setText(mTimeLimit.toString())
@@ -148,7 +149,10 @@ class ConfigActivity : SuperActivity() {
                 } else {
                     //修改账号  保存到sharepreference中
                     val editor = preferences.edit()
-                    editor.putString(Constants.TERMINAL_ACCOUNT, mAccount)
+                    val array=mAccount.split("##")
+                    editor.putString(Constants.TERMINAL_ROOM_NUMBER, if(array.size>0)array[0] else "")
+                    editor.putString(Constants.TERMINAL_HOST_PASSWORD, if(array.size>1)array[1] else "")
+                    editor.putString(Constants.TERMINAL_GUEST_PASSWORD, if(array.size>2)array[2] else "")
                     editor.putInt(Constants.TERMINAL_RATE, Integer.valueOf(mRate))
                     editor.putString(Constants.PROTOCOL, protocol)
                     editor.putLong(Constants.TIME_LIMIT,timeStr.toLong())

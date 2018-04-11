@@ -14,13 +14,21 @@ object Constants {
     val IS_DEBUG_MODEL = false//debug模式打印日志到控制台,发布版本不打印
     val REQUEST_TIMEOUT = 30000//超时时间半分钟
     /*-------------------------------User Tab-------------------------------------------------*/
+    val TEMP_TABLE = "temp_table"//不清空表，临时表
+
     val USER_TABLE = "user_table"
     val USER_IS_UNAUTHORIZED = "isUnauthorized"
     val USER_ACCOUNT = "user_account"//云信帐号
     val USER_PASSWORD = "user_password"//云信密码
-    val TERMINAL_ACCOUNT = "terminal_account"//终端帐号
+
+    val TERMINAL_JIAL_ID = "terminal_jial_id"//监狱id
+    val TERMINAL_JIAL_NAME = "terminal_jial_name"//监狱名称
+    val TERMINAL_ROOM_NUMBER = "terminal_room_number"//会议室号码
+    val TERMINAL_HOST_PASSWORD = "terminal_host_password"//主持人密码
+    val TERMINAL_GUEST_PASSWORD = "terminal_guest_password"//参与密码 客人密码
+
+//    val TERMINAL_ACCOUNT = "terminal_account"//终端帐号
     val TERMINAL_RATE = "terminal_rate"//终端码率
-    val TERMINAL_PASSWORD = "terminal_password"//终端密码，空
     val LAST_IGNORE_VERSION = "last_ignore_version"//上一个忽略的版本
     val OTHER_CARD = "other_card"//身份证信息
 
@@ -30,17 +38,20 @@ object Constants {
 
     /*-------------------------------request url-------------------------------------------------*/
     val RELEASE_DOMAIN = "https://www.yuwugongkai.com"//新发布正式环境
-    val DEMO_DOMAIN = "https://www.fushuile.com"//开发环境
-    val DOMAIN_NAME_XLS = RELEASE_DOMAIN
+    val DEMO_DOMAIN = "http://39.108.185.51:8082/ywgk-app"//开发环境
+    val DOMAIN_NAME_XLS = DEMO_DOMAIN
 
-    val REQUEST_MEETING_LIST_URL = DOMAIN_NAME_XLS + "/api/v1/terminals"//会见列表
-    val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME_XLS + "/api/v1/meetings"// 取消会见
-    val REQUEST_MEETING_DETAIL_URL = DOMAIN_NAME_XLS + "/api/v1/families"// 会见详情
-    val REQUEST_VERSION_URL = DOMAIN_NAME_XLS + "/api/v1/versions/2"//版本更新
-    val REQUEST_CRASH_LOG_URL = DOMAIN_NAME_XLS + "/api/v1/loggers"//奔溃日志
-    val REQUEST_MEETING_ROOM = DOMAIN_NAME_XLS + "/api/v1/terminals"//会议室信息
+    val REQUEST_MEETING_LIST_URL = DOMAIN_NAME_XLS + "/api/meetings/getMeetingsForPrison"//会见列表
+    val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME_XLS + "/api/meetings/update"// 取消会见
+    val REQUEST_MEETING_DETAIL_URL = DOMAIN_NAME_XLS + "/families/detail"// 会见详情
+    val REQUEST_VERSION_URL = DOMAIN_NAME_XLS + "/api/versions/page"//版本更新
+    val REQUEST_CRASH_LOG_URL = DOMAIN_NAME_XLS + "/app_loggers/save"//奔溃日志
+    val REQUEST_MEETING_ROOM = DOMAIN_NAME_XLS + "/api/terminals/detail"//会议室信息
 
-    val REQUEST_FREE_MEETING_TIME = DOMAIN_NAME_XLS + "/api/v1/jails"//免费呼叫次数
+    val REQUEST_FAMILY_BY_KEY = DOMAIN_NAME_XLS + "/api/meetings/getMeetingsFree"//免费会见－根据用户名和手机号码查询家属
+
+    val REQUEST_FREE_MEETING_TIME = DOMAIN_NAME_XLS + "/api/jails/access_times"//免费呼叫次数
+    val UPDATE_FREE_MEETING_TIME = DOMAIN_NAME_XLS + "/api/jails/access"//减少呼叫次数
 
     /*-------------------------------msg what-------------------------------------------------*/
     val START_REFRESH_UI = 1
@@ -60,6 +71,10 @@ object Constants {
     /*-------------------------------Request Tab-------------------------------------------------*/
     val MAIN_TAB = 0x206
     val CLOSE_GUI_TAB = 0x207
+    /*-------------------------------Service服务器状态配置-------------------------------------------------*/
+    val MEETTING_CANCELED = "CANCELED"
+    val MEETTING_FINISHED = "FINISHED"
+    val MEETTING_PASSED = "PASSED"
     /*-------------------------------action-------------------------------------------------*/
 
     val ONLINE_SUCCESS_ACTION = "com.gkzxhn.prison.ONLINE_SUCCESS_ACTION"//连线成功
@@ -85,7 +100,5 @@ object Constants {
     val PROTOCOL = "protocol"
     val TIME_LIMIT = "time_limit"
     val CALL_AGAIN = "call_again"
-    val USER_ACCOUNT_CACHE = "user_account_cache"
-    val USER_PASSWORD_CACHE = "user_password_cache"
     val END_REASON = "end_reason"
 }

@@ -40,17 +40,18 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
     /**
      * 请求用户信息
      */
-    fun request(id: String) {
+    fun request(familyId: String) {
         mView?.startRefreshAnim()
-        mModel.request(id, object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.request(familyId, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 mView?.stopRefreshAnim()
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    entity = Gson().fromJson(JSONUtil.getJSONObjectStringValue(response, "family"), MeetingDetailEntity::class.java)
-                    entity?.phone = id
+                    val data=JSONUtil.getJSONObject(response,"data")
+                    entity = Gson().fromJson(JSONUtil.getJSONObjectStringValue(data, "family"), MeetingDetailEntity::class.java)
+                    entity?.phone = familyId
                     val edit = getSharedPreferences().edit()
-                    edit.putString(Constants.ACCID, entity?.accid)
+                    edit.putString(Constants.ACCID, entity?.accessToken)
                     edit.apply()
                     mView?.onSuccess()
                 }
@@ -121,7 +122,8 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
     /**
      * 拨号 进入视频会议
      */
-    fun dial(account: String) {
+    fun dial() {
+        val account=getMeettingAccount()?:""
         mModel.dial(account, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
 //                val response=JSONUtil.getJSONObject(responseStr)
@@ -129,8 +131,7 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                 try {
                     val code = response.getInt("code")
                     if (code == 0 ) {
-                        val strings = account.split("##".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        mView?.dialSuccess(if (strings.size > 1) strings[1] else "")
+                        mView?.dialSuccess(getSharedPreferences().getString(Constants.TERMINAL_HOST_PASSWORD,""))
                     } else {
                         mView?.dialFailed()
                         Log.i(TAG, "onResponse: 参数无效 code:  " + code)

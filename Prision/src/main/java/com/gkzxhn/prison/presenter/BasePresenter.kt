@@ -27,8 +27,8 @@ import java.util.concurrent.Executors
 open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, protected val mModel: M, view: V?) {
     protected var mWeakContext: WeakReference<Context>? = null //弱引用Context
     protected val UNAUTHCODE = "401"
-    protected val PAGE_SIZE = 20//分页 每页数量
-    protected val FIRST_PAGE = 0//分页 起始页
+    protected val PAGE_SIZE = 100//分页 每页数量
+    protected val FIRST_PAGE = 1//分页 起始页
     protected var currentPage = FIRST_PAGE //分页 当前页面
     protected var mWeakView: WeakReference<V>? = null//弱引用 view
     protected var asynHelper: AsynHelper? = null //异步解析数据
@@ -43,6 +43,16 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
     }
     fun getSharedPreferences(): SharedPreferences {
         return mModel.sharedPreferences
+    }
+    fun getMeettingAccount():String?{
+        val roomNum=getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER,null)
+        if(roomNum==null||roomNum.isEmpty()){
+            return null
+        }else{
+            return String.format("%s##%s##%s",getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER,"")
+                    ,getSharedPreferences().getString(Constants.TERMINAL_HOST_PASSWORD,""),
+                    getSharedPreferences().getString(Constants.TERMINAL_GUEST_PASSWORD,""))
+        }
     }
 
     protected fun unauthorized() {//getRooms has expired

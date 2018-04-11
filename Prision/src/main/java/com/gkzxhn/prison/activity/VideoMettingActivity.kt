@@ -374,7 +374,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      */
     private fun callAccount() {
         val sharedPreferences = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
-        val account = sharedPreferences.getString(Constants.TERMINAL_ACCOUNT, "")
+        val account = mPresenter.getMeettingAccount()
         val time = sharedPreferences.getLong(Constants.TIME_LIMIT, 20)
         if (account != null && account.length > 0) {
             //发送云信消息，检测家属端是否已经准备好可以呼叫

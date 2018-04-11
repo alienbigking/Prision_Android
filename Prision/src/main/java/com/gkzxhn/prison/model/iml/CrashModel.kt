@@ -20,10 +20,10 @@ class CrashModel:CallZijingModel(),ICrashModel {
             val params = JSONObject()
             params.put("phone", sharedPreferences.getString(Constants.USER_ACCOUNT, ""))
             params.put("contents", message)
-            params.put("device_name", android.os.Build.MODEL)
-            params.put("sys_version", "Android")
-            params.put("device_type", Build.VERSION.SDK_INT.toString())
-            params.put("app_version", versionCode)
+            params.put("deviceName", android.os.Build.MODEL)
+            params.put("sysVersion", "Android")
+            params.put("deviceType", Build.VERSION.SDK_INT.toString())
+            params.put("appVersion", versionCode)
             volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL, JSONObject().put("logger", params),null,onFinishedListener)
         }catch (e:Exception){}
     }

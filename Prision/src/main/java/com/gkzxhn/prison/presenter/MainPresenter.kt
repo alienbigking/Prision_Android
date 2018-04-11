@@ -19,6 +19,7 @@ import com.gkzxhn.prison.model.iml.MainModel
 import com.gkzxhn.prison.view.IMainView
 import com.gkzxhn.wisdom.async.VolleyUtils
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthService
@@ -99,7 +100,8 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "access_times"))
+                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(
+                            JSONUtil.getJSONObject(response,"data"), "access_times"))
                     //保存到本地
                     getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME, time).apply()
                 }
@@ -113,10 +115,13 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
     /**
      * 请求会见列表
      */
-    fun request(date: String) {
+    fun request(isRefresh: Boolean,date: String) {
 //        checkGUI()
-        mView?.startRefreshAnim()
-        mModel.request(date, object : VolleyUtils.OnFinishedListener<JSONObject> {
+        if (isRefresh) {
+            currentPage = FIRST_PAGE
+            mView?.startRefreshAnim()
+        }
+        mModel.request(date,currentPage,PAGE_SIZE, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val view = if (mWeakView == null) null else mWeakView!!.get()
                 view?.stopRefreshAnim()
@@ -126,7 +131,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                         val resultJson = JSONUtil.getJSONObjectStringValue(response, "meetings")
                         startAsynTask(Constants.MAIN_TAB, object : AsynHelper.TaskFinishedListener {
                             override fun back(`object`: Any?) {
-                                mView?.updateItems(`object` as List<MeetingEntity>)
+                                val mData =`object` as List<MeetingEntity>
+                                if (mData != null && mData.size > 0) currentPage = currentPage + 1
+                                mView?.updateItems(mData)
                                 mView?.stopRefreshAnim()
                             }
                         }, resultJson)
@@ -177,7 +184,16 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    mView?.updateVersion(Gson().fromJson(response.toString(), VersionEntity::class.java))
+                    val versionsJson=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"),"versions")
+                    val versions= Gson().fromJson<List<VersionEntity>>(versionsJson,
+                            object : TypeToken<List<VersionEntity>>() {
+                            }.type)
+                    for(version in versions){
+                        if(version.id==2){
+                            mView?.updateVersion(version)
+                            break
+                        }
+                    }
                 }
             }
 
@@ -225,49 +241,4 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
         super.stopAnim()
         mView?.dismissProgress()
     }
-
-
-    /**
-     * 拨号 进入视频会议
-     */
-    fun dial(account: String, requestCode: Int) {
-        var account = account
-        var strings: Array<String>? = null
-        var password = ""
-        if (account.contains("##")) {
-            strings = account.split("##".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            account = strings[0]
-            if (strings.size > 0) {
-                password = strings[1]
-            }
-        }
-        val finalStrings = strings
-        mModel.dial(account, object : VolleyUtils.OnFinishedListener<JSONObject> {
-            override fun onSuccess(response: JSONObject) {
-                Log.d(TAG, "DIAL" + response.toString())
-                try {
-                    val code = response.getInt("code")
-                    if (code == 0) {
-                        val intent = Intent(mView as Activity, VideoMettingActivity::class.java)
-                        if (null != finalStrings && finalStrings.size > 1) {
-                            intent.putExtra(Constants.ZIJING_PASSWORD, finalStrings[1])
-                        }
-                        (mView as Activity).startActivityForResult(intent, requestCode)
-                    } else {
-                        Log.i(TAG, "onResponse: 参数无效 code:  " + code)
-                    }
-                } catch (e: JSONException) {
-                    Log.e(TAG, "onResponse: >>> " + e.message)
-                    //                            e.printStackTrace();
-                }
-
-            }
-
-            override fun onFailed(error: VolleyError) {
-                Log.d(TAG, "ResetQuest..." + error.toString())
-                mView?.showToast("ResetQuest...  " + error.toString())
-            }
-        })
-    }
-
 }

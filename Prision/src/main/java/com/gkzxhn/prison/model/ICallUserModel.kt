@@ -16,5 +16,9 @@ interface ICallUserModel : ICallZijingModel {
     /**
      *  请求数据
      */
-    fun request(id: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
+    fun request(familyId: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
+    /**
+     * 家属信息 通过手机号码和家属姓名
+     */
+    fun requestFamily(key: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
 }

@@ -6,11 +6,14 @@ import android.text.TextUtils
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
+import com.gkzxhn.prison.common.GKApplication
+import com.gkzxhn.prison.entity.LoginEntity
 import com.gkzxhn.prison.model.ILoginModel
 import com.gkzxhn.prison.model.iml.LoginModel
 import com.gkzxhn.prison.utils.Utils
 import com.gkzxhn.prison.view.ILoginView
 import com.gkzxhn.wisdom.async.VolleyUtils
+import com.google.gson.Gson
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
@@ -35,15 +38,23 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    var content = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response, "DataBean"), "content")
+                    val loginEntity=Gson().fromJson(JSONUtil.getJSONObjectStringValue(response, "data"),LoginEntity::class.java)
                     val edit = getSharedPreferences().edit()
                     edit.putString(Constants.USER_ACCOUNT, account)
                     edit.putString(Constants.USER_PASSWORD, password)
                     //记住帐号密码
-                    edit.putString(Constants.USER_ACCOUNT_CACHE, account)
-                    edit.putString(Constants.USER_PASSWORD_CACHE, password)
-                    if (!TextUtils.isEmpty(content)) {
-                        edit.putString(Constants.TERMINAL_ACCOUNT, content)
+                    GKApplication.instance.getSharedPreferences(Constants.TEMP_TABLE,Context.MODE_PRIVATE).
+                            edit().putString(Constants.USER_ACCOUNT, account).putString(Constants.USER_PASSWORD, password).apply()
+                    edit.putString(Constants.TERMINAL_JIAL_ID, loginEntity.jailId)
+                    edit.putString(Constants.TERMINAL_JIAL_NAME, loginEntity.title)
+                    if(loginEntity.roomNumber!=null&&loginEntity.roomNumber?.length?:0>0){
+                        edit.putString(Constants.TERMINAL_ROOM_NUMBER, loginEntity.roomNumber)
+                        edit.putString(Constants.TERMINAL_HOST_PASSWORD, loginEntity.hostPassword)
+                        edit.putString(Constants.TERMINAL_GUEST_PASSWORD, loginEntity.mettingPassword)
+                    }else{
+                        edit.putString(Constants.TERMINAL_ROOM_NUMBER, "6851")
+                        edit.putString(Constants.TERMINAL_HOST_PASSWORD, "7890")
+                        edit.putString(Constants.TERMINAL_GUEST_PASSWORD, "0987")
                     }
                     edit.apply()
                     //关闭加载条

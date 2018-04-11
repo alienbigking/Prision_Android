@@ -29,7 +29,7 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
      *  取消会见
      */
     fun requestCancel(id: String, reason: String) {
-        mModel.requestCancel(id, reason, null)
+        mModel.requestCancel(id, reason,null)
     }
     //// 遥控器控制器
     fun cameraControl(v:String){
@@ -185,7 +185,8 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "access_times"))
+                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(
+                            JSONUtil.getJSONObject(response,"data"), "access_times"))
                     //保存到本地
                     getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME, time).apply()
                 }

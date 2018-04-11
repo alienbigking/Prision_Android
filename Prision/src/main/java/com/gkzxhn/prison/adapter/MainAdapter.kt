@@ -36,7 +36,7 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
      *  获取当前项实体
      */
     fun getCurrentItem(): MeetingEntity{
-        return mDatas[mCurrentIndex];
+        return mDatas[mCurrentIndex]
     }
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
         this.onItemClickListener = onItemClickListener
@@ -79,7 +79,7 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
                 formateTime = String.format("%s - %s", if (array.size > 1) array[1] else "", if (array.size > 3) array[3] else "")
             }
             tvTime.text = formateTime
-            tvArea.text = entity.area
+            tvArea.text = entity.prisonerNumber
             this.setOnClickListener { v ->
                 mCurrentIndex = position
                onItemClickListener?.onClickListener(v, position)

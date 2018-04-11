@@ -134,9 +134,7 @@ class GKApplication : Application() {
     fun clearSharedPreferences(){
         val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
         val edit = sharedPreferences.edit()
-        edit.remove(Constants.USER_ACCOUNT)
-        edit.remove(Constants.USER_PASSWORD)
-        edit.remove(Constants.TERMINAL_ACCOUNT)
+        edit.clear()
         edit.apply()
     }
 

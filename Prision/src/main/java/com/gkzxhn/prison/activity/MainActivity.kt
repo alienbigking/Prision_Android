@@ -16,10 +16,6 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.gkzxhn.prison.BuildConfig
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.MainAdapter
 import com.gkzxhn.prison.common.Constants
@@ -33,9 +29,7 @@ import com.gkzxhn.prison.entity.MeetingEntity
 import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.presenter.MainPresenter
 import com.gkzxhn.prison.service.EReportService
-import com.gkzxhn.prison.utils.XtHttpUtil
 import com.gkzxhn.prison.view.IMainView
-import com.gkzxhn.wisdom.async.SingleRequestQueue
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
@@ -58,7 +52,8 @@ import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_lay
 as tvNoData
 
 
-class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener {
+class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener,CusSwipeRefreshLayout.OnLoadListener{
+
     private var mDate: CustomDate? = null
     private lateinit var adapter: MainAdapter
     private lateinit var mPresenter: MainPresenter
@@ -94,8 +89,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
                     val intent = Intent(this@MainActivity, CallUserActivity::class.java)
                     intent.action=Constants.CALL_DEFUALT_ACTION
                     intent.putExtra(Constants.EXTRA, adapter.getCurrentItem().id)
-                    intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().yxAccount)
-                    intent.putExtra(Constants.EXTRA_TAB, adapter.getCurrentItem().name)
+                    intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().familyId)
                     startActivityForResult(intent, Constants.EXTRA_CODE)
                 } else {
                     showToast(R.string.video_service_is_error)
@@ -159,9 +153,10 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mSwipeRefresh.setColor(R.color.holo_blue_bright, R.color.holo_green_light,
                 R.color.holo_orange_light, R.color.holo_red_light)
         //设置加载模式，为只顶部上啦刷新
-        mSwipeRefresh.setMode(CusSwipeRefreshLayout.Mode.PULL_FROM_START)
+        mSwipeRefresh.setMode(CusSwipeRefreshLayout.Mode.BOTH)
         mSwipeRefresh.setLoadNoFull(false)
         mSwipeRefresh.onRefreshListener = this
+        mSwipeRefresh.onLoadListener=this
         mRecylerView.adapter = adapter
         val sizeMenu = resources.getDimensionPixelSize(R.dimen.recycler_view_line_height)
         mRecylerView.addItemDecoration(RecycleViewDivider(
@@ -185,12 +180,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mPresenter.requestZijing()
         //请求免费呼叫次数
         mPresenter.requestFreeTime()
-        if (BuildConfig.DEBUG) {
-            findViewById(R.id.main_layout_ch_head).setOnClickListener {
-                val account = mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "")
-                mPresenter.dial(account, 1)
-            }
-        }
         mPresenter.requestVersion()
     }
     /**
@@ -245,16 +234,20 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mPresenter.checkStatusCode()
         if (mPresenter.checkStatusCode() == StatusCode.LOGINED) {
             //没有设置终端，则提示用户设置终端
-            if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "").length == 0) {
+            if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER, "").length == 0) {
                 stopRefreshAnim()
                 initTerminalDialog()
                 if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
             } else {
-                mPresenter.request(mDate.toString())
+                mPresenter.request(true,mDate.toString())
             }
         } else {
             stopRefreshAnim()
         }
+    }
+
+    override fun onLoad() {
+        mPresenter.request(false,mDate.toString())
     }
 
     /**

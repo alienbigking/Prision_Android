@@ -11,6 +11,7 @@ import com.gkzxhn.prison.model.iml.SettingModel
 import com.gkzxhn.prison.view.ISettingView
 import com.gkzxhn.wisdom.async.VolleyUtils
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.util.HttpStatus
 import com.starlight.mobile.android.lib.util.JSONUtil
@@ -30,7 +31,8 @@ class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISe
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "access_times"))
+                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(
+                            JSONUtil.getJSONObject(response,"data"), "access_times"))
                     mView?.updateFreeTime(time)
                     //保存到本地
                     getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME, time).apply()
@@ -50,7 +52,18 @@ class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISe
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    mView?.updateVersion(Gson().fromJson(response.toString(), VersionEntity::class.java))
+                    val versionsJson=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"),"versions")
+                    val versions= Gson().fromJson<List<VersionEntity>>(versionsJson,
+                            object : TypeToken<List<VersionEntity>>() {
+                            }.type)
+                    var v:VersionEntity?=null
+                    for(version in versions){
+                        if(version.id==2){
+                            v=version
+                            break
+                        }
+                    }
+                    mView?.updateVersion(v)
                 }
             }
 

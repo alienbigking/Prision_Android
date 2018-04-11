@@ -2,7 +2,9 @@ package com.gkzxhn.prison.model.iml
 
 import com.android.volley.AuthFailureError
 import com.android.volley.VolleyError
+import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
+import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.ICallZijingModel
 import com.gkzxhn.prison.utils.XtHttpUtil
 import com.gkzxhn.wisdom.async.VolleyUtils
@@ -19,11 +21,20 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
      *  取消会见
      */
     override fun requestCancel(id: String, reason: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
-        val url = String.format("%s/%s", Constants.REQUEST_CANCEL_MEETING_URL, id)
         try {
+            var status=Constants.MEETTING_PASSED
+            val finishResons=GKApplication.instance.resources.getStringArray(R.array.cancel_video_reason)
+            val cancelResons=GKApplication.instance.resources.getStringArray(R.array.cancel_meeting_reason)
+            if(cancelResons.contains(reason)){
+                status=Constants.MEETTING_CANCELED
+            }else if(finishResons[0]==reason||finishResons[1]==reason||finishResons[2]==reason){
+                status=Constants.MEETTING_FINISHED
+            }
             val params = HashMap<String, String>()
-            params.put("remarks", reason)
-            volleyUtils.patch(url, params, REQUEST_TAG, onFinishedListener)
+            params.put("remark", reason)
+            params.put("id", id)
+            params.put("status", status)
+            volleyUtils.post( Constants.REQUEST_CANCEL_MEETING_URL, params, REQUEST_TAG, onFinishedListener)
         } catch (authFailureError: AuthFailureError) {
             authFailureError.printStackTrace()
         }
@@ -85,7 +96,7 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
      */
     override fun updateFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         try {
-            val url = String.format("%s/%s/access", Constants.REQUEST_FREE_MEETING_TIME,
+            val url = String.format("%s?terminalNumber=%s", Constants.UPDATE_FREE_MEETING_TIME,
                     sharedPreferences.getString(Constants.USER_ACCOUNT, ""))
             volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
         } catch (e: Exception) {

@@ -7,9 +7,10 @@ import com.google.gson.annotations.SerializedName
  */
 
 class VersionEntity {
-    @SerializedName("version_number")
+    var id:Int=0
+    @SerializedName("versionNumber")
     var versionCode: Int = 0
-    @SerializedName("version_code")
+    @SerializedName("versionCode")
     var versionName: String? = null
         get() {
             return if(field=="null")"" else field
@@ -19,7 +20,7 @@ class VersionEntity {
         get() {
             return if(field=="null")"" else field
         }
-    @SerializedName("is_force")
+    @SerializedName("isForce")
     var isForce: Boolean = false
 
 }

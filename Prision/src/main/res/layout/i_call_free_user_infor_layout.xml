@@ -79,7 +79,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:textSize="20sp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/call_free_layout_tv_click_call"
         android:textColor="@color/common_blue"
         android:text="@string/click_for_call"

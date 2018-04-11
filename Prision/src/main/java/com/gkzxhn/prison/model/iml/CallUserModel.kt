@@ -17,13 +17,15 @@ import org.json.JSONObject
  */
 
 class CallUserModel : CallZijingModel(), ICallUserModel {
+
+
     /**
      * 获取免费呼叫次数
      * @param onFinishedListener
      */
     override fun requestFreeTime(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
         try {
-            val url = String.format("%s/%s/access_times", Constants.REQUEST_FREE_MEETING_TIME,
+            val url = String.format("%s?terminalNumber=%s", Constants.REQUEST_FREE_MEETING_TIME,
                     sharedPreferences.getString(Constants.USER_ACCOUNT, ""))
             volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
         } catch (authFailureError: AuthFailureError) {
@@ -35,14 +37,20 @@ class CallUserModel : CallZijingModel(), ICallUserModel {
     /**
      * 获取家属信息
      */
-    override fun request(id: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
-        val url = String.format("%s/%s", Constants.REQUEST_MEETING_DETAIL_URL, id)
+    override fun request(familyId: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+        val url = String.format("%s?id=%s", Constants.REQUEST_MEETING_DETAIL_URL, familyId)
         try {
             volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
         } catch (authFailureError: AuthFailureError) {
             authFailureError.printStackTrace()
         }
-
     }
-
+    override fun requestFamily(key: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+        val url = String.format("%s?key=%s&page=1&rows=1000", Constants.REQUEST_FAMILY_BY_KEY, key)
+        try {
+            volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+    }
 }
