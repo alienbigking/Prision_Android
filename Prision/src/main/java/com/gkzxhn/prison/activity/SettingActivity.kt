@@ -67,9 +67,6 @@ class SettingActivity : SuperActivity(), ISettingView {
         //显示已设置的USB录播
         val isOpenUsb = mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD, true)
         mRadioGroup.check(if (isOpenUsb) R.id.setting_layout_rb_usb_open else R.id.setting_layout_rb_usb_close)
-        //显示剩余的免费次数
-        tvCallFreeTime.text = getString(R.string.leave) +
-                mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0) + getString(R.string.time)
         //请求免费会见次数
         mPresenter.requestFreeTime()
         // 初始化退出对话框
@@ -244,6 +241,8 @@ class SettingActivity : SuperActivity(), ISettingView {
 
     override fun onResume() {
         super.onResume()
+        tvCallFreeTime.text = getString(R.string.leave) +
+                mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0) + getString(R.string.time)
         //关闭GUI
         mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
     }
