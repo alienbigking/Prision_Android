@@ -71,7 +71,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     //关闭视频会见对话框
     private lateinit var mCloseVideoDialog: CancelVideoDialog
     //是否开启扬声器
-    private var isOpenYSQ: Boolean = false
+    private var isOpenYSQ: Boolean = true
     //审核界面是否已缩放
     private var isScaled = false
     //提示通话时间已到 对话框
@@ -89,7 +89,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         //遥控器控制器
         mPresenter.cameraControl("direct")
         //打开扬声器
-        mPresenter.setIsQuite(true,true)
+        mPresenter.setIsQuite(isOpenYSQ)
         //打开麦克风
         mPresenter.switchMuteStatus()
         //初始化挂断对话框
@@ -221,7 +221,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             R.id.mute_text ->//麦克风
                 mPresenter.switchMuteStatus()
             R.id.quiet_text ->  //扬声器
-                mPresenter.setIsQuite(isOpenYSQ,false)
+                mPresenter.setIsQuite(!isOpenYSQ)
             R.id.exit_Img ->  //挂断
                 showHangup()
             R.id.ll_check_id ->//身份证缩放
@@ -261,14 +261,16 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      *
      * @param quiet
      */
-    override fun setSpeakerUi(quiet: Boolean) {
-        isOpenYSQ =quiet
-        if (quiet)
-            mQuite_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                    resources.getDrawable(R.drawable.vconf_mute_selector), null, null)
-        else
+    override fun setSpeakerUi(mIsOpenYSQ: Boolean) {
+        isOpenYSQ =mIsOpenYSQ
+        if (isOpenYSQ)//打开扬声器
             mQuite_txt.setCompoundDrawablesWithIntrinsicBounds(null,
                     resources.getDrawable(R.drawable.vconf_speaker_selector), null, null)
+        else
+            mQuite_txt.setCompoundDrawablesWithIntrinsicBounds(null,
+                    resources.getDrawable(R.drawable.vconf_mute_selector), null, null)
+
+
     }
 
 
@@ -350,7 +352,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 return true
             }
             218 -> {//静音
-                mPresenter.setIsQuite(!isOpenYSQ,false)
+                mPresenter.setIsQuite(!isOpenYSQ)
                 return true
             }
         }
@@ -486,7 +488,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                                     resources.getDrawable(R.drawable.vconf_microphone_off_selector), null, null)
 
                         }
-                            "MuteOff" ->
+                        "MuteOff" ->
                             //麦克风静音
                             mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
                                     resources.getDrawable(R.drawable.vconf_microphone_on_selector), null, null)

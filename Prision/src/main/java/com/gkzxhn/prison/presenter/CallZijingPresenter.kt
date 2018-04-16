@@ -91,20 +91,18 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     /**
      * 设置是否静音
      */
-    fun setIsQuite(quiet: Boolean,isInit:Boolean) {
+    fun setIsQuite(isOpenYSQ: Boolean) {
         //设置静音状态  true表示设置成静音
-        mModel.setIsQuite(quiet, object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.setIsQuite(isOpenYSQ, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 Log.d(TAG, "DIAL" + response.toString())
                 try {
-                    if(!isInit) {
-                        val code = response.getInt("code")
-                        if (code == 0) {
-                            //设置成功
-                            mView?.setSpeakerUi(quiet)
-                        } else {
-                            Log.i(TAG, "onResponse: 参数无效 code:  " + code)
-                        }
+                    val code = response.getInt("code")
+                    if (code == 0) {
+                        //设置成功
+                        mView?.setSpeakerUi(isOpenYSQ)
+                    } else {
+                        Log.i(TAG, "onResponse: 参数无效 code:  " + code)
                     }
                 } catch (e: JSONException) {
                     Log.e(TAG, "onResponse: >>> " + e.message)
