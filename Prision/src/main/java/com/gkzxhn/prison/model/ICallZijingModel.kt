@@ -74,12 +74,4 @@ interface ICallZijingModel : IBaseModel {
     fun switchMuteStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
 
 
-    /**
-     * 恢复音频输出
-     */
-    fun resetAudioOut(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
-    /**
-     * 恢复音频输入
-     */
-    fun resetAudioIn(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
 }

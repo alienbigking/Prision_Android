@@ -6,7 +6,6 @@ import android.util.Log
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
-import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.ICallZijingModel
 import com.gkzxhn.prison.model.iml.CallZijingModel
 import com.gkzxhn.prison.view.ICallZijingView
@@ -24,26 +23,6 @@ import org.json.JSONObject
 
 class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresenter<ICallZijingModel, ICallZijingView>(context, CallZijingModel(), view) {
     private val TAG = CallZijingPresenter::class.java.simpleName
-
-    /**
-     *  恢复音频
-     */
-    fun resetAudio(){
-        mModel.resetAudioIn(object :VolleyUtils.OnFinishedListener<JSONObject>{
-            override fun onSuccess(response: JSONObject) {
-            }
-
-            override fun onFailed(error: VolleyError) {
-            }
-        })
-        mModel.resetAudioOut(object :VolleyUtils.OnFinishedListener<JSONObject>{
-            override fun onSuccess(response: JSONObject) {
-            }
-
-            override fun onFailed(error: VolleyError) {
-            }
-        })
-    }
     /**
      *  取消会见
      */
@@ -54,6 +33,9 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     fun cameraControl(v:String){
         mModel.cameraControl(v,object :VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {
+                val code = response.getInt("code")
+                if (code == 0) {
+                }
             }
 
             override fun onFailed(error: VolleyError) {
@@ -109,18 +91,20 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     /**
      * 设置是否静音
      */
-    fun setIsQuite(quiet: Boolean) {
+    fun setIsQuite(quiet: Boolean,isInit:Boolean) {
         //设置静音状态  true表示设置成静音
         mModel.setIsQuite(quiet, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 Log.d(TAG, "DIAL" + response.toString())
                 try {
-                    val code = response.getInt("code")
-                    if (code == 0) {
-                        //设置成功
-                        mView?.setSpeakerUi(quiet)
-                    } else {
-                        Log.i(TAG, "onResponse: 参数无效 code:  " + code)
+                    if(!isInit) {
+                        val code = response.getInt("code")
+                        if (code == 0) {
+                            //设置成功
+                            mView?.setSpeakerUi(quiet)
+                        } else {
+                            Log.i(TAG, "onResponse: 参数无效 code:  " + code)
+                        }
                     }
                 } catch (e: JSONException) {
                     Log.e(TAG, "onResponse: >>> " + e.message)
@@ -143,6 +127,7 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
         //修改哑音状态
         mModel.switchMuteStatus(object : VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {
+                Log.e("raleigh_test"+response.toString(),"raleigh_test")
 
             }
 
