@@ -60,6 +60,10 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                     //关闭加载条
                     mView?.stopRefreshAnim()
                     mView?.onSuccess()
+                }else{
+                    //关闭加载条
+                    mView?.stopRefreshAnim()
+                    mView?.showToast(R.string.id_card_hint)
                 }
             }
 

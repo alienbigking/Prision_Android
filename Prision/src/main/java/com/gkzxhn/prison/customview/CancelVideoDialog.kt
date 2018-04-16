@@ -13,10 +13,12 @@ import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import com.android.volley.VolleyError
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.iml.MainModel
+import com.gkzxhn.wisdom.async.VolleyUtils
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
@@ -111,7 +113,13 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
             NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
         }
         if(!meetingId.isEmpty()) {//meetingid不能为空
-            mModel.requestCancel(meetingId, content, null)
+            mModel.requestCancel(meetingId, content, object :VolleyUtils.OnFinishedListener<String>{
+                override fun onSuccess(response: String) {
+                }
+
+                override fun onFailed(error: VolleyError) {
+                }
+            })
         }
     }
 

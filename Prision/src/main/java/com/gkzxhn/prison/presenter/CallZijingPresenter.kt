@@ -26,6 +26,25 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     private val TAG = CallZijingPresenter::class.java.simpleName
 
     /**
+     *  恢复音频
+     */
+    fun resetAudio(){
+        mModel.resetAudioIn(object :VolleyUtils.OnFinishedListener<JSONObject>{
+            override fun onSuccess(response: JSONObject) {
+            }
+
+            override fun onFailed(error: VolleyError) {
+            }
+        })
+        mModel.resetAudioOut(object :VolleyUtils.OnFinishedListener<JSONObject>{
+            override fun onSuccess(response: JSONObject) {
+            }
+
+            override fun onFailed(error: VolleyError) {
+            }
+        })
+    }
+    /**
      *  取消会见
      */
     fun requestCancel(id: String, reason: String) {

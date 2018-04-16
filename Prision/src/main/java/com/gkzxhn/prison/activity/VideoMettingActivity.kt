@@ -88,6 +88,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         initCountDownTimer()
         //遥控器控制器
         mPresenter.cameraControl("direct")
+//        mPresenter.resetAudio()
 
         //初始化挂断对话框
         initHangUpDialog()

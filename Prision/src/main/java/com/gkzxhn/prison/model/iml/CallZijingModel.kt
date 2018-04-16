@@ -17,6 +17,14 @@ import java.util.HashMap
  */
 
 open class CallZijingModel : BaseModel(), ICallZijingModel {
+    override fun resetAudioOut(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+        volleyUtils[JSONObject::class.java, XtHttpUtil.RESET_AUDIOUT, REQUEST_TAG, onFinishedListener]
+    }
+
+    override fun resetAudioIn(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+        volleyUtils[JSONObject::class.java, XtHttpUtil.RESET_AUDIIN, REQUEST_TAG, onFinishedListener]
+    }
+
     /**
      *  取消会见
      */
