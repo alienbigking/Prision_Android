@@ -45,7 +45,6 @@
         android:text="@string/terminal_account"
         />
 
-
     <EditText
         android:id="@+id/config_layout_et_account"
         android:layout_width="match_parent"
@@ -60,6 +59,41 @@
         android:background="@android:color/white"
         android:layout_toRightOf="@+id/config_layout_tv_terminal_account_title"
         android:layout_below="@+id/config_layout_tv_notice"
+        android:hint="@string/terminal_account_hint"
+        />
+
+    <TextView
+        android:id="@+id/config_layout_tv_terminal_room_number_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/config_layout_tv_notice"
+        android:layout_alignTop="@+id/config_layout_et_terminal_room_number"
+        android:layout_alignBottom="@+id/config_layout_et_terminal_room_number"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/margin_half"
+        android:textColor="@color/common_light_text_color"
+        android:paddingRight="10dip"
+        android:layout_alignRight="@+id/config_layout_tv_config_time"
+        android:textSize="26sp"
+
+        android:background="@android:color/white"
+        android:text="@string/terminal_account"
+        />
+
+    <EditText
+        android:id="@+id/config_layout_et_terminal_room_number"
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/margin_half"
+        android:layout_alignRight="@+id/config_layout_tv_notice"
+        android:paddingTop="@dimen/margin_half"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:lines="1"
+        android:ellipsize="end"
+        android:paddingLeft="15dip"
+        android:background="@android:color/white"
+        android:layout_toRightOf="@+id/config_layout_tv_terminal_account_title"
+        android:layout_below="@+id/config_layout_et_account"
         android:hint="@string/terminal_account_hint"
         />
     <ImageView

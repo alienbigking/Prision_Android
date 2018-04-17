@@ -63,7 +63,7 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                 }else{
                     //关闭加载条
                     mView?.stopRefreshAnim()
-                    mView?.showToast(R.string.id_card_hint)
+                    mView?.showToast(R.string.account_pwd_error)
                 }
             }
 

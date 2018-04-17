@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import com.android.volley.VolleyError
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.MainAdapter
@@ -28,16 +27,13 @@ import com.gkzxhn.prison.customview.calendar.CalendarViewAdapter
 import com.gkzxhn.prison.customview.calendar.CustomDate
 import com.gkzxhn.prison.entity.MeetingEntity
 import com.gkzxhn.prison.entity.VersionEntity
-import com.gkzxhn.prison.model.iml.CrashModel
 import com.gkzxhn.prison.presenter.MainPresenter
 import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.view.IMainView
-import com.gkzxhn.wisdom.async.VolleyUtils
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
 import com.starlight.mobile.android.lib.view.RecycleViewDivider
-import org.json.JSONObject
 import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_service_hint
 as tvServiceConnectHint
 import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_month
@@ -226,7 +222,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             R.id.common_head_layout_iv_left -> startActivity(Intent(this, SettingActivity::class.java))
             R.id.common_head_layout_iv_right -> {
                 onRefresh()
-                val t=CrashModel();
             }
             R.id.main_layout_ll_service_hint//视频连接服务
             -> if (!isConnectZijing) {

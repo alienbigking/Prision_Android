@@ -26,6 +26,10 @@ import kotlinx.android.synthetic.main.config_layout.config_layout_sp_protocol
 as mSpinnerProtocol
 import kotlinx.android.synthetic.main.config_layout.config_layout_et_config_time
 as etTime
+import kotlinx.android.synthetic.main.config_layout.config_layout_ch_head
+as chHead
+
+
 /**终端配置
  * Created by Raleigh.Luo on 17/4/12.
  */
@@ -61,6 +65,7 @@ class ConfigActivity : SuperActivity() {
     }
 
     private fun init() {
+
         //协议初始化
         val protocolArray = resources.getStringArray(R.array.protocol)
         val protocolAdapter = ArrayAdapter(this,
@@ -104,6 +109,8 @@ class ConfigActivity : SuperActivity() {
         //获取终端号
         mAccount = String.format("%s##%s##%s",preferences.getString(Constants.TERMINAL_ROOM_NUMBER, ""),
                 preferences.getString(Constants.TERMINAL_HOST_PASSWORD, ""), preferences.getString(Constants.TERMINAL_GUEST_PASSWORD, ""))
+        //初始化标题
+        chHead.getTvTitle().setText(String.format("%s(%s)",getString(R.string.end_setting),preferences.getString(Constants.USER_ACCOUNT, "")))
         //获取
         mTimeLimit = preferences.getLong(Constants.TIME_LIMIT, 20L)
         etTime.setText(mTimeLimit.toString())
