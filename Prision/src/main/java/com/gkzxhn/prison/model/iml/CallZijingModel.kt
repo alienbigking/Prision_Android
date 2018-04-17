@@ -153,7 +153,7 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
         try {
             val params = JSONObject()
             params.put("k", "enable-line-out")
-            params.put("v", !quiet)
+            params.put("v", quiet)
             volleyUtils.post(XtHttpUtil.SET_AUDIOUT, params, REQUEST_TAG, onFinishedListener)
         } catch (e: Exception) {
             e.printStackTrace()

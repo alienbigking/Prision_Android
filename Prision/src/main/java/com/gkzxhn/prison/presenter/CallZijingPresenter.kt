@@ -29,7 +29,14 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
      *  取消会见
      */
     fun requestCancel(id: String, reason: String) {
-        mModel.requestCancel(id, reason, null)
+        mModel.requestCancel(id, reason, object :VolleyUtils.OnFinishedListener<String>{
+            override fun onSuccess(response: String) {
+            }
+
+            override fun onFailed(error: VolleyError) {
+            }
+
+        })
     }
     //// 遥控器控制器
     fun cameraControl(v:String){
