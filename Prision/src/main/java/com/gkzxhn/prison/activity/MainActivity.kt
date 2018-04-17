@@ -191,7 +191,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 //                mPresenter.dial(account, 1)
 //            }
 //        }
-        mPresenter.requestVersion()
+
     }
     /**
      * 配置好终端提示对话框
@@ -345,6 +345,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     override fun onResume() {
         super.onResume()
+        mPresenter.requestVersion()
         //关闭GUI
         mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
         onRefresh()
