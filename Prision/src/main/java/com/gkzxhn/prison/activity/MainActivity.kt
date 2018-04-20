@@ -371,18 +371,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         intentFilter.addAction(Constants.NIM_KIT_OUT)
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        Log.i(TAG, "onKeyDown: getkeycode >>>>>> " + event.keyCode)
-        when (event.keyCode) {
-            222 -> {
-                mProgress.setMessage(getString(R.string.turn_off_ing))
-                if(!mProgress.isShowing)mProgress.show()
-                //关机按键
-                mPresenter.turnOff()
-                return true
-            }
-        }
-        return false
-    }
+
 
 }
