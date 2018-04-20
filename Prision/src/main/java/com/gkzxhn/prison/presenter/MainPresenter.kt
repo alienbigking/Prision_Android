@@ -42,7 +42,13 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
         requestZijingTime = 0
     }
     fun turnOff(){
-        mModel.turnOff(null)
+        mModel.turnOff(object :VolleyUtils.OnFinishedListener<JSONObject>{
+            override fun onSuccess(response: JSONObject) {
+            }
+
+            override fun onFailed(error: VolleyError) {
+            }
+        })
     }
 
     /**
@@ -201,9 +207,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             StatusCode.LOGINING-> {// 正在登录
                 mView?.showToast(R.string.yunxin_offline)
             }
-            StatusCode.NET_BROKEN -> { // 网络连接已断开
-                mView?.showToast(R.string.network_error)
-            }
+//            StatusCode.NET_BROKEN -> { // 网络连接已断开
+//                mView?.showToast(R.string.network_error)
+//            }
             StatusCode.UNLOGIN-> {// 未登录
                 //系统自动登录云信
                 val username = getSharedPreferences().getString(Constants.USER_ACCOUNT, "")

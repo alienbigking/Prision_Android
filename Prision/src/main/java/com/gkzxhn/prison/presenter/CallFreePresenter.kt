@@ -35,8 +35,6 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
      * 获取免费会见次数
      */
     fun requestFreeTime() {
-        //关闭GUI
-        startAsynTask(Constants.CLOSE_GUI_TAB,null)
         mModel.requestFreeTime(object : VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))

@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.RadioGroup
 
 import com.gkzxhn.prison.R
+import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.customview.CustomDialog
@@ -29,6 +30,11 @@ import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_check_net
 as tvNetwork
 import kotlinx.android.synthetic.main.setting_layout.setting_layout_rg_usb
 as mRadioGroup
+
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_start_gui_hint
+as tvStartGuiHint
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_stop_gui_hint
+as tvStopGuiHint
 
 
 
@@ -123,12 +129,42 @@ class SettingActivity : SuperActivity(), ISettingView {
                 startActivityForResult(Intent(this, CallFreeActivity::class.java), Constants.EXTRAS_CODE)
             }
             R.id.setting_layout_tv_check_network ->{
+
                 tvNetworkHint.setTextColor(resources.getColor(R.color.common_gray_title_color))
                 tvNetworkHint.setText(R.string.check_network_ing)
                 //按钮不可点击
                 tvNetwork.isEnabled=false
                 //关闭GUI
                 mPresenter.checkNetworkStatus()
+            }
+            R.id.setting_layout_tv_start_gui->{//启用gui
+                tvStartGuiHint.setText(R.string.start_gui_ing)
+                // adb shell pm enable cn.com.rocware.c9gui
+                mPresenter.startAsynTask(Constants.OPEN_GUI_TAB,object :AsynHelper.TaskFinishedListener{
+                    override fun back(`object`: Any?) {
+                        val i=`object` as Int
+                        if(i==0){//启用成功
+                            tvStartGuiHint.setText(R.string.start_gui_success)
+                        }else{
+                            tvStartGuiHint.setText(R.string.start_gui_failed)
+                        }
+                    }
+
+                })
+            }
+            R.id.setting_layout_tv_stop_gui ->{//禁用gui
+                tvStopGuiHint.setText(R.string.stop_gui_ing)
+              //adb shell pm disable cn.com.rocware.c9gui
+                mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,object :AsynHelper.TaskFinishedListener{
+                    override fun back(`object`: Any?) {
+                        val i=`object` as Int
+                        if(i==0){//禁用用成功
+                            tvStopGuiHint.setText(R.string.stop_gui_success)
+                        }else{
+                            tvStopGuiHint.setText(R.string.stop_gui_failed)
+                        }
+                    }
+                })
             }
         }
 
@@ -244,8 +280,6 @@ class SettingActivity : SuperActivity(), ISettingView {
 
     override fun onResume() {
         super.onResume()
-        //关闭GUI
-        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
     }
 
     /**

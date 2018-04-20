@@ -243,7 +243,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     override fun onRefresh() {
         mPresenter.checkStatusCode()
-        if (mPresenter.checkStatusCode() == StatusCode.LOGINED) {
+        if (mPresenter.checkStatusCode() == StatusCode.LOGINED||mPresenter.checkStatusCode() ==StatusCode.NET_BROKEN) {
             //没有设置终端，则提示用户设置终端
             if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ACCOUNT, "").length == 0) {
                 stopRefreshAnim()
@@ -346,8 +346,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     override fun onResume() {
         super.onResume()
         mPresenter.requestVersion()
-        //关闭GUI
-        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
         onRefresh()
     }
 

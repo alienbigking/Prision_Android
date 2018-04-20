@@ -60,6 +60,7 @@ object Constants {
     /*-------------------------------Request Tab-------------------------------------------------*/
     val MAIN_TAB = 0x206
     val CLOSE_GUI_TAB = 0x207
+    val OPEN_GUI_TAB = 0x208
     /*-------------------------------action-------------------------------------------------*/
 
     val ONLINE_SUCCESS_ACTION = "com.gkzxhn.prison.ONLINE_SUCCESS_ACTION"//连线成功

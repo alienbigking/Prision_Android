@@ -60,5 +60,107 @@
             android:layout_centerHorizontal="true"
             />
 
+        <!--检查网络-->
+        <TextView
+            android:id="@+id/login_layout_tv_check_network"
+            android:clickable="true"
+            android:textColor="@drawable/black_blue_text_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dip"
+            android:layout_marginTop="@dimen/margin"
+            android:background="@android:color/white"
+            android:layout_below="@+id/loign_layout_btn_login"
+            android:onClick="onClickListener"
+            android:textSize="26sp"
+            android:text="@string/check_network"
+            />
+        <TextView
+            android:id="@+id/login_layout_tv_check_network_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="@string/check_network_hint"
+            android:layout_alignBottom="@+id/login_layout_tv_check_network"
+            android:layout_alignTop="@+id/login_layout_tv_check_network"
+            android:textSize="20sp"
+            android:layout_marginRight="70dip"
+            android:textColor="@color/common_gray_title_color"
+            />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_below="@+id/login_layout_tv_check_network"
+            android:id="@+id/login_layout_v_check_network"
+            android:background="@color/common_line_color"
+            />
+
+        <!--启动GUI-->
+        <TextView
+            android:id="@+id/login_layout_tv_start_gui"
+            android:clickable="true"
+            android:textColor="@drawable/black_blue_text_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dip"
+            android:background="@android:color/white"
+            android:layout_below="@+id/login_layout_v_check_network"
+            android:onClick="onClickListener"
+            android:textSize="26sp"
+            android:text="@string/start_gui"
+            />
+        <TextView
+            android:id="@+id/login_layout_tv_start_gui_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="@string/start_gui_hint"
+            android:layout_alignBottom="@+id/login_layout_tv_start_gui"
+            android:layout_alignTop="@+id/login_layout_tv_start_gui"
+            android:textSize="20sp"
+            android:layout_marginRight="70dip"
+            android:textColor="@color/common_gray_title_color"
+            />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_below="@+id/login_layout_tv_start_gui"
+            android:id="@+id/login_layout_v_start_gui_1"
+            android:background="@color/common_line_color"
+            />
+        <!--关闭GUI-->
+        <TextView
+            android:id="@+id/login_layout_tv_stop_gui"
+            android:clickable="true"
+            android:textColor="@drawable/black_blue_text_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dip"
+            android:background="@android:color/white"
+            android:layout_below="@+id/login_layout_v_start_gui_1"
+            android:onClick="onClickListener"
+            android:textSize="26sp"
+            android:text="@string/stop_gui"
+            />
+        <TextView
+            android:id="@+id/login_layout_tv_stop_gui_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="@string/stop_gui_hint"
+            android:layout_alignBottom="@+id/login_layout_tv_stop_gui"
+            android:layout_alignTop="@+id/login_layout_tv_stop_gui"
+            android:textSize="20sp"
+            android:layout_marginRight="70dip"
+            android:textColor="@color/common_gray_title_color"
+            />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_below="@+id/login_layout_tv_start_gui"
+            android:id="@+id/login_layout_v_start_gui"
+            android:background="@color/common_line_color"
+            />
+
     </RelativeLayout>
 </ScrollView>

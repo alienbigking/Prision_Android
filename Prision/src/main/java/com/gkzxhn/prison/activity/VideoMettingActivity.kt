@@ -77,7 +77,8 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     //提示通话时间已到 对话框
     private lateinit var mHintDialog:CustomDialog
     private lateinit var mTimer:CountDownTimer
-    private var FIMALY_IS_JOIN=false;//家属是否已经加入会议室
+    private var FIMALY_IS_JOIN=false//家属是否已经加入会议室
+    private var ESTABLISHED_CALL=false//监狱端已经建立连接
     private var init=true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -449,17 +450,21 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                         "setup_call_calling" -> mText.text = getString(R.string.connecting)
                         "ring_call" -> mText.text =  getString(R.string.wait_answer)
                         "established_call" -> {
-                            //呼叫建立
-                            mText.visibility = View.GONE
-                            mContent.setBackgroundColor(resources.getColor(R.color.zijing_video_bg))
-                            callAccount()
+                            if(!ESTABLISHED_CALL){
+                                ESTABLISHED_CALL=true
+//                                //呼叫建立
+                                mText.visibility = View.GONE
+                                mContent.setBackgroundColor(resources.getColor(R.color.zijing_video_bg))
+                                callAccount()
+                            }
                         }
                         "cleared_call" -> {
                             try {
                                 val jsonObject = JSONUtil.getJSONObject(jsonStr)
                                 var objv = jsonObject.getJSONObject("v")
-                                val reason = objv!!.getString("reason")
-                                if ("Ended by local user" != reason) {
+                                val reason = objv?.getString("reason")
+                                if ("Ended by local user" != reason&&!ESTABLISHED_CALL) {
+                                    Log.e("reason="+jsonObject,"raleigh_test")
                                     //连接失败 重新连接 切换协议
                                     //                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
                                     val data = Intent()

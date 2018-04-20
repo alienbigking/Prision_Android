@@ -54,6 +54,8 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         mPresenter = CallFreePresenter(this, this)
         //请求免费次数
         mPresenter.requestFreeTime()
+        //TODO
+        etPhone.setText("18163657553")
         //设置输入框监听器
         etPhone?.addTextChangedListener(mTextWatcher)
         etPhone?.setOnEditorActionListener { v, actionId, event ->
@@ -186,7 +188,6 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
 
     override fun onResume() {
         super.onResume()
-        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
         mCallFreeTime = mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0)
         tvFreeTime.text = mCallFreeTime.toString()
         initSearchBtn()

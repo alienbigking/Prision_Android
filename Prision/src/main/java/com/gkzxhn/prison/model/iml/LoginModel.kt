@@ -2,6 +2,7 @@ package com.gkzxhn.prison.model.iml
 
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ILoginModel
+import com.gkzxhn.prison.utils.XtHttpUtil
 import com.gkzxhn.wisdom.async.VolleyUtils
 import org.json.JSONObject
 
@@ -10,6 +11,14 @@ import org.json.JSONObject
  */
 
 class LoginModel : BaseModel(), ILoginModel {
+
+    /**
+     * 获取网络请求
+     */
+    override fun getNetworkStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
+        volleyUtils[JSONObject::class.java, XtHttpUtil.GET_NETWORK_STATUS, REQUEST_TAG, onFinishedListener]
+    }
+
     /**
      * 获取终端信息
      */

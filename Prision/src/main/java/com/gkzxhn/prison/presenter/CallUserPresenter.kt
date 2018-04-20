@@ -98,9 +98,9 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
             }
             StatusCode.CONNECTING,// 正在连接
             StatusCode.LOGINING,// 正在登录
-            StatusCode.NET_BROKEN -> { // 网络连接已断开
-                mView?.showToast(R.string.network_error)
-            }
+//            StatusCode.NET_BROKEN -> { // 网络连接已断开
+//                mView?.showToast(R.string.network_error)
+//            }
             StatusCode.UNLOGIN -> {// 未登录
                 //系统自动登录云信
                 val username = getSharedPreferences().getString(Constants.USER_ACCOUNT, "")
