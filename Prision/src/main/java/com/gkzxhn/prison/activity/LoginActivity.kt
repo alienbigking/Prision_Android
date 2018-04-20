@@ -128,15 +128,15 @@ class LoginActivity : SuperActivity(), ILoginView {
                 })
             }
             R.id.login_layout_tv_stop_gui ->{//禁用gui
-                tvStartGuiHint.setText(R.string.stop_gui_ing)
+                tvStopGuiHint.setText(R.string.stop_gui_ing)
                 //adb shell pm disable cn.com.rocware.c9gui
                 mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,object :AsynHelper.TaskFinishedListener{
                     override fun back(`object`: Any?) {
                         val i=`object` as Int
                         if(i==0){//禁用用成功
-                            tvStartGuiHint.setText(R.string.stop_gui_success)
+                            tvStopGuiHint.setText(R.string.stop_gui_success)
                         }else{
-                            tvStartGuiHint.setText(R.string.stop_gui_failed)
+                            tvStopGuiHint.setText(R.string.stop_gui_failed)
                         }
                     }
                 })

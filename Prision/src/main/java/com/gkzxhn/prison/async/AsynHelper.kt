@@ -92,13 +92,9 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
         var os: DataOutputStream? = null
         try {
             val cmd = if(isEnable) "pm enable " + packageName
-                       else "pm disable " + packageName
-            process = Runtime.getRuntime().exec("su") //切换到root帐号
-            os = DataOutputStream(process.outputStream)
-            os.writeBytes(cmd + "\n")
-            os.writeBytes("exit\n")
-            os.flush()
-            result=process.waitFor()
+            else "pm disable " + packageName
+            Runtime.getRuntime().exec("adb shell "+cmd).waitFor()
+            result=0
         } catch (e: Exception) {
             e.printStackTrace()
 //            Toast.makeText(GKApplication.instance, "冻结应用失败", Toast.LENGTH_LONG).show()
