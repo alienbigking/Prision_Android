@@ -135,7 +135,7 @@
     <string name="start_gui_success">已启用GUI，请使用遥控器进行切换</string>
     <string name="start_gui_failed">启用GUI失败，请重试</string>
     <string name="stop_gui_failed">禁用GUI失败，请重试</string>
-    <string name="stop_gui_success">已禁用GUI，建议可重启终端</string>
+    <string name="stop_gui_success">已禁用GUI，建议重启终端</string>
     <string name="check_network_normal">网络正常</string>
     <string name="check_network_innormal">网络异常，请检查接入网络</string>
     <string name="check_network_hint">加载太慢？查查网络</string>
