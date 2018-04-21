@@ -242,7 +242,7 @@ class SettingActivity : SuperActivity(), ISettingView {
                 val currentVersion = packageInfo.versionCode//当前App版本
                 //TODO
                 //新版本大于当前版本
-//                if (newVersion > currentVersion) {
+                if (newVersion > currentVersion) {
                     //版本名
                     val versionName = version.versionName
                     // 下载地址
@@ -252,9 +252,9 @@ class SettingActivity : SuperActivity(), ISettingView {
                     updateDialog.setDownloadInfor(versionName ?: "", newVersion, downloadUrl ?: "")
                     updateDialog.show()//显示对话框
                     tvUpdateHint.text = getString(R.string.new_version_colon) + versionName
-//                } else {//无版本更新
-//                    tvUpdateHint.setText(R.string.has_last_version)
-//                }
+                } else {//无版本更新
+                    tvUpdateHint.setText(R.string.has_last_version)
+                }
             } catch (e: PackageManager.NameNotFoundException) {
                 e.printStackTrace()
             }

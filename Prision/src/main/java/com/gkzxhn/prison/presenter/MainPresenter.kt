@@ -53,11 +53,18 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
      * 发请求，检测设备视频会议是否已经准备好
      */
     fun requestZijing() {
-        mModel.getCallHistory(object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.getNetworkStatus(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == 0) {
-                    mView?.startZijingService()
+                    var isConnected=false
+                    try {
+                        val v = JSONUtil.getJSONObject(response, "v")
+                        if (v.getBoolean("connected")) {
+                            isConnected = true
+                        }
+                    }catch (e:Exception){}
+                    mView?.startZijingService(isConnected)
                     checkCallStatus()
                 } else {
                     mHandler.postDelayed(Runnable {

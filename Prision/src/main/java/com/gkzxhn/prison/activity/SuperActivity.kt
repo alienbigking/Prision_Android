@@ -3,8 +3,6 @@ package com.gkzxhn.prison.activity
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
@@ -12,8 +10,10 @@ import android.widget.Toast
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.GKApplication
+import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.model.iml.CallZijingModel
 import com.gkzxhn.wisdom.async.VolleyUtils
+import kotlinx.android.synthetic.main.activity_call_zijing.*
 import org.json.JSONObject
 
 /**
@@ -25,19 +25,43 @@ open class SuperActivity : AppCompatActivity() {
     private lateinit var tvToastText: TextView
     //关机
     private lateinit var mTurnOffProgress: ProgressDialog
+    private lateinit var mTurnOffDialog:CustomDialog
+    private lateinit var mCallZijingModel:CallZijingModel
     //自动化测试使用
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GKApplication.instance.pushActivity(this)
+        var mCallZijingModel=CallZijingModel()
         mToast = Toast(this)
         val view=View.inflate(this, R.layout.toast_layout,null)
         mToast.view=view
         tvToastText= view.findViewById(R.id.toast_layout_tv_title) as TextView
         //初始化进度条
         mTurnOffProgress = ProgressDialog.show(this, null, getString(R.string.turn_off_ing))
-        mTurnOffProgress.setCanceledOnTouchOutside(true)
-        mTurnOffProgress.setCancelable(true)
+        mTurnOffProgress.setCanceledOnTouchOutside(false)
+        mTurnOffProgress.setCancelable(false)
         mTurnOffProgress.dismiss()
+
+        mTurnOffDialog = CustomDialog(this)
+        with(mTurnOffDialog!!){
+            this.title = getString(R.string.hint)
+            this.content = getString(R.string.turn_off_hint)
+            this.confirmText = getString(R.string.ok)
+            this.cancelText = getString(R.string.back)
+            this.onClickListener= View.OnClickListener { v ->
+                if(v.id==R.id.custom_dialog_layout_tv_confirm){
+                    if(!mTurnOffProgress.isShowing)mTurnOffProgress.show()
+//                    //关机按键
+                    mCallZijingModel.turnOff(object :VolleyUtils.OnFinishedListener<JSONObject>{
+                        override fun onSuccess(response: JSONObject) {
+                        }
+
+                        override fun onFailed(error: VolleyError) {
+                        }
+                    })
+                }
+            }
+        }
     }
     /**
      * Espresso 自动化测试延迟操作
@@ -66,6 +90,7 @@ open class SuperActivity : AppCompatActivity() {
     override fun onDestroy() {
         cancelToast()
         if(mTurnOffProgress.isShowing)mTurnOffProgress.dismiss()
+        if(mTurnOffDialog.isShowing) mTurnOffDialog.dismiss()
         super.onDestroy()
     }
 
@@ -82,17 +107,8 @@ open class SuperActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         when (event.keyCode) {
-            222 -> {
-                if(!mTurnOffProgress.isShowing)mTurnOffProgress.show()
-                //关机按键
-                val module=CallZijingModel()
-                module.turnOff(object :VolleyUtils.OnFinishedListener<JSONObject>{
-                    override fun onSuccess(response: JSONObject) {
-                    }
-
-                    override fun onFailed(error: VolleyError) {
-                    }
-                })
+            222 -> {//23OK键
+                if(!mTurnOffDialog.isShowing) mTurnOffDialog.show()
                 return true
             }
         }

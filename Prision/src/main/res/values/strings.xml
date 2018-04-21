@@ -4,6 +4,7 @@
     <string name="take_photo">拍照</string>
     <string name="album">相册</string>
     <string name="cancel">取消</string>
+    <string name="back">返回</string>
     <!--common-->
     <string name="save">保存</string>
     <string name="please_input">请输入</string>
@@ -40,11 +41,11 @@
     <string name="day">日</string>
     <string name="canceled_meeting">已取消会见</string>
     <string name="no_meeting_data">暂无待会见名单</string>
-    <string name="video_service_status">视频服务连接状态：</string>
+    <string name="video_service_status">连接状态：</string>
     <string name="video_service_is_error">连接视频服务器失败，正在重试，请稍后~</string>
     <string name="video_service_connecting">正在连接视频服务器..</string>
-    <string name="video_service_connect_success">连接成功</string>
-    <string name="video_service_connect_failed">连接失败</string>
+    <string name="video_service_connect_success">网络连接成功</string>
+    <string name="video_service_connect_failed">网络连接失败</string>
     <!--远程会见-->
     <string name="video_metting_failed">对方未通过人脸识别或已拒绝</string>
     <string name="video_metting_hangup">对方已挂断</string>
@@ -125,6 +126,7 @@
     <string name="logout">退出当前账号</string>
     <string name="turn_off">关机</string>
     <string name="turn_off_ing">正在关机...</string>
+    <string name="turn_off_hint">确定关机？</string>
     <string name="check_update">检查更新</string>
     <string name="check_network">检测网络</string>
     <string name="start_gui">启用GUI</string>

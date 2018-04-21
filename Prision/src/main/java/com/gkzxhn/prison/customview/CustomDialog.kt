@@ -73,6 +73,17 @@ class CustomDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
             onClickListener?.onClick(view)
         }
     }
+
+    override fun show() {
+        super.show()
+        if(tvConfirm!=null){
+            tvConfirm.isFocusable=true
+            tvConfirm.requestFocus()
+            tvConfirm.isFocusableInTouchMode=true
+            tvConfirm.requestFocusFromTouch()
+            tvConfirm.isSelected=true
+        }
+    }
     fun measureWindow() {
         val dialogWindow = this.window
         val params = dialogWindow.attributes

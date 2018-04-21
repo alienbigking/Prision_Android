@@ -183,6 +183,8 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mPresenter = MainPresenter(this, this)
         //请求连接紫荆服务器
         mPresenter.requestZijing()
+        mProgress.setMessage(getString(R.string.video_service_connecting))
+        mProgress.show()
         //请求免费呼叫次数
         mPresenter.requestFreeTime()
 //        if (BuildConfig.DEBUG) {
@@ -235,9 +237,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
                 onRefresh()
             }
             R.id.main_layout_ll_service_hint//视频连接服务
-            -> if (!isConnectZijing) {
-                reConnextZijing()
-            }
+            -> reConnextZijing()
         }
     }
 
@@ -321,13 +321,20 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     }
 
-    override fun startZijingService() {
+    override fun startZijingService(isNetworkConnected:Boolean) {
         if (!isConnectZijing) {
             isConnectZijing = true
-            tvServiceConnectHint.setText(R.string.video_service_connect_success)
-            tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_success))
+            dismissProgress()
             val mService = Intent(this, EReportService::class.java)
             startService(mService)
+        }
+        if(isNetworkConnected){
+            tvServiceConnectHint.setText(R.string.video_service_connect_success)
+            tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_success))
+        }else{
+//                "0040xf609"
+            tvServiceConnectHint.setText(R.string.video_service_connect_failed)
+            tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_failed))
         }
     }
 
