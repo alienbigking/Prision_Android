@@ -126,6 +126,7 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
             // 遥控器控制器
             val params = JSONObject()
             params.put("k","remote-control-role")
+            params.put("v",v)
             volleyUtils.post(XtHttpUtil.CAMERA_CONTROL, params, REQUEST_TAG, onFinishedListener)
         } catch (e: Exception) {
             e.printStackTrace()

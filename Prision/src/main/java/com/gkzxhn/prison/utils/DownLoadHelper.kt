@@ -125,20 +125,7 @@ class DownLoadHelper {
             filePath = file.getAbsolutePath()
 //            if(!file.canWrite()||!file.canRead()) {
                 Log.i(DownLoadHelper::class.java.simpleName, "path : " + filePath)
-                val cmd = "chmod 777 " + filePath
-                try {
-                    val p = Runtime.getRuntime().exec(cmd)
-                    val status = p.waitFor()
-                    if (status == 0) {
-                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改成功")
-                    } else {
-                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改失败")
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
+
 //            }
             try {
                 val url = URL(mUrl)
@@ -170,6 +157,21 @@ class DownLoadHelper {
                 fos.close()
                 inputStream?.close()
             } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            val cmd = "chmod 777 " + filePath
+            try {
+                val p = Runtime.getRuntime().exec(cmd)
+                val status = p.waitFor()
+                if (status == 0) {
+                    Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改成功")
+                } else {
+                    Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改失败")
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
 

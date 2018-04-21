@@ -3,6 +3,7 @@ package com.gkzxhn.prison.presenter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 
@@ -35,12 +36,9 @@ import org.json.JSONObject
  */
 
 class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainModel, IMainView>(context, MainModel(), view) {
-    private var requestZijingTime = 0
+    private val mHandler: Handler =Handler()
 
     private val TAG = MainPresenter::class.java.simpleName
-    fun resetTime() {
-        requestZijingTime = 0
-    }
     fun turnOff(){
         mModel.turnOff(object :VolleyUtils.OnFinishedListener<JSONObject>{
             override fun onSuccess(response: JSONObject) {
@@ -55,7 +53,6 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
      * 发请求，检测设备视频会议是否已经准备好
      */
     fun requestZijing() {
-        requestZijingTime++
         mModel.getCallHistory(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
@@ -63,16 +60,17 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                     mView?.startZijingService()
                     checkCallStatus()
                 } else {
-                    mView?.zijingServiceFailed()
+                    mHandler.postDelayed(Runnable {
+                        requestZijing()
+                    },500)
+
                 }
             }
 
             override fun onFailed(error: VolleyError) {
-                if (requestZijingTime < 5) {//最多请求5次
+                mHandler.postDelayed(Runnable {
                     requestZijing()
-                } else {
-                    mView?.zijingServiceFailed()
-                }
+                },500)
             }
         })
     }
