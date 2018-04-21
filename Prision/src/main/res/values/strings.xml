@@ -41,7 +41,7 @@
     <string name="day">日</string>
     <string name="canceled_meeting">已取消会见</string>
     <string name="no_meeting_data">暂无待会见名单</string>
-    <string name="video_service_status">连接状态：</string>
+    <string name="video_service_status">启动连接状态：</string>
     <string name="video_service_is_error">连接视频服务器失败，正在重试，请稍后~</string>
     <string name="video_service_connecting">正在连接视频服务器..</string>
     <string name="video_service_connect_success">网络连接成功</string>

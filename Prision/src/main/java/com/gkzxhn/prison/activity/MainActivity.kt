@@ -262,7 +262,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
      */
     private fun reConnextZijing() {
         tvServiceConnectHint.setTextColor(resources.getColor(R.color.connecting))
-        tvServiceConnectHint.setText(R.string.video_service_connecting)
+        tvServiceConnectHint.setText(R.string.check_network_ing)
         //重新请求
         mPresenter.requestZijing()
     }
