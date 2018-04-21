@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import com.android.volley.VolleyError
 
 import com.gkzxhn.prison.R
@@ -36,6 +37,7 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
     private lateinit var rateArray: Array<String>
     var content: String = ""
     var onClickListener: View.OnClickListener? = null
+    private lateinit var tvConfirm: TextView
 
     private val mModel: MainModel
 
@@ -80,7 +82,11 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         findViewById(R.id.cancel_dialog_layout_tv_cancel).setOnClickListener {
             dismiss()
         }
-        findViewById(R.id.cancel_dialog_layout_tv_set).setOnClickListener { view ->
+        findViewById(R.id.cancel_dialog_layout_tv_cancel).isFocusable=true
+        tvConfirm= findViewById(R.id.cancel_dialog_layout_tv_set) as TextView
+        //聚焦
+        tvConfirm.isFocusable=true
+        tvConfirm.setOnClickListener { view ->
             dismiss()
             onClickListener?.onClick(view)
             if (isCancelVideo) sendMessage()
@@ -135,4 +141,5 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         dialogWindow.setGravity(Gravity.CENTER)
         dialogWindow.attributes = params
     }
+
 }

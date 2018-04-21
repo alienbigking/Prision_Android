@@ -240,7 +240,6 @@ class SettingActivity : SuperActivity(), ISettingView {
                 packageInfo = pm.getPackageInfo(packageName,
                         PackageManager.GET_CONFIGURATIONS)
                 val currentVersion = packageInfo.versionCode//当前App版本
-                //TODO
                 //新版本大于当前版本
                 if (newVersion > currentVersion) {
                     //版本名

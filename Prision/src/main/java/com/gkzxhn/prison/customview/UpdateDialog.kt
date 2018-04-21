@@ -173,7 +173,16 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
 
     override fun show() {
         super.show()
-        tvDownload.isEnabled = true
-        tvProgress.visibility = View.INVISIBLE
+        if(tvDownload!=null){
+            tvProgress.visibility = View.INVISIBLE
+            tvDownload.isEnabled = true
+
+            //聚焦－遥控器点击ok即可触发
+            tvDownload.isFocusable=true
+            tvDownload.requestFocus()
+            tvDownload.isFocusableInTouchMode=true
+            tvDownload.requestFocusFromTouch()
+            tvDownload.isSelected=true
+        }
     }
 }
