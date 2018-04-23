@@ -38,7 +38,7 @@ class VolleyUtils{
     operator fun get(obj: Class<*>?, url: String, tag: String?, onFinishedListener: OnFinishedListener<*>?) {
         try {
             if (obj != null && obj == String::class.java) {
-                val request = object : StringRequest(url, getStringListener(onFinishedListener as OnFinishedListener<String>), getErrorListener(onFinishedListener)) {
+                val request = object : StringRequest(url, getStringListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<String>), getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         return if (tag == null) HashMap() else cusHeaders
@@ -49,7 +49,7 @@ class VolleyUtils{
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                 SingleRequestQueue.instance.add(request, tag)
             } else if (obj != null && obj == JSONObject::class.java) {
-                val request = object : JsonObjectRequest(url, null, getJSONObjectListener(onFinishedListener as OnFinishedListener<JSONObject>) , getErrorListener(onFinishedListener)) {
+                val request = object : JsonObjectRequest(url, null, getJSONObjectListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONObject>) , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         return if (tag == null) HashMap() else cusHeaders
@@ -60,7 +60,7 @@ class VolleyUtils{
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                 SingleRequestQueue.instance.add(request, tag)
             } else if (obj != null && obj == JSONArray::class.java) {
-                val request = object : JsonArrayRequest(url, getJSONArrayListener(onFinishedListener as OnFinishedListener<JSONArray>), getErrorListener(onFinishedListener)) {
+                val request = object : JsonArrayRequest(url, getJSONArrayListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONArray>), getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         return if (tag == null) HashMap() else cusHeaders
@@ -88,7 +88,7 @@ class VolleyUtils{
     fun post(url: String, params: Any, tag: String?, onFinishedListener: OnFinishedListener<*>?) {
         try {
             if (params is JSONObject) {
-                val request = object : JsonObjectRequest(Request.Method.POST, url, params, getJSONObjectListener(onFinishedListener as OnFinishedListener<JSONObject>)  , getErrorListener(onFinishedListener)) {
+                val request = object : JsonObjectRequest(Request.Method.POST, url, params, getJSONObjectListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONObject>)  , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         //                        headers.put("Accept", "application/json");
@@ -101,7 +101,7 @@ class VolleyUtils{
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                 SingleRequestQueue.instance.add(request, tag)
             } else if (params is JSONArray) {
-                val request = object : JsonArrayRequest(Request.Method.POST, url, params, getJSONArrayListener(onFinishedListener as OnFinishedListener<JSONArray>) , getErrorListener(onFinishedListener)) {
+                val request = object : JsonArrayRequest(Request.Method.POST, url, params, getJSONArrayListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONArray>) , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         //                        headers.put("Accept", "application/json");
@@ -113,7 +113,7 @@ class VolleyUtils{
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                 SingleRequestQueue.instance.add(request, tag)
             } else if (params is Map<*, *>) {
-                val request = object : StringRequest(Request.Method.POST, url, getStringListener(onFinishedListener as OnFinishedListener<String>) , getErrorListener(onFinishedListener)) {
+                val request = object : StringRequest(Request.Method.POST, url, getStringListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<String>) , getErrorListener(onFinishedListener)) {
 
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
@@ -147,7 +147,7 @@ class VolleyUtils{
     fun put(url: String, params: Any, tag: String?, onFinishedListener: OnFinishedListener<*>?) {
         try {
             if (params is JSONObject) {
-                val request = object : JsonObjectRequest(Request.Method.PUT, url, params, getJSONObjectListener(onFinishedListener as OnFinishedListener<JSONObject>)  , getErrorListener(onFinishedListener)) {
+                val request = object : JsonObjectRequest(Request.Method.PUT, url, params, getJSONObjectListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONObject>)  , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         //                        headers.put("Accept", "application/json");
@@ -159,7 +159,7 @@ class VolleyUtils{
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                 SingleRequestQueue.instance.add(request, tag)
             } else if (params is JSONArray) {
-                val request = object : JsonArrayRequest(Request.Method.PUT, url, params, getJSONArrayListener(onFinishedListener as OnFinishedListener<JSONArray>)  , getErrorListener(onFinishedListener)) {
+                val request = object : JsonArrayRequest(Request.Method.PUT, url, params, getJSONArrayListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONArray>)  , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         //                        headers.put("Accept", "application/json");
@@ -171,7 +171,7 @@ class VolleyUtils{
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                 SingleRequestQueue.instance.add(request, tag)
             } else if (params is Map<*, *>) {
-                val request = object : StringRequest(Request.Method.PUT, url, getStringListener(onFinishedListener as OnFinishedListener<String>)  , getErrorListener(onFinishedListener)) {
+                val request = object : StringRequest(Request.Method.PUT, url, getStringListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<String>)  , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
                         return params as Map<String, String>
@@ -204,7 +204,7 @@ class VolleyUtils{
     fun patch(url: String, params: Any, tag: String?, onFinishedListener: OnFinishedListener<*>?) {
         try {
             if (params is JSONObject) {
-                val request = object : JsonObjectRequest(Request.Method.PATCH, url, params, getJSONObjectListener(onFinishedListener as OnFinishedListener<JSONObject>), getErrorListener(onFinishedListener)) {
+                val request = object : JsonObjectRequest(Request.Method.PATCH, url, params, getJSONObjectListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONObject>), getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         //                        headers.put("Accept", "application/json");
@@ -220,7 +220,7 @@ class VolleyUtils{
                     Volley.newRequestQueue(GKApplication.instance, OkHttpStack(OkHttpClient())).add(request)
                 }
             } else if (params is JSONArray) {
-                val request = object : JsonArrayRequest(Request.Method.PATCH, url, params, getJSONArrayListener(onFinishedListener as OnFinishedListener<JSONArray>)  , getErrorListener(onFinishedListener)) {
+                val request = object : JsonArrayRequest(Request.Method.PATCH, url, params, getJSONArrayListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONArray>)  , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         //                        headers.put("Accept", "application/json");
@@ -236,7 +236,7 @@ class VolleyUtils{
                     Volley.newRequestQueue(GKApplication.instance, OkHttpStack(OkHttpClient())).add(request)
                 }
             } else if (params is Map<*, *>) {
-                val request = object : StringRequest(Request.Method.PATCH, url, getStringListener(onFinishedListener as OnFinishedListener<String>)  , getErrorListener(onFinishedListener)) {
+                val request = object : StringRequest(Request.Method.PATCH, url, getStringListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<String>)  , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
                         return params as Map<String, String>
@@ -273,7 +273,7 @@ class VolleyUtils{
     fun delete(url: String, params: Any, tag: String?, onFinishedListener: OnFinishedListener<*>?) {
         try {
             if (params is JSONObject) {
-                val request = object : JsonObjectRequest(Request.Method.DELETE, url, params, getJSONObjectListener(onFinishedListener as OnFinishedListener<JSONObject>)   , getErrorListener(onFinishedListener)) {
+                val request = object : JsonObjectRequest(Request.Method.DELETE, url, params, getJSONObjectListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONObject>)   , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         //                        headers.put("Accept", "application/json");
@@ -287,7 +287,7 @@ class VolleyUtils{
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                 SingleRequestQueue.instance.add(request, tag)
             } else if (params is JSONArray) {
-                val request = object : JsonArrayRequest(Request.Method.DELETE, url, params, getJSONArrayListener(onFinishedListener as OnFinishedListener<JSONArray>) , getErrorListener(onFinishedListener)) {
+                val request = object : JsonArrayRequest(Request.Method.DELETE, url, params, getJSONArrayListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<JSONArray>) , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getHeaders(): Map<String, String> {
                         //                        headers.put("Accept", "application/json");
@@ -299,7 +299,7 @@ class VolleyUtils{
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                 SingleRequestQueue.instance.add(request, tag)
             } else if (params is Map<*, *>) {
-                val request = object : StringRequest(Request.Method.DELETE, url, getStringListener(onFinishedListener as OnFinishedListener<String>)  , getErrorListener(onFinishedListener)) {
+                val request = object : StringRequest(Request.Method.DELETE, url, getStringListener(if(onFinishedListener==null)null else onFinishedListener as OnFinishedListener<String>)  , getErrorListener(onFinishedListener)) {
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
                         return params as Map<String, String>

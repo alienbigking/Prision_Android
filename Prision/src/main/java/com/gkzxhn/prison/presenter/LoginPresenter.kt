@@ -106,4 +106,26 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                     }
                 })
     }
+    fun checkNetworkStatus(){
+        mModel.getNetworkStatus(object : VolleyUtils.OnFinishedListener<JSONObject> {
+            override fun onSuccess(response: JSONObject) {
+                val code = response.getInt("code")
+                var isConnected=false
+                if (code == 0) {
+                    try {
+                        val v = JSONUtil.getJSONObject(response, "v")
+                        if (v.getBoolean("connected")) {
+                            isConnected = true
+                        }
+                    }catch (e:Exception){}
+                }
+                mView?.networkStatus(isConnected)
+            }
+
+            override fun onFailed(error: VolleyError) {
+                mView?.networkStatus(false)
+            }
+
+        })
+    }
 }

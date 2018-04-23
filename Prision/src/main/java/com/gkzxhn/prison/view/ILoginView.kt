@@ -6,4 +6,6 @@ package com.gkzxhn.prison.view
 
 interface ILoginView : IBaseView {
     fun onSuccess()
+    //网络状态
+    fun networkStatus(isConnected: Boolean)
 }

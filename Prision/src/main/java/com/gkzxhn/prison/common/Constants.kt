@@ -71,6 +71,7 @@ object Constants {
     /*-------------------------------Request Tab-------------------------------------------------*/
     val MAIN_TAB = 0x206
     val CLOSE_GUI_TAB = 0x207
+    val OPEN_GUI_TAB = 0x208
     /*-------------------------------Service服务器状态配置-------------------------------------------------*/
     val MEETTING_CANCELED = "CANCELED"
     val MEETTING_FINISHED = "FINISHED"
