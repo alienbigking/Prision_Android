@@ -63,6 +63,7 @@ class CustomDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
         if(title.isEmpty())tvTitle.visibility=View.GONE
         tvContent.text = content
         tvCancel.text = cancelText
+        tvCancel.isFocusable=true
         tvConfirm.text = confirmText
         tvCancel.setOnClickListener { view ->
             dismiss()
@@ -77,6 +78,7 @@ class CustomDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
     override fun show() {
         super.show()
         if(tvConfirm!=null){
+            //聚焦－遥控器点击ok即可触发
             tvConfirm.isFocusable=true
             tvConfirm.requestFocus()
             tvConfirm.isFocusableInTouchMode=true
