@@ -1,5 +1,6 @@
 package com.gkzxhn.prison.activity
 
+
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,7 +13,6 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
-
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
@@ -27,35 +27,20 @@ import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.nineoldandroids.animation.ObjectAnimator
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.starlight.mobile.android.lib.util.JSONUtil
-
-
+import kotlinx.android.synthetic.main.activity_call_zijing.tv_count_down
 import org.json.JSONException
 import org.json.JSONObject
-
-import kotlinx.android.synthetic.main.activity_call_zijing.tv_call_zijing
-as mText
-import kotlinx.android.synthetic.main.activity_call_zijing.fl_call_zijing
-as mContent
-import kotlinx.android.synthetic.main.activity_call_zijing.exit_Img
-as mExit_img
-import kotlinx.android.synthetic.main.activity_call_zijing.mute_text
-as mMute_txt
-import kotlinx.android.synthetic.main.activity_call_zijing.quiet_text
-as mQuite_txt
-import kotlinx.android.synthetic.main.activity_call_zijing.ll_check_id
-as mLl_check_id
-import kotlinx.android.synthetic.main.activity_call_zijing.iv_avatar
-as mIv_avatar
-import kotlinx.android.synthetic.main.activity_call_zijing.iv_id_card_01
-as mIv_id_card_01
-import kotlinx.android.synthetic.main.activity_call_zijing.iv_id_card_02
-as mIv_id_card_02
-import kotlinx.android.synthetic.main.activity_call_zijing.tv_count_down
-as tv_count_down
-import kotlinx.android.synthetic.main.activity_call_zijing.rl_bottom
-as rlBottomPanel
-import kotlinx.android.synthetic.main.activity_call_zijing.tv_header_count_down
-as tvHeaderCountDown
+import kotlinx.android.synthetic.main.activity_call_zijing.exit_Img as mExit_img
+import kotlinx.android.synthetic.main.activity_call_zijing.fl_call_zijing as mContent
+import kotlinx.android.synthetic.main.activity_call_zijing.iv_avatar as mIv_avatar
+import kotlinx.android.synthetic.main.activity_call_zijing.iv_id_card_01 as mIv_id_card_01
+import kotlinx.android.synthetic.main.activity_call_zijing.iv_id_card_02 as mIv_id_card_02
+import kotlinx.android.synthetic.main.activity_call_zijing.ll_check_id as mLl_check_id
+import kotlinx.android.synthetic.main.activity_call_zijing.mute_text as mMute_txt
+import kotlinx.android.synthetic.main.activity_call_zijing.quiet_text as mQuite_txt
+import kotlinx.android.synthetic.main.activity_call_zijing.rl_bottom as rlBottomPanel
+import kotlinx.android.synthetic.main.activity_call_zijing.tv_call_zijing as mText
+import kotlinx.android.synthetic.main.activity_call_zijing.tv_header_count_down as tvHeaderCountDown
 
 
 
@@ -391,11 +376,13 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             notification.sessionType = SessionTypeEnum.P2P
             // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
             // 这里以类型 “1” 作为“正在输入”的状态通知。
+            val jailId = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE).getString(Constants.TERMINAL_JIAL_ID, "")
             val json = JSONObject()
             try {
                 json.put("code", -1)//-1表示接通
                 json.put("msg", account)
                 json.put("limit_time", time)
+                json.put("jail", jailId)
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
