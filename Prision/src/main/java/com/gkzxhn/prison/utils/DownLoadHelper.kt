@@ -123,23 +123,6 @@ class DownLoadHelper {
             val file = File(Constants.CACHE_FILE + Constants.APK_NAME)
             //            final File file = new File(Constants.SD_ROOT_PATH + "/" + "app.apk");
             filePath = file.getAbsolutePath()
-//            if(!file.canWrite()||!file.canRead()) {
-                Log.i(DownLoadHelper::class.java.simpleName, "path : " + filePath)
-                val cmd = "chmod 777 " + filePath
-                try {
-                    val p = Runtime.getRuntime().exec(cmd)
-                    val status = p.waitFor()
-                    if (status == 0) {
-                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改成功")
-                    } else {
-                        Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改失败")
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-//            }
             try {
                 val url = URL(mUrl)
                 val connection = url
@@ -172,7 +155,21 @@ class DownLoadHelper {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
+            Log.i(DownLoadHelper::class.java.simpleName, "path : " + filePath)
+            val cmd = "chmod 777 " + filePath
+            try {
+                val p = Runtime.getRuntime().exec(cmd)
+                val status = p.waitFor()
+                if (status == 0) {
+                    Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改成功")
+                } else {
+                    Log.i(DownLoadHelper::class.java.simpleName, "doInBackground: 权限修改失败")
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
             return responseCode
         }
 

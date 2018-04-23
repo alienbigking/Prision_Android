@@ -3,6 +3,7 @@ package com.gkzxhn.prison.presenter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 
@@ -36,38 +37,38 @@ import org.json.JSONObject
  */
 
 class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainModel, IMainView>(context, MainModel(), view) {
-    private var requestZijingTime = 0
 
     private val TAG = MainPresenter::class.java.simpleName
-    fun resetTime() {
-        requestZijingTime = 0
-    }
-    fun turnOff(){
-        mModel.turnOff(null)
-    }
-
+    private val mHandler: Handler = Handler()
     /**
      * 发请求，检测设备视频会议是否已经准备好
      */
     fun requestZijing() {
-        requestZijingTime++
-        mModel.getCallHistory(object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.getNetworkStatus(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == 0) {
-                    mView?.startZijingService()
+                    var isConnected=false
+                    try {
+                        val v = JSONUtil.getJSONObject(response, "v")
+                        if (v.getBoolean("connected")) {
+                            isConnected = true
+                        }
+                    }catch (e:Exception){}
+                    mView?.startZijingService(isConnected)
                     checkCallStatus()
                 } else {
-                    mView?.zijingServiceFailed()
+                    mHandler.postDelayed(Runnable {
+                        requestZijing()
+                    },500)
+
                 }
             }
 
             override fun onFailed(error: VolleyError) {
-                if (requestZijingTime < 5) {//最多请求5次
+                mHandler.postDelayed(Runnable {
                     requestZijing()
-                } else {
-                    mView?.zijingServiceFailed()
-                }
+                },500)
             }
         })
     }
@@ -116,7 +117,6 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
      * 请求会见列表
      */
     fun request(isRefresh: Boolean,date: String) {
-//        checkGUI()
         if (isRefresh) {
             currentPage = FIRST_PAGE
             mView?.startRefreshAnim()
@@ -217,9 +217,9 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             StatusCode.LOGINING-> {// 正在登录
                 mView?.showToast(R.string.yunxin_offline)
             }
-            StatusCode.NET_BROKEN -> { // 网络连接已断开
-                mView?.showToast(R.string.network_error)
-            }
+//            StatusCode.NET_BROKEN -> { // 网络连接已断开
+//                mView?.showToast(R.string.network_error)
+//            }
             StatusCode.UNLOGIN-> {// 未登录
                 //系统自动登录云信
                 val username = getSharedPreferences().getString(Constants.USER_ACCOUNT, "")

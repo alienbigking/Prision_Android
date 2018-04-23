@@ -64,6 +64,7 @@ class CustomDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
         tvContent.text = content
         tvCancel.text = cancelText
         tvConfirm.text = confirmText
+        tvCancel.isFocusable=true
         tvCancel.setOnClickListener { view ->
             dismiss()
             onClickListener?.onClick(view)
@@ -71,6 +72,17 @@ class CustomDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
         tvConfirm.setOnClickListener { view ->
             dismiss()
             onClickListener?.onClick(view)
+        }
+    }
+    override fun show() {
+        super.show()
+        if(tvConfirm!=null){
+            //聚焦－遥控器点击ok即可触发
+            tvConfirm.isFocusable=true
+            tvConfirm.requestFocus()
+            tvConfirm.isFocusableInTouchMode=true
+            tvConfirm.requestFocusFromTouch()
+            tvConfirm.isSelected=true
         }
     }
     fun measureWindow() {
@@ -84,4 +96,6 @@ class CustomDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
         dialogWindow.setGravity(Gravity.CENTER)
         dialogWindow.attributes = params
     }
+
+
 }

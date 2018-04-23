@@ -177,7 +177,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             mSendOnlineSuccess=false
             isConnecting = true
             if (mettingRoomNumber != null && mettingRoomNumber.length > 0) {
-                if (mPresenter.checkStatusCode() == StatusCode.LOGINED) {
+                if (mPresenter.checkStatusCode() == StatusCode.LOGINED||mPresenter.checkStatusCode() == StatusCode.NET_BROKEN) {
                     startProgress()
                     //发送云信消息，检测家属端是否已经准备好可以呼叫
                     val notification = CustomNotification()

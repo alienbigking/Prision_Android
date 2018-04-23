@@ -15,6 +15,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
 import android.util.Log
+import java.io.DataOutputStream
 
 
 /**
@@ -54,20 +55,11 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
                     }.type)
                 }
                 Constants.CLOSE_GUI_TAB ->{
-                    try {
-                        val mActivityManager = GKApplication.instance.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-                        val appProcessList = mActivityManager
-                                .getRunningAppProcesses()
-                        for (appProcess in appProcessList) {
-                            if (appProcess.processName.equals(Constants.C9_PACKAGE_NAME)) {
-                                //关闭GUI
-                                val p = Runtime.getRuntime().exec("adb shell am force-stop  cn.com.rocware.c9gui")
-                                //status=0 关闭成功
-                                val status = p.waitFor()
-                                break
-                            }
-                        }
-                    }catch (e: Exception){}
+                    result=operateGUI(false)
+                }
+                Constants.OPEN_GUI_TAB ->{
+                    //关闭GUI
+                    result=operateGUI(true)
                 }
             }
         } catch (ex: Exception) {
@@ -85,6 +77,36 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
             e.printStackTrace()
         }
 
+    }
+    /**
+     * 停用／开启应用
+     * @param context 上下文信息
+     * @param packageName 应用的包名
+     * @return
+     */
+    fun operateGUI(isEnable:Boolean): Int {
+        var result=-1
+        val packageName=Constants.C9_PACKAGE_NAME
+        var process: Process? = null
+        var os: DataOutputStream? = null
+        try {
+            val cmd = if(isEnable) "pm enable " + packageName
+            else "pm disable " + packageName
+            Runtime.getRuntime().exec("adb shell "+cmd).waitFor()
+            result=0
+        } catch (e: Exception) {
+            e.printStackTrace()
+//            Toast.makeText(GKApplication.instance, "冻结应用失败", Toast.LENGTH_LONG).show()
+        } finally {
+            try {
+                os?.close()
+                process?.destroy()
+            } catch (e: Exception) {
+            }
+
+        }
+//        Toast.makeText(GKApplication.instance, "冻结应用成功", Toast.LENGTH_LONG).show()
+        return result
     }
 
 }

@@ -178,9 +178,10 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mPresenter = MainPresenter(this, this)
         //请求连接紫荆服务器
         mPresenter.requestZijing()
+        mProgress.setMessage(getString(R.string.video_service_connecting))
+        mProgress.show()
         //请求免费呼叫次数
         mPresenter.requestFreeTime()
-        mPresenter.requestVersion()
     }
     /**
      * 配置好终端提示对话框
@@ -224,15 +225,13 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
                 onRefresh()
             }
             R.id.main_layout_ll_service_hint//视频连接服务
-            -> if (!isConnectZijing) {
-                reConnextZijing()
-            }
+            -> reConnextZijing()
         }
     }
 
     override fun onRefresh() {
         mPresenter.checkStatusCode()
-        if (mPresenter.checkStatusCode() == StatusCode.LOGINED) {
+        if (mPresenter.checkStatusCode() == StatusCode.LOGINED||mPresenter.checkStatusCode() == StatusCode.NET_BROKEN) {
             //没有设置终端，则提示用户设置终端
             if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER, "").length == 0) {
                 stopRefreshAnim()
@@ -255,9 +254,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
      */
     private fun reConnextZijing() {
         tvServiceConnectHint.setTextColor(resources.getColor(R.color.connecting))
-        tvServiceConnectHint.setText(R.string.video_service_connecting)
-        //充值请求次数
-        mPresenter.resetTime()
+        tvServiceConnectHint.setText(R.string.check_network_ing)
         //重新请求
         mPresenter.requestZijing()
     }
@@ -316,13 +313,20 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     }
 
-    override fun startZijingService() {
+    override fun startZijingService(isNetworkConnected:Boolean) {
         if (!isConnectZijing) {
             isConnectZijing = true
-            tvServiceConnectHint.setText(R.string.video_service_connect_success)
-            tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_success))
+            dismissProgress()
             val mService = Intent(this, EReportService::class.java)
             startService(mService)
+        }
+        if(isNetworkConnected){
+            tvServiceConnectHint.setText(R.string.video_service_connect_success)
+            tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_success))
+        }else{
+//                "0040xf609"
+            tvServiceConnectHint.setText(R.string.video_service_connect_failed)
+            tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_failed))
         }
     }
 
@@ -338,8 +342,8 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     override fun onResume() {
         super.onResume()
-        //关闭GUI
-        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
+        //请求版本信息
+        mPresenter.requestVersion()
         onRefresh()
     }
 
@@ -365,18 +369,4 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         intentFilter.addAction(Constants.NIM_KIT_OUT)
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        Log.i(TAG, "onKeyDown: getkeycode >>>>>> " + event.keyCode)
-        when (event.keyCode) {
-            222 -> {
-                mProgress.setMessage(getString(R.string.turn_off_ing))
-                if(!mProgress.isShowing)mProgress.show()
-                //关机按键
-                mPresenter.turnOff()
-                return true
-            }
-        }
-        return false
-    }
-
 }

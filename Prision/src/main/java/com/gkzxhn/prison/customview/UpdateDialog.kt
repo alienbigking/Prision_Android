@@ -129,6 +129,7 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
     }
 
     private fun initControls() {
+        tvCancel.isFocusable=true
         tvCancel.visibility = if (isForceUpdate) View.GONE else View.VISIBLE
         vMidLine.visibility = if (isForceUpdate) View.GONE else View.VISIBLE
         setCanceledOnTouchOutside(false)
@@ -173,7 +174,16 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
 
     override fun show() {
         super.show()
-        tvDownload.isEnabled = true
-        tvProgress.visibility = View.INVISIBLE
+        if(tvDownload!=null){
+            tvProgress.visibility = View.INVISIBLE
+            tvDownload.isEnabled = true
+
+            //聚焦－遥控器点击ok即可触发
+            tvDownload.isFocusable=true
+            tvDownload.requestFocus()
+            tvDownload.isFocusableInTouchMode=true
+            tvDownload.requestFocusFromTouch()
+            tvDownload.isSelected=true
+        }
     }
 }

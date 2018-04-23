@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.RadioGroup
 
 import com.gkzxhn.prison.R
+import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.customview.CustomDialog
@@ -30,6 +31,12 @@ as tvNetwork
 import kotlinx.android.synthetic.main.setting_layout.setting_layout_rg_usb
 as mRadioGroup
 
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_start_gui_hint
+as tvStartGuiHint
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_stop_gui_hint
+as tvStopGuiHint
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_version_hint
+as tvVersionHint
 
 
 /**系统设置
@@ -58,6 +65,7 @@ class SettingActivity : SuperActivity(), ISettingView {
             val packageInfo = pm.getPackageInfo(packageName,
                     PackageManager.GET_CONFIGURATIONS)
             tvUpdateHint.text = getString(R.string.current_version) + "v" + packageInfo.versionName
+            tvVersionHint.text=getString(R.string.current_version) + "v" + packageInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
@@ -126,6 +134,40 @@ class SettingActivity : SuperActivity(), ISettingView {
                 tvNetwork.isEnabled=false
                 //关闭GUI
                 mPresenter.checkNetworkStatus()
+            } R.id.setting_layout_tv_start_gui->{//启用gui
+            tvStartGuiHint.setText(R.string.start_gui_ing)
+            tvStartGuiHint.isEnabled=false
+            // adb shell pm enable cn.com.rocware.c9gui
+            mPresenter.startAsynTask(Constants.OPEN_GUI_TAB,object : AsynHelper.TaskFinishedListener{
+                override fun back(`object`: Any?) {
+                    tvStartGuiHint.isEnabled=true
+                    val i=`object` as Int
+                    if(i==0){//启用成功
+                        tvStartGuiHint.setText(R.string.start_gui_success)
+                        tvStopGuiHint.setText(R.string.stop_gui_hint)
+                    }else{
+                        tvStartGuiHint.setText(R.string.start_gui_failed)
+                    }
+                }
+
+            })
+        }
+            R.id.setting_layout_tv_stop_gui ->{//禁用gui
+                tvStopGuiHint.isEnabled=false
+                tvStopGuiHint.setText(R.string.stop_gui_ing)
+                //adb shell pm disable cn.com.rocware.c9gui
+                mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,object : AsynHelper.TaskFinishedListener{
+                    override fun back(`object`: Any?) {
+                        tvStopGuiHint.isEnabled=true
+                        val i=`object` as Int
+                        if(i==0){//禁用用成功
+                            tvStopGuiHint.setText(R.string.stop_gui_success)
+                            tvStartGuiHint.setText(R.string.start_gui_hint)
+                        }else{
+                            tvStopGuiHint.setText(R.string.stop_gui_failed)
+                        }
+                    }
+                })
             }
         }
 
@@ -145,7 +187,7 @@ class SettingActivity : SuperActivity(), ISettingView {
             tvNetworkHint.setTextColor(resources.getColor(R.color.red_text))
             tvNetworkHint.setText(R.string.check_network_innormal)
         }
-      }
+    }
     //开启／关闭Usb录屏监听
     private val mOnCheckedChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
         when (checkedId) {
