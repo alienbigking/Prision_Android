@@ -72,13 +72,8 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
             val entity = mDatas[position]
             tvName.text = entity.name
             val meetingTime = entity.time?:""
-            val array = meetingTime.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            //        2017-08-03 9:00 - 9:30
-            var formateTime = "-"
-            if (array != null) {
-                formateTime = String.format("%s - %s", if (array.size > 1) array[1] else "", if (array.size > 3) array[3] else "")
-            }
-            tvTime.text = formateTime
+            //        2017-08-03 19:00-19:30
+            tvTime.text =if(meetingTime.length>10)meetingTime.substring(10,meetingTime.length) else "-"
             tvArea.text = entity.prisonerNumber
             this.setOnClickListener { v ->
                 mCurrentIndex = position
