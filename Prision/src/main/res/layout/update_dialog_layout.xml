@@ -30,6 +30,25 @@
         android:text="@string/new_version_colon"
         android:textColor="@color/common_blue"
         android:textSize="30sp" />
+    <TextView
+        android:id="@+id/update_dialog_layout_tv_update_content_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="left"
+        android:visibility="gone"
+        android:text="@string/update_content_hint"
+        android:textColor="@color/common_light_text_color"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/update_dialog_layout_tv_update_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="left"
+        android:visibility="gone"
+        android:textColor="@color/common_light_text_color"
+        android:textSize="20sp" />
 
     <ProgressBar
         android:id="@+id/update_dialog_layout_progress"

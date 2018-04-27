@@ -21,5 +21,9 @@ class VersionEntity {
             return if(field=="null")"" else field
         }
     var isForce: Int = 0
+    var description: String? = null
+        get() {
+            return if(field=="null")"" else field
+        }
 
 }

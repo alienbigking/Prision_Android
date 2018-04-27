@@ -303,7 +303,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
                 val isForceUpdate = version.isForce
                 if (updateDialog == null) updateDialog = UpdateDialog(this)
                 updateDialog?.setForceUpdate(isForceUpdate==1)
-                updateDialog?.setDownloadInfor(versionName?:"", newVersion, downloadUrl?:"")
+                updateDialog?.setDownloadInfor(versionName?:"", newVersion, downloadUrl?:"",version.description?:"")
                 updateDialog?.show()//显示对话框
             }
 

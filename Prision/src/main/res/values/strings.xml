@@ -106,6 +106,7 @@
     <!--版本更新-->
     <string name="update_version_hint">狱务通监狱版更新</string>
     <string name="new_version_colon">新版本：</string>
+    <string name="update_content_hint">更新内容：</string>
     <string name="has_last_version">已经是最新版本</string>
     <string name="download">马上更新</string>
     <string name="current_version">当前版本：</string>

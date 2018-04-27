@@ -6,19 +6,13 @@ import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.Display
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
-import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.utils.DownLoadHelper
 import java.io.File
 import kotlinx.android.synthetic.main.update_dialog_layout.update_dialog_layout_tv_cancel
@@ -33,9 +27,11 @@ import kotlinx.android.synthetic.main.update_dialog_layout.update_dialog_layout_
 as tvProgress
 import kotlinx.android.synthetic.main.update_dialog_layout.update_dialog_layout_progress
 as mProgress
+import kotlinx.android.synthetic.main.update_dialog_layout.update_dialog_layout_tv_update_content_hint
+as tvUpdateContentTitle
+import kotlinx.android.synthetic.main.update_dialog_layout.update_dialog_layout_tv_update_content
+as tvUpdateContent
 import android.os.Build
-import android.util.Log
-import java.io.IOException
 
 
 class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_style) {
@@ -43,6 +39,8 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
     private var mHelper: DownLoadHelper
     private var downloadUrl: String? = null
     private var isForceUpdate = false
+    //更新内容
+    private var updateContent: String = ""
     private var versionCode: Int = 0
     private val downloadFinishListener = object : DownLoadHelper.DownloadFinishListener {
         override fun onSuccess(filePath: String?) {
@@ -101,10 +99,17 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
 
     }
 
-    fun setDownloadInfor(versionName: String, versionCode: Int, downloadUrl: String) {
+    fun setDownloadInfor(versionName: String, versionCode: Int, downloadUrl: String,updateContent:String) {
         this.downloadUrl = downloadUrl
         this.versionName = versionName
         this.versionCode = versionCode
+        this.updateContent=updateContent
+        if(tvVersion!=null){
+            tvVersion.text = context.getString(R.string.new_version_colon) + versionName
+            tvUpdateContentTitle.visibility=if(this.updateContent.length>0)View.VISIBLE else View.GONE
+            tvUpdateContent.visibility=if(this.updateContent.length>0)View.VISIBLE else View.GONE
+            tvUpdateContent.text=this.updateContent
+        }
     }
 
 
@@ -135,6 +140,9 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
         setCanceledOnTouchOutside(false)
         setCancelable(false)
         tvVersion.text = context.getString(R.string.new_version_colon) + versionName
+        tvUpdateContentTitle.visibility=if(updateContent.length>0)View.VISIBLE else View.GONE
+        tvUpdateContent.visibility=if(updateContent.length>0)View.VISIBLE else View.GONE
+        tvUpdateContent.text=updateContent
     }
 
     fun setForceUpdate(isForceUpdate: Boolean) {
