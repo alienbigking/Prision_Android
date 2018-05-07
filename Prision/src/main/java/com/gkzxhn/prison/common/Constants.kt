@@ -1,7 +1,5 @@
 package com.gkzxhn.prison.common
 
-import android.os.Environment
-
 /**
  * Created by Raleigh.Luo on 17/3/29.
  */
@@ -37,9 +35,10 @@ object Constants {
 
 
     /*-------------------------------request url-------------------------------------------------*/
-    val RELEASE_DOMAIN = "https://www.yuwugongkai.com"//新发布正式环境
+    val RELEASE_DOMAIN = "https://www.yuwugongkai.com/ywgk-app"//新发布正式环境
     val DEMO_DOMAIN = "http://39.108.185.51:8082/ywgk-app"//开发环境
-    val DOMAIN_NAME_XLS = DEMO_DOMAIN
+    val DEV_DOMAIN = "http://123.57.7.159:8082/ywgk-app"//开发环境
+    val DOMAIN_NAME_XLS = DEV_DOMAIN
 
     val REQUEST_MEETING_LIST_URL = DOMAIN_NAME_XLS + "/api/meetings/getMeetingsForPrison"//会见列表
     val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME_XLS + "/api/meetings/update"// 取消会见
