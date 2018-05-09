@@ -19,6 +19,7 @@ import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.customview.UpdateDialog
 import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.presenter.SettingPresenter
+import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.view.ISettingView
 import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_update_hint
 as tvUpdateHint
@@ -158,6 +159,9 @@ class SettingActivity : SuperActivity(), ISettingView {
                 //adb shell pm disable cn.com.rocware.c9gui
                 mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,object : AsynHelper.TaskFinishedListener{
                     override fun back(`object`: Any?) {
+                        val mService = Intent(this@SettingActivity, EReportService::class.java)
+                        stopService(mService)
+                        startService(mService)
                         tvStopGuiHint.isEnabled=true
                         val i=`object` as Int
                         if(i==0){//禁用用成功
