@@ -131,12 +131,19 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
             />
-        <!--登录-->
+        <!--呼叫-->
         <activity android:name="com.gkzxhn.prison.activity.CallUserActivity"
             android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
             />
+        <!--网络检查-->
+        <activity android:name="com.gkzxhn.prison.activity.NetworkActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
+            />
+
         <activity android:name="com.gkzxhn.prison.activity.CallFreeActivity"
             android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize"

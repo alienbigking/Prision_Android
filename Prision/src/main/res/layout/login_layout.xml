@@ -1,166 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mAttr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="none"
     android:fillViewport="true"
     >
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:background="@color/common_bg_color"
-        xmlns:mAttr="http://schemas.android.com/apk/res-auto"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.starlight.mobile.android.lib.view.CusHeadView
-            style="@style/common_head_blue_style"
-            mAttr:chHead_title="@string/login"
-            mAttr:chHead_title_padding_left="0dip"
-            android:id="@+id/loign_layout_ch_head"
+        android:layout_height="match_parent"
+        android:id="@+id/loign_layout_ch_head"
+        >
+
+        <TextView
+            android:id="@+id/login_layout_tv_login_title"
+            android:layout_width="0dip"
+            android:layout_height="70dip"
+            android:text="@string/login"
+            android:background="@color/common_blue"
+            android:gravity="right|center_vertical"
+            mAttr:layout_constraintRight_toLeftOf="@+id/login_layout_tv_check_network_title"
+            android:textColor="@android:color/white"
+            android:paddingRight="@dimen/margin"
+            mAttr:layout_constraintLeft_toLeftOf="parent"
+            android:textSize="16sp"
+            />
+        <View android:layout_width="0dip"
+            android:layout_height="5dip"
+            android:background="@color/common_blue"
+            mAttr:layout_constraintTop_toBottomOf="@+id/login_layout_tv_login_title"
+            mAttr:layout_constraintLeft_toLeftOf="@+id/login_layout_tv_login_title"
+            mAttr:layout_constraintRight_toRightOf="@+id/login_layout_tv_login_title"
             />
         <TextView
-            android:id="@+id/loign_layout_tv_notice"
+            android:id="@+id/login_layout_tv_check_network_title"
+            android:layout_width="wrap_content"
+            android:layout_height="70dip"
+            android:text="@string/check_network"
+            android:background="@color/common_blue"
+            android:gravity="right|center_vertical"
+            android:textColor="@android:color/white"
+            android:paddingRight="@dimen/margin"
+            android:textSize="16sp"
+            android:onClick="onClickListener"
+            mAttr:layout_constraintRight_toRightOf="parent"
+            />
+        <ImageView
+            android:id="@+id/login_layout_iv_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/loign_layout_ch_head"
             android:layout_marginLeft="@dimen/margin"
-            android:text="@string/please_input_user_infor"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginRight="@dimen/margin"
-            android:layout_marginBottom="10dip"
-            android:layout_centerHorizontal="true"
+            mAttr:layout_constraintLeft_toLeftOf="parent"
+            mAttr:layout_constraintBottom_toBottomOf="@+id/login_layout_tv_login_title"
+            mAttr:layout_constraintTop_toTopOf="@+id/login_layout_tv_login_title"
+            android:src="@mipmap/login_logo" />
+
+        <ImageView
+            android:id="@+id/login_layout_iv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_half"
+            android:src="@mipmap/login_text"
+            mAttr:layout_constraintBottom_toBottomOf="@+id/login_layout_tv_login_title"
+            mAttr:layout_constraintTop_toTopOf="@+id/login_layout_tv_login_title"
+            mAttr:layout_constraintLeft_toRightOf="@+id/login_layout_iv_login" />
+
+        <TextView
+            android:id="@+id/login_layout_tv_welcome_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dip"
+            mAttr:layout_constraintLeft_toLeftOf="parent"
+            android:textColor="@color/common_blue"
             android:textSize="24sp"
-            android:textColor="@color/common_gray_title_color"
-            android:layout_marginTop="@dimen/margin"/>
+            mAttr:layout_constraintRight_toLeftOf="parent"
+            mAttr:layout_constraintTop_toBottomOf="@+id/login_layout_tv_login_title"
+            android:text="@string/welcome_back"
+            />
 
         <EditText
             android:id="@+id/loign_layout_et_username"
             style="@style/login_edit_style"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
+            android:layout_marginTop="60dip"
+            android:gravity="left"
             android:inputType="number"
-            android:layout_below="@+id/loign_layout_tv_notice"
-            android:layout_marginLeft="@dimen/margin"
+            mAttr:layout_constraintLeft_toLeftOf="parent"
+            mAttr:layout_constraintRight_toRightOf="parent"
+            android:drawablePadding="@dimen/margin_half"
+            mAttr:layout_constraintDimensionRatio="6:1"
+            android:drawableLeft="@mipmap/login_username"
+            mAttr:layout_constraintTop_toBottomOf="@+id/login_layout_tv_welcome_title"
             android:hint="@string/account" />
+        <View android:layout_width="0dip"
+            android:layout_height="1dip"
+            mAttr:layout_constraintLeft_toLeftOf="@+id/loign_layout_et_username"
+            mAttr:layout_constraintRight_toRightOf="@+id/loign_layout_et_username"
+            android:background="@color/common_line_color"
+            android:id="@+id/loign_layout_v_username"
+            mAttr:layout_constraintTop_toBottomOf="@+id/loign_layout_et_username"
+            />
 
         <EditText
             android:id="@+id/loign_layout_et_password"
             style="@style/login_edit_style"
-            android:layout_marginTop="1dp"
-            android:layout_below="@+id/loign_layout_et_username"
+            android:layout_marginTop="@dimen/margin_half"
+            mAttr:layout_constraintLeft_toLeftOf="parent"
+            mAttr:layout_constraintRight_toRightOf="parent"
+            android:drawableLeft="@mipmap/login_password"
+            mAttr:layout_constraintTop_toBottomOf="@+id/loign_layout_v_username"
             android:hint="@string/password"
-            android:gravity="center"
+            mAttr:layout_constraintDimensionRatio="6:1"
+            android:drawablePadding="@dimen/margin_half"
+            android:gravity="left"
             android:inputType="numberPassword"/>
-
+        <View android:layout_width="0dip"
+            android:layout_height="1dip"
+            mAttr:layout_constraintLeft_toLeftOf="@+id/loign_layout_et_password"
+            mAttr:layout_constraintRight_toRightOf="@+id/loign_layout_et_password"
+            android:background="@color/common_line_color"
+            android:id="@+id/loign_layout_v_password"
+            mAttr:layout_constraintTop_toBottomOf="@+id/loign_layout_et_password"
+            />
         <Button
             android:id="@+id/loign_layout_btn_login"
             android:text="@string/login"
             android:layout_marginTop="70dip"
-            android:layout_below="@+id/loign_layout_et_password"
-            style="@style/common_blue_btn_style"
+            mAttr:layout_constraintLeft_toLeftOf="parent"
+            mAttr:layout_constraintRight_toRightOf="parent"
+            mAttr:layout_constraintDimensionRatio="5:1"
+            mAttr:layout_constraintTop_toBottomOf="@+id/loign_layout_et_password"
             android:layout_centerHorizontal="true"
-            />
-
-        <!--检查网络-->
-        <TextView
-            android:id="@+id/login_layout_tv_check_network"
-            android:clickable="true"
-            android:textColor="@drawable/black_blue_text_selector"
-            android:layout_width="match_parent"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:padding="30dip"
-            android:layout_marginTop="@dimen/margin"
-            android:background="@android:color/white"
-            android:layout_below="@+id/loign_layout_btn_login"
+            android:background="@drawable/common_blue_btn_selector"
+            android:textSize="14sp"
             android:onClick="onClickListener"
-            android:textSize="26sp"
-            android:text="@string/check_network"
+            android:textColor="@android:color/white"
             />
-        <TextView
-            android:id="@+id/login_layout_tv_check_network_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_alignParentRight="true"
-            android:text="@string/check_network_hint"
-            android:layout_alignBottom="@+id/login_layout_tv_check_network"
-            android:layout_alignTop="@+id/login_layout_tv_check_network"
-            android:textSize="20sp"
-            android:layout_marginRight="70dip"
-            android:textColor="@color/common_gray_title_color"
-            />
-        <View android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:layout_below="@+id/login_layout_tv_check_network"
-            android:id="@+id/login_layout_v_check_network"
-            android:background="@color/common_line_color"
-            />
+    </android.support.constraint.ConstraintLayout>
 
-        <!--启动GUI-->
-        <TextView
-            android:id="@+id/login_layout_tv_start_gui"
-            android:clickable="true"
-            android:textColor="@drawable/black_blue_text_selector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="30dip"
-            android:background="@android:color/white"
-            android:layout_below="@+id/login_layout_v_check_network"
-            android:onClick="onClickListener"
-            android:textSize="26sp"
-            android:text="@string/start_gui"
-            />
-        <TextView
-            android:id="@+id/login_layout_tv_start_gui_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_alignParentRight="true"
-            android:text="@string/start_gui_hint"
-            android:layout_alignBottom="@+id/login_layout_tv_start_gui"
-            android:layout_alignTop="@+id/login_layout_tv_start_gui"
-            android:textSize="20sp"
-            android:layout_marginRight="70dip"
-            android:textColor="@color/common_gray_title_color"
-            />
-        <View android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:layout_below="@+id/login_layout_tv_start_gui"
-            android:id="@+id/login_layout_v_start_gui_1"
-            android:background="@color/common_line_color"
-            />
-        <!--关闭GUI-->
-        <TextView
-            android:id="@+id/login_layout_tv_stop_gui"
-            android:clickable="true"
-            android:textColor="@drawable/black_blue_text_selector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="30dip"
-            android:background="@android:color/white"
-            android:layout_below="@+id/login_layout_v_start_gui_1"
-            android:onClick="onClickListener"
-            android:textSize="26sp"
-            android:text="@string/stop_gui"
-            />
-        <TextView
-            android:id="@+id/login_layout_tv_stop_gui_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_alignParentRight="true"
-            android:text="@string/stop_gui_hint"
-            android:layout_alignBottom="@+id/login_layout_tv_stop_gui"
-            android:layout_alignTop="@+id/login_layout_tv_stop_gui"
-            android:textSize="20sp"
-            android:layout_marginRight="70dip"
-            android:textColor="@color/common_gray_title_color"
-            />
-        <View android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:layout_below="@+id/login_layout_tv_start_gui"
-            android:id="@+id/login_layout_v_start_gui"
-            android:background="@color/common_line_color"
-            />
 
-    </RelativeLayout>
 </ScrollView>

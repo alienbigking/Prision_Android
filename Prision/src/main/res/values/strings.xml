@@ -17,6 +17,7 @@
     <string name="operate_failed">操作失败，请稍后再试</string>
     <!--登录-->
     <string name="login">登录</string>
+    <string name="welcome_back">欢迎回来！</string>
     <string name="please_input_user_infor">请输入用户信息</string>
     <string name="account">帐号</string>
     <string name="password">密码</string>

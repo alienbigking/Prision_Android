@@ -18,14 +18,6 @@ as etAccount
 import kotlinx.android.synthetic.main.login_layout.loign_layout_et_password
 as etPassword
 
-import kotlinx.android.synthetic.main.login_layout.login_layout_tv_check_network_hint
-as tvNetworkHint
-import kotlinx.android.synthetic.main.login_layout.login_layout_tv_check_network
-as tvNetwork
-import kotlinx.android.synthetic.main.login_layout.login_layout_tv_start_gui_hint
-as tvStartGuiHint
-import kotlinx.android.synthetic.main.login_layout.login_layout_tv_stop_gui_hint
-as tvStopGuiHint
 /**登录
  * Created by Raleigh.Luo on 17/3/29.
  */
@@ -84,49 +76,8 @@ class LoginActivity : SuperActivity(), ILoginView {
 
                 }
             }
-            R.id.login_layout_tv_check_network ->{
-
-                tvNetworkHint.setTextColor(resources.getColor(R.color.common_gray_title_color))
-                tvNetworkHint.setText(R.string.check_network_ing)
-                //按钮不可点击
-                tvNetwork.isEnabled=false
-                //关闭GUI
-                mPresenter.checkNetworkStatus()
-            }
-            R.id.login_layout_tv_start_gui->{//启用gui
-                tvStartGuiHint.setText(R.string.start_gui_ing)
-                tvStartGuiHint.isEnabled=false
-                // adb shell pm enable cn.com.rocware.c9gui
-                mPresenter.startAsynTask(Constants.OPEN_GUI_TAB,object : AsynHelper.TaskFinishedListener{
-                    override fun back(`object`: Any?) {
-                        tvStartGuiHint.isEnabled=true
-                        val i=`object` as Int
-                        if(i==0){//启用成功
-                            tvStartGuiHint.setText(R.string.start_gui_success)
-                            tvStopGuiHint.setText(R.string.stop_gui_hint)
-                        }else{
-                            tvStartGuiHint.setText(R.string.start_gui_failed)
-                        }
-                    }
-
-                })
-            }
-            R.id.login_layout_tv_stop_gui ->{//禁用gui
-                tvStopGuiHint.isEnabled=false
-                tvStopGuiHint.setText(R.string.stop_gui_ing)
-                //adb shell pm disable cn.com.rocware.c9gui
-                mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,object : AsynHelper.TaskFinishedListener{
-                    override fun back(`object`: Any?) {
-                        tvStopGuiHint.isEnabled=true
-                        val i=`object` as Int
-                        if(i==0){//禁用用成功
-                            tvStopGuiHint.setText(R.string.stop_gui_success)
-                            tvStartGuiHint.setText(R.string.start_gui_hint)
-                        }else{
-                            tvStopGuiHint.setText(R.string.stop_gui_failed)
-                        }
-                    }
-                })
+            R.id.login_layout_tv_check_network_title ->{//跳转到检测网络界面
+                startActivity(Intent(this,NetworkActivity::class.java))
             }
         }
     }
@@ -168,15 +119,6 @@ class LoginActivity : SuperActivity(), ILoginView {
     }
 
     override fun networkStatus(isConnected: Boolean) {
-        //按钮可点击
-        tvNetwork.isEnabled=true
-        if(isConnected){
-            tvNetworkHint.setTextColor(resources.getColor(R.color.connect_success))
-            tvNetworkHint.setText(R.string.check_network_normal)
 
-        }else{
-            tvNetworkHint.setTextColor(resources.getColor(R.color.red_text))
-            tvNetworkHint.setText(R.string.check_network_innormal)
-        }
     }
 }
