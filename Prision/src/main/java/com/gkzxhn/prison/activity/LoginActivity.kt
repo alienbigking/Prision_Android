@@ -11,6 +11,7 @@ import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.presenter.LoginPresenter
+import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.view.ILoginView
 import com.starlight.mobile.android.lib.util.CommonHelper
 import kotlinx.android.synthetic.main.login_layout.loign_layout_et_username
@@ -40,6 +41,8 @@ class LoginActivity : SuperActivity(), ILoginView {
         setContentView(R.layout.login_layout)
         //初始化
         init()
+        //停止服务
+        stopService(Intent(this, EReportService::class.java))
         //清除下信息
         GKApplication.instance.clearSharedPreferences()
     }
