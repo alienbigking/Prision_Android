@@ -20,33 +20,18 @@ import com.gkzxhn.prison.customview.UpdateDialog
 import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.presenter.SettingPresenter
 import com.gkzxhn.prison.view.ISettingView
-import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_update_hint
-as tvUpdateHint
-import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_call_free_hint
-as tvCallFreeTime
-import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_check_network_hint
-as tvNetworkHint
-import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_check_network
-as tvNetwork
-import kotlinx.android.synthetic.main.setting_layout.setting_layout_rg_usb
-as mRadioGroup
-
-import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_start_gui_hint
-as tvStartGuiHint
-import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_stop_gui_hint
-as tvStopGuiHint
-import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_version_hint
-as tvVersionHint
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_check_update_hint
+as tvCheckUpdateHint
+import kotlinx.android.synthetic.main.setting_layout.setting_layout_tv_version
+as tvCurrentVersion
 
 
 /**系统设置
  * Created by Raleigh.Luo on 17/4/12.
  */
 
-class SettingActivity : SuperActivity(), ISettingView {
-
-
-    //请求presenter
+class SettingActivity : SuperActivity(),ISettingView {
+        //请求presenter
     private lateinit var mPresenter: SettingPresenter
     //app更新对话框
     private lateinit var updateDialog: UpdateDialog
@@ -57,26 +42,19 @@ class SettingActivity : SuperActivity(), ISettingView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.setting_layout)
-        //设置USB录播选择监听器
-        mRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener)
         //版本更新 显示当前版本
         val pm = packageManager
         try {
             val packageInfo = pm.getPackageInfo(packageName,
                     PackageManager.GET_CONFIGURATIONS)
-            tvUpdateHint.text = getString(R.string.current_version) + "v" + packageInfo.versionName
-            tvVersionHint.text=getString(R.string.current_version) + "v" + packageInfo.versionName
+            tvCurrentVersion.text = getString(R.string.current_version) + "V" + packageInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
 
         //初始化Presenter
         mPresenter = SettingPresenter(this, this)
-        //显示已设置的USB录播
-        val isOpenUsb = mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD, true)
-        mRadioGroup.check(if (isOpenUsb) R.id.setting_layout_rb_usb_open else R.id.setting_layout_rb_usb_close)
         //请求免费会见次数
-        mPresenter.requestFreeTime()
         // 初始化退出对话框
         mExitDialog = CustomDialog(this)
         //设置显示内容
@@ -104,99 +82,33 @@ class SettingActivity : SuperActivity(), ISettingView {
      */
     fun onClickListener(view: View) {
         when (view.id) {
-            R.id.setting_layout_tv_end_setting -> {
+            R.id.setting_layout_v_video_setting -> {
                 //终端设置 跳转界面
                 val intent = Intent(this, ConfigActivity::class.java)
                 startActivityForResult(intent, Constants.EXTRA_CODE)
             }
-            R.id.setting_layout_tv_update -> {
-//                updateDialog.show()
+            R.id.setting_layout_v_check_update -> {
 //                //版本更新
-                tvUpdateHint.setText(R.string.check_updating)
+                tvCheckUpdateHint.setText(R.string.check_updating)
                 //请求更新
                 mPresenter.requestVersion()
             }
-            R.id.setting_layout_tv_logout ->{ //退出账号
-
+            R.id.setting_layout_v_exit ->{ //退出账号
                 if (!mExitDialog.isShowing)
                     mExitDialog.show()
             }
             R.id.common_head_layout_iv_left -> { //返回
                 finish()
             }
-            R.id.setting_layout_tv_call_free ->{//免费会见
+            R.id.setting_layout_v_free_video ->{//免费会见
                 startActivityForResult(Intent(this, CallFreeActivity::class.java), Constants.EXTRAS_CODE)
             }
-            R.id.setting_layout_tv_check_network ->{
-                tvNetworkHint.setTextColor(resources.getColor(R.color.common_gray_title_color))
-                tvNetworkHint.setText(R.string.check_network_ing)
-                //按钮不可点击
-                tvNetwork.isEnabled=false
-                //关闭GUI
-                mPresenter.checkNetworkStatus()
-            } R.id.setting_layout_tv_start_gui->{//启用gui
-            tvStartGuiHint.setText(R.string.start_gui_ing)
-            tvStartGuiHint.isEnabled=false
-            // adb shell pm enable cn.com.rocware.c9gui
-            mPresenter.startAsynTask(Constants.OPEN_GUI_TAB,object : AsynHelper.TaskFinishedListener{
-                override fun back(`object`: Any?) {
-                    tvStartGuiHint.isEnabled=true
-                    val i=`object` as Int
-                    if(i==0){//启用成功
-                        tvStartGuiHint.setText(R.string.start_gui_success)
-                        tvStopGuiHint.setText(R.string.stop_gui_hint)
-                    }else{
-                        tvStartGuiHint.setText(R.string.start_gui_failed)
-                    }
-                }
-
-            })
-        }
-            R.id.setting_layout_tv_stop_gui ->{//禁用gui
-                tvStopGuiHint.isEnabled=false
-                tvStopGuiHint.setText(R.string.stop_gui_ing)
-                //adb shell pm disable cn.com.rocware.c9gui
-                mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,object : AsynHelper.TaskFinishedListener{
-                    override fun back(`object`: Any?) {
-                        tvStopGuiHint.isEnabled=true
-                        val i=`object` as Int
-                        if(i==0){//禁用用成功
-                            tvStopGuiHint.setText(R.string.stop_gui_success)
-                            tvStartGuiHint.setText(R.string.start_gui_hint)
-                        }else{
-                            tvStopGuiHint.setText(R.string.stop_gui_failed)
-                        }
-                    }
-                })
+            R.id.setting_layout_v_check_network ->{//检查网络
+                startActivity(Intent(this,NetworkActivity::class.java))
             }
         }
-
     }
 
-    /**
-     * 加速完成
-     */
-    override fun networkStatus(isConnected: Boolean) {
-        //按钮可点击
-        tvNetwork.isEnabled=true
-        if(isConnected){
-            tvNetworkHint.setTextColor(resources.getColor(R.color.connect_success))
-            tvNetworkHint.setText(R.string.check_network_normal)
-
-        }else{
-            tvNetworkHint.setTextColor(resources.getColor(R.color.red_text))
-            tvNetworkHint.setText(R.string.check_network_innormal)
-        }
-    }
-    //开启／关闭Usb录屏监听
-    private val mOnCheckedChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
-        when (checkedId) {
-            R.id.setting_layout_rb_usb_close//关闭USB录播 保存
-            -> mPresenter.getSharedPreferences().edit().putBoolean(Constants.IS_OPEN_USB_RECORD, false).apply()
-            R.id.setting_layout_rb_usb_open//开启录播 保存
-            -> mPresenter.getSharedPreferences().edit().putBoolean(Constants.IS_OPEN_USB_RECORD, true).apply()
-        }
-    }
     /**
      * 广播接收器
      */
@@ -214,8 +126,6 @@ class SettingActivity : SuperActivity(), ISettingView {
             if(resultCode == Activity.RESULT_OK ){
                 if (requestCode == Constants.EXTRA_CODE ) {//修改终端信息成功
                     showToast(R.string.alter_terminal_account_success)
-                } else if (requestCode == Constants.EXTRAS_CODE) {//免费呼叫
-                    mPresenter.requestFreeTime()
                 }
             }
 
@@ -245,25 +155,19 @@ class SettingActivity : SuperActivity(), ISettingView {
                     updateDialog.setForceUpdate(version.isForce==1)
                     updateDialog.setDownloadInfor(versionName ?: "", newVersion, downloadUrl ?: "",version.description?:"")
                     updateDialog.show()//显示对话框
-                    tvUpdateHint.text = getString(R.string.new_version_colon) + versionName
+                    tvCheckUpdateHint.text = getString(R.string.new_version_colon) + versionName
                 } else {//无版本更新
-                    tvUpdateHint.setText(R.string.has_last_version)
+                    tvCheckUpdateHint.setText(R.string.has_last_version)
                 }
             } catch (e: PackageManager.NameNotFoundException) {
                 e.printStackTrace()
             }
         }else{//无版本更新
-            tvUpdateHint.setText(R.string.has_last_version)
+            tvCheckUpdateHint.setText(R.string.has_last_version)
         }
 
     }
 
-    /**
-     *  成功获取到免费会见次数
-     */
-    override fun updateFreeTime(time: Int) {
-        tvCallFreeTime.text = getString(R.string.leave) + time + getString(R.string.time)
-    }
 
     override fun startRefreshAnim() {
 
@@ -281,12 +185,6 @@ class SettingActivity : SuperActivity(), ISettingView {
         super.onDestroy()
     }
 
-    override fun onResume() {
-        super.onResume()
-        tvCallFreeTime.text = getString(R.string.leave) +
-                mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0) + getString(R.string.time)
-    }
-
     /**
      * 注册广播监听器
      */
@@ -295,4 +193,7 @@ class SettingActivity : SuperActivity(), ISettingView {
         intentFilter.addAction(Constants.NIM_KIT_OUT)
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
+    override fun networkStatus(isConnected: Boolean) {
+    }
+
 }

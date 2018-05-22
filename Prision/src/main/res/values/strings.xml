@@ -59,6 +59,7 @@
     <string name="remote_interview">远程会见</string>
     <string name="meeting_notice"><![CDATA[注意：\n        请确保视频内都是您的亲人，不是请及时告知警察。\n        请注意通话不涉及犯罪、国家机密等内容，否则您将失去并可能永久失去远程会见机会。\n        请注意时间长短，不要影响后面的狱友使用。\n        若您在通话过程中有任何问题，请及时联系警察沟通解决。]]></string>
     <string name="call">呼叫</string>
+    <string name="next_call_hint">倒计时</string>
     <string name="query_phone_is_error">查询的家属手机号码不存在</string>
     <string name="click_for_call">点击呼叫</string>
     <string name="call_free">免费会见</string>

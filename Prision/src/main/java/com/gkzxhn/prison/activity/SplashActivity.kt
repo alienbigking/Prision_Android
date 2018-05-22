@@ -18,6 +18,7 @@ import com.gkzxhn.prison.common.Constants
  */
 
 class SplashActivity : Activity() {
+    private val DELAY_TIME=2000L
 
     /**
      * Handler:跳转到不同界面
@@ -28,7 +29,7 @@ class SplashActivity : Activity() {
             when (msg.what) {
                 1//跳转登录界面
                 -> {
-                    intent = Intent(this@SplashActivity, SettingActivity::class.java)
+                    intent = Intent(this@SplashActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
@@ -67,9 +68,9 @@ class SplashActivity : Activity() {
 
         val preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
         if (preferences.getString(Constants.USER_ACCOUNT, "").length == 0) {//未登录 未认证
-            mHandler.sendEmptyMessage(1)
+            mHandler.sendEmptyMessageDelayed(1,DELAY_TIME)
         } else {//已登录
-            mHandler.sendEmptyMessage(2)
+            mHandler.sendEmptyMessageDelayed(2,DELAY_TIME)
         }
     }
 

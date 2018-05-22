@@ -29,11 +29,11 @@ import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.nostra13.universalimageloader.core.ImageLoader
+import com.starlight.mobile.android.lib.view.dotsloading.DotsTextView
 
 import org.json.JSONObject
-import javax.security.auth.callback.Callback
 
-import kotlinx.android.synthetic.main.i_common_loading_layout.common_loading_layout_tv_load
+import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_i_loading
 as tvLoading
 
 import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_iv_card_01
@@ -41,16 +41,17 @@ as ivCard01
 import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_iv_card_02
 as ivCard02
 
-import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_bt_call
+import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_iv_call
 as btnCall
+
+import kotlinx.android.synthetic.main.call_user_layout.call_user_layout_tv_next_call_hint
+as tvNextCallHint
 
 /**呼叫用户
  * Created by Raleigh.Luo on 17/4/11.
  */
 
 class CallUserActivity : SuperActivity(), ICallUserView {
-
-
     //请求对象
     private lateinit var mPresenter: CallUserPresenter
     private lateinit var mCustomDialog: CustomDialog
@@ -69,7 +70,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     //用户账号
     private var mIDWidth: Int = 0
     private var mCallRequestCode = Constants.EXTRA_CODE
-    private val DOWN_TIME: Long = 10000//倒计时 10秒
+    //呼叫云信等待时间
+    private val DOWN_TIME: Long = 15000//倒计时 15秒
+    // 下一次呼叫间隔时间
+    private val NEXT_CALL_TIME: Long = 5000//倒计时 5秒
     private val TAG = CallUserActivity::class.java.simpleName
     //发送云信消息成功
     private var mSendOnlineSuccess=false
@@ -78,10 +82,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.call_user_layout)
-        //初始化
-        init()
-        //注册接收器
-        registerReceiver()
+//        //初始化
+//        init()
+//        //注册接收器
+//        registerReceiver()
     }
 
     override fun dialFailed() {
@@ -95,7 +99,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * 初始化
      */
     private fun init() {
-        btnCall.isEnabled=true
         mPresenter = CallUserPresenter(this, this)
         //获取传递过来时的数据
         id = intent.getStringExtra(Constants.EXTRA)?:""
@@ -162,7 +165,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         when (view.id) {
         //左上角返回
             R.id.common_head_layout_iv_left -> finish()
-            R.id.call_user_layout_bt_call -> {
+            R.id.call_user_layout_iv_call -> {
                 online()
             }
         }
@@ -228,7 +231,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     override fun onSuccess() {
         ivCard01.post { ImageLoader.getInstance().displayImage(getImageUrl(mPresenter.entity?.idCardFront), ivCard01) }
         ivCard02.post { ImageLoader.getInstance().displayImage(getImageUrl(mPresenter.entity?.idCardBack), ivCard02) }
-        findViewById(R.id.call_user_layout_bt_call).isEnabled = true
+        findViewById(R.id.call_user_layout_iv_call).isEnabled = true
         val editor = mPresenter.getSharedPreferences().edit()
         editor.putString(Constants.OTHER_CARD + 1, mPresenter.entity?.idCardFront)
         editor.putString(Constants.OTHER_CARD + 2, mPresenter.entity?.idCardBack)
@@ -251,7 +254,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * @param password
      */
     override fun dialSuccess(hostPassword: String) {
-        btnCall.setBackgroundResource(R.drawable.common_grey_btn_shape)
+        btnCall.setBackgroundResource(R.mipmap.ic_call_disable)
         btnCall.isEnabled=false
         //跳转到视频界面
         val intent = Intent(this, VideoMettingActivity::class.java)
@@ -298,7 +301,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         //检查是否正在通话，有就挂断
         mPresenter.checkCallStatus()
         if(!btnCall.isEnabled){
-            mTimer.start()
+            tvNextCallHint.visibility=View.VISIBLE
+            mNextCallTimer.start()
         }
     }
 
@@ -370,21 +374,30 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      */
     private val mTimer = object : CountDownTimer(DOWN_TIME, 1000) {
         override fun onTick(millisUntilFinished: Long) {
+        }
+
+        override fun onFinish() {
+            stopVConfVideo()
+        }
+    }
+    /**
+     * 倒计时
+     */
+    private val mNextCallTimer = object : CountDownTimer(NEXT_CALL_TIME, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
             if(!btnCall.isEnabled) {//呼叫等待10秒的倒计时
                 val second = millisUntilFinished / 1000
-                btnCall.setText(String.format("%s(%sS)",getString(R.string.call),second))
+                tvNextCallHint.setText(String.format("%s%sS",getString(R.string.next_call_hint),second))
             }
         }
 
         override fun onFinish() {
             if(!btnCall.isEnabled){//呼叫等待10秒的倒计时
                 btnCall.isEnabled=true
-                btnCall.setBackgroundResource(R.drawable.common_blue_btn_selector)
-                btnCall.setText(getString(R.string.call))
-            }else{//是否在线倒计时
-                stopVConfVideo()
+                btnCall.setBackgroundResource(R.drawable.call_btn_selector)
+                tvNextCallHint.setText(getString(R.string.next_call_hint))
+                tvNextCallHint.visibility=View.GONE
             }
-
         }
     }
     /**
@@ -406,16 +419,16 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      */
     private val handler = object : Handler() {
         override fun handleMessage(msg: Message) {
+            val view=(tvLoading as DotsTextView)
             if (msg.what == Constants.START_REFRESH_UI) {//开始加载动画
-                tvLoading.visibility = View.VISIBLE
-                if (!tvLoading.isPlaying) {
-
-                    tvLoading.showAndPlay()
+                view.visibility = View.VISIBLE
+                if (!view.isPlaying) {
+                    view.showAndPlay()
                 }
             } else if (msg.what == Constants.STOP_REFRESH_UI) {//停止加载动画
-                if (tvLoading.isPlaying || tvLoading.isShown) {
-                    tvLoading.hideAndStop()
-                    tvLoading.visibility = View.GONE
+                if (view.isPlaying || view.isShown) {
+                    view.hideAndStop()
+                    view.visibility = View.GONE
                 }
             }
         }
