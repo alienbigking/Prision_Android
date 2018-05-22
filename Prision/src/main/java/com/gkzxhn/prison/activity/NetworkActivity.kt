@@ -108,7 +108,4 @@ class NetworkActivity: SuperActivity(), ISettingView {
     override fun updateVersion(version: VersionEntity?) {
     }
 
-    override fun updateFreeTime(time: Int) {
-    }
-
 }

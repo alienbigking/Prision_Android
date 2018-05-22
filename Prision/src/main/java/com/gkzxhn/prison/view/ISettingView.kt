@@ -8,7 +8,6 @@ import com.gkzxhn.prison.entity.VersionEntity
 
 interface ISettingView : IBaseView {
     fun updateVersion(version: VersionEntity?)
-    fun updateFreeTime(time: Int)
     //网络状态
     fun networkStatus(isConnected: Boolean)
 }

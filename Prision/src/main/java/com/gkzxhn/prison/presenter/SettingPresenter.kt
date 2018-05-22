@@ -23,26 +23,26 @@ import org.json.JSONObject
  */
 
 class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISettingModel, ISettingView>(context, SettingModel(), view) {
-    /**
-     * 请求免费会见次数
-     */
-    fun requestFreeTime() {
-        mModel.requestFreeTime(object : VolleyUtils.OnFinishedListener<JSONObject> {
-            override fun onSuccess(response: JSONObject) {
-                val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
-                if (code == HttpStatus.SC_OK) {
-                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(
-                            JSONUtil.getJSONObject(response,"data"), "access_times"))
-                    mView?.updateFreeTime(time)
-                    //保存到本地
-                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME, time).apply()
-                }
-            }
-            override fun onFailed(error: VolleyError) {
-
-            }
-        })
-    }
+//    /**
+//     * 请求免费会见次数
+//     */
+//    fun requestFreeTime() {
+//        mModel.requestFreeTime(object : VolleyUtils.OnFinishedListener<JSONObject> {
+//            override fun onSuccess(response: JSONObject) {
+//                val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
+//                if (code == HttpStatus.SC_OK) {
+//                    val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(
+//                            JSONUtil.getJSONObject(response,"data"), "access_times"))
+//                    mView?.updateFreeTime(time)
+//                    //保存到本地
+//                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME, time).apply()
+//                }
+//            }
+//            override fun onFailed(error: VolleyError) {
+//
+//            }
+//        })
+//    }
 
     /**
      * 请求版本信息

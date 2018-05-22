@@ -128,8 +128,8 @@
 
     <string name="exit_account_hint">确定退出当前账号？</string>
     <string name="setting">设置</string>
-    <string name="end_setting">终端设置</string>
-    <string name="logout">退出当前账号</string>
+    <string name="end_setting">视频设置</string>
+    <string name="logout">退出账号</string>
     <string name="turn_off">关机</string>
     <string name="turn_off_ing">正在关机...</string>
     <string name="turn_off_hint">确定关机？</string>

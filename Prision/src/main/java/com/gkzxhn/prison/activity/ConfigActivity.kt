@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.RadioGroup
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
@@ -54,7 +55,21 @@ class ConfigActivity : SuperActivity() {
             }
         }
     }
+    //设置USB录播选择监听器
+//    mRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener)
+//    //显示已设置的USB录播
+//    val isOpenUsb = mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD, true)
+//    mRadioGroup.check(if (isOpenUsb) R.id.setting_layout_rb_usb_open else R.id.setting_layout_rb_usb_close)
 
+    //    //开启／关闭Usb录屏监听
+//    private val mOnCheckedChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
+//        when (checkedId) {
+//            R.id.setting_layout_rb_usb_close//关闭USB录播 保存
+//            -> mPresenter.getSharedPreferences().edit().putBoolean(Constants.IS_OPEN_USB_RECORD, false).apply()
+//            R.id.setting_layout_rb_usb_open//开启录播 保存
+//            -> mPresenter.getSharedPreferences().edit().putBoolean(Constants.IS_OPEN_USB_RECORD, true).apply()
+//        }
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.config_layout)

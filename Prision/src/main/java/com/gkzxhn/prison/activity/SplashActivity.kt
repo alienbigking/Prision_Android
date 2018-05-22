@@ -28,7 +28,7 @@ class SplashActivity : Activity() {
             when (msg.what) {
                 1//跳转登录界面
                 -> {
-                    intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                    intent = Intent(this@SplashActivity, SettingActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
