@@ -174,7 +174,7 @@
         android:id="@+id/network_layout_tv_disable_gui_hint"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:text="@string/stop_gui"
+        android:text="@string/stop_gui_hint"
         android:gravity="center_horizontal"
         android:layout_marginLeft="@dimen/margin"
         android:layout_marginRight="@dimen/margin"
