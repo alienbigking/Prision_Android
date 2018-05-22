@@ -20,6 +20,9 @@ import kotlinx.android.synthetic.main.i_call_free_user_infor_layout.view.call_fr
 as tvPrisionName
 import kotlinx.android.synthetic.main.i_call_free_user_infor_layout.view.call_free_layout_tv_prision_number
 as tvPrisionNumber
+import kotlinx.android.synthetic.main.i_call_free_user_infor_layout.view.call_free_layout_tv_relationship
+as tvRelationShip
+
 /**
  * Created by Raleigh.Luo on 18/4/11.
  */
@@ -60,7 +63,8 @@ class CallFreeAdapter(private val mContext: Context) : RecyclerView.Adapter<View
             tvFamilyName.setText(entity.name)
             tvPhone.setText(entity.phone)
             tvPrisionName.setText(entity.prisonerName)
-            tvPrisionNumber.setText(entity.prisonerNumber +"  "+entity.relationship)
+            tvPrisionNumber.setText(entity.prisonerNumber)
+            tvRelationShip.setText(entity.relationship)
             holder.itemView.setOnClickListener(View.OnClickListener {
                 mCurrentIndex=position
                 onItemClickListener?.onClickListener(this,position)

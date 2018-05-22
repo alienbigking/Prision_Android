@@ -64,6 +64,10 @@
     <string name="call_free">免费会见</string>
     <string name="usb_setting">USB录屏设置</string>
     <string name="call_free_leave_time_hint">今年剩余免费呼叫次数</string>
+    <string name="family_infor">家属信息</string>
+    <string name="prison_name">服刑人员姓名</string>
+    <string name="prison_number">服刑人员编号</string>
+    <string name="prison_relationship">与服刑人员关系</string>
 
     <string name="family_name_default">家属姓名</string>
     <string name="family_phone_default">手机号码</string>
@@ -134,6 +138,10 @@
     <string name="check_network">检测网络</string>
     <string name="start_gui">启用GUI</string>
     <string name="stop_gui">禁用GUI</string>
+    <string name="check">检查</string>
+    <string name="enable">启用</string>
+    <string name="operate_gui_hint">**温馨提示**：需先打开adb，才可使用禁用或启用GUI功能</string>
+    <string name="disable">禁用</string>
     <string name="check_network_ing">正在检测网络...</string>
     <string name="start_gui_ing">正在启用GUI...</string>
     <string name="stop_gui_ing">正在禁用GUI...</string>

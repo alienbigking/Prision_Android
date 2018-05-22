@@ -285,8 +285,6 @@ class SettingActivity : SuperActivity(), ISettingView {
         super.onResume()
         tvCallFreeTime.text = getString(R.string.leave) +
                 mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0) + getString(R.string.time)
-        //关闭GUI
-        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
     }
 
     /**
