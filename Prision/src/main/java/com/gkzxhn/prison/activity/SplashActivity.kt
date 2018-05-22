@@ -18,7 +18,7 @@ import com.gkzxhn.prison.common.Constants
  */
 
 class SplashActivity : Activity() {
-    private val DELAY_TIME=2000L
+    private val DELAY_TIME=1000L
 
     /**
      * Handler:跳转到不同界面
@@ -29,7 +29,7 @@ class SplashActivity : Activity() {
             when (msg.what) {
                 1//跳转登录界面
                 -> {
-                    intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                    intent = Intent(this@SplashActivity, VideoMettingActivity::class.java)
                     startActivity(intent)
                     finish()
                 }

@@ -47,9 +47,9 @@ class GKApplication : Application() {
      */
     private val options = DisplayImageOptions.Builder()
             .showImageOnLoading(R.color.common_line_color)//默认加载的图片
-            .showImageForEmptyUri(R.color.common_blue)//下载地址不存在
+            .showImageForEmptyUri(R.color.common_line_color)//下载地址不存在
             .cacheInMemory(true)
-            .showImageOnFail(R.color.common_blue).cacheOnDisk(false)//加载失败的图
+            .showImageOnFail(R.color.common_line_color).cacheOnDisk(false)//加载失败的图
             //	.displayer(new RoundedBitmapDisplayer(0))  设置圆角，设置后不能使用loadimage方法，项目并不需要圆角
             .bitmapConfig(Bitmap.Config.RGB_565)    //设置图片的质量
             .imageScaleType(ImageScaleType.IN_SAMPLE_INT)    //设置图片的缩放类型，该方法可以有效减少内存的占用

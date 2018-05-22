@@ -27,20 +27,20 @@ import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.nineoldandroids.animation.ObjectAnimator
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.starlight.mobile.android.lib.util.JSONUtil
-import kotlinx.android.synthetic.main.activity_call_zijing.tv_count_down
 import org.json.JSONException
 import org.json.JSONObject
-import kotlinx.android.synthetic.main.activity_call_zijing.exit_Img as mExit_img
-import kotlinx.android.synthetic.main.activity_call_zijing.fl_call_zijing as mContent
-import kotlinx.android.synthetic.main.activity_call_zijing.iv_avatar as mIv_avatar
-import kotlinx.android.synthetic.main.activity_call_zijing.iv_id_card_01 as mIv_id_card_01
-import kotlinx.android.synthetic.main.activity_call_zijing.iv_id_card_02 as mIv_id_card_02
-import kotlinx.android.synthetic.main.activity_call_zijing.ll_check_id as mLl_check_id
-import kotlinx.android.synthetic.main.activity_call_zijing.mute_text as mMute_txt
-import kotlinx.android.synthetic.main.activity_call_zijing.quiet_text as mQuite_txt
-import kotlinx.android.synthetic.main.activity_call_zijing.rl_bottom as rlBottomPanel
-import kotlinx.android.synthetic.main.activity_call_zijing.tv_call_zijing as mText
-import kotlinx.android.synthetic.main.activity_call_zijing.tv_header_count_down as tvHeaderCountDown
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_hang_up as mExit_img
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_root as mContent
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_avatar as mIv_avatar
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_id_card_font as mIv_id_card_01
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_id_card_back as mIv_id_card_02
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_ll_check_id as mLl_check_id
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_cb_micro as cbMicro
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_cb_speaker as cbSpeaker
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_tv_call_zijing as mText
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_tv_header_count_down as tvHeaderCountDown
+
+
 
 
 
@@ -67,7 +67,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     private var init=true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_call_zijing)
+        setContentView(R.layout.video_metting_layout)
         //初始化Present
         mPresenter = CallZijingPresenter(this, this)
         //初始化倒计时时间 必须presenter初始化后
@@ -99,7 +99,6 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 val second = millisUntilFinished / 1000//秒
                 if (second == 30L) {//30秒时
                     runOnUiThread {
-                        tv_count_down.setTextColor(resources.getColor(R.color.red_text))
                         tvHeaderCountDown.setTextColor(resources.getColor(R.color.red_text))
                     }
                 }
@@ -107,13 +106,11 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 val min = second / 60
                 val seconds = second - min * 60
                 val time= min.toString() + getString(R.string.minute) + seconds.toString() +  getString(R.string.second)
-                tv_count_down.text = getString(R.string.the_leave_time)+time
-                tvHeaderCountDown.text=time
+                tvHeaderCountDown.text = getString(R.string.the_leave_time)+time
             }
 
             override fun onFinish() {
-                tv_count_down.text=getString(R.string.the_leave_time)+getString(R.string.metting_has_time_out)
-                tvHeaderCountDown.text=getString(R.string.metting_has_time_out)
+                tvHeaderCountDown.text=getString(R.string.the_leave_time)+getString(R.string.metting_has_time_out)
                 //倒计时完成
                 if(!mHintDialog.isShowing)mHintDialog.show()
             }
@@ -204,44 +201,21 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
 
     fun onClickListener(v: View) {
         when (v.id) {
-            R.id.mute_text ->//麦克风
+            R.id.video_metting_layout_cb_micro ->//麦克风
+            {
                 mPresenter.switchMuteStatus()
-            R.id.quiet_text ->  //扬声器
-                mPresenter.setIsQuite(!isOpenYSQ)
-            R.id.exit_Img ->  //挂断
-                showHangup()
-            R.id.ll_check_id ->//身份证缩放
-                startScaleAnim(mLl_check_id)
-            R.id.fl_call_zijing ->{//点击示或隐藏底部
-                showOrHideBottomPanel(rlBottomPanel.visibility==View.VISIBLE)
             }
+            R.id.video_metting_layout_cb_speaker ->  //扬声器
+            {
+                mPresenter.setIsQuite(!isOpenYSQ)
+            }
+            R.id.video_metting_layout_iv_hang_up ->  //挂断
+                showHangup()
+            R.id.video_metting_layout_ll_check_id ->//身份证缩放
+                startScaleAnim(mLl_check_id)
         }
     }
 
-    /**
-     * 显示或隐藏底部条
-     */
-    private fun showOrHideBottomPanel(isShown: Boolean) {
-        if (isShown) {// 显示动画
-            val bottomHideAnim = AnimationUtils.loadAnimation(this,
-                    com.starlight.mobile.android.lib.R.anim.slide_out_to_bottom)
-            //设置动画时间
-            bottomHideAnim.duration = 400
-            rlBottomPanel.startAnimation(bottomHideAnim)
-            rlBottomPanel.visibility = View.GONE
-            //头部显示
-            tvHeaderCountDown.visibility=View.VISIBLE
-        } else {// 隐藏动画
-            val bottomShowAnim = AnimationUtils.loadAnimation(this,
-                    com.starlight.mobile.android.lib.R.anim.slide_in_from_bottom)
-            //设置动画时间
-            bottomShowAnim.duration = 400
-            rlBottomPanel.startAnimation(bottomShowAnim)
-            rlBottomPanel.visibility = View.VISIBLE
-            //头部不现实
-            tvHeaderCountDown.visibility=View.GONE
-        }
-    }
     /**
      * 设置扬声器UI
      *
@@ -249,14 +223,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      */
     override fun setSpeakerUi(mIsOpenYSQ: Boolean) {
         isOpenYSQ =mIsOpenYSQ
-        if (isOpenYSQ)//打开扬声器
-            mQuite_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                    resources.getDrawable(R.drawable.vconf_speaker_selector), null, null)
-        else
-            mQuite_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                    resources.getDrawable(R.drawable.vconf_mute_selector), null, null)
-
-
+        cbSpeaker.isChecked=isOpenYSQ
     }
 
 
@@ -307,14 +274,14 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         if (isScaled) {
             //放大动画
             anim = ObjectAnimator.ofFloat(mLl_check_id, "tobig", 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1f).setDuration(300)
-            mLl_check_id.pivotX = 0f
+            mLl_check_id.pivotX = mLl_check_id.measuredWidth.toFloat()
             mLl_check_id.pivotY = 0f
             isScaled = !isScaled
             anim.start()
         } else {
             //缩小动画
             anim = ObjectAnimator.ofFloat(mLl_check_id, "tosmall", 1f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f).setDuration(300)
-            mLl_check_id.pivotX = 0f
+            mLl_check_id.pivotX =  mLl_check_id.measuredWidth.toFloat()
             mLl_check_id.pivotY = 0f
             isScaled = !isScaled
             anim.start()
@@ -470,19 +437,16 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                         "error" -> {//呼叫错误
                             hangUpSuccess(getString(R.string.call_error))
                         }
-                        "MuteOn" ->{  //麦克风静音
+                        "MuteOn" ->{  //关闭了 麦克风
                             if(init){//第一次打开
                                 init=false
                                 mPresenter.switchMuteStatus()
                             }
-                            mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                                    resources.getDrawable(R.drawable.vconf_microphone_off_selector), null, null)
+                            cbMicro.isChecked=false
 
                         }
-                        "MuteOff" ->
-                            //麦克风静音
-                            mMute_txt.setCompoundDrawablesWithIntrinsicBounds(null,
-                                    resources.getDrawable(R.drawable.vconf_microphone_on_selector), null, null)
+                        "MuteOff" -> //打开了麦克风
+                            cbMicro.isChecked=false
                     }
                 }
             }

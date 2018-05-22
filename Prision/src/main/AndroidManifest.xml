@@ -165,6 +165,7 @@
 
         <activity android:name=".activity.VideoMettingActivity"
             android:screenOrientation="landscape"
+            android:theme="@style/VideoMeettingTheme"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
             />
