@@ -3,7 +3,6 @@ package com.gkzxhn.prison.adapter
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 
@@ -19,8 +18,8 @@ import kotlinx.android.synthetic.main.main_item_layout.view.main_item_layout_tv_
 as tvName
 import kotlinx.android.synthetic.main.main_item_layout.view.main_item_layout_tv_prison_area
 as tvArea
-import kotlinx.android.synthetic.main.main_item_layout.view.main_item_layout_tv_cancel
-as tvCancel
+import kotlinx.android.synthetic.main.main_item_layout.view.main_item_layout_iv_cancel
+as ivCancel
 /**
  * Created by Raleigh.Luo on 17/4/11.
  */
@@ -69,27 +68,27 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder.itemView){
-            val entity = mDatas[position]
-            tvName.text = entity.name
-            val meetingTime = entity.time?:""
-            //        2017-08-03 19:00-19:30
-            tvTime.text =if(meetingTime.length>10)meetingTime.substring(10,meetingTime.length) else "-"
-            tvArea.text = entity.prisonerNumber
-            this.setOnClickListener { v ->
-                mCurrentIndex = position
-               onItemClickListener?.onClickListener(v, position)
-            }
-            tvCancel.setOnClickListener { v ->
-                mCurrentIndex = position
-                onItemClickListener?.onClickListener(v, position)
+//            val entity = mDatas[position]
+//            tvName.text = entity.name
+//            val meetingTime = entity.time?:""
+//            //        2017-08-03 19:00-19:30
+//            tvTime.text =if(meetingTime.length>10)meetingTime.substring(10,meetingTime.length) else "-"
+//            tvArea.text = entity.prisonerNumber
+//            this.setOnClickListener { v ->
+//                mCurrentIndex = position
+//               onItemClickListener?.onClickListener(v, position)
+//            }
+            ivCancel.setOnClickListener { v ->
+//                mCurrentIndex = position
+//                onItemClickListener?.onClickListener(v, position)
             }
 
-
+//
         }
 
     }
 
     override fun getItemCount(): Int {
-        return mDatas.size
+        return 10
     }
 }

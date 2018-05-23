@@ -122,6 +122,7 @@
         <!--主页-->
         <activity android:name="com.gkzxhn.prison.activity.MainActivity"
             android:screenOrientation="landscape"
+            android:theme="@style/VideoMeettingTheme"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
             />
