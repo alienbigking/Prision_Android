@@ -52,8 +52,8 @@
     <string name="video_metting_hangup">对方已挂断</string>
     <string name="the_leave_time">剩余通话时间： </string>
     <string name="id_card_hint">身份审核\n点击缩放</string>
-    <string name="open">开启USB录屏</string>
-    <string name="close">关闭USB录屏</string>
+    <string name="open">开启</string>
+    <string name="close">关闭</string>
     <string name="metting_has_time_out">已超时</string>
     <string name="error_to_meetting">拨号失败，请检查终端网络配置</string>
     <string name="remote_interview">远程会见</string>
@@ -159,15 +159,19 @@
     <string name="terminal_account">终端帐号</string>
     <string name="terminal_account_hint">请填写会议室号##主持人密码##参与密码，如0000##0000##0000</string>
     <string name="rate">码率</string>
-    <string name="rate_colon">码\u3000\u3000率(K)</string>
-    <string name="please_input_terminal_account">请输入终端帐号</string>
+    <string name="rate_colon">码\u0020\u0020率(K)</string>
+    <string name="please_input_meeting_numbers">请输入会议室号</string>
+    <string name="please_input_host_password">请输入主持人密码</string>
+    <string name="please_input_guest_password">请输入参会密码</string>
     <string name="alter_terminal_account_success">修改终端信息成功</string>
     <string name="terminal_account_not_available">此终端可不用，请重新设置</string>
     <string name="GK_register_failed">网络异常，GK注册失败</string>
     <string name="check_failed">验证失败</string>
     <string name="delay_meeting_success">延长会议成功</string>
     <string name="delay_meeting_failed">延长会议失败</string>
-
+    <string name="meetting_number">会议室号\u3000</string>
+    <string name="host_password">主持人密码</string>
+    <string name="guest_password">参会密码\u3000\u3000</string>
     <!-- vconf -->
     <string name="connecting">正在连接...</string>
     <string name="wait_answer">等待接听...</string>
@@ -225,7 +229,7 @@
     <string name="speaker">扬声器</string>
     <string name="add_text">添加</string>
     <string name="protocol">协\u3000\u3000议</string>
-    <string name="config_time">通话时长(Min)</string>
+    <string name="config_time">通话时长</string>
     <string name="reminder">提示</string>
 
     <string-array  name="rate_array">

@@ -29,7 +29,7 @@ class SplashActivity : Activity() {
             when (msg.what) {
                 1//跳转登录界面
                 -> {
-                    intent = Intent(this@SplashActivity, VideoMettingActivity::class.java)
+                    intent = Intent(this@SplashActivity, ConfigActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
