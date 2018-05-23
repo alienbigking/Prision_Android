@@ -12,8 +12,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 
 import com.gkzxhn.prison.R
@@ -84,7 +82,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     private val onItemClickListener = object : OnItemClickListener {
         override fun onClickListener(convertView: View, position: Int) {
             when (convertView.id) {
-                R.id.main_item_layout_tv_cancel -> if (mCancelVideoDialog != null && !mCancelVideoDialog.isShowing) mCancelVideoDialog.show()
+                R.id.main_item_layout_iv_cancel -> if (mCancelVideoDialog != null && !mCancelVideoDialog.isShowing) mCancelVideoDialog.show()
                 else -> if (isConnectZijing) {
                     val intent = Intent(this@MainActivity, CallUserActivity::class.java)
                     intent.action=Constants.CALL_DEFUALT_ACTION
@@ -158,9 +156,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mSwipeRefresh.onRefreshListener = this
         mSwipeRefresh.onLoadListener=this
         mRecylerView.adapter = adapter
-        val sizeMenu = resources.getDimensionPixelSize(R.dimen.recycler_view_line_height)
-        mRecylerView.addItemDecoration(RecycleViewDivider(
-                this, LinearLayoutManager.HORIZONTAL, sizeMenu, resources.getColor(R.color.common_hint_text_color)))
+//        val sizeMenu = resources.getDimensionPixelSize(R.dimen.recycler_view_line_height)
+//        mRecylerView.addItemDecoration(RecycleViewDivider(
+//                this, LinearLayoutManager.HORIZONTAL, sizeMenu, resources.getColor(R.color.common_hint_text_color)))
 
         //初始化进度条
         mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
@@ -220,7 +218,8 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             -> mViewPager.currentItem = mViewPager.currentItem - 1
             R.id.main_layout_btn_next//下一个月
             -> mViewPager.currentItem = mViewPager.currentItem + 1
-            R.id.common_head_layout_iv_left -> startActivity(Intent(this, SettingActivity::class.java))
+            R.id.main_layout_tv_setting ->//设置
+                startActivity(Intent(this, SettingActivity::class.java))
             R.id.common_head_layout_iv_right -> {
                 onRefresh()
             }

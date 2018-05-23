@@ -38,7 +38,6 @@
         app:layout_constraintEnd_toStartOf="@+id/video_metting_layout_ll_check_id"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
-
     <LinearLayout
         android:id="@+id/video_metting_layout_ll_check_id"
         android:layout_width="0dip"
@@ -94,7 +93,7 @@
         app:layout_constraintRight_toLeftOf="@+id/video_metting_layout_iv_hang_up"
         app:layout_constraintTop_toTopOf="@+id/video_metting_layout_iv_hang_up" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/video_metting_layout_iv_hang_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

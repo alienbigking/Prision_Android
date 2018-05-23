@@ -19,6 +19,7 @@ import com.gkzxhn.prison.entity.FreeFamilyEntity
 import com.gkzxhn.prison.presenter.CallFreePresenter
 import com.gkzxhn.prison.view.ICallFreeView
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
+import com.starlight.mobile.android.lib.util.CommonHelper
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
 import com.starlight.mobile.android.lib.view.RecycleViewDivider
 import kotlinx.android.synthetic.main.common_list_layout.*
@@ -136,6 +137,7 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
     }
 
     fun onClickListener(view: View) {
+        CommonHelper.clapseSoftInputMethod(this)
         when (view.id) {
         //点击返回
             R.id.common_head_layout_iv_left -> finish()

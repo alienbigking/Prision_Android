@@ -106,7 +106,7 @@ private constructor() : UncaughtExceptionHandler {
                     if (s != null && !s.toString().isEmpty()) b.append("\n" + s.toString())
                 }
             }
-            deal(b.toString())
+            if (!Constants.IS_DEBUG_MODEL)   deal(b.toString())
         }
         if (Constants.IS_DEBUG_MODEL) {//打印日志
             ex.printStackTrace()
