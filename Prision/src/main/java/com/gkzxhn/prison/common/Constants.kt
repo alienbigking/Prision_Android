@@ -38,22 +38,22 @@ object Constants {
     val RELEASE_DOMAIN = "https://www.yuwugongkai.com/ywgk-app"//新发布正式环境
     val DEMO_DOMAIN = "http://39.108.185.51:8082/ywgk-app"//开发环境
     val DEV_DOMAIN = "http://123.57.7.159:8082/ywgk-app"//开发环境
-    val DOMAIN_NAME_XLS = DEV_DOMAIN
+    val DOMAIN_NAME = DEV_DOMAIN
 
-    val REQUEST_MEETING_LIST_URL = DOMAIN_NAME_XLS + "/api/meetings/getMeetingsForPrison"//会见列表
-    val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME_XLS + "/api/meetings/update"// 取消会见
-    val REQUEST_MEETING_DETAIL_URL = DOMAIN_NAME_XLS + "/families/detail"// 会见详情
-    val REQUEST_VERSION_URL = DOMAIN_NAME_XLS + "/api/versions/page"//版本更新
-    val REQUEST_CRASH_LOG_URL = DOMAIN_NAME_XLS + "/app_loggers/save"//奔溃日志
-    val REQUEST_MEETING_ROOM = DOMAIN_NAME_XLS + "/api/terminals/detail"//会议室信息
+    val REQUEST_MEETING_LIST_URL = DOMAIN_NAME + "/api/meetings/getMeetingsForPrison"//会见列表
+    val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME + "/api/meetings/update"// 取消会见
+    val REQUEST_MEETING_DETAIL_URL = DOMAIN_NAME + "/families/detail"// 会见详情
+    val REQUEST_VERSION_URL = DOMAIN_NAME + "/api/versions/page"//版本更新
+    val REQUEST_CRASH_LOG_URL = DOMAIN_NAME + "/app_loggers/save"//奔溃日志
+    val REQUEST_MEETING_ROOM = DOMAIN_NAME + "/api/terminals/detail"//会议室信息
 
-    val REQUEST_FAMILY_BY_KEY = DOMAIN_NAME_XLS + "/api/meetings/getMeetingsFree"//免费会见－根据用户名和手机号码查询家属
+    val REQUEST_FAMILY_BY_KEY = DOMAIN_NAME + "/api/meetings/getMeetingsFree"//免费会见－根据用户名和手机号码查询家属
 
-    val REQUEST_FREE_MEETING_TIME = DOMAIN_NAME_XLS + "/api/jails/access_times"//免费呼叫次数
-    val UPDATE_FREE_MEETING_TIME = DOMAIN_NAME_XLS + "/api/jails/access"//减少呼叫次数
+    val REQUEST_FREE_MEETING_TIME = DOMAIN_NAME + "/api/jails/access_times"//免费呼叫次数
+    val UPDATE_FREE_MEETING_TIME = DOMAIN_NAME + "/api/jails/access"//减少呼叫次数
 
-    val ADD_FREE_MEETING = DOMAIN_NAME_XLS + "/api/free_meetings/add"//记录免费会见信息
-    val UPDATE_FREE_MEETING = DOMAIN_NAME_XLS + "/api/free_meetings/updateDuration"//更新免费会见时长
+    val ADD_FREE_MEETING = DOMAIN_NAME + "/api/free_meetings/add"//记录免费会见信息
+    val UPDATE_FREE_MEETING = DOMAIN_NAME + "/api/free_meetings/updateDuration"//更新免费会见时长
 
     /*-------------------------------msg what-------------------------------------------------*/
     val START_REFRESH_UI = 1

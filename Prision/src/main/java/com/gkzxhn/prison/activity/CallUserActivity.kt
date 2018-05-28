@@ -11,12 +11,9 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Message
-import android.support.v4.widget.ImageViewCompat
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
-import android.widget.LinearLayout
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
@@ -59,8 +56,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     private var mShowTerminalDialog: CustomDialog?=null
     private lateinit var mProgress: ProgressDialog
     private var preferences: SharedPreferences? = null
-    //手机号码
-    private lateinit var phone: String
+    //家属id
+    private lateinit var mFamilyId: String
     //昵称
     private lateinit var nickName: String
     private lateinit var id: String
@@ -103,7 +100,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         mPresenter = CallUserPresenter(this, this)
         //获取传递过来时的数据
         id = intent.getStringExtra(Constants.EXTRA)?:""
-        phone = intent.getStringExtra(Constants.EXTRAS)?:""
+        mFamilyId = intent.getStringExtra(Constants.EXTRAS)?:""
         nickName = intent.getStringExtra(Constants.EXTRA_TAB)?:""
         mProgress = ProgressDialog.show(this, null, getString(R.string.check_other_status))
         mProgress.setCanceledOnTouchOutside(true)
@@ -138,7 +135,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 //            }
 //        })
         //请求详情
-        mPresenter.request(phone)
+        mPresenter.request(mFamilyId)
     }
 
     /**
@@ -246,7 +243,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         else if(url.contains("http")){
             return url
         }else{
-            return Constants.DOMAIN_NAME_XLS+url
+            return Constants.DOMAIN_NAME +url
         }
     }
 
@@ -255,13 +252,13 @@ class CallUserActivity : SuperActivity(), ICallUserView {
      * @param password
      */
     override fun dialSuccess(hostPassword: String) {
-        btnCall.setBackgroundResource(R.mipmap.ic_call_disable)
+        btnCall.setImageResource(R.mipmap.ic_call_disable)
         btnCall.isEnabled=false
         //跳转到视频界面
         val intent = Intent(this, VideoMettingActivity::class.java)
         intent.action=getIntent().action
         intent.putExtra(Constants.ZIJING_PASSWORD, hostPassword)
-        intent.putExtra(Constants.EXTRA,id)//家属id
+        intent.putExtra(Constants.EXTRA,mFamilyId)//家属id
         startActivityForResult(intent, mCallRequestCode)
         //关闭显示进度条
         stopProgress()
@@ -304,7 +301,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         mPresenter.checkCallStatus()
         if(!btnCall.isEnabled){
             tvNextCallHint.visibility=View.VISIBLE
-            btnCall.setBackgroundResource(R.mipmap.ic_call_disable)
             mNextCallTimer.start()
         }
     }
@@ -397,7 +393,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         override fun onFinish() {
             if(!btnCall.isEnabled){//呼叫等待10秒的倒计时
                 btnCall.isEnabled=true
-                btnCall.setBackgroundResource(R.drawable.call_btn_selector)
+                btnCall.setImageResource(R.drawable.call_btn_selector)
                 tvNextCallHint.setText(getString(R.string.next_call_hint))
                 tvNextCallHint.visibility=View.GONE
             }

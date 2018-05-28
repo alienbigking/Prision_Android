@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+
+    <TextView
+        android:id="@+id/main_layout_tv_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="@dimen/margin_half"
+        android:layout_marginBottom="@dimen/margin_half"
+        android:text="十二月"
+        android:textColor="@color/common_blue"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="@+id/main_layout_tv_sunday"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dip"
+        android:text="2015年"
+        android:textColor="@color/common_gray_title_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/main_layout_tv_month"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_month" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_sunday"
+        style="@style/date_week_style"
+        android:text="@string/sunday"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_monday"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_layout_tv_month" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_monday"
+        style="@style/date_week_style"
+        android:text="@string/monday"
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_thesday"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_sunday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_thesday"
+        style="@style/date_week_style"
+        android:text="@string/thesday"
+
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_wednesday"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_monday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_wednesday"
+        style="@style/date_week_style"
+        android:text="@string/wednesday"
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_thursday"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_thesday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_thursday"
+        style="@style/date_week_style"
+        android:text="@string/thursday"
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_friday"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_wednesday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_friday"
+        style="@style/date_week_style"
+        android:text="@string/friday"
+
+        app:layout_constraintEnd_toStartOf="@+id/main_layout_tv_saturday"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/main_layout_tv_thursday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_saturday"
+        style="@style/date_week_style"
+        android:text="@string/saturday"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_friday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/main_layout_vp_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_marginTop="20dip"
+        app:layout_constraintTop_toBottomOf="@+id/main_layout_tv_saturday"
+        app:layout_constraintBottom_toTopOf="@+id/main_layout_ll_service_hint"
+        android:layout_above="@+id/main_layout_ll_service_hint"
+        android:layout_gravity="center"
+        android:gravity="center"
+        />
+
+    <LinearLayout
+        android:id="@+id/main_layout_ll_service_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="onClickListener"
+        android:layout_marginBottom="20dip"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:id="@+id/main_layout_tv_service_hint_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingLeft="20dip"
+            android:paddingRight="10dip"
+            android:paddingTop="10dip"
+            android:text="@string/video_service_status"
+            android:textColor="@color/common_gray_title_color"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/main_layout_tv_service_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingRight="10dip"
+            android:paddingTop="10dip"
+            android:text="@string/video_service_connecting"
+            android:textColor="@color/connecting"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
+

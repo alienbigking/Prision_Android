@@ -61,6 +61,7 @@
     <string name="call">呼叫</string>
     <string name="next_call_hint">倒计时</string>
     <string name="query_phone_is_error">查询的家属手机号码不存在</string>
+    <string name="query_name_is_error">查询的家属姓名不存在</string>
     <string name="click_for_call">点击呼叫</string>
     <string name="call_free">免费会见</string>
     <string name="usb_setting">USB录屏设置</string>

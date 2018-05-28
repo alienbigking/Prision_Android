@@ -30,11 +30,11 @@ import com.gkzxhn.prison.view.IMainView
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
-import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_service_hint
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_service_hint
 as tvServiceConnectHint
-import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_month
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_month
 as tvMonth
-import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_vp_calendar
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_vp_calendar
 as mViewPager
 import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list
 as mRecylerView
@@ -74,7 +74,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         }
 
         override fun changeDate(date: CustomDate) {
-            tvMonth.text = date.getYear().toString() + getString(R.string.year) + date.getMonth() + getString(R.string.month)
+//            tvMonth.text = date.getYear().toString() + getString(R.string.year) + date.getMonth() + getString(R.string.month)
         }
     }
     private val onItemClickListener = object : OnItemClickListener {

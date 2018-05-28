@@ -12,7 +12,6 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.view.animation.AnimationUtils
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
@@ -261,7 +260,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         if(url.contains("http")){
             return url
         }else{
-            return Constants.DOMAIN_NAME_XLS+url
+            return Constants.DOMAIN_NAME +url
         }
     }
     /**

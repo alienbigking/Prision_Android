@@ -10,6 +10,7 @@ import com.gkzxhn.prison.entity.FreeFamilyEntity
 import com.gkzxhn.prison.entity.MeetingDetailEntity
 import com.gkzxhn.prison.model.ICallUserModel
 import com.gkzxhn.prison.model.iml.CallUserModel
+import com.gkzxhn.prison.utils.Utils
 import com.gkzxhn.prison.view.ICallFreeView
 import com.gkzxhn.wisdom.async.VolleyUtils
 import com.google.gson.Gson
@@ -70,7 +71,12 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
                             object : TypeToken<List<FreeFamilyEntity>>() {}.type)
                     mView?.onSuccess(familys)
                 } else {
-                    mView?.showToast(R.string.query_phone_is_error)
+                    if(Utils.isPhoneNumber(key)){//查询手机号报错
+                        mView?.showToast(R.string.query_phone_is_error)
+                    }else{//查询姓名报错
+                        mView?.showToast(R.string.query_name_is_error)
+                    }
+
                 }
             }
 

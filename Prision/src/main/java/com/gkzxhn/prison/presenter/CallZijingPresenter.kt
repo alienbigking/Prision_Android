@@ -71,7 +71,8 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(json, "code"))
                 Log.e("raleigh_test","response"+response.toString())
                 if (code == HttpStatus.SC_OK) {
-                    mFreeMeetingId=JSONUtil.getJSONObjectStringValue(json, "id")
+                    val meettingJson=JSONUtil.getJSONObject(JSONUtil.getJSONObject(json,"data"),"freeMeeting")
+                    mFreeMeetingId=JSONUtil.getJSONObjectStringValue(meettingJson, "id")
                 }
             }
 

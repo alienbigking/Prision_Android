@@ -24,12 +24,16 @@
             android:padding="@dimen/margin_half"
             android:textColor="@color/common_blue"
             />
+        <include layout="@layout/i_main_left_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
     </FrameLayout>
     <FrameLayout
         android:layout_weight="2"
         android:layout_width="0dip"
         android:layout_height="match_parent">
-        <include layout="@layout/i_main_left_layout"
+        <include layout="@layout/i_main_center_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
