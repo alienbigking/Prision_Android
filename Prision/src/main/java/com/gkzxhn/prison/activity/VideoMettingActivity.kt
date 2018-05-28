@@ -386,9 +386,14 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                     FIMALY_IS_JOIN=true;
 
                     mTimer.start()
-                    //免费呼叫次数更新
+
                     if(getIntent().action==Constants.CALL_FREE_ACTION) {
+                        val activityIntent=this@VideoMettingActivity.intent
+                        //免费呼叫次数更新
                         mPresenter.updateFreeTime()
+                        //添加免费会见信息  参数是家属id
+                        if(activityIntent.hasExtra(Constants.EXTRA))
+                            mPresenter.addFreeMeetting(activityIntent.getStringExtra(Constants.EXTRA))
                     }
                 }
                 Constants.PRISION_JOIN_METTING ->{//监狱端进入会见房间
@@ -408,7 +413,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                             if(!ESTABLISHED_CALL) {
                                 ESTABLISHED_CALL = true
                                 //呼叫建立
-                                mText.visibility = View.GONE
+                                mText.visibility = View.INVISIBLE
                                 mContent.setBackgroundColor(resources.getColor(R.color.zijing_video_bg))
                                 callAccount()
                             }
@@ -446,7 +451,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
 
                         }
                         "MuteOff" -> //打开了麦克风
-                            cbMicro.isChecked=false
+                            cbMicro.isChecked=true
                     }
                 }
             }

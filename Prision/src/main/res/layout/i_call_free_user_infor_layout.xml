@@ -7,14 +7,17 @@
     android:background="@drawable/common_white_item_click_selector"
     android:onClick="onClickListener"
     android:orientation="vertical"
-    android:padding="@dimen/margin">
+    android:paddingTop="@dimen/margin_half"
+    android:paddingBottom="@dimen/margin_half"
+    >
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/call_free_layout_ll_family_name"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingRight="15dip"
+        android:gravity="center_horizontal"
         mAttr:layout_constraintHorizontal_weight="2"
         mAttr:layout_constraintLeft_toLeftOf="parent"
         mAttr:layout_constraintHorizontal_chainStyle="spread"
@@ -31,6 +34,7 @@
             android:id="@+id/call_free_layout_tv_family_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_alignTop="@+id/call_free_layout_iv_portrait"
             android:layout_marginLeft="20dip"
             android:layout_toRightOf="@+id/call_free_layout_iv_portrait"
@@ -48,9 +52,10 @@
             android:layout_below="@+id/call_free_layout_tv_family_name"
             android:layout_marginTop="5dip"
             android:text="@string/family_phone_default"
+            android:visibility="gone"
             android:textColor="@color/common_gray_title_color"
             android:textSize="20sp" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/call_free_layout_tv_prision_name"
@@ -60,6 +65,7 @@
         android:textColor="@color/common_light_text_color"
         android:textSize="22sp"
         android:paddingRight="15dip"
+        android:gravity="center_horizontal"
         android:layout_marginLeft="@dimen/margin"
         mAttr:layout_constraintHorizontal_weight="1"
         mAttr:layout_constraintRight_toLeftOf="@+id/call_free_layout_tv_prision_number"
@@ -76,6 +82,7 @@
         android:layout_alignLeft="@+id/call_free_layout_tv_prision_name"
         android:layout_below="@+id/call_free_layout_tv_prision_name"
         android:text="编号"
+        android:gravity="center_horizontal"
         android:layout_marginLeft="@dimen/margin"
         android:paddingRight="15dip"
         android:textColor="@color/common_light_text_color"
@@ -93,6 +100,7 @@
         android:layout_alignLeft="@+id/call_free_layout_tv_prision_name"
         android:layout_below="@+id/call_free_layout_tv_prision_name"
         android:text="关系"
+        android:gravity="center_horizontal"
         android:layout_marginLeft="@dimen/margin"
         android:textColor="@color/common_light_text_color"
         android:textSize="20sp"

@@ -23,11 +23,62 @@ import org.json.JSONObject
 
 class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresenter<ICallZijingModel, ICallZijingView>(context, CallZijingModel(), view) {
     private val TAG = CallZijingPresenter::class.java.simpleName
+    //免费会见id
+    private var mFreeMeetingId:String?=null
+    //开始会见的时间戳
+    private var mStartMeetingTime:Long=0L
     /**
      *  取消会见
      */
     fun requestCancel(id: String, reason: String) {
-        mModel.requestCancel(id, reason,null)
+        mModel.requestCancel(id, reason,object :VolleyUtils.OnFinishedListener<String>{
+            override fun onSuccess(response: String) {
+
+            }
+
+            override fun onFailed(error: VolleyError) {
+            }
+        })
+    }
+    /**
+     *  更新会见时长
+     */
+    fun updateFreeMeetting() {
+        mFreeMeetingId?.let {
+            val endMeetingTime=System.currentTimeMillis()
+            //通话时长转成秒
+            val meettingSecond=(endMeetingTime-mStartMeetingTime)/1000
+            mModel.updateFreeMeetting(it,meettingSecond,object :VolleyUtils.OnFinishedListener<String>{
+                override fun onSuccess(response: String) {
+                    Log.e("raleigh_test","response"+response)
+                }
+
+                override fun onFailed(error: VolleyError) {
+                    Log.e("raleigh_test","error"+String(error.networkResponse.data))
+                }
+            })
+        }
+
+    }
+    /**
+     *  添加免费会见
+     */
+    fun addFreeMeetting(familyId: String) {
+        mStartMeetingTime=System.currentTimeMillis()
+        mModel.addFreeMeetting(familyId,object :VolleyUtils.OnFinishedListener<String>{
+            override fun onSuccess(response: String) {
+                val json=JSONUtil.getJSONObject(response)
+                val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(json, "code"))
+                Log.e("raleigh_test","response"+response.toString())
+                if (code == HttpStatus.SC_OK) {
+                    mFreeMeetingId=JSONUtil.getJSONObjectStringValue(json, "id")
+                }
+            }
+
+            override fun onFailed(error: VolleyError) {
+                Log.e("raleigh_test","error"+String(error.networkResponse.data))
+            }
+        })
     }
     //// 遥控器控制器
     fun cameraControl(v:String){
@@ -63,6 +114,8 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
      *  挂断
      */
     fun hangUp(reason: String) {
+        //更新免费会见时长
+        if(mFreeMeetingId!=null)updateFreeMeetting()
         //挂断
         mModel.hangUp(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {

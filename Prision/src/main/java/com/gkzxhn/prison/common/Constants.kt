@@ -52,6 +52,9 @@ object Constants {
     val REQUEST_FREE_MEETING_TIME = DOMAIN_NAME_XLS + "/api/jails/access_times"//免费呼叫次数
     val UPDATE_FREE_MEETING_TIME = DOMAIN_NAME_XLS + "/api/jails/access"//减少呼叫次数
 
+    val ADD_FREE_MEETING = DOMAIN_NAME_XLS + "/api/free_meetings/add"//记录免费会见信息
+    val UPDATE_FREE_MEETING = DOMAIN_NAME_XLS + "/api/free_meetings/updateDuration"//更新免费会见时长
+
     /*-------------------------------msg what-------------------------------------------------*/
     val START_REFRESH_UI = 1
     val STOP_REFRESH_UI = 2//msg what

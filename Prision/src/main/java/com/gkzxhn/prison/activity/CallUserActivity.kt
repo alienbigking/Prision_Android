@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Message
+import android.support.v4.widget.ImageViewCompat
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -83,9 +84,9 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.call_user_layout)
 //        //初始化
-//        init()
-//        //注册接收器
-//        registerReceiver()
+        init()
+        //注册接收器
+        registerReceiver()
     }
 
     override fun dialFailed() {
@@ -123,19 +124,19 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                 online()
             }
         }
-        val viewTreeObserver = ivCard01.viewTreeObserver
-        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val ID_RATIO= 856f / 540f
-                ivCard01.viewTreeObserver.removeGlobalOnLayoutListener(this)
-                mIDWidth = ivCard01.measuredWidth
-                val layoutParams = ivCard01.layoutParams as LinearLayout.LayoutParams
-                layoutParams.height = (mIDWidth / ID_RATIO).toInt()
-                layoutParams.width = mIDWidth
-                ivCard01.layoutParams = layoutParams
-                ivCard02.layoutParams = layoutParams
-            }
-        })
+//        val viewTreeObserver = ivCard01.viewTreeObserver
+//        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+//            override fun onGlobalLayout() {
+//                val ID_RATIO= 856f / 540f
+//                ivCard01.viewTreeObserver.removeGlobalOnLayoutListener(this)
+//                mIDWidth = ivCard01.measuredWidth
+//                val layoutParams = ivCard01.layoutParams as LinearLayout.LayoutParams
+//                layoutParams.height = (mIDWidth / ID_RATIO).toInt()
+//                layoutParams.width = mIDWidth
+//                ivCard01.layoutParams = layoutParams
+//                ivCard02.layoutParams = layoutParams
+//            }
+//        })
         //请求详情
         mPresenter.request(phone)
     }
@@ -231,7 +232,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     override fun onSuccess() {
         ivCard01.post { ImageLoader.getInstance().displayImage(getImageUrl(mPresenter.entity?.idCardFront), ivCard01) }
         ivCard02.post { ImageLoader.getInstance().displayImage(getImageUrl(mPresenter.entity?.idCardBack), ivCard02) }
-        findViewById(R.id.call_user_layout_iv_call).isEnabled = true
+        btnCall.isEnabled = true
         val editor = mPresenter.getSharedPreferences().edit()
         editor.putString(Constants.OTHER_CARD + 1, mPresenter.entity?.idCardFront)
         editor.putString(Constants.OTHER_CARD + 2, mPresenter.entity?.idCardBack)
@@ -260,6 +261,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         val intent = Intent(this, VideoMettingActivity::class.java)
         intent.action=getIntent().action
         intent.putExtra(Constants.ZIJING_PASSWORD, hostPassword)
+        intent.putExtra(Constants.EXTRA,id)//家属id
         startActivityForResult(intent, mCallRequestCode)
         //关闭显示进度条
         stopProgress()
@@ -302,6 +304,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         mPresenter.checkCallStatus()
         if(!btnCall.isEnabled){
             tvNextCallHint.visibility=View.VISIBLE
+            btnCall.setBackgroundResource(R.mipmap.ic_call_disable)
             mNextCallTimer.start()
         }
     }

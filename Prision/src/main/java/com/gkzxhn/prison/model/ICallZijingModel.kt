@@ -8,6 +8,19 @@ import org.json.JSONObject
  */
 
 interface ICallZijingModel : IBaseModel {
+    /**
+     * 更新免费会见时长
+     */
+    fun  updateFreeMeetting(meettingId: String, meettingSecond: Long,onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+
+    /**
+     * 记录免费会见
+     */
+    fun  addFreeMeetting(familyId: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+
+    /**
+     * 取消／结束会见
+     */
     fun  requestCancel(id: String, reason: String,onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
     /**
      * 关机

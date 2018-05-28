@@ -11,7 +11,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 
 import com.gkzxhn.prison.R
@@ -31,7 +30,6 @@ import com.gkzxhn.prison.view.IMainView
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
-import com.starlight.mobile.android.lib.view.RecycleViewDivider
 import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_service_hint
 as tvServiceConnectHint
 import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_month
@@ -214,10 +212,10 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     fun onClickListener(view: View) {
         when (view.id) {
-            R.id.main_layout_btn_last//上一个月
-            -> mViewPager.currentItem = mViewPager.currentItem - 1
-            R.id.main_layout_btn_next//下一个月
-            -> mViewPager.currentItem = mViewPager.currentItem + 1
+//            R.id.main_layout_btn_last//上一个月
+//            -> mViewPager.currentItem = mViewPager.currentItem - 1
+//            R.id.main_layout_btn_next//下一个月
+//            -> mViewPager.currentItem = mViewPager.currentItem + 1
             R.id.main_layout_tv_setting ->//设置
                 startActivity(Intent(this, SettingActivity::class.java))
             R.id.common_head_layout_iv_right -> {

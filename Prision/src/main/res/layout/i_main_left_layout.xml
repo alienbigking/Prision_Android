@@ -1,99 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="10dip"
-    android:paddingBottom="10dip"
+    android:layout_height="match_parent"
     android:background="@android:color/white"
     >
-    <ImageButton
-        android:id="@+id/main_layout_btn_last"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
-        android:layout_alignTop="@+id/main_layout_tv_month"
-        android:layout_alignBottom="@+id/main_layout_tv_month"
-        android:onClick="onClickListener"
-        android:padding="5dip"
-        android:background="@null"
-        android:scaleType="centerInside"
-        android:layout_toLeftOf="@+id/main_layout_tv_month"
-        android:src="@mipmap/ic_before" />
-
-    <ImageButton
-        android:id="@+id/main_layout_btn_next"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
-        android:onClick="onClickListener"
-        android:background="@null"
-        android:padding="5dip"
-        android:scaleType="centerInside"
-        android:layout_alignTop="@+id/main_layout_tv_month"
-        android:layout_alignBottom="@+id/main_layout_tv_month"
-        android:layout_toRightOf="@+id/main_layout_tv_month"
-        android:src="@mipmap/ic_next" />
 
     <TextView
         android:id="@+id/main_layout_tv_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2015年"
-        android:paddingTop="@dimen/margin_half"
-        android:paddingBottom="@dimen/margin_half"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:textColor="#323232"
-        android:layout_centerHorizontal="true"
-        android:textSize="26sp" />
-    <View style="@style/common_line_style"
-        android:id="@+id/main_layout_v_month"
-        android:layout_below="@+id/main_layout_tv_month"
-        />
-    <include layout="@layout/date_week_layout"
-        android:layout_width="match_parent"
+
+        android:layout_marginTop="@dimen/margin_half"
+        android:layout_marginBottom="@dimen/margin_half"
+        android:text="十二月"
+        android:textColor="@color/common_blue"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="@+id/main_layout_tv_sunday"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_year"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/main_layout_i_week"
-        android:layout_below="@+id/main_layout_v_month"
-        />
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dip"
+        android:text="2015年"
+        android:textColor="@color/common_gray_title_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/main_layout_tv_month"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_month" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_sunday"
+        style="@style/date_week_style"
+        android:text="@string/sunday"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_monday"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_layout_tv_month" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_monday"
+        style="@style/date_week_style"
+        android:text="@string/monday"
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_thesday"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_sunday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_thesday"
+        style="@style/date_week_style"
+        android:text="@string/thesday"
+
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_wednesday"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_monday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_wednesday"
+        style="@style/date_week_style"
+        android:text="@string/wednesday"
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_thursday"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_thesday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_thursday"
+        style="@style/date_week_style"
+        android:text="@string/thursday"
+        app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_friday"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_wednesday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_friday"
+        style="@style/date_week_style"
+        android:text="@string/friday"
+
+        app:layout_constraintEnd_toStartOf="@+id/main_layout_tv_saturday"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/main_layout_tv_thursday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
+    <TextView
+        android:id="@+id/main_layout_tv_saturday"
+        style="@style/date_week_style"
+        android:text="@string/saturday"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_friday"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_sunday" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/main_layout_vp_calendar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dip"
+        android:layout_marginTop="20dip"
+        app:layout_constraintTop_toBottomOf="@+id/main_layout_tv_saturday"
+        app:layout_constraintBottom_toTopOf="@+id/main_layout_ll_service_hint"
+        android:layout_above="@+id/main_layout_ll_service_hint"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_above="@+id/main_layout_ll_service_hint"
-        android:layout_below="@+id/main_layout_i_week"
         />
+
     <LinearLayout
         android:id="@+id/main_layout_ll_service_hint"
         android:layout_width="match_parent"
-        android:onClick="onClickListener"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content">
+        android:onClick="onClickListener"
+        android:layout_marginBottom="20dip"
+        app:layout_constraintBottom_toBottomOf="parent">
         <TextView
+            android:id="@+id/main_layout_tv_service_hint_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="10dip"
+            android:layout_weight="0"
             android:paddingLeft="20dip"
             android:paddingRight="10dip"
-            android:textSize="20sp"
-            android:textColor="@color/common_gray_title_color"
-            android:id="@+id/main_layout_tv_service_hint_title"
+            android:paddingTop="10dip"
             android:text="@string/video_service_status"
-            android:layout_weight="0"
-            />
+            android:textColor="@color/common_gray_title_color"
+            android:textSize="20sp" />
+
         <TextView
+            android:id="@+id/main_layout_tv_service_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="10dip"
-            android:paddingRight="10dip"
-            android:textSize="20sp"
-            android:textColor="@color/connecting"
-            android:id="@+id/main_layout_tv_service_hint"
-            android:text="@string/video_service_connecting"
             android:layout_weight="0"
-            />
+            android:paddingRight="10dip"
+            android:paddingTop="10dip"
+            android:text="@string/video_service_connecting"
+            android:textColor="@color/connecting"
+            android:textSize="20sp" />
     </LinearLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
 

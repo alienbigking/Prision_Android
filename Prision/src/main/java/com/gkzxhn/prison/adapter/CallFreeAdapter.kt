@@ -61,7 +61,7 @@ class CallFreeAdapter(private val mContext: Context) : RecyclerView.Adapter<View
         with(holder.itemView){
             val entity=mDatas.get(position)
             tvFamilyName.setText(entity.name)
-            tvPhone.setText(entity.phone)
+//            tvPhone.setText(entity.phone)
             tvPrisionName.setText(entity.prisonerName)
             tvPrisionNumber.setText(entity.prisonerNumber)
             tvRelationShip.setText(entity.relationship)

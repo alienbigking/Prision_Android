@@ -17,6 +17,29 @@ import java.util.HashMap
  */
 
 open class CallZijingModel : BaseModel(), ICallZijingModel {
+    override fun updateFreeMeetting(meettingId: String, meettingSecond: Long, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
+        try {
+            val params = HashMap<String, String>()
+            params.put("id", meettingId)
+            params.put("duration", meettingSecond.toString())
+            volleyUtils.post( Constants.UPDATE_FREE_MEETING, params, REQUEST_TAG, onFinishedListener)
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+    }
+
+    override fun addFreeMeetting(familyId: String,  onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
+        try {
+            val params = HashMap<String, String>()
+            params.put("familyId", familyId)
+            params.put("jailId", sharedPreferences.getString(Constants.TERMINAL_JIAL_ID,""))
+            params.put("terminalNum", sharedPreferences.getString(Constants.USER_ACCOUNT,""))
+            params.put("duration", "0")
+            volleyUtils.post( Constants.ADD_FREE_MEETING, params, REQUEST_TAG, onFinishedListener)
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+    }
 
     /**
      *  取消会见

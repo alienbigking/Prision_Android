@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
     <com.starlight.mobile.android.lib.view.CusHeadView
@@ -10,250 +11,263 @@
         app:chHead_leftImg="@mipmap/ic_back"
         app:chHead_title="@string/check_network"
         app:chHead_title_padding_left="0dip" />
-
-    <!--spread chain 三个均等面板-->
-    <com.starlight.mobile.android.lib.view.EqualImageView
-        android:id="@+id/network_layout_iv_check_network_item"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dip"
-        android:scaleType="fitXY"
-        android:src="@mipmap/check_item_bg"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/network_layout_iv_enable_gui_item"
-        app:layout_constraintTop_toTopOf="@+id/network_layout_iv_enable_gui_item" />
-
-    <com.starlight.mobile.android.lib.view.EqualImageView
-        android:id="@+id/network_layout_iv_enable_gui_item"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dip"
-        android:layout_marginRight="50dip"
-        android:scaleType="fitXY"
-        android:src="@mipmap/check_item_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@+id/network_layout_iv_check_network_item"
-        app:layout_constraintRight_toLeftOf="@+id/network_layout_iv_disable_gui_item"
-        app:layout_constraintTop_toBottomOf="@+id/network_layout_ch_head" />
-
-    <com.starlight.mobile.android.lib.view.EqualImageView
-        android:id="@+id/network_layout_iv_disable_gui_item"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="100dip"
-        android:scaleType="fitXY"
-        android:src="@mipmap/check_item_bg"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@+id/network_layout_iv_enable_gui_item"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/network_layout_iv_enable_gui_item" />
-    <!--图标 辅助线-->
-    <View
-        android:id="@+id/network_layout_gl_top"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="1dip"
-        app:layout_constraintBottom_toTopOf="@+id/network_layout_iv_enable_gui_item"
-        android:orientation="horizontal"
-        />
-    <!--展示项 图标-->
-    <ImageView
-        android:id="@+id/network_layout_iv_check_network"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/network_grey_oval"
-        android:padding="20dip"
-        android:scaleType="center"
-        android:src="@mipmap/check_network"
-        app:layout_constraintBottom_toBottomOf="@+id/network_layout_gl_top"
-        app:layout_constraintTop_toTopOf="@+id/network_layout_gl_top"
-        app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_check_network_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_check_network_item" />
+        android:layout_gravity="center"
+        android:layout_marginLeft="100dip"
+        android:layout_marginRight="100dip"
+        android:layout_height="wrap_content">
+        <!--spread chain 三个均等面板-->
+        <com.starlight.mobile.android.lib.view.EqualImageView
+            android:id="@+id/network_layout_iv_check_network_item"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:scaleType="fitXY"
+            android:layout_marginRight="10dip"
+            android:layout_marginLeft="10dip"
+            android:src="@mipmap/check_item_bg"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/network_layout_v_bottom"
+            app:layout_constraintRight_toLeftOf="@+id/network_layout_iv_enable_gui_item"
+            app:layout_constraintTop_toTopOf="@+id/network_layout_iv_enable_gui_item" />
 
-    <ImageView
-        android:id="@+id/network_layout_iv_enable_gui"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/network_grey_oval"
-        android:padding="20dip"
-        android:scaleType="center"
-        android:src="@mipmap/enable_gui"
-        app:layout_constraintBottom_toBottomOf="@+id/network_layout_gl_top"
-        app:layout_constraintTop_toTopOf="@+id/network_layout_gl_top"
-        app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_enable_gui_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_enable_gui_item" />
-    <ImageView
-        android:id="@+id/network_layout_iv_disable_gui"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/network_grey_oval"
-        android:padding="20dip"
-        android:scaleType="center"
-        android:src="@mipmap/disable_gui"
-        app:layout_constraintBottom_toBottomOf="@+id/network_layout_gl_top"
-        app:layout_constraintTop_toTopOf="@+id/network_layout_gl_top"
-        app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_disable_gui_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_disable_gui_item" />
-    <!--展示项 文字-->
+        <com.starlight.mobile.android.lib.view.EqualImageView
+            android:id="@+id/network_layout_iv_enable_gui_item"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginLeft="10dip"
+            android:scaleType="fitXY"
+            android:src="@mipmap/check_item_bg"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintBottom_toBottomOf="@+id/network_layout_v_bottom"
+            app:layout_constraintLeft_toRightOf="@+id/network_layout_iv_check_network_item"
+            app:layout_constraintRight_toLeftOf="@+id/network_layout_iv_disable_gui_item"
+            app:layout_constraintTop_toTopOf="@+id/network_layout_gl_top" />
 
-    <TextView
-        android:id="@+id/network_layout_tv_check_network"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/check_network"
-        android:textColor="@color/common_text_color"
-        android:layout_marginTop="50dip"
-        android:textSize="24sp"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/network_layout_iv_check_network"
-        app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_check_network_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_check_network_item"
-        />
-    <TextView
-        android:id="@+id/network_layout_tv_enable_gui"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/start_gui"
-        android:textColor="@color/common_text_color"
-        android:layout_marginTop="50dip"
-        android:gravity="center_horizontal"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/network_layout_iv_enable_gui"
-        app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_enable_gui_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_enable_gui_item"
-        />
+        <com.starlight.mobile.android.lib.view.EqualImageView
+            android:id="@+id/network_layout_iv_disable_gui_item"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginLeft="10dip"
+            android:scaleType="fitXY"
+            android:src="@mipmap/check_item_bg"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintBottom_toBottomOf="@+id/network_layout_v_bottom"
+            app:layout_constraintLeft_toRightOf="@+id/network_layout_iv_enable_gui_item"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/network_layout_iv_enable_gui_item" />
+        <!--图标 辅助线-->
+        <View
+            android:id="@+id/network_layout_gl_top"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            app:layout_constraintTop_toTopOf="@+id/network_layout_iv_check_network"
+            app:layout_constraintBottom_toBottomOf="@+id/network_layout_iv_check_network"
+            android:orientation="horizontal"
+            />
+        <!--展示项 图标-->
+        <ImageView
+            android:id="@+id/network_layout_iv_check_network"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/network_grey_oval"
+            android:padding="20dip"
+            android:scaleType="center"
+            android:src="@mipmap/check_network"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_check_network_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_check_network_item" />
 
-    <TextView
-        android:id="@+id/network_layout_tv_disable_gui"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stop_gui"
-        android:textColor="@color/common_text_color"
-        android:layout_marginTop="50dip"
-        android:gravity="center_horizontal"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/network_layout_iv_disable_gui"
-        app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_disable_gui_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_disable_gui_item"
-        />
+        <ImageView
+            android:id="@+id/network_layout_iv_enable_gui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/network_grey_oval"
+            android:padding="20dip"
+            android:scaleType="center"
+            android:src="@mipmap/enable_gui"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_enable_gui_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_enable_gui_item" />
+        <ImageView
+            android:id="@+id/network_layout_iv_disable_gui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/network_grey_oval"
+            android:padding="20dip"
+            android:scaleType="center"
+            android:src="@mipmap/disable_gui"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_disable_gui_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_disable_gui_item" />
+        <!--展示项 文字-->
 
-    <!--展示项 提示-->
+        <TextView
+            android:id="@+id/network_layout_tv_check_network"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/check_network"
+            android:textColor="@color/common_text_color"
+            android:layout_marginTop="50dip"
+            android:textSize="28sp"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/network_layout_iv_check_network"
+            app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_check_network_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_check_network_item"
+            />
+        <TextView
+            android:id="@+id/network_layout_tv_enable_gui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_gui"
+            android:textColor="@color/common_text_color"
+            android:layout_marginTop="50dip"
+            android:gravity="center_horizontal"
+            android:textSize="28sp"
+            app:layout_constraintTop_toBottomOf="@id/network_layout_iv_enable_gui"
+            app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_enable_gui_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_enable_gui_item"
+            />
 
-    <TextView
-        android:id="@+id/network_layout_tv_check_network_hint"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:text="@string/check_network"
-        android:textColor="@color/common_gray_title_color"
-        android:layout_marginTop="10dip"
-        android:textSize="14sp"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/network_layout_tv_check_network"
-        app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_check_network_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_check_network_item"
-        />
-    <TextView
-        android:id="@+id/network_layout_tv_enable_gui_hint"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:text="@string/start_gui_hint"
-        android:textColor="@color/common_gray_title_color"
-        android:layout_marginTop="10dip"
-        android:textSize="14sp"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/network_layout_tv_enable_gui"
-        app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_enable_gui_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_enable_gui_item"
-        />
+        <TextView
+            android:id="@+id/network_layout_tv_disable_gui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stop_gui"
+            android:textColor="@color/common_text_color"
+            android:layout_marginTop="50dip"
+            android:gravity="center_horizontal"
+            android:textSize="28sp"
+            app:layout_constraintTop_toBottomOf="@id/network_layout_iv_disable_gui"
+            app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_disable_gui_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_disable_gui_item"
+            />
 
-    <TextView
-        android:id="@+id/network_layout_tv_disable_gui_hint"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:text="@string/stop_gui_hint"
-        android:gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin"
-        android:textColor="@color/common_gray_title_color"
-        android:layout_marginTop="10dip"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/network_layout_tv_disable_gui"
-        app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_disable_gui_item"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_disable_gui_item"
-        />
-    <!--展示项 底部按钮-->
-    <TextView
-        android:id="@+id/network_layout_btn_check_network"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/check"
-        android:layout_marginBottom="50dip"
-        android:paddingBottom="10dip"
-        android:paddingRight="30dip"
-        android:paddingLeft="30dip"
-        android:paddingTop="10dip"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin"
-        android:clickable="true"
-        android:onClick="onClickListener"
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_check_network_item"
-        app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_check_network_item"
-        app:layout_constraintBottom_toBottomOf="@+id/network_layout_iv_check_network_item"
-        android:background="@drawable/check_network_btn_selector"
-        />
+        <!--展示项 提示-->
 
+        <TextView
+            android:id="@+id/network_layout_tv_check_network_hint"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:text="@string/check_network"
+            android:textColor="@color/common_gray_title_color"
+            android:layout_marginTop="10dip"
+            android:textSize="18sp"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/network_layout_tv_check_network"
+            app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_check_network_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_check_network_item"
+            />
+        <TextView
+            android:id="@+id/network_layout_tv_enable_gui_hint"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:text="@string/start_gui_hint"
+            android:textColor="@color/common_gray_title_color"
+            android:layout_marginTop="10dip"
+            android:textSize="18sp"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/network_layout_tv_enable_gui"
+            app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_enable_gui_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_enable_gui_item"
+            />
+
+        <TextView
+            android:id="@+id/network_layout_tv_disable_gui_hint"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:text="@string/stop_gui_hint"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:textColor="@color/common_gray_title_color"
+            android:layout_marginTop="10dip"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/network_layout_tv_disable_gui"
+            app:layout_constraintLeft_toLeftOf="@id/network_layout_iv_disable_gui_item"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_disable_gui_item"
+            />
+        <!--展示项 底部按钮-->
+        <TextView
+            android:id="@+id/network_layout_btn_check_network"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/check"
+            android:paddingBottom="10dip"
+            android:paddingRight="30dip"
+            android:paddingLeft="30dip"
+            android:paddingTop="10dip"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:clickable="true"
+            android:onClick="onClickListener"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/network_layout_btn_disable_gui"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_check_network_item"
+            app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_check_network_item"
+            android:background="@drawable/check_network_btn_selector"
+            />
+
+        <TextView
+            android:id="@+id/network_layout_btn_enable_gui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable"
+            android:paddingBottom="10dip"
+            android:paddingRight="30dip"
+            android:paddingLeft="30dip"
+            android:paddingTop="10dip"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:onClick="onClickListener"
+            android:textColor="@android:color/white"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_enable_gui_item"
+            app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_enable_gui_item"
+            app:layout_constraintBottom_toBottomOf="@+id/network_layout_btn_disable_gui"
+            android:background="@drawable/check_network_btn_selector"
+            />
+        <TextView
+            android:id="@+id/network_layout_btn_disable_gui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disable"
+            android:paddingBottom="10dip"
+            android:paddingRight="30dip"
+            android:paddingLeft="30dip"
+            android:paddingTop="10dip"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:layout_marginTop="60dip"
+            app:layout_constraintTop_toBottomOf="@+id/network_layout_tv_disable_gui_hint"
+            android:onClick="onClickListener"
+            android:textColor="@android:color/white"
+            app:layout_constraintRight_toRightOf="@+id/network_layout_iv_disable_gui_item"
+            app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_disable_gui_item"
+            android:background="@drawable/check_network_btn_selector"
+            />
+        <View android:layout_width="1dip"
+            android:layout_height="70dip"
+            android:id="@+id/network_layout_v_bottom"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/network_layout_btn_disable_gui"
+            />
+
+    </android.support.constraint.ConstraintLayout>
     <TextView
-        android:id="@+id/network_layout_btn_enable_gui"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enable"
-        android:layout_marginBottom="50dip"
-        android:paddingBottom="10dip"
-        android:paddingRight="30dip"
-        android:paddingLeft="30dip"
-        android:paddingTop="10dip"
-        android:textSize="18sp"
-        android:clickable="true"
-        android:onClick="onClickListener"
-        android:textColor="@android:color/white"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_enable_gui_item"
-        app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_enable_gui_item"
-        app:layout_constraintBottom_toBottomOf="@+id/network_layout_iv_enable_gui_item"
-        android:background="@drawable/check_network_btn_selector"
-        />
-    <TextView
-        android:id="@+id/network_layout_btn_disable_gui"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/disable"
-        android:layout_marginBottom="50dip"
-        android:paddingBottom="10dip"
-        android:paddingRight="30dip"
-        android:paddingLeft="30dip"
-        android:paddingTop="10dip"
-        android:textSize="18sp"
-        android:clickable="true"
-        android:onClick="onClickListener"
-        android:textColor="@android:color/white"
-        app:layout_constraintRight_toRightOf="@+id/network_layout_iv_disable_gui_item"
-        app:layout_constraintLeft_toLeftOf="@+id/network_layout_iv_disable_gui_item"
-        app:layout_constraintBottom_toBottomOf="@+id/network_layout_iv_disable_gui_item"
-        android:background="@drawable/check_network_btn_selector"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:textColor="@color/common_gray_title_color"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="@dimen/margin"
         android:text="@string/operate_gui_hint"
         />
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>

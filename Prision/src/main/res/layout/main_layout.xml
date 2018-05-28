@@ -10,12 +10,8 @@
     <FrameLayout
         android:layout_weight="1"
         android:layout_width="0dip"
-        android:layout_height="wrap_content">
-        <include layout="@layout/i_main_left_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
+        android:background="@android:color/white"
+        android:layout_height="match_parent">
         <TextView
             android:id="@+id/main_layout_tv_setting"
             android:layout_width="wrap_content"
@@ -29,9 +25,19 @@
             android:textColor="@color/common_blue"
             />
     </FrameLayout>
+    <FrameLayout
+        android:layout_weight="2"
+        android:layout_width="0dip"
+        android:layout_height="match_parent">
+        <include layout="@layout/i_main_left_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+    </FrameLayout>
     <LinearLayout
         android:layout_width="0dip"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:orientation="vertical"
         android:background="#F6F6FF"
         android:layout_height="wrap_content">
