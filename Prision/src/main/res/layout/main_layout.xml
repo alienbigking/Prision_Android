@@ -12,18 +12,7 @@
         android:layout_width="0dip"
         android:background="@android:color/white"
         android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/main_layout_tv_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/setting"
-            android:textSize="24sp"
-            android:background="@drawable/common_white_item_click_selector"
-            android:clickable="true"
-            android:onClick="onClickListener"
-            android:padding="@dimen/margin_half"
-            android:textColor="@color/common_blue"
-            />
+
         <include layout="@layout/i_main_left_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

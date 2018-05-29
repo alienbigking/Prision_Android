@@ -5,19 +5,71 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     >
+    <!--辅助线-->
+    <TextView
+        android:id="@+id/main_layout_tv_week_helper_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="一"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="@+id/main_layout_tv_saturday"
+        app:layout_constraintRight_toRightOf="@+id/main_layout_tv_saturday"
+        />
+    <TextView
+        android:id="@+id/main_layout_tv_week_helper_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="一"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="@+id/main_layout_tv_sunday"
+        app:layout_constraintRight_toRightOf="@+id/main_layout_tv_sunday"
+        />
+    <TextView
+        android:id="@+id/main_layout_tv_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setting"
+        android:textSize="22sp"
+        android:background="@drawable/common_white_item_click_selector"
+        android:clickable="true"
+        android:paddingLeft="@dimen/margin_half"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/main_layout_tv_week_helper_right"
+        android:drawableLeft="@mipmap/ic_grey_setting"
+        android:onClick="onClickListener"
+        android:layout_marginTop="20dip"
+        android:drawablePadding="8dip"
+        android:paddingTop="@dimen/margin_half"
+        android:textColor="@color/common_light_text_color"
+        />
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/main_layout_tv_setting"
+        app:layout_constraintRight_toRightOf="@+id/main_layout_tv_week_helper_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:id="@+id/main_layout_tv_free_time"
+        android:text="@string/call_free"
+        android:textColor="@android:color/white"
+        android:background="@drawable/main_free_time_bg_shape"
+        />
+
 
     <TextView
         android:id="@+id/main_layout_tv_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_marginTop="@dimen/margin_half"
-        android:layout_marginBottom="@dimen/margin_half"
+        app:layout_constraintTop_toTopOf="@+id/main_layout_tv_free_time"
+        app:layout_constraintBottom_toBottomOf="@+id/main_layout_tv_free_time"
         android:text="十二月"
         android:textColor="@color/common_blue"
-        android:textSize="24sp"
-        app:layout_constraintLeft_toLeftOf="@+id/main_layout_tv_sunday"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="@+id/main_layout_tv_week_helper_left"
+        />
 
     <TextView
         android:id="@+id/main_layout_tv_year"
@@ -27,7 +79,7 @@
         android:layout_marginLeft="20dip"
         android:text="2015年"
         android:textColor="@color/common_gray_title_color"
-        android:textSize="18sp"
+        android:textSize="19sp"
         app:layout_constraintBottom_toBottomOf="@+id/main_layout_tv_month"
         app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_month" />
 
@@ -35,11 +87,11 @@
         android:id="@+id/main_layout_tv_sunday"
         style="@style/date_week_style"
         android:text="@string/sunday"
-        android:layout_marginTop="@dimen/margin"
+        android:layout_marginTop="30dip"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintRight_toLeftOf="@+id/main_layout_tv_monday"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_layout_tv_month" />
+        app:layout_constraintTop_toBottomOf="@+id/main_layout_tv_free_time" />
 
     <TextView
         android:id="@+id/main_layout_tv_monday"

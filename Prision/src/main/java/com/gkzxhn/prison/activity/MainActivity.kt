@@ -34,6 +34,8 @@ import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_servic
 as tvServiceConnectHint
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_month
 as tvMonth
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_year
+as tvYear
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_vp_calendar
 as mViewPager
 import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list
@@ -46,9 +48,12 @@ import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_swip
 as mSwipeRefresh
 import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_hint
 as tvNoData
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_free_time
+as tvFreeTime
 
 
 class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener,CusSwipeRefreshLayout.OnLoadListener{
+
 
     private var mDate: CustomDate? = null
     private lateinit var adapter: MainAdapter
@@ -59,11 +64,13 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     private  var mShowTerminalDialog: CustomDialog?=null
     private var isConnectZijing = false
     private val TAG = MainActivity::class.java.simpleName
+    private lateinit var months:Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isConnectZijing = false
         setContentView(R.layout.main_layout)
+        months=resources.getStringArray(R.array.month_text)
         init()
         registerReceiver()
     }
@@ -74,7 +81,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         }
 
         override fun changeDate(date: CustomDate) {
-//            tvMonth.text = date.getYear().toString() + getString(R.string.year) + date.getMonth() + getString(R.string.month)
+            tvYear.text=date.getYear().toString() + getString(R.string.year)
+
+            tvMonth.text =  months[date.getMonth()-1]  + getString(R.string.month)
         }
     }
     private val onItemClickListener = object : OnItemClickListener {
@@ -333,12 +342,20 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_failed))
     }
 
+    /**
+     * 更新免费次数
+     */
+    override fun updateFreeTime(freeTime: Int) {
+        tvFreeTime.setText(String.format("%s  %s%s",getString(R.string.call_free),freeTime,getString(R.string.time)))
+    }
     override fun startRefreshAnim() {
         handler.sendEmptyMessage(Constants.START_REFRESH_UI)
     }
 
     override fun onResume() {
         super.onResume()
+        //更新免费会见次数
+        updateFreeTime(mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0))
         //请求版本信息
         mPresenter.requestVersion()
         onRefresh()

@@ -261,4 +261,20 @@
         <item>系统分配有误</item>
         <item>其他原因</item>
     </string-array>
+
+
+    <string-array  name="month_text">
+        <item>一</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>七</item>
+        <item>八</item>
+        <item>九</item>
+        <item>十</item>
+        <item>十一</item>
+        <item>十二</item>
+    </string-array>
 </resources>

@@ -219,5 +219,4 @@ object Utils {
     fun hasSDFree(): Boolean {
         return getSdFreeSize() > 100//大于100M
     }
-
 }

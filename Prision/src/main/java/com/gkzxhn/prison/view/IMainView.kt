@@ -13,6 +13,7 @@ interface IMainView : IBaseView {
     fun updateItems(datas: List<MeetingEntity>?)
     fun onCanceled()
     fun updateVersion(version: VersionEntity)
+    fun updateFreeTime(freeTime: Int)
     fun startZijingService(isNetworkConnected:Boolean)
     fun zijingServiceFailed()
 }
