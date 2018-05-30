@@ -294,8 +294,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
     override fun onResume() {
         super.onResume()
-        //关闭GUI
-        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
         isVideoMetting=false
         //检查是否正在通话，有就挂断
         mPresenter.checkCallStatus()

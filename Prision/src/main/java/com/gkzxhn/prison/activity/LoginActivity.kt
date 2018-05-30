@@ -112,11 +112,6 @@ class LoginActivity : SuperActivity(), ILoginView {
         super.onDestroy()
     }
 
-    override fun onResume() {
-        super.onResume()
-        //关闭GUI
-        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
-    }
 
     override fun networkStatus(isConnected: Boolean) {
 

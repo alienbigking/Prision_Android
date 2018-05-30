@@ -34,6 +34,8 @@ object Constants {
     val IS_OPEN_USB_RECORD = "is_open_usb_record"//是否开启usb录屏状态 true/false 开启／关闭
 
 
+    val FREE_MEETING_PRISON_ID= "free_meeting_prison_id"//免费会见囚犯ID
+
     /*-------------------------------request url-------------------------------------------------*/
     val RELEASE_DOMAIN = "https://www.yuwugongkai.com/ywgk-app"//新发布正式环境
     val DEMO_DOMAIN = "http://39.108.185.51:8082/ywgk-app"//开发环境

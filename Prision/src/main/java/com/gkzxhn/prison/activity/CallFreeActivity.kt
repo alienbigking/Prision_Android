@@ -100,6 +100,8 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         override fun onClickListener(convertView: View, position: Int) {
             //有免费次数
             if (mCallFreeTime > 0) {
+                //临时保存到本地
+                mPresenter.getSharedPreferences().edit().putString(Constants.FREE_MEETING_PRISON_ID,adapter.getCurrentItem().prisonerId).apply()
                 val intent = Intent(this@CallFreeActivity, CallUserActivity::class.java)
                 intent.action=Constants.CALL_FREE_ACTION
                 intent.putExtra(Constants.EXTRA, "")
@@ -199,7 +201,6 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
 
     override fun onResume() {
         super.onResume()
-        mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,null)
         mCallFreeTime = mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0)
         tvFreeTime.text = mCallFreeTime.toString()
         initSearchBtn()

@@ -8,5 +8,10 @@
         android:bottomRightRadius="0dip"
         android:topRightRadius="0dip"
         />
+    <padding android:bottom="10dip"
+        android:top="10dip"
+        android:right="40dip"
+        android:left="40dip"
+        />
     <solid android:color="@color/common_light_blue" />
 </shape>

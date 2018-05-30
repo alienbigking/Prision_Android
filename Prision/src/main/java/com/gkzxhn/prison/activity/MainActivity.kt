@@ -11,12 +11,16 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.os.SystemClock
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.MainAdapter
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.customview.CancelVideoDialog
+import com.gkzxhn.prison.customview.CircleLayout
 import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.customview.UpdateDialog
 import com.gkzxhn.prison.customview.calendar.CalendarCard
@@ -30,6 +34,7 @@ import com.gkzxhn.prison.view.IMainView
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
+import kotlin.math.abs
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_service_hint
 as tvServiceConnectHint
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_month
@@ -50,7 +55,10 @@ import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_lay
 as tvNoData
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_free_time
 as tvFreeTime
-
+import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_mcv_month
+as mMonthCircler
+import kotlinx.android.synthetic.main.i_main_left_layout.main_layout_tv_circler_year
+as tvCirclerYear
 
 class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener,CusSwipeRefreshLayout.OnLoadListener{
 
@@ -65,6 +73,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     private var isConnectZijing = false
     private val TAG = MainActivity::class.java.simpleName
     private lateinit var months:Array<String>
+    private var mLastMonth=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,8 +91,8 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
         override fun changeDate(date: CustomDate) {
             tvYear.text=date.getYear().toString() + getString(R.string.year)
-
-            tvMonth.text =  months[date.getMonth()-1]  + getString(R.string.month)
+            tvCirclerYear.setText(date.getYear().toString())
+            tvMonth.text =  months[date.getMonth()-1]
         }
     }
     private val onItemClickListener = object : OnItemClickListener {
@@ -179,6 +188,8 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             mCancelVideoDialog.dismiss()
             mPresenter.requestCancel(adapter.getCurrentItem().id?:"", reason)
         }
+
+
         //请求数据
         mPresenter = MainPresenter(this, this)
         //请求连接紫荆服务器
@@ -217,12 +228,33 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mViewPager.adapter = adapter
         mViewPager.currentItem = adapter.currentIndex
         mViewPager.addOnPageChangeListener(adapter.onPageChangeListener)
+        tvCirclerYear.setText(mDate?.year.toString())
+        mMonthCircler.selected=mDate?.month?:0
+        mLastMonth=mDate?.month?:0
+        mMonthCircler.setOnItemSelectedListener(object :CircleLayout.OnItemSelectedListener{
+            override fun onItemSelected(view: View, position: Int, id: Long, name: String?) {
+//                if(position>=0){
+//                    val month=position+1
+//                    val currentMonth=mDate?.month?:0
+//                    Log.e("raleigh_test","mLastMonth="+mLastMonth+",month="+month)
+//                    if(mLastMonth==12&&month==1){//顺时针 下一年
+//                        mViewPager.currentItem = mViewPager.currentItem +1
+//                    }else if(mLastMonth==12&&month==1){//逆时针 上一年
+//                        mViewPager.currentItem = mViewPager.currentItem -1
+//                    }else{
+//                        val dis=month-currentMonth//-1/1
+//                        mViewPager.currentItem = mViewPager.currentItem +dis
+//                    }
+//
+//                }
+            }
+        })
     }
 
     fun onClickListener(view: View) {
         when (view.id) {
 //            R.id.main_layout_btn_last//上一个月
-//            -> mViewPager.currentItem = mViewPager.currentItem - 1
+//            ->mViewPager.currentItem = mViewPager.currentItem - 1
 //            R.id.main_layout_btn_next//下一个月
 //            -> mViewPager.currentItem = mViewPager.currentItem + 1
             R.id.main_layout_tv_setting ->//设置
@@ -232,6 +264,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             }
             R.id.main_layout_ll_service_hint//视频连接服务
             -> reConnextZijing()
+
         }
     }
 

@@ -105,6 +105,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                             JSONUtil.getJSONObject(response,"data"), "access_times"))
                     //保存到本地
                     getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME, time).apply()
+                    mView?.updateFreeTime(time)
                 }
             }
 
@@ -234,11 +235,11 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                 }
             }
         }
-        return code
-    }
+            return code
+        }
 
-    override fun stopAnim() {
-        super.stopAnim()
-        mView?.dismissProgress()
+        override fun stopAnim() {
+            super.stopAnim()
+            mView?.dismissProgress()
+        }
     }
-}

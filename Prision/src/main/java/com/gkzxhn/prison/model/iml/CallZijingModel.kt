@@ -35,6 +35,7 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
             params.put("jailId", sharedPreferences.getString(Constants.TERMINAL_JIAL_ID,""))
             params.put("terminalNum", sharedPreferences.getString(Constants.USER_ACCOUNT,""))
             params.put("duration", "0")
+            params.put("prisonerId", sharedPreferences.getString(Constants.FREE_MEETING_PRISON_ID,""))
             volleyUtils.post( Constants.ADD_FREE_MEETING, params, REQUEST_TAG, onFinishedListener)
         } catch (authFailureError: AuthFailureError) {
             authFailureError.printStackTrace()

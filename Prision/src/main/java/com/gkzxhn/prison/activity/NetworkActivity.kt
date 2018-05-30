@@ -1,5 +1,7 @@
 package com.gkzxhn.prison.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.gkzxhn.prison.R
@@ -7,6 +9,7 @@ import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.presenter.SettingPresenter
+import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.view.ISettingView
 import kotlinx.android.synthetic.main.network_layout.network_layout_tv_enable_gui_hint
 as tvEnableGuiHint
@@ -69,6 +72,12 @@ class NetworkActivity: SuperActivity(), ISettingView {
                         if(i==0){//禁用用成功
                             tvDisableGuiHint.setText(R.string.stop_gui_success)
                             tvEnableGuiHint.setText(R.string.start_gui_hint)
+                            stopService(Intent(this@NetworkActivity, EReportService::class.java))
+                            val preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
+                            if (preferences.getString(Constants.USER_ACCOUNT, "").length >0) {//登录 重启服务
+                                val mService = Intent(this@NetworkActivity, EReportService::class.java)
+                                startService(mService)
+                            }
                         }else{
                             tvDisableGuiHint.setText(R.string.stop_gui_failed)
                         }
