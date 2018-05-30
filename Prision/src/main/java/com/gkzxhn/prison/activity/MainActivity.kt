@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.View
 
 import com.gkzxhn.prison.R
@@ -75,6 +76,12 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         registerReceiver()
     }
     private val onCellClickListener = object : CalendarCard.OnCellClickListener {
+//        override fun nextMonth(date: CustomDate?) {
+//        }
+//
+//        override fun lastMonth(date: CustomDate?) {
+//
+//        }
 
         override fun clickDate(date: CustomDate) {
             mDate = date

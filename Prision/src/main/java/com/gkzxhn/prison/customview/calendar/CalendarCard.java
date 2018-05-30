@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -215,7 +216,7 @@ public class CalendarCard extends View {
 
             CustomDate date = rows[row].cells[col].date;
             date.week = col;
-            mCellClickListener.clickDate(date);
+
 
             int currentMonthDays = DateUtil.getMonthDays(mShowDate.year,
                     mShowDate.month); // 当前月的天数
@@ -226,9 +227,16 @@ public class CalendarCard extends View {
             if (position >= firstDayWeek
                     && position < firstDayWeek + currentMonthDays) {
                 update(col, row);// 刷新界面
-            }else {
-                update(-1, -1);
+                mCellClickListener.clickDate(date);
+            } else if (position < firstDayWeek) {//上个月
+                mShowDate.day=date.day;
+                leftSlide();
+                // 下个月
+            } else if (position >= firstDayWeek + currentMonthDays) {
+                mShowDate.day=date.day;
+                rightSlide();
             }
+//                update(-1, -1);
         }
     }
 
