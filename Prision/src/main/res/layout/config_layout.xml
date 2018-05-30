@@ -263,6 +263,7 @@
                 android:id="@+id/config_layout_tv_usb"
                 mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_config_time"
                 style="@style/config_title_style"
+                android:layout_marginBottom="40dip"
                 mAttr:layout_constraintTop_toTopOf="@+id/config_layout_rg_usb"
                 mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_rg_usb"
                 android:text="@string/usb_setting"
@@ -273,6 +274,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="40dip"
                 android:layout_marginLeft="20dip"
+                android:layout_marginBottom="40dip"
                 mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_usb"
                 mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_protocol"
                 android:layout_height="wrap_content">

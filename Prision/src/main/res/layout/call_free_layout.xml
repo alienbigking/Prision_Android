@@ -68,8 +68,9 @@
         mAttr:layout_constraintLeft_toLeftOf="@+id/call_free_layout_tv_hint"
         mAttr:layout_constraintRight_toLeftOf="@+id/call_free_layout_tv_search"
         android:layout_toLeftOf="@+id/call_free_layout_tv_search"
-        android:background="@drawable/search_btn_bg_shape"
-        android:padding="15dip"
+        android:paddingBottom="15dip"
+        android:paddingRight="15dip"
+        android:paddingTop="15dip"
         mAttr:layout_constraintTop_toBottomOf="@+id/call_free_layout_tv_leave_time">
 
         <ImageView
@@ -80,6 +81,7 @@
             android:paddingBottom="5dip"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
+            android:visibility="gone"
             android:paddingTop="5dip"
             android:scaleType="fitXY"
             android:src="@mipmap/ic_search"
@@ -90,11 +92,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="40dip"
+            android:layout_marginLeft="10dip"
             android:background="@null"
             android:drawablePadding="5dip"
             android:ellipsize="end"
-            android:gravity="center"
+            android:gravity="left"
             android:hint="@string/input_phone"
             android:imeOptions="actionSearch"
             android:lines="1"
@@ -104,8 +106,8 @@
             android:paddingRight="35dip"
             android:paddingTop="8dip"
             android:singleLine="true"
-            android:textColor="@color/common_text_color"
-            android:textColorHint="#999999"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
             android:textCursorDrawable="@android:color/white"
             android:textSize="22sp" />
 
@@ -124,6 +126,13 @@
             android:tint="@color/common_line_color"
             android:visibility="gone" />
     </FrameLayout>
+    <View android:layout_width="0dip"
+        android:layout_height="1dip"
+        android:background="@android:color/white"
+        mAttr:layout_constraintTop_toBottomOf="@+id/call_free_layout_fl_search_panel"
+        mAttr:layout_constraintLeft_toLeftOf="@+id/call_free_layout_fl_search_panel"
+        mAttr:layout_constraintRight_toRightOf="@+id/call_free_layout_tv_search"
+        />
 
     <TextView
         android:id="@+id/call_free_layout_tv_search"
@@ -131,10 +140,12 @@
         android:layout_height="0dip"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/call_free_layout_fl_search_panel"
-        android:paddingRight="@dimen/margin"
         android:layout_marginRight="@dimen/margin"
+        android:drawableLeft="@mipmap/ic_search"
         android:background="@drawable/search_btn_selector"
         android:clickable="true"
+        android:drawablePadding="10dip"
+        android:paddingLeft="20dip"
         android:gravity="center"
         android:onClick="onClickListener"
         android:text="@string/search"

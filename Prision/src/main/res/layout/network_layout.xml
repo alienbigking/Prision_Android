@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/common_bg_color"
     android:layout_height="match_parent">
 
     <com.starlight.mobile.android.lib.view.CusHeadView
@@ -29,7 +30,7 @@
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/network_layout_v_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/network_layout_iv_enable_gui_item"
             app:layout_constraintTop_toTopOf="@+id/network_layout_iv_enable_gui_item" />
 
@@ -42,7 +43,7 @@
             android:scaleType="fitXY"
             android:src="@mipmap/check_item_bg"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/network_layout_v_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/network_layout_iv_check_network_item"
             app:layout_constraintRight_toLeftOf="@+id/network_layout_iv_disable_gui_item"
             app:layout_constraintTop_toTopOf="@+id/network_layout_gl_top" />
@@ -56,7 +57,7 @@
             android:scaleType="fitXY"
             android:src="@mipmap/check_item_bg"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/network_layout_v_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/network_layout_iv_enable_gui_item"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/network_layout_iv_enable_gui_item" />
@@ -264,8 +265,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="26sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:textColor="@color/common_gray_title_color"
+        android:textColor="@color/common_light_text_color"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="@dimen/margin"
         android:text="@string/operate_gui_hint"

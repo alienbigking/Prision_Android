@@ -76,7 +76,7 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         //请求免费次数
         mPresenter.requestFreeTime()
 //        //TODO
-        etPhone.setText("18670075445")
+//        etPhone.setText("18670075445")
         //设置输入框监听器
         etPhone.addTextChangedListener(mTextWatcher)
         etPhone.setOnEditorActionListener { v, actionId, event ->

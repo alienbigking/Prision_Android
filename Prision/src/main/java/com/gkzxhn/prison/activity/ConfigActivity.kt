@@ -103,6 +103,7 @@ class ConfigActivity : SuperActivity() {
         mSpinnerProtocol.adapter = protocolAdapter
         mSpinnerProtocol.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, l: Long) {
+                CommonHelper.clapseSoftInputMethod(this@ConfigActivity)
                 protocol = protocolArray[position]
             }
 
@@ -116,6 +117,7 @@ class ConfigActivity : SuperActivity() {
         mSpinner.adapter = adapter
         mSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, l: Long) {
+                CommonHelper.clapseSoftInputMethod(this@ConfigActivity)
                 mRate = mRateArray[position]
             }
 
