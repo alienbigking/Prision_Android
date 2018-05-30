@@ -75,13 +75,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         registerReceiver()
     }
     private val onCellClickListener = object : CalendarCard.OnCellClickListener {
-        override fun nextMonth(date: CustomDate?) {
-            mViewPager.currentItem = mViewPager.currentItem + 1
-        }
-
-        override fun lastMonth(date: CustomDate?) {
-            mViewPager.currentItem = mViewPager.currentItem - 1
-        }
 
         override fun clickDate(date: CustomDate) {
             mDate = date

@@ -72,10 +72,10 @@ public class CalendarCard extends View {
     }
 
     private void init(Context context) {
-        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTextPaint = new Paint();
         mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCirclePaint.setStyle(Paint.Style.FILL);
-        mCirclePaint.setColor(context.getResources().getColor(R.color.common_blue)); // 红色圆形
+        mCirclePaint.setColor(context.getResources().getColor(R.color.main_color)); // 红色圆形
         touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
         initDate();
@@ -281,14 +281,14 @@ public class CalendarCard extends View {
                             mCirclePaint);
                     break;
                 case CURRENT_MONTH_DAY: // 当前月日期
-                    mTextPaint.setColor(Color.BLACK);
+                    mTextPaint.setColor(getResources().getColor(R.color.common_light_text_color));
                     break;
                 case PAST_MONTH_DAY: // 过去一个月
                 case NEXT_MONTH_DAY: // 下一个月
                     mTextPaint.setColor(Color.parseColor("#dadada"));
                     break;
                 case UNREACH_DAY: // 还未到的天
-                    mTextPaint.setColor(Color.BLACK);
+                    mTextPaint.setColor(getResources().getColor(R.color.common_light_text_color));
                     break;
                 default:
                     break;

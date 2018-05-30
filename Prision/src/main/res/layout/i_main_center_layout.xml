@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/setting"
-        android:textSize="22sp"
+        android:textSize="28sp"
         android:background="@drawable/common_white_item_click_selector"
         android:clickable="true"
         android:paddingLeft="@dimen/margin_half"
@@ -66,7 +66,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/main_layout_tv_free_time"
         android:text="十二月"
         android:textColor="@color/common_blue"
-        android:textSize="20sp"
+        android:textSize="22sp"
         app:layout_constraintLeft_toLeftOf="@+id/main_layout_tv_week_helper_left"
         />
 
@@ -78,7 +78,7 @@
         android:layout_marginLeft="20dip"
         android:text="2015年"
         android:textColor="@color/common_gray_title_color"
-        android:textSize="19sp"
+        android:textSize="21sp"
         app:layout_constraintBottom_toBottomOf="@+id/main_layout_tv_month"
         app:layout_constraintLeft_toRightOf="@+id/main_layout_tv_month" />
 

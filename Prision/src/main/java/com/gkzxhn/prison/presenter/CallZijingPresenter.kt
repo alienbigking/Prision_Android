@@ -6,6 +6,7 @@ import android.util.Log
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
+import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.ICallZijingModel
 import com.gkzxhn.prison.model.iml.CallZijingModel
 import com.gkzxhn.prison.view.ICallZijingView
@@ -127,9 +128,11 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
                         //成功
                         mView?.hangUpSuccess(reason)
                     } else {
+                        mView?.hangUpSuccess("")
                         Log.i(TAG, "onResponse: code :  " + code)
                     }
                 } catch (e: JSONException) {
+                    mView?.hangUpSuccess("")
                     Log.e(TAG, "onResponse: >>> " + e.message)
                     //                            e.printStackTrace();
                 }
@@ -137,6 +140,7 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
             }
 
             override fun onFailed(error: VolleyError) {
+                mView?.hangUpSuccess("")
                 Log.d(TAG, "ResetQuest..." + error.toString())
             }
         })
