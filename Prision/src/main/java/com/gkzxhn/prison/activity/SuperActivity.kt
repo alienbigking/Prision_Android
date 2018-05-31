@@ -14,7 +14,7 @@ import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.model.iml.CallZijingModel
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import org.json.JSONObject
 
 

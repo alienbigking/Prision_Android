@@ -7,7 +7,7 @@ import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.ICallZijingModel
 import com.gkzxhn.prison.utils.XtHttpUtil
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 
 import org.json.JSONObject
 import java.util.HashMap

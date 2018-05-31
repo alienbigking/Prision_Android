@@ -18,7 +18,7 @@ import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.model.IMainModel
 import com.gkzxhn.prison.model.iml.MainModel
 import com.gkzxhn.prison.view.IMainView
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.netease.nimlib.sdk.NIMClient

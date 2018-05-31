@@ -12,7 +12,7 @@ import com.gkzxhn.prison.model.ICallUserModel
 import com.gkzxhn.prison.model.iml.CallUserModel
 import com.gkzxhn.prison.utils.Utils
 import com.gkzxhn.prison.view.ICallFreeView
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.starlight.mobile.android.lib.util.ConvertUtil

@@ -3,7 +3,7 @@ package com.gkzxhn.prison.model.iml
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ILoginModel
 import com.gkzxhn.prison.utils.XtHttpUtil
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import org.json.JSONObject
 
 /**

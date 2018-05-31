@@ -4,7 +4,7 @@ import com.android.volley.AuthFailureError
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ISettingModel
 import com.gkzxhn.prison.utils.XtHttpUtil
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 
 import org.json.JSONObject
 

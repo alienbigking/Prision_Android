@@ -13,7 +13,7 @@ import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.utils.CrashHandler
 import com.gkzxhn.prison.utils.NimInitUtil
 import com.gkzxhn.prison.utils.XtHttpUtil
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.AuthService
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator

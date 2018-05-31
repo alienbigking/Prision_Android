@@ -7,8 +7,8 @@ import android.content.SharedPreferences
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.IBaseModel
-import com.gkzxhn.wisdom.async.SingleRequestQueue
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.SingleRequestQueue
+import com.gkzxhn.prison.async.VolleyUtils
 
 import java.util.UUID
 

@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ICrashModel
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import org.json.JSONObject
 
 /**

@@ -9,7 +9,7 @@ import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.model.ISettingModel
 import com.gkzxhn.prison.model.iml.SettingModel
 import com.gkzxhn.prison.view.ISettingView
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.starlight.mobile.android.lib.util.ConvertUtil

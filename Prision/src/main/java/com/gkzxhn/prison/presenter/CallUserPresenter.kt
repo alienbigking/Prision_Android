@@ -12,7 +12,7 @@ import com.gkzxhn.prison.entity.MeetingDetailEntity
 import com.gkzxhn.prison.model.ICallUserModel
 import com.gkzxhn.prison.model.iml.CallUserModel
 import com.gkzxhn.prison.view.ICallUserView
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import com.google.gson.Gson
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.StatusCode

@@ -10,7 +10,7 @@ import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.ICallZijingModel
 import com.gkzxhn.prison.model.iml.CallZijingModel
 import com.gkzxhn.prison.view.ICallZijingView
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.util.HttpStatus
 import com.starlight.mobile.android.lib.util.JSONUtil

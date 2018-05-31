@@ -13,7 +13,7 @@ import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.iml.CrashModel
-import com.gkzxhn.wisdom.async.VolleyUtils
+import com.gkzxhn.prison.async.VolleyUtils
 import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.util.JSONUtil
 
