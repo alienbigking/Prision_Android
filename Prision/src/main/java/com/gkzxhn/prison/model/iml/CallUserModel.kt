@@ -46,7 +46,8 @@ class CallUserModel : CallZijingModel(), ICallUserModel {
         }
     }
     override fun requestFamily(key: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
-        val url = String.format("%s?key=%s&page=1&rows=1000", Constants.REQUEST_FAMILY_BY_KEY, key)
+        val url = String.format("%s?key=%s&page=1&rows=1000&jailId=%s", Constants.REQUEST_FAMILY_BY_KEY, key,
+                sharedPreferences.getString(Constants.TERMINAL_JIAL_ID,""))
         try {
             volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
         } catch (authFailureError: AuthFailureError) {

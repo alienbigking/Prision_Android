@@ -70,7 +70,6 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
             override fun onSuccess(response: String) {
                 val json=JSONUtil.getJSONObject(response)
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(json, "code"))
-                Log.e("raleigh_test","response"+response.toString())
                 if (code == HttpStatus.SC_OK) {
                     val meettingJson=JSONUtil.getJSONObject(JSONUtil.getJSONObject(json,"data"),"freeMeeting")
                     mFreeMeetingId=JSONUtil.getJSONObjectStringValue(meettingJson, "id")
@@ -78,7 +77,6 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
             }
 
             override fun onFailed(error: VolleyError) {
-                Log.e("raleigh_test","error"+String(error.networkResponse.data))
             }
         })
     }
@@ -128,11 +126,11 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
                         //成功
                         mView?.hangUpSuccess(reason)
                     } else {
-                        mView?.hangUpSuccess("")
+                        mView?.hangUpSuccess(GKApplication.instance.getString(R.string.network_innormal_hang_up))
                         Log.i(TAG, "onResponse: code :  " + code)
                     }
                 } catch (e: JSONException) {
-                    mView?.hangUpSuccess("")
+                    mView?.hangUpSuccess(GKApplication.instance.getString(R.string.network_innormal_hang_up))
                     Log.e(TAG, "onResponse: >>> " + e.message)
                     //                            e.printStackTrace();
                 }
@@ -140,7 +138,7 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
             }
 
             override fun onFailed(error: VolleyError) {
-                mView?.hangUpSuccess("")
+                mView?.hangUpSuccess(GKApplication.instance.getString(R.string.network_innormal_hang_up))
                 Log.d(TAG, "ResetQuest..." + error.toString())
             }
         })

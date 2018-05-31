@@ -136,7 +136,7 @@
     <string name="turn_off_ing">正在关机...</string>
     <string name="turn_off_hint">确定关机？</string>
     <string name="back">返回</string>
-    <string name="check_update">检查更新</string>
+    <string name="check_update">版本更新</string>
     <string name="check_network">检测网络</string>
     <string name="start_gui">启用GUI</string>
     <string name="stop_gui">禁用GUI</string>
@@ -153,6 +153,7 @@
     <string name="stop_gui_success">已禁用GUI，建议重启终端</string>
     <string name="check_network_normal">网络正常</string>
     <string name="check_network_innormal">网络异常，请检查接入网络</string>
+    <string name="network_innormal_hang_up">网络异常，请检查接入网络</string>
     <string name="check_network_hint">加载太慢？查查网络</string>
     <string name="start_gui_hint">网络需要配置？启用GUI</string>
     <string name="stop_gui_hint">终端太卡？网络太慢？试试禁用GUI</string>
@@ -164,7 +165,7 @@
     <string name="please_input_meeting_numbers">请输入会议室号</string>
     <string name="please_input_host_password">请输入主持人密码</string>
     <string name="please_input_guest_password">请输入参会密码</string>
-    <string name="alter_terminal_account_success">修改终端信息成功</string>
+    <string name="alter_terminal_account_success">修改视频信息成功</string>
     <string name="terminal_account_not_available">此终端可不用，请重新设置</string>
     <string name="GK_register_failed">网络异常，GK注册失败</string>
     <string name="check_failed">验证失败</string>
@@ -221,7 +222,6 @@
     <string name="more_info">更多</string>
     <string name="off">关</string>
     <string name="on">开</string>
-
     <!-- comm Text -->
     <string name="ok">确定</string>
     <string name="search">搜索</string>

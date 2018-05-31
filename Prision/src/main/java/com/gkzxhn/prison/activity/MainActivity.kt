@@ -76,13 +76,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         registerReceiver()
     }
     private val onCellClickListener = object : CalendarCard.OnCellClickListener {
-//        override fun nextMonth(date: CustomDate?) {
-//        }
-//
-//        override fun lastMonth(date: CustomDate?) {
-//
-//        }
-
         override fun clickDate(date: CustomDate) {
             mDate = date
             onRefresh()
@@ -170,6 +163,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mSwipeRefresh.onRefreshListener = this
         mSwipeRefresh.onLoadListener=this
         mRecylerView.adapter = adapter
+        mRecylerView.setPadding(0,resources.getDimensionPixelSize(R.dimen.margin_half),0,0)
 //        val sizeMenu = resources.getDimensionPixelSize(R.dimen.recycler_view_line_height)
 //        mRecylerView.addItemDecoration(RecycleViewDivider(
 //                this, LinearLayoutManager.HORIZONTAL, sizeMenu, resources.getColor(R.color.common_hint_text_color)))

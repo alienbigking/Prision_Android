@@ -9,7 +9,7 @@ object Constants {
     val CACHE_FILE = GKApplication.instance.filesDir.absolutePath
 
     val APK_NAME="/app.apk"
-    val IS_DEBUG_MODEL = true//debug模式打印日志到控制台,发布版本不打印
+    val IS_DEBUG_MODEL = false//debug模式打印日志到控制台,发布版本不打印
     val REQUEST_TIMEOUT = 30000//超时时间半分钟
     /*-------------------------------User Tab-------------------------------------------------*/
     val TEMP_TABLE = "temp_table"//不清空表，临时表
