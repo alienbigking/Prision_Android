@@ -72,12 +72,12 @@
             android:id="@+id/login_layout_tv_welcome_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dip"
             mAttr:layout_constraintLeft_toLeftOf="parent"
             android:textColor="@color/common_blue"
-            android:textSize="28sp"
+            android:textSize="38sp"
+            mAttr:layout_constraintBottom_toTopOf="@+id/loign_layout_et_username"
+            mAttr:layout_constraintTop_toBottomOf="@+id/login_layout_tv_check_network_title"
             mAttr:layout_constraintRight_toLeftOf="parent"
-            mAttr:layout_constraintTop_toBottomOf="@+id/login_layout_tv_login_title"
             android:text="@string/welcome_back"
             />
 
@@ -90,17 +90,17 @@
             mAttr:layout_constraintLeft_toLeftOf="parent"
             mAttr:layout_constraintRight_toRightOf="parent"
             android:drawablePadding="@dimen/margin_half"
-            mAttr:layout_constraintDimensionRatio="6:1"
+            mAttr:layout_constraintDimensionRatio="8:1"
             android:drawableLeft="@mipmap/login_username"
-            mAttr:layout_constraintTop_toBottomOf="@+id/login_layout_tv_welcome_title"
+            mAttr:layout_constraintBottom_toTopOf="@+id/loign_layout_v_username"
             android:hint="@string/account" />
         <View android:layout_width="0dip"
             android:layout_height="1dip"
-            mAttr:layout_constraintLeft_toLeftOf="@+id/loign_layout_et_username"
+            mAttr:layout_constraintBottom_toTopOf="@+id/loign_layout_et_password"
+             mAttr:layout_constraintLeft_toLeftOf="@+id/loign_layout_et_username"
             mAttr:layout_constraintRight_toRightOf="@+id/loign_layout_et_username"
             android:background="@color/common_line_color"
             android:id="@+id/loign_layout_v_username"
-            mAttr:layout_constraintTop_toBottomOf="@+id/loign_layout_et_username"
             />
 
         <EditText
@@ -110,9 +110,10 @@
             mAttr:layout_constraintLeft_toLeftOf="parent"
             mAttr:layout_constraintRight_toRightOf="parent"
             android:drawableLeft="@mipmap/login_password"
-            mAttr:layout_constraintTop_toBottomOf="@+id/loign_layout_v_username"
             android:hint="@string/password"
-            mAttr:layout_constraintDimensionRatio="6:1"
+            mAttr:layout_constraintTop_toTopOf="parent"
+            mAttr:layout_constraintBottom_toBottomOf="parent"
+            mAttr:layout_constraintDimensionRatio="8:1"
             android:drawablePadding="@dimen/margin_half"
             android:gravity="left"
             android:inputType="numberPassword"/>
@@ -127,10 +128,10 @@
         <Button
             android:id="@+id/loign_layout_btn_login"
             android:text="@string/login"
-            android:layout_marginTop="70dip"
             mAttr:layout_constraintLeft_toLeftOf="parent"
             mAttr:layout_constraintRight_toRightOf="parent"
-            mAttr:layout_constraintDimensionRatio="5:1"
+            mAttr:layout_constraintDimensionRatio="7:1"
+            mAttr:layout_constraintBottom_toBottomOf="parent"
             mAttr:layout_constraintTop_toBottomOf="@+id/loign_layout_et_password"
             android:layout_centerHorizontal="true"
             android:layout_width="0dip"

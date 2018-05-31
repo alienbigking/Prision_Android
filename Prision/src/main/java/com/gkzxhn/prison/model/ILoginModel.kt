@@ -9,6 +9,11 @@ import org.json.JSONObject
 
 interface ILoginModel : IBaseModel {
     /**
+     * 请求版本信息
+     */
+    fun requestVersion(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>)
+
+    /**
      * 请求网络信息
      */
     fun getNetworkStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)

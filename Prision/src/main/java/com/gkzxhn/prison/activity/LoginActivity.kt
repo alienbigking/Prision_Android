@@ -3,6 +3,8 @@ package com.gkzxhn.prison.activity
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 
@@ -10,6 +12,8 @@ import com.gkzxhn.prison.R
 import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
+import com.gkzxhn.prison.customview.UpdateDialog
+import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.presenter.LoginPresenter
 import com.gkzxhn.prison.view.ILoginView
 import com.starlight.mobile.android.lib.util.CommonHelper
@@ -23,6 +27,37 @@ as etPassword
  */
 
 class LoginActivity : SuperActivity(), ILoginView {
+    override fun updateVersion(version: VersionEntity) {
+        //新版本
+        val newVersion = version.versionCode
+        val pm = packageManager
+        var packageInfo: PackageInfo? = null
+        try {
+            packageInfo = pm.getPackageInfo(packageName,
+                    PackageManager.GET_CONFIGURATIONS)
+            val currentVersion = packageInfo.versionCode//当前App版本
+            val lastIgnoreVersion = mPresenter.getSharedPreferences().getInt(Constants.LAST_IGNORE_VERSION, 0)
+            var isIgoreVersion = lastIgnoreVersion == newVersion//若是已忽略的版本，则不弹出升级对话框
+            if (version.isForce==1) isIgoreVersion = false
+            if (newVersion > currentVersion && !isIgoreVersion) {//新版本大于当前版本，则弹出更新下载到对话框
+                //版本名
+                val versionName = version.versionName
+                // 下载地址
+                val downloadUrl = version.downloadUrl
+                //是否强制更新
+                val isForceUpdate = version.isForce
+                if (updateDialog == null) updateDialog = UpdateDialog(this)
+                updateDialog?.setForceUpdate(isForceUpdate==1)
+                updateDialog?.setDownloadInfor(versionName?:"", newVersion, downloadUrl?:"",version.description?:"")
+                updateDialog?.show()//显示对话框
+            }
+
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+
+    private var updateDialog: UpdateDialog?=null
     //请求Presenter
     private lateinit var mPresenter: LoginPresenter
     //进度条
@@ -34,6 +69,12 @@ class LoginActivity : SuperActivity(), ILoginView {
         init()
         //清除下信息
         GKApplication.instance.clearSharedPreferences()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //请求版本信息
+        mPresenter.requestVersion()
     }
     /**
      * 初始化
@@ -109,6 +150,7 @@ class LoginActivity : SuperActivity(), ILoginView {
         stopRefreshAnim()
         //释放资源 停止所有请求
         mPresenter.onDestory()
+        if(updateDialog?.isShowing?:false)updateDialog?.dismiss()
         super.onDestroy()
     }
 

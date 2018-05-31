@@ -103,7 +103,7 @@ class UpdateDialog(context: Context) : Dialog(context, R.style.update_dialog_sty
         this.downloadUrl = downloadUrl
         this.versionName = versionName
         this.versionCode = versionCode
-        this.updateContent=updateContent
+        this.updateContent=updateContent.replace("\\n","\n")
         if(tvVersion!=null){
             tvVersion.text = context.getString(R.string.new_version_colon) + versionName
             tvUpdateContentTitle.visibility=if(this.updateContent.length>0)View.VISIBLE else View.GONE

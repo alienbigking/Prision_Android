@@ -1,5 +1,6 @@
 package com.gkzxhn.prison.model.iml
 
+import com.android.volley.AuthFailureError
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ILoginModel
 import com.gkzxhn.prison.utils.XtHttpUtil
@@ -11,6 +12,20 @@ import org.json.JSONObject
  */
 
 class LoginModel : BaseModel(), ILoginModel {
+    /**
+     * 获取版本信息
+     */
+    override fun requestVersion(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+        try {
+            val url=String.format("%s?page=1&rows=10",Constants.REQUEST_VERSION_URL)
+            volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+
+    }
+
+
     /**
      * 获取网络请求
      */

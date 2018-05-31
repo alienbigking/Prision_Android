@@ -13,7 +13,9 @@ import com.gkzxhn.prison.model.iml.LoginModel
 import com.gkzxhn.prison.utils.Utils
 import com.gkzxhn.prison.view.ILoginView
 import com.gkzxhn.prison.async.VolleyUtils
+import com.gkzxhn.prison.entity.VersionEntity
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
@@ -28,6 +30,30 @@ import org.json.JSONObject
  */
 
 class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginModel, ILoginView>(context, LoginModel(), view) {
+    /**
+     *  请求版本信息
+     */
+    fun requestVersion() {
+        mModel.requestVersion(object : VolleyUtils.OnFinishedListener<JSONObject> {
+            override fun onSuccess(response: JSONObject) {
+                val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
+                if (code == HttpStatus.SC_OK) {
+                    val versionsJson=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"),"versions")
+                    val versions= Gson().fromJson<List<VersionEntity>>(versionsJson,
+                            object : TypeToken<List<VersionEntity>>() {
+                            }.type)
+                    for(version in versions){
+                        if(version.id==2){
+                            mView?.updateVersion(version)
+                            break
+                        }
+                    }
+                }
+            }
+
+            override fun onFailed(error: VolleyError) {}
+        })
+    }
     /**
      * 获取会见会议室号等
      * @param account

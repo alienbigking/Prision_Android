@@ -159,10 +159,10 @@ class ConfigActivity : SuperActivity() {
     //开启／关闭Usb录屏监听
     private val mOnCheckedChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
         when (checkedId) {
-            R.id.config_layout_rb_usb_open//关闭USB录播 保存
-            -> isOpenUsb=false
-            R.id.config_layout_rb_usb_close//开启录播 保存
-            ->   isOpenUsb=true
+            R.id.config_layout_rb_usb_open//开启录播 保存
+            -> isOpenUsb=true
+            R.id.config_layout_rb_usb_close//关闭USB录播 保存
+            ->   isOpenUsb=false
         }
     }
     /**
