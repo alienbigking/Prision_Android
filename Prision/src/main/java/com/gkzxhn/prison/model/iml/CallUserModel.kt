@@ -8,6 +8,8 @@ import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.ICallUserModel
 import com.gkzxhn.prison.utils.XtHttpUtil
 import com.gkzxhn.prison.async.VolleyUtils
+import com.gkzxhn.prison.utils.Utils
+import com.starlight.mobile.android.lib.util.ConvertUtil
 import org.json.JSONException
 
 import org.json.JSONObject
@@ -46,7 +48,9 @@ class CallUserModel : CallZijingModel(), ICallUserModel {
         }
     }
     override fun requestFamily(key: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
-        val url = String.format("%s?key=%s&page=1&rows=1000&jailId=%s", Constants.REQUEST_FAMILY_BY_KEY, key,
+        var searchKey=key
+        if(!Utils.isPhoneNumber(key))searchKey=ConvertUtil.urlEncode(key)//中文转码
+        val url = String.format("%s?key=%s&page=1&rows=1000&jailId=%s", Constants.REQUEST_FAMILY_BY_KEY, searchKey,
                 sharedPreferences.getString(Constants.TERMINAL_JIAL_ID,""))
         try {
             volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
