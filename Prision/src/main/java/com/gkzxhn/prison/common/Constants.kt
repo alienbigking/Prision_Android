@@ -33,14 +33,16 @@ object Constants {
     val CALL_FREE_TIME = "call_free_time"//免费呼叫次数
     val IS_OPEN_USB_RECORD = "is_open_usb_record"//是否开启usb录屏状态 true/false 开启／关闭
 
-
     val FREE_MEETING_PRISON_ID= "free_meeting_prison_id"//免费会见囚犯ID
 
+
     /*-------------------------------request url-------------------------------------------------*/
+    val IS_TEST_MODEL=true //是否为自动化测试模式，发布时需设置为false
+
     val RELEASE_DOMAIN = "https://www.yuwugongkai.com/ywgk-app"//新发布正式环境
-    val DEMO_DOMAIN = "http://39.108.185.51:8082/ywgk-app"//开发环境
+    val DEMO_DOMAIN = "http://123.57.7.159:8084/ywgk-app-demo"//演示环境
     val DEV_DOMAIN = "http://123.57.7.159:8082/ywgk-app"//开发环境
-    val DOMAIN_NAME = RELEASE_DOMAIN
+    val DOMAIN_NAME = DEMO_DOMAIN
 
     val REQUEST_MEETING_LIST_URL = DOMAIN_NAME + "/api/meetings/getMeetingsForPrison"//会见列表
     val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME + "/api/meetings/update"// 取消会见

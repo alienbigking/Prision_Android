@@ -51,7 +51,8 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                 }
             }
 
-            override fun onFailed(error: VolleyError) {}
+            override fun onFailed(error: VolleyError) {
+                }
         })
     }
     /**
@@ -60,6 +61,7 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
      * @param password
      */
     private fun getMeetingRoom(account: String, password: String) {
+        mView?.setIdleNow(true)
         mModel.getMeetingRoom(account, password, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
@@ -85,15 +87,21 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                     edit.apply()
                     //关闭加载条
                     mView?.stopRefreshAnim()
+                    //单元测试 释放加载延迟
+                    mView?.setIdleNow(false)
                     mView?.onSuccess()
                 }else{
                     //关闭加载条
                     mView?.stopRefreshAnim()
+                    //单元测试 释放加载延迟
+                    mView?.setIdleNow(false)
                     mView?.showToast(R.string.account_pwd_error)
                 }
             }
 
             override fun onFailed(error: VolleyError) {
+                //单元测试 释放加载延迟
+                mView?.setIdleNow(false)
                 showErrors(error)
             }
         })
@@ -104,6 +112,9 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
      * @param password
      */
     fun login(account: String, password: String) {
+        //单元测试 延迟加载
+        mView?.setIdleNow(true)
+        //刷新
         mView?.startRefreshAnim()
         val info = LoginInfo(account, password)
         NIMClient.getService(AuthService::class.java).login(info)
@@ -113,6 +124,8 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                     }
 
                     override fun onFailed(code: Int) {
+                        //单元测试 释放加载延迟
+                        mView?.setIdleNow(false)
                         mView?.stopRefreshAnim()
                         when (code) {
                             302 -> mView?.showToast(R.string.account_pwd_error)
@@ -127,6 +140,8 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                     }
 
                     override fun onException(exception: Throwable) {
+                        //单元测试 释放加载延迟
+                        mView?.setIdleNow(false)
                         mView?.stopRefreshAnim()
                         mView?.showToast(R.string.login_exception_retry)
                     }

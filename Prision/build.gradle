@@ -32,6 +32,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //单元测试类库中，读取excel中poi编译报错问题
+    packagingOptions {
+        exclude 'META-INF/*'
+    }
+
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -55,4 +60,6 @@ dependencies {
     implementation files('libs/okio-1.9.0.jar')
     //kotlin必须添加
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    androidTestImplementation project(':auto_espresso')
+    implementation 'com.android.support.test.espresso.idling:idling-concurrent:3.0.1'
 }
