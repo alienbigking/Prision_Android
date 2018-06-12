@@ -41,13 +41,15 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
      * 请求用户信息
      */
     fun request(familyId: String) {
+        //单元测试 延迟加载
+        mView?.setIdleNow(true)
         mView?.startRefreshAnim()
         mModel.request(familyId, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 mView?.stopRefreshAnim()
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    val data=JSONUtil.getJSONObject(response,"data")
+                    val data = JSONUtil.getJSONObject(response, "data")
                     entity = Gson().fromJson(JSONUtil.getJSONObjectStringValue(data, "family"), MeetingDetailEntity::class.java)
                     entity?.phone = familyId
                     val edit = getSharedPreferences().edit()
@@ -55,10 +57,14 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                     edit.apply()
                     mView?.onSuccess()
                 }
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
             }
 
             override fun onFailed(error: VolleyError) {
                 showErrors(error)
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
             }
         })
     }
@@ -123,6 +129,8 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
      * 拨号 进入视频会议
      */
     fun dial() {
+        //单元测试 延迟加载
+        mView?.setIdleNow(true)
         val account=getMeettingAccount()?:""
         mModel.dial(account, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
@@ -140,9 +148,13 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                     mView?.dialFailed()
 
                 }
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
             }
             override fun onFailed(error: VolleyError) {
                 mView?.dialFailed()
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
             }
         })
     }

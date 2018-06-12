@@ -164,6 +164,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         //左上角返回
             R.id.common_head_layout_iv_left -> finish()
             R.id.call_user_layout_iv_call -> {
+                //单元测试 延迟加载
+                setIdleNow(true)
                 online()
             }
         }
@@ -209,10 +211,12 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                     //开始倒计时
                     mTimer.start()
                 } else {
+                    setIdleNow(false)
                     //云信已掉线
                     showToast(R.string.yunxin_offline)
                 }
             } else {//未设置终端
+                setIdleNow(false)
                 initTerminalDialog()
                 //显示设置终端对话框
                 if(!(mShowTerminalDialog?.isShowing?:false)){
@@ -374,6 +378,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         }
 
         override fun onFinish() {
+            setIdleNow(false)
             stopVConfVideo()
         }
     }

@@ -44,6 +44,8 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
      * 发请求，检测设备视频会议是否已经准备好
      */
     fun requestZijing() {
+        //单元测试，延迟加载
+        mView?.setIdleNow(true)
         mModel.getNetworkStatus(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
@@ -57,6 +59,8 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                     }catch (e:Exception){}
                     mView?.startZijingService(isConnected)
                     checkCallStatus()
+                    //单元测试，释放延迟加载
+                    mView?.setIdleNow(false)
                 } else {
                     mHandler.postDelayed(Runnable {
                         requestZijing()
@@ -122,6 +126,8 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             currentPage = FIRST_PAGE
             mView?.startRefreshAnim()
         }
+        //单元测试，延迟加载
+        mView?.setIdleNow(true)
         mModel.request(date,currentPage,PAGE_SIZE, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val view = if (mWeakView == null) null else mWeakView!!.get()
@@ -144,11 +150,14 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                     }
                 } catch (e: Exception) {
                 }
-
+                //单元测试，释放延迟加载
+                mView?.setIdleNow(false)
             }
 
             override fun onFailed(error: VolleyError) {
                 showErrors(error)
+                //单元测试，释放延迟加载
+                mView?.setIdleNow(false)
             }
         })
     }
@@ -157,6 +166,8 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
      *  取消会见
      */
     fun requestCancel(id: String, reason: String) {
+        //单元测试，延迟加载
+        mView?.setIdleNow(true)
         mView?.showProgress()
         mModel.requestCancel(id, reason, object : VolleyUtils.OnFinishedListener<String> {
             override fun onSuccess(response: String) {
@@ -172,6 +183,8 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
 
             override fun onFailed(error: VolleyError) {
                 showErrors(error)
+                //单元测试，延迟加载
+                mView?.setIdleNow(true)
             }
         })
 
@@ -235,11 +248,11 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                 }
             }
         }
-            return code
-        }
-
-        override fun stopAnim() {
-            super.stopAnim()
-            mView?.dismissProgress()
-        }
+        return code
     }
+
+    override fun stopAnim() {
+        super.stopAnim()
+        mView?.dismissProgress()
+    }
+}

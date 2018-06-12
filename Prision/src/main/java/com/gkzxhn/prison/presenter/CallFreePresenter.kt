@@ -60,27 +60,46 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
      *  通过手机号码查询家属信息
      */
     fun request(key: String) {
+        //单元测试 延迟加载
+        mView?.setIdleNow(true)
         mView?.startRefreshAnim()
         mModel.requestFamily(key, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 mView?.stopRefreshAnim()
+
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
                     val familyJson=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"), "infos")
                     val familys= Gson().fromJson<List<FreeFamilyEntity>>(familyJson,
                             object : TypeToken<List<FreeFamilyEntity>>() {}.type)
-                    mView?.onSuccess(familys)
+                    if(familys!=null&&familys.size>0){//有数据
+                        mView?.onSuccess(familys)
+                        //单元测试 释放延迟加载
+                        mView?.setIdleNow(false)
+                    }else{
+                        //单元测试 释放延迟加载
+                        mView?.setIdleNow(false)
+                        if(Utils.isPhoneNumber(key)){//查询手机号报错
+                            mView?.showToast(R.string.query_phone_is_error)
+                        }else{//查询姓名报错
+                            mView?.showToast(R.string.query_name_is_error)
+                        }
+                    }
                 } else {
+                    //单元测试 释放延迟加载
+                    mView?.setIdleNow(false)
                     if(Utils.isPhoneNumber(key)){//查询手机号报错
                         mView?.showToast(R.string.query_phone_is_error)
                     }else{//查询姓名报错
                         mView?.showToast(R.string.query_name_is_error)
                     }
-
                 }
+
             }
 
             override fun onFailed(error: VolleyError) {
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
                 showErrors(error)
             }
         })

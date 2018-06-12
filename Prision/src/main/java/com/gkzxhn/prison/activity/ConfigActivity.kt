@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.InputType
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewTreeObserver
@@ -65,6 +66,7 @@ class ConfigActivity : SuperActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.config_layout)
+        InputType.TYPE_CLASS_NUMBER
         preferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
         //初始化
         init()

@@ -202,6 +202,8 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         when (v.id) {
             R.id.video_metting_layout_cb_micro ->//麦克风
             {
+                //单元测试 延迟加载
+                setIdleNow(true)
                 mPresenter.switchMuteStatus()
             }
             R.id.video_metting_layout_cb_speaker ->  //扬声器
@@ -442,22 +444,34 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                             hangUpSuccess(getString(R.string.call_error))
                         }
                         "MuteOn" ->{  //关闭了 麦克风
-                            if(init){//第一次打开
-                                init=false
-                                mPresenter.switchMuteStatus()
-                            }
-                            cbMicro.isChecked=false
-
+                            micro(false)
                         }
-                        "MuteOff" -> //打开了麦克风
-                            cbMicro.isChecked=true
+                        "MuteOff" -> {//打开了麦克风
+                            micro(true)
+                        }
                     }
                 }
             }
         }
     }
 
-
+    /**
+     * 打开或关闭麦克风
+     */
+    private  fun micro(isOpenMicro: Boolean){
+        if(isOpenMicro){
+            cbMicro.isChecked=true
+        }else{
+            if(init){//第一次打开
+                init=false
+                mPresenter.switchMuteStatus()
+            }
+            cbMicro.isChecked=false
+            setIdleNow(false)
+        }
+        //释放延迟加载
+        setIdleNow(false)
+    }
 
     override fun startRefreshAnim() {
 

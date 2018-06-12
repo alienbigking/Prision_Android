@@ -48,6 +48,8 @@ class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISe
      * 请求版本信息
      */
     fun requestVersion() {
+        //单元测试，延迟加载
+        mView?.setIdleNow(true)
         mModel.requestVersion(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
@@ -65,15 +67,21 @@ class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISe
                     }
                     mView?.updateVersion(v)
                 }
+                //单元测试，释放延迟加载
+                mView?.setIdleNow(false)
             }
 
             override fun onFailed(error: VolleyError) {
                 mView?.updateVersion(null);
+                //单元测试，释放延迟加载
+                mView?.setIdleNow(false)
             }
         })
     }
 
     fun checkNetworkStatus(){
+        //单元测试，延迟加载
+        mView?.setIdleNow(true)
         mModel.getNetworkStatus(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = response.getInt("code")
@@ -87,10 +95,14 @@ class SettingPresenter(context: Context, view: ISettingView) : BasePresenter<ISe
                     }catch (e:Exception){}
                 }
                 mView?.networkStatus(isConnected)
+                //单元测试，释放延迟加载
+                mView?.setIdleNow(false)
             }
 
             override fun onFailed(error: VolleyError) {
                 mView?.networkStatus(false)
+                //单元测试，释放延迟加载
+                mView?.setIdleNow(false)
             }
 
         })

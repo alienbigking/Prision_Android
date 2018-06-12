@@ -114,6 +114,8 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
      *  挂断
      */
     fun hangUp(reason: String) {
+        //单元测试 延迟加载
+        mView?.setIdleNow(true)
         //更新免费会见时长
         if(mFreeMeetingId!=null)updateFreeMeetting()
         //挂断
@@ -134,12 +136,15 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
                     Log.e(TAG, "onResponse: >>> " + e.message)
                     //                            e.printStackTrace();
                 }
-
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
             }
 
             override fun onFailed(error: VolleyError) {
                 mView?.hangUpSuccess(GKApplication.instance.getString(R.string.network_innormal_hang_up))
                 Log.d(TAG, "ResetQuest..." + error.toString())
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
             }
         })
     }
@@ -148,6 +153,8 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
      * 设置是否静音
      */
     fun setIsQuite(isOpenYSQ: Boolean) {
+        //单元测试 延迟加载
+        mView?.setIdleNow(true)
         //设置静音状态  true表示设置成静音
         mModel.setIsQuite(isOpenYSQ, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
@@ -164,10 +171,14 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
                     Log.e(TAG, "onResponse: >>> " + e.message)
                     //                            e.printStackTrace();
                 }
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
             }
 
             override fun onFailed(error: VolleyError) {
                 Log.d(TAG, "ResetQuest..." + error.toString())
+                //单元测试 释放延迟加载
+                mView?.setIdleNow(false)
             }
         })
 

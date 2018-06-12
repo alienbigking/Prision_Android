@@ -231,9 +231,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 //            -> mViewPager.currentItem = mViewPager.currentItem + 1
             R.id.main_layout_tv_setting ->//设置
                 startActivity(Intent(this, SettingActivity::class.java))
-            R.id.common_head_layout_iv_right -> {
-                onRefresh()
-            }
             R.id.main_layout_ll_service_hint//视频连接服务
             -> reConnextZijing()
 

@@ -44,6 +44,8 @@ class NetworkActivity: SuperActivity(), ISettingView {
             }
             R.id.network_layout_btn_enable_gui ->{//启用Gui
                 tvEnableGuiHint.setText(R.string.start_gui_ing)
+                //单元测试 延迟加载
+                setIdleNow(true)
                 btnEnableGui.isEnabled=false
                 // adb shell pm enable cn.com.rocware.c9gui
                 mPresenter.startAsynTask(Constants.OPEN_GUI_TAB,object : AsynHelper.TaskFinishedListener{
@@ -56,6 +58,8 @@ class NetworkActivity: SuperActivity(), ISettingView {
                         }else{
                             tvEnableGuiHint.setText(R.string.start_gui_failed)
                         }
+                        //单元测试 释放延迟加载
+                        setIdleNow(false)
                     }
 
                 })
@@ -64,6 +68,8 @@ class NetworkActivity: SuperActivity(), ISettingView {
             R.id.network_layout_btn_disable_gui ->{//关闭Gui
                 btnDisableGui.isEnabled=false
                 tvDisableGuiHint.setText(R.string.stop_gui_ing)
+                //单元测试 延迟加载
+                setIdleNow(true)
                 //adb shell pm disable cn.com.rocware.c9gui
                 mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,object : AsynHelper.TaskFinishedListener{
                     override fun back(`object`: Any?) {
@@ -81,6 +87,8 @@ class NetworkActivity: SuperActivity(), ISettingView {
                         }else{
                             tvDisableGuiHint.setText(R.string.stop_gui_failed)
                         }
+                        //单元测试 释放延迟加载
+                        setIdleNow(false)
                     }
                 })
             }
