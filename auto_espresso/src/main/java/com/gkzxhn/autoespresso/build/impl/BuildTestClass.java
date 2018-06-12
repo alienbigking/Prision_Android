@@ -72,18 +72,24 @@ public class BuildTestClass implements IBuildTestClass {
             boolean isCreate=TUtils.valueToBoolean(getValue(TableConfig.IS_CREATE));
             //测试类名不能为空
             if(isCreate&&classname.length()>0) {
+                header = new ModuleEntity();
                 //获取ModuleNumber 合并的单元格
                 MergedRegionEntity moduleNumber = ExcelUtil.isMergedRegion(mSheet, mRow,mModuleColNames.get(TableConfig.MODULE_NUMBER));
-                int firstRow = moduleNumber.getLastRow()+2;
+                int firstRow=mRow+2;
+                if(moduleNumber!=null&&moduleNumber.isMergedRegion()){
+                    firstRow = moduleNumber.getLastRow()+2;
+                    header.setModuleNumber(moduleNumber.getValue());
+                    header.setFirstRow(moduleNumber.getFirstRow());
+                    header.setLastRow(moduleNumber.getLastRow());
+                }else{
+                    header.setModuleNumber(getValue(TableConfig.MODULE_NUMBER));
+                    header.setFirstRow(mRow);
+                    header.setLastRow(mRow);
+                }
                 int lastRow = mMaxRow;
-
-                header = new ModuleEntity();
-                header.setModuleNumber(moduleNumber.getValue());
                 header.setModuleName(getValue(TableConfig.MODULE_NAME));
                 header.setClassName(classname);
                 header.setClassPackageName(getValue(TableConfig.CLASS_PACKAGE_NAME));
-                header.setFirstRow(moduleNumber.getFirstRow());
-                header.setLastRow(moduleNumber.getLastRow());
                 header.setSharedPreferencesName(getValue(TableConfig.SHAREDPREFERENCES_NAME));
                 createFile();
                 mBuildTestMethod.init(mSheet, header.getModuleNumber(),firstRow, lastRow);

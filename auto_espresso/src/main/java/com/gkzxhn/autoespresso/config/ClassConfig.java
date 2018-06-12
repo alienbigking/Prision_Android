@@ -149,9 +149,11 @@ public class ClassConfig {
             + Config.TABS_LINE+"}"+ Config.WRAP;
     public static final String  getBeforeMethod(String premissions,String sharedPreferencesName,String sharedPreferences){
         if(Config.TEST_CLASS_SUFFIX.equals(Config.TEST_CLASS_SUFFIX_JAVA)){
-            return String.format(BEFORE_METHOD_JAVA, premissions+String.format(SHAREDPREFERENCES_JAVA,sharedPreferencesName,sharedPreferences));
+            String db=sharedPreferencesName.isEmpty()?"":String.format(SHAREDPREFERENCES_JAVA,sharedPreferencesName,sharedPreferences);
+            return String.format(BEFORE_METHOD_JAVA, premissions+db);
         }else{
-            return String.format(BEFORE_METHOD,premissions+String.format(SHAREDPREFERENCES,sharedPreferencesName,sharedPreferences) );
+            String db=sharedPreferencesName.isEmpty()?"":String.format(SHAREDPREFERENCES,sharedPreferencesName,sharedPreferences);
+            return String.format(BEFORE_METHOD,premissions+db);
         }
     }
 
