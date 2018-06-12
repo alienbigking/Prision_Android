@@ -3,6 +3,7 @@ package com.gkzxhn.autoespresso.operate;
 import android.app.Activity;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.text.InputType;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -197,7 +198,7 @@ public class TView {
      * 验证EditTextView控件输入的类型
      */
     public static void check_input_type(int id,int inputType){
-        onView(withInputType(inputType)).check(matches(withId(id)));
+        onView(withId(id)).check(matches(withInputType(inputType)));
     }
 
     /**

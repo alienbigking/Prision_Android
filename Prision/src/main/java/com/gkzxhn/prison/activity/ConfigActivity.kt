@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.config_layout.config_layout_tv_account
 as tvAccount
 
 
-/**终端配置
+/**终端配置 OK
  * Created by Raleigh.Luo on 17/4/12.
  */
 
@@ -87,7 +87,6 @@ class ConfigActivity : SuperActivity() {
         //获取
         mTimeLimit = preferences.getLong(Constants.TIME_LIMIT, 20L)
         etTime.setText(mTimeLimit.toString())
-
         //默认都显示*
         etGuestPassword.setText(preferences.getString(Constants.TERMINAL_GUEST_PASSWORD, ""))
         etHostPassword.setText( preferences.getString(Constants.TERMINAL_HOST_PASSWORD,""))
@@ -190,6 +189,8 @@ class ConfigActivity : SuperActivity() {
                 }else  if (TextUtils.isEmpty(guestPassword)) {
                     showToast(R.string.please_input_guest_password)
                 } else {
+                    //单元测试 延迟加载
+                    setIdleNow(true)
                     //修改账号  保存到sharepreference中
                     val editor = preferences.edit()
                     editor.putString(Constants.TERMINAL_ROOM_NUMBER, meettingNumber)
@@ -200,6 +201,8 @@ class ConfigActivity : SuperActivity() {
                     editor.putLong(Constants.TIME_LIMIT,timeStr.toLong())
                     editor.putBoolean(Constants.IS_OPEN_USB_RECORD, isOpenUsb)
                     editor.apply()
+                    //单元测试 释放延迟加载
+                    setIdleNow(false)
                     setResult(Activity.RESULT_OK)
                     finish()
                 }
