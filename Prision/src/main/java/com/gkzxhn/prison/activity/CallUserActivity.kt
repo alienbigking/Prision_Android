@@ -60,6 +60,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     private lateinit var mFamilyId: String
     //昵称
     private lateinit var nickName: String
+    //会见id
     private lateinit var id: String
     //是否正在连线
     private var isConnecting = false
@@ -191,6 +192,9 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                     // 这里以类型 “1” 作为“正在输入”的状态通知。
                     val json = JSONObject()
                     json.put("code", -1)
+                    //会见记录id
+                    json.put("meetingId", id)
+
                     //                        json.put("msg", account);
                     notification.content = json.toString()
                     NIMClient.getService(MsgService::class.java).sendCustomNotification(notification).
@@ -262,7 +266,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         val intent = Intent(this, VideoMettingActivity::class.java)
         intent.action=getIntent().action
         intent.putExtra(Constants.ZIJING_PASSWORD, hostPassword)
-        intent.putExtra(Constants.EXTRA,mFamilyId)//家属id
+        intent.putExtra(Constants.EXTRAS,mFamilyId)//家属id
+        intent.putExtra(Constants.EXTRA,id)//会见id
         startActivityForResult(intent, mCallRequestCode)
         //关闭显示进度条
         stopProgress()

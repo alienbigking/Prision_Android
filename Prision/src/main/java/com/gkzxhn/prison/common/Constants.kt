@@ -41,12 +41,12 @@ object Constants {
 
     val RELEASE_DOMAIN = "https://www.yuwugongkai.com/ywgk-app"//新发布正式环境
     val DEMO_DOMAIN = "http://123.57.7.159:8084/ywgk-app-demo"//演示环境
-    val DEV_DOMAIN = "http://123.57.7.159:8082/ywgk-app"//开发环境
+    val DEV_DOMAIN = "http://120.78.190.101:8086/ywgk-app-auth"//开发环境
     val DOMAIN_NAME = DEV_DOMAIN
 
     val REQUEST_MEETING_LIST_URL = DOMAIN_NAME + "/api/meetings/getMeetingsForPrison"//会见列表
     val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME + "/api/meetings/update"// 取消会见
-    val REQUEST_MEETING_DETAIL_URL = DOMAIN_NAME + "/families/detail"// 会见详情
+    val REQUEST_MEETING_DETAIL_URL = DOMAIN_NAME + "/api/families/detail"// 会见详情
     val REQUEST_VERSION_URL = DOMAIN_NAME + "/api/versions/page"//版本更新
     val REQUEST_CRASH_LOG_URL = DOMAIN_NAME + "/app_loggers/save"//奔溃日志
     val REQUEST_MEETING_ROOM = DOMAIN_NAME + "/api/terminals/detail"//会议室信息

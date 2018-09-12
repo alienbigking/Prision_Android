@@ -60,6 +60,9 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     private var isScaled = false
     //提示通话时间已到 对话框
     private lateinit var mHintDialog:CustomDialog
+    //会见id
+    private lateinit var id: String
+    //倒计时
     private lateinit var mTimer:CountDownTimer
     private var FIMALY_IS_JOIN=false;//家属是否已经加入会议室
     private var ESTABLISHED_CALL=false//监狱端已经建立连接
@@ -77,6 +80,8 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         mPresenter.setIsQuite(isOpenYSQ)
         //打开麦克风
         mPresenter.switchMuteStatus()
+        //获取传递过来时的数据
+        id=intent.getStringExtra(Constants.EXTRA)?:""
         //初始化挂断对话框
         initHangUpDialog()
         setIdCheckData()
@@ -352,6 +357,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 json.put("msg", account)
                 json.put("limit_time", time)
                 json.put("jail", jailId)
+                json.put("meetingId", id)//会见id
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
