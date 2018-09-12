@@ -130,14 +130,13 @@ open class SuperActivity : AppCompatActivity() {
         GKApplication.instance.popActivity(this)
     }
 
-    override fun onResume() {
-        super.onResume()
 
-    }
-
+    /**
+     * 响应设备遥控器
+     */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         when (event.keyCode) {
-            222 -> {//23OK键
+            222 -> {//关机键
                 if(!mTurnOffDialog.isShowing) mTurnOffDialog.show()
                 return true
             }

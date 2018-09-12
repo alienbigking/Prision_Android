@@ -37,6 +37,10 @@ class NetworkActivity: SuperActivity(), ISettingView {
         //初始化Presenter
         mPresenter = SettingPresenter(this, this)
     }
+
+    /**
+     * 页面所有点击事件
+     */
     fun onClickListener(view: View){
         when(view.id){
             R.id.common_head_layout_iv_left ->{
@@ -103,7 +107,9 @@ class NetworkActivity: SuperActivity(), ISettingView {
     }
 
 
-
+    /**
+     * 网络状态返回
+     */
     override fun networkStatus(isConnected: Boolean) {
         //按钮可点击
         btnCheckNetwork.isEnabled=true

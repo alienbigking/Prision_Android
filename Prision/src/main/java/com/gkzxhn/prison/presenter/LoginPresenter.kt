@@ -80,9 +80,9 @@ class LoginPresenter(context: Context, view: ILoginView) : BasePresenter<ILoginM
                         edit.putString(Constants.TERMINAL_HOST_PASSWORD, loginEntity.hostPassword)
                         edit.putString(Constants.TERMINAL_GUEST_PASSWORD, loginEntity.mettingPassword)
                     }else{
-                        edit.putString(Constants.TERMINAL_ROOM_NUMBER, "6851")
-                        edit.putString(Constants.TERMINAL_HOST_PASSWORD, "7890")
-                        edit.putString(Constants.TERMINAL_GUEST_PASSWORD, "0987")
+                        edit.putString(Constants.TERMINAL_ROOM_NUMBER, "")
+                        edit.putString(Constants.TERMINAL_HOST_PASSWORD, "")
+                        edit.putString(Constants.TERMINAL_GUEST_PASSWORD, "")
                     }
                     edit.apply()
                     //关闭加载条

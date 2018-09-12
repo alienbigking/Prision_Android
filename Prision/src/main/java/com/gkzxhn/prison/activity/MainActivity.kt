@@ -53,18 +53,25 @@ import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_free_t
 as tvFreeTime
 
 class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener,CusSwipeRefreshLayout.OnLoadListener{
-
-
+    //当前选择日期
     private var mDate: CustomDate? = null
+    //列表适配器
     private lateinit var adapter: MainAdapter
+    //请求Presenter
     private lateinit var mPresenter: MainPresenter
+    //进度条
     private lateinit var mProgress: ProgressDialog
+    //取消会见对话框
     private lateinit var mCancelVideoDialog: CancelVideoDialog
+    //版本更新对话框
     private var updateDialog: UpdateDialog?=null
+    //配置终端提示对话框
     private  var mShowTerminalDialog: CustomDialog?=null
+    //是否已经连接了紫荆服务
     private var isConnectZijing = false
-    private val TAG = MainActivity::class.java.simpleName
+    //所有月份
     private lateinit var months:Array<String>
+    //上一个月，中文月份
     private var mLastMonth=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,8 +82,22 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         init()
         registerReceiver()
     }
+    override fun onResume() {
+        super.onResume()
+        //更新免费会见次数
+        updateFreeTime(mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0))
+        //请求版本信息
+        mPresenter.requestVersion()
+        //开始请求列表数据
+        onRefresh()
+    }
+
+    /**
+     * 日历点击监听器
+     */
     private val onCellClickListener = object : CalendarCard.OnCellClickListener {
         override fun clickDate(date: CustomDate) {
+            //每点击了一个日历，获取新数据列表
             mDate = date
             onRefresh()
         }
@@ -86,11 +107,17 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             tvMonth.text =  months[date.getMonth()-1]
         }
     }
+    /**
+     *  列表项点击事件监听器
+     */
     private val onItemClickListener = object : OnItemClickListener {
         override fun onClickListener(convertView: View, position: Int) {
             when (convertView.id) {
-                R.id.main_item_layout_iv_cancel -> if (mCancelVideoDialog != null && !mCancelVideoDialog.isShowing) mCancelVideoDialog.show()
-                else -> if (isConnectZijing) {
+
+                R.id.main_item_layout_iv_cancel ->{ //取消会见
+                    if (mCancelVideoDialog != null && !mCancelVideoDialog.isShowing) mCancelVideoDialog.show()
+                }
+                else -> if (isConnectZijing) {//点击项，进入详情，必须已连接视频服务器
                     val intent = Intent(this@MainActivity, CallUserActivity::class.java)
                     intent.action=Constants.CALL_DEFUALT_ACTION
                     intent.putExtra(Constants.EXTRA, adapter.getCurrentItem().id)
@@ -105,41 +132,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         }
     }
 
-    /**
-     * 刷新动画加载
-     */
-    private val handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            if (msg.what == Constants.START_REFRESH_UI) {//开始动画
-                if (adapter == null || adapter.itemCount == 0) {
-                    if (ivNodata.isShown) {
-                        ivNodata.visibility = View.GONE
-                    }
-                    tvLoading.visibility = View.VISIBLE
-                    if (!tvLoading.isPlaying) {
 
-                        tvLoading.showAndPlay()
-                    }
-                    if (mSwipeRefresh.isRefreshing) mSwipeRefresh.isRefreshing = false
-                } else {
-                    if (!mSwipeRefresh.isRefreshing) mSwipeRefresh.isRefreshing = true
-                }
-            } else if (msg.what == Constants.STOP_REFRESH_UI) {//停止动画
-                if (tvLoading.isPlaying || tvLoading.isShown) {
-                    tvLoading.hideAndStop()
-                    tvLoading.visibility = View.GONE
-                }
-                if (mSwipeRefresh.isRefreshing) mSwipeRefresh.isRefreshing = false
-                if (mSwipeRefresh.isLoading) mSwipeRefresh.isLoading = false
-                if (adapter == null || adapter.itemCount == 0) {
-
-                    if (!ivNodata.isShown) ivNodata.visibility = View.VISIBLE
-                } else {
-                    if (ivNodata.isShown) ivNodata.visibility = View.GONE
-                }
-            }
-        }
-    }
     private val mBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == Constants.NIM_KIT_OUT) {
@@ -210,6 +203,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         }
     }
 
+    /**
+     * 初始化日历
+     */
     private fun initCalander() {
         val views = arrayOfNulls<CalendarCard>(3)
         for (i in 0..2) {
@@ -223,6 +219,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mLastMonth=mDate?.month?:0
     }
 
+    /**
+     * 页面点击事件
+     */
     fun onClickListener(view: View) {
         when (view.id) {
 //            R.id.main_layout_btn_last//上一个月
@@ -237,9 +236,14 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         }
     }
 
+    /**
+     * 列表上啦刷新
+     */
     override fun onRefresh() {
+        //检查云信推送状态
         mPresenter.checkStatusCode()
         if (mPresenter.checkStatusCode() == StatusCode.LOGINED||mPresenter.checkStatusCode() == StatusCode.NET_BROKEN) {
+            //云信为已经登录状态
             //没有设置终端，则提示用户设置终端
             if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER, "").length == 0) {
                 stopRefreshAnim()
@@ -253,6 +257,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         }
     }
 
+    /**
+     * 列表下拉加载
+     */
     override fun onLoad() {
         mPresenter.request(false,mDate.toString())
     }
@@ -282,6 +289,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         if (mProgress != null && mProgress.isShowing) mProgress.dismiss()
     }
 
+    /**
+     * 列表更新数据
+     */
     override fun updateItems(datas: List<MeetingEntity>?) {
         adapter.updateItems(datas)
     }
@@ -321,6 +331,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
     }
 
+    /**
+     * 开启紫荆视频服务
+     */
     override fun startZijingService(isNetworkConnected:Boolean) {
         if (!isConnectZijing) {
             isConnectZijing = true
@@ -338,6 +351,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         }
     }
 
+    /**
+     * 紫荆服务连接失败
+     */
     override fun zijingServiceFailed() {
         isConnectZijing = false
         tvServiceConnectHint.setText(R.string.video_service_connect_failed)
@@ -350,26 +366,29 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     override fun updateFreeTime(freeTime: Int) {
         tvFreeTime.setText(String.format("%s  %s%s",getString(R.string.call_free),freeTime,getString(R.string.time)))
     }
+
+    /**
+     * 开始列表刷新动画
+     */
     override fun startRefreshAnim() {
         handler.sendEmptyMessage(Constants.START_REFRESH_UI)
     }
-
-    override fun onResume() {
-        super.onResume()
-        //更新免费会见次数
-        updateFreeTime(mPresenter.getSharedPreferences().getInt(Constants.CALL_FREE_TIME, 0))
-        //请求版本信息
-        mPresenter.requestVersion()
-        onRefresh()
-    }
-
+    /**
+     * 停止列表刷新动画
+     */
     override fun stopRefreshAnim() {
         handler.sendEmptyMessage(Constants.STOP_REFRESH_UI)
     }
 
+
+
+
     override fun onDestroy() {
+        //停止所有请求
         mPresenter.onDestory()
-        unregisterReceiver(mBroadcastReceiver)//注销广播监听器
+        //注销广播监听器
+        unregisterReceiver(mBroadcastReceiver)
+        //关闭窗口，避免窗口溢出
         if(mProgress.isShowing)mProgress.dismiss()
         if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.dismiss()
         if (  mCancelVideoDialog.isShowing) mCancelVideoDialog.dismiss()
@@ -384,5 +403,40 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         val intentFilter = IntentFilter()
         intentFilter.addAction(Constants.NIM_KIT_OUT)
         registerReceiver(mBroadcastReceiver, intentFilter)
+    }
+    /**
+     * 刷新动画加载
+     */
+    private val handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            if (msg.what == Constants.START_REFRESH_UI) {//开始动画
+                if (adapter == null || adapter.itemCount == 0) {
+                    if (ivNodata.isShown) {
+                        ivNodata.visibility = View.GONE
+                    }
+                    tvLoading.visibility = View.VISIBLE
+                    if (!tvLoading.isPlaying) {
+
+                        tvLoading.showAndPlay()
+                    }
+                    if (mSwipeRefresh.isRefreshing) mSwipeRefresh.isRefreshing = false
+                } else {
+                    if (!mSwipeRefresh.isRefreshing) mSwipeRefresh.isRefreshing = true
+                }
+            } else if (msg.what == Constants.STOP_REFRESH_UI) {//停止动画
+                if (tvLoading.isPlaying || tvLoading.isShown) {
+                    tvLoading.hideAndStop()
+                    tvLoading.visibility = View.GONE
+                }
+                if (mSwipeRefresh.isRefreshing) mSwipeRefresh.isRefreshing = false
+                if (mSwipeRefresh.isLoading) mSwipeRefresh.isLoading = false
+                if (adapter == null || adapter.itemCount == 0) {
+
+                    if (!ivNodata.isShown) ivNodata.visibility = View.VISIBLE
+                } else {
+                    if (ivNodata.isShown) ivNodata.visibility = View.GONE
+                }
+            }
+        }
     }
 }

@@ -105,9 +105,18 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
             }
             StatusCode.CONNECTING,// 正在连接
             StatusCode.LOGINING,// 正在登录
-//            StatusCode.NET_BROKEN -> { // 网络连接已断开
+            StatusCode.NET_BROKEN -> { // 网络连接已断开
 //                mView?.showToast(R.string.network_error)
-//            }
+                //系统自动登录云信
+                val username = getSharedPreferences().getString(Constants.USER_ACCOUNT, "")
+                val password = getSharedPreferences().getString(Constants.USER_PASSWORD, "")
+                if ((username != null) and (username!!.length > 0)) {
+                    val info = LoginInfo(username, password) // config...
+                    //登录云信
+                    NIMClient.getService(AuthService::class.java).login(info)
+                            .setCallback(null)
+                }
+            }
             StatusCode.UNLOGIN -> {// 未登录
                 //系统自动登录云信
                 val username = getSharedPreferences().getString(Constants.USER_ACCOUNT, "")

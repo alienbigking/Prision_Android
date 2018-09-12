@@ -231,9 +231,17 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             StatusCode.LOGINING-> {// 正在登录
                 mView?.showToast(R.string.yunxin_offline)
             }
-//            StatusCode.NET_BROKEN -> { // 网络连接已断开
-//                mView?.showToast(R.string.network_error)
-//            }
+            StatusCode.NET_BROKEN -> { // 网络连接已断开
+                //系统自动登录云信
+                val username = getSharedPreferences().getString(Constants.USER_ACCOUNT, "")
+                val password = getSharedPreferences().getString(Constants.USER_PASSWORD, "")
+                if ((username != null) and (username!!.length > 0)) {
+                    val info = LoginInfo(username, password) // config...
+                    //登录云信
+                    NIMClient.getService(AuthService::class.java).login(info)
+                            .setCallback(null)
+                }
+            }
             StatusCode.UNLOGIN-> {// 未登录
                 //系统自动登录云信
                 val username = getSharedPreferences().getString(Constants.USER_ACCOUNT, "")

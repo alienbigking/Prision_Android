@@ -150,6 +150,10 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             }
         }
     }
+
+    /**
+     * 超时挂断 发送云信，意义未知
+     */
     private fun timeOutHangUp(){
         val array=resources.getStringArray( R.array.cancel_video_reason)
         val mContent=if(FIMALY_IS_JOIN)array[0] else array[4]
@@ -203,6 +207,9 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
 
+    /**
+     * 所有页面点击事件
+     */
     fun onClickListener(v: View) {
         when (v.id) {
             R.id.video_metting_layout_cb_micro ->//麦克风
@@ -263,6 +270,10 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         ImageLoader.getInstance().displayImage(idCardUri1, mIv_id_card_01)
         ImageLoader.getInstance().displayImage(idCardUri2, mIv_id_card_02)
     }
+
+    /**
+     * 获取图片请求完整地址
+     */
     private fun getImageUrl(url:String):String{
         if(url.contains("http")){
             return url
@@ -299,6 +310,9 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         }
     }
 
+    /**
+     * 响应设备遥控器
+     */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Log.i(TAG, "onKeyDown: getkeycode >>>>>> " + event.keyCode)
         when (event.keyCode) {
@@ -368,6 +382,9 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         }
     }
 
+    /**
+     * 挂断成功，返回到上一个页面，异常挂断原因返回给上一个页面
+     */
     override fun hangUpSuccess(hint :String) {
         val intent=Intent()
         intent.putExtra(Constants.EXTRA,hint)
