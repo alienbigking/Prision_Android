@@ -47,6 +47,18 @@ class CallUserModel : CallZijingModel(), ICallUserModel {
             authFailureError.printStackTrace()
         }
     }
+
+    /**
+     * 查询会见家属
+     */
+    override fun requestByMettingId(meetingId: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
+        val url = String.format("%s?meetingId=%s", Constants.REQUEST_MEETING_MEMBERS_URL, meetingId)
+        try {
+            volleyUtils[JSONObject::class.java, url, REQUEST_TAG, onFinishedListener]
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+    }
     override fun requestFamily(key: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>) {
         var searchKey=key
         if(!Utils.isPhoneNumber(key))searchKey=ConvertUtil.urlEncode(key)//中文转码

@@ -1,100 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mAttr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical">
+>
 
     <com.starlight.mobile.android.lib.view.CusHeadView
         android:id="@+id/call_user_layout_ch_head"
         style="@style/common_head_blue_style"
-
         mAttr:chHead_leftImg="@mipmap/ic_back"
         mAttr:chHead_title="@string/remote_interview"
-        mAttr:chHead_title_padding_left="0dip" />
+        mAttr:chHead_title_padding_left="0dip"/>
 
     <include
         android:id="@+id/call_user_layout_i_loading"
         layout="@layout/i_common_loading_layout"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        mAttr:layout_constraintTop_toBottomOf="@+id/call_user_layout_ch_head"
         mAttr:layout_constraintLeft_toLeftOf="@+id/call_user_layout_tv_meeting_notice"
-        mAttr:layout_constraintRight_toRightOf="parent" />
+        mAttr:layout_constraintRight_toRightOf="parent"
+        mAttr:layout_constraintTop_toBottomOf="@+id/call_user_layout_ch_head"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/margin"
-        mAttr:layout_constraintTop_toBottomOf="@+id/call_user_layout_ch_head"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        mAttr:layout_constraintBottom_toBottomOf="parent"
+        mAttr:layout_constraintEnd_toStartOf="@+id/call_user_layout_tv_meeting_notice"
+        mAttr:layout_constraintHorizontal_chainStyle="spread_inside"
         mAttr:layout_constraintHorizontal_weight="2"
-        mAttr:layout_constraintHorizontal_chainStyle="spread"
-        mAttr:layout_constraintRight_toLeftOf="@+id/call_user_layout_tv_meeting_notice"
-        mAttr:layout_constraintLeft_toLeftOf="parent">
+        mAttr:layout_constraintLeft_toLeftOf="parent"
+        mAttr:layout_constraintTop_toBottomOf="@+id/call_user_layout_ch_head">
 
-        <com.gkzxhn.prison.customview.CardWImageView
-            android:id="@+id/call_user_layout_iv_card_01"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/id_card_shape"
-            android:scaleType="fitXY"
-            android:src="@color/common_line_color" />
+        <ImageView
+            android:id="@+id/call_user_layout_iv_left"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/shape_call_user_pint_gary"
+            android:onClick="onClickListener"
+            android:padding="10dp"
+            android:paddingBottom="14dp"
+            android:paddingEnd="21dp"
+            android:paddingStart="21dp"
+            android:paddingTop="14dp"
+            android:src="@mipmap/ic_arrow_left_white"
+        />
 
-        <com.gkzxhn.prison.customview.CardWImageView
-            android:id="@+id/call_user_layout_iv_card_02"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:background="@drawable/id_card_shape"
-            android:scaleType="fitXY"
-            android:src="@color/common_line_color" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/call_user_layout_vp"
+            android:layout_width="534dp"
+            android:layout_height="700dp"
+        >
+
+        </android.support.v4.view.ViewPager>
+
+        <ImageView
+            android:id="@+id/call_user_layout_iv_right"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/shape_call_user_pint_blue"
+            android:onClick="onClickListener"
+            android:paddingBottom="14dp"
+            android:paddingEnd="21dp"
+            android:paddingStart="21dp"
+            android:paddingTop="14dp"
+            android:src="@mipmap/ic_arrow_right_white"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_dots"
+        android:layout_width="122dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:src="@mipmap/ic_arrow_right_white"
+        mAttr:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        mAttr:layout_constraintStart_toStartOf="@+id/linearLayout"
+        mAttr:layout_constraintTop_toBottomOf="@+id/linearLayout"
+    >
     </LinearLayout>
 
     <TextView
         android:id="@+id/call_user_layout_tv_meeting_notice"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:lineSpacingExtra="20dp"
-        mAttr:layout_constraintHorizontal_weight="3"
-        android:padding="10dp"
-        android:layout_marginLeft="80dip"
-        android:text="@string/meeting_notice"
-        android:textSize="30sp"
-        android:textColor="@color/common_light_text_color"
-        android:layout_marginTop="80dip"
         android:layout_marginRight="@dimen/margin"
+        android:layout_marginTop="80dip"
+        android:lineSpacingExtra="20dp"
+        android:padding="10dp"
+        android:text="@string/meeting_notice"
+        android:textColor="@color/common_light_text_color"
+        android:textSize="30sp"
         mAttr:layout_constraintEnd_toEndOf="parent"
+        mAttr:layout_constraintHorizontal_weight="3"
         mAttr:layout_constraintStart_toEndOf="@+id/linearLayout"
-        mAttr:layout_constraintTop_toBottomOf="@+id/call_user_layout_i_loading" />
+        mAttr:layout_constraintTop_toBottomOf="@+id/call_user_layout_i_loading"/>
 
     <TextView
         android:id="@+id/call_user_layout_tv_next_call_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next_call_hint"
-        android:visibility="gone"
-        android:textSize="20sp"
-
         android:layout_marginRight="20dip"
+        android:text="@string/next_call_hint"
         android:textColor="@color/common_blue"
+        android:textSize="20sp"
+        android:visibility="gone"
+        mAttr:layout_constraintBottom_toBottomOf="@+id/call_user_layout_iv_call"
         mAttr:layout_constraintRight_toLeftOf="@+id/call_user_layout_iv_call"
         mAttr:layout_constraintTop_toTopOf="@+id/call_user_layout_iv_call"
-        mAttr:layout_constraintBottom_toBottomOf="@+id/call_user_layout_iv_call"
-        />
+    />
     <ImageView
         android:id="@+id/call_user_layout_iv_call"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClickListener"
-        android:enabled="false"
-        android:src="@drawable/call_btn_selector"
         android:layout_marginBottom="@dimen/margin"
         android:layout_marginRight="80dip"
+        android:enabled="false"
+        android:onClick="onClickListener"
+        android:src="@drawable/call_btn_selector"
         android:textColor="@android:color/white"
         mAttr:layout_constraintBottom_toBottomOf="parent"
-        mAttr:layout_constraintRight_toRightOf="parent" />
+        mAttr:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>
 

@@ -47,7 +47,7 @@ class CallFreeAdapter(private val mContext: Context) : RecyclerView.Adapter<View
      */
     fun updateItems(mDatas: List<FreeFamilyEntity>?) {
         this.mDatas.clear()
-        if (mDatas != null && mDatas.size > 0) {
+        if (mDatas != null && mDatas.isNotEmpty()) {
             this.mDatas.addAll(mDatas)
         }
         notifyDataSetChanged()

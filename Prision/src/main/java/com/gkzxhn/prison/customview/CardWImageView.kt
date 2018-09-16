@@ -9,7 +9,7 @@ import android.widget.ImageView
 /**
  * Created by Raleigh.Luo on 18/5/22.
  */
-class CardWImageView: ImageView {
+class CardWImageView : ImageView {
     constructor(context: Context) : super(context) {}
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
@@ -22,7 +22,7 @@ class CardWImageView: ImageView {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val height= measuredWidth.toFloat()/1.6
+        val height = measuredWidth.toFloat() / 1.6
         setMeasuredDimension(measuredWidth, height.toInt())
     }
 }

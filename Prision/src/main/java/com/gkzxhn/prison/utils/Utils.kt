@@ -13,6 +13,7 @@ import android.text.TextUtils
 import android.view.WindowManager
 
 import com.gkzxhn.prison.R
+import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
@@ -218,5 +219,24 @@ object Utils {
 
     fun hasSDFree(): Boolean {
         return getSdFreeSize() > 100//大于100M
+    }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    fun dip2px(context: Context, dpValue: Float): Int {
+        val scale = context.resources.displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
+    }
+
+    /**
+     * 获取图片请求完整地址
+     */
+    fun getImageUrl(url: String): String {
+        return if (url.contains("http")) {
+            url
+        } else {
+            Constants.DOMAIN_NAME + url
+        }
     }
 }

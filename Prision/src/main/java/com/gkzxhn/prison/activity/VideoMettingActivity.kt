@@ -8,15 +8,18 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.support.v4.view.ViewPager
 import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import com.gkzxhn.prison.R
+import com.gkzxhn.prison.adapter.VideoMettingViewPagerAdapter
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.customview.CancelVideoDialog
 import com.gkzxhn.prison.customview.CustomDialog
+import com.gkzxhn.prison.entity.MeetingMemberEntity
 import com.gkzxhn.prison.presenter.CallZijingPresenter
 import com.gkzxhn.prison.view.ICallZijingView
 import com.netease.nimlib.sdk.NIMClient
@@ -24,23 +27,18 @@ import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.nineoldandroids.animation.ObjectAnimator
-import com.nostra13.universalimageloader.core.ImageLoader
 import com.starlight.mobile.android.lib.util.JSONUtil
+import kotlinx.android.synthetic.main.video_metting_layout.*
 import org.json.JSONException
 import org.json.JSONObject
-import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_hang_up as mExit_img
-import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_root as mContent
-import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_avatar as mIv_avatar
-import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_id_card_font as mIv_id_card_01
-import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_id_card_back as mIv_id_card_02
-import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_ll_check_id as mLl_check_id
 import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_cb_micro as cbMicro
 import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_cb_speaker as cbSpeaker
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_iv_hang_up as mExit_img
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_ll_check_id as mLl_check_id
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_root as mContent
 import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_tv_call_zijing as mText
 import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_tv_header_count_down as tvHeaderCountDown
-
-
-
+import kotlinx.android.synthetic.main.video_metting_layout.video_metting_layout_vp as vp_metting
 
 
 /**视频会见界面
@@ -59,14 +57,14 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     //审核界面是否已缩放
     private var isScaled = false
     //提示通话时间已到 对话框
-    private lateinit var mHintDialog:CustomDialog
+    private lateinit var mHintDialog: CustomDialog
     //会见id
     private lateinit var id: String
     //倒计时
-    private lateinit var mTimer:CountDownTimer
-    private var FIMALY_IS_JOIN=false;//家属是否已经加入会议室
-    private var ESTABLISHED_CALL=false//监狱端已经建立连接
-    private var init=true
+    private lateinit var mTimer: CountDownTimer
+    private var FIMALY_IS_JOIN = false//家属是否已经加入会议室
+    private var ESTABLISHED_CALL = false//监狱端已经建立连接
+    private var init = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.video_metting_layout)
@@ -81,7 +79,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         //打开麦克风
         mPresenter.switchMuteStatus()
         //获取传递过来时的数据
-        id=intent.getStringExtra(Constants.EXTRA)?:""
+        id = intent.getStringExtra(Constants.EXTRA) ?: ""
         //初始化挂断对话框
         initHangUpDialog()
         setIdCheckData()
@@ -91,10 +89,10 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     /**
      * 初始化倒计时时间
      */
-    private fun initCountDownTimer(){
+    private fun initCountDownTimer() {
         val time = mPresenter.getSharedPreferences().getLong(Constants.TIME_LIMIT, 20)
         //倒计时time分钟
-        var DOWN_TIME=time*60*1000//倒计时
+        var DOWN_TIME = time * 60 * 1000//倒计时
         /**
          * 延迟time秒执行 倒计时
          */
@@ -109,14 +107,14 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 //分钟
                 val min = second / 60
                 val seconds = second - min * 60
-                val time= min.toString() + getString(R.string.minute) + seconds.toString() +  getString(R.string.second)
-                tvHeaderCountDown.text = getString(R.string.the_leave_time)+time
+                val time = min.toString() + getString(R.string.minute) + seconds.toString() + getString(R.string.second)
+                tvHeaderCountDown.text = getString(R.string.the_leave_time) + time
             }
 
             override fun onFinish() {
-                tvHeaderCountDown.text=getString(R.string.the_leave_time)+getString(R.string.metting_has_time_out)
+                tvHeaderCountDown.text = getString(R.string.the_leave_time) + getString(R.string.metting_has_time_out)
                 //倒计时完成
-                if(!mHintDialog.isShowing)mHintDialog.show()
+                if (!mHintDialog.isShowing) mHintDialog.show()
             }
         }
     }
@@ -124,23 +122,23 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     /**
      * 初始化挂断对话框
      */
-    private fun initHangUpDialog(){
+    private fun initHangUpDialog() {
         //取消会见 提示对话框
         mCloseVideoDialog = CancelVideoDialog(this, true)
-        mCloseVideoDialog.onClickListener=View.OnClickListener {
+        mCloseVideoDialog.onClickListener = View.OnClickListener {
             //发送挂断消息给对方
             sendHangupMessage()
             //挂断
             mPresenter.hangUp("")
         }
         //提示通话时间已到
-        mHintDialog= CustomDialog(this)
-        mHintDialog.title=getString(R.string.hint)
-        mHintDialog.content=getString(R.string.call_time_has_arrived)
-        mHintDialog.cancelText=getString(R.string.cancel)
-        mHintDialog.confirmText=getString(R.string.ok)
-        mHintDialog.onClickListener= View.OnClickListener { v->
-            if(v.id==R.id.custom_dialog_layout_tv_confirm) {
+        mHintDialog = CustomDialog(this)
+        mHintDialog.title = getString(R.string.hint)
+        mHintDialog.content = getString(R.string.call_time_has_arrived)
+        mHintDialog.cancelText = getString(R.string.cancel)
+        mHintDialog.confirmText = getString(R.string.ok)
+        mHintDialog.onClickListener = View.OnClickListener { v ->
+            if (v.id == R.id.custom_dialog_layout_tv_confirm) {
                 //发送挂断消息给对方
                 sendHangupMessage()
                 //挂断
@@ -154,9 +152,9 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     /**
      * 超时挂断 发送云信，意义未知
      */
-    private fun timeOutHangUp(){
-        val array=resources.getStringArray( R.array.cancel_video_reason)
-        val mContent=if(FIMALY_IS_JOIN)array[0] else array[4]
+    private fun timeOutHangUp() {
+        val array = resources.getStringArray(R.array.cancel_video_reason)
+        val mContent = if (FIMALY_IS_JOIN) array[0] else array[4]
         val sharedPreferences = mPresenter.getSharedPreferences()
         val otherAccount = sharedPreferences.getString(Constants.EXTRA, "")//对方云信帐号
         val meetingId = sharedPreferences.getString(Constants.EXTRAS, "")//记录ID
@@ -181,10 +179,11 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             // 发送自定义通知
             NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
         }
-        if(!meetingId.isEmpty()) {//meetingid不能为空
+        if (!meetingId.isEmpty()) {//meetingid不能为空
             mPresenter.requestCancel(meetingId, mContent)
         }
     }
+
     override fun onDestroy() {
         mPresenter.onDestory()
         //关闭窗口，避免窗口溢出
@@ -226,6 +225,14 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 showHangup()
             R.id.video_metting_layout_ll_check_id ->//身份证缩放
                 startScaleAnim(mLl_check_id)
+            R.id.video_metting_layout_iv_left -> {
+                vp_metting.currentItem = vp_metting.currentItem - 1
+                changeViewPagerLeftAndRight()
+            }
+            R.id.video_metting_layout_iv_right -> {
+                vp_metting.currentItem = vp_metting.currentItem + 1
+                changeViewPagerLeftAndRight()
+            }
         }
     }
 
@@ -235,8 +242,8 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      * @param quiet
      */
     override fun setSpeakerUi(mIsOpenYSQ: Boolean) {
-        isOpenYSQ =mIsOpenYSQ
-        cbSpeaker.isChecked=isOpenYSQ
+        isOpenYSQ = mIsOpenYSQ
+        cbSpeaker.isChecked = isOpenYSQ
     }
 
 
@@ -260,27 +267,47 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      * 设置审核身份布局
      */
     private fun setIdCheckData() {
-        //获取图片信息
-        val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
-        val avatarUri =getImageUrl(sharedPreferences.getString(Constants.OTHER_CARD + 3, ""))
-        val idCardUri1 = getImageUrl(sharedPreferences.getString(Constants.OTHER_CARD + 1, ""))
-        val idCardUri2 =getImageUrl(sharedPreferences.getString(Constants.OTHER_CARD + 2, ""))
-        //加载图片信息
-        ImageLoader.getInstance().displayImage(avatarUri, mIv_avatar)
-        ImageLoader.getInstance().displayImage(idCardUri1, mIv_id_card_01)
-        ImageLoader.getInstance().displayImage(idCardUri2, mIv_id_card_02)
+        //获取信息
+        val meetingMemberEntitys = intent.getSerializableExtra("data") as ArrayList<MeetingMemberEntity>
+
+        vp_metting.adapter = VideoMettingViewPagerAdapter(meetingMemberEntitys)
+        vp_metting.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                changeViewPagerLeftAndRight()
+            }
+
+        })
+
     }
 
     /**
-     * 获取图片请求完整地址
+     * Explanation: 根据当前的页面动态改变左右方向按扭的底色
+     * @author LSX
+     *    -----2018/9/14
      */
-    private fun getImageUrl(url:String):String{
-        if(url.contains("http")){
-            return url
-        }else{
-            return Constants.DOMAIN_NAME +url
+    private fun changeViewPagerLeftAndRight() {
+        when {
+            vp_metting.currentItem == 0 -> {
+                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_gary)
+                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
+            }
+            vp_metting.currentItem == vp_metting.childCount -1 -> {
+                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
+                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_gary)
+            }
+            else -> {
+                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
+                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
+            }
         }
     }
+
     /**
      * 开始属性动画
      *
@@ -298,7 +325,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         } else {
             //缩小动画
             anim = ObjectAnimator.ofFloat(mLl_check_id, "tosmall", 1f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f).setDuration(300)
-            mLl_check_id.pivotX =  mLl_check_id.measuredWidth.toFloat()
+            mLl_check_id.pivotX = mLl_check_id.measuredWidth.toFloat()
             mLl_check_id.pivotY = 0f
             isScaled = !isScaled
             anim.start()
@@ -336,9 +363,9 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      * 显示关闭会见对话框
      */
     private fun showHangup() {
-        if(FIMALY_IS_JOIN){//家属已加入会议 则提示挂断原因
+        if (FIMALY_IS_JOIN) {//家属已加入会议 则提示挂断原因
             if (!mCloseVideoDialog.isShowing) mCloseVideoDialog.show()
-        }else{//直接挂断
+        } else {//直接挂断
             //发送挂断消息给对方
             sendHangupMessage()
             //挂断
@@ -385,10 +412,10 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     /**
      * 挂断成功，返回到上一个页面，异常挂断原因返回给上一个页面
      */
-    override fun hangUpSuccess(hint :String) {
-        val intent=Intent()
-        intent.putExtra(Constants.EXTRA,hint)
-        setResult(Activity.RESULT_CANCELED,intent)
+    override fun hangUpSuccess(hint: String) {
+        val intent = Intent()
+        intent.putExtra(Constants.EXTRA, hint)
+        setResult(Activity.RESULT_CANCELED, intent)
         finish()
     }
 
@@ -397,44 +424,44 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      */
     private val mBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            when(intent.action){
-                Constants.FAMILY_FAILED_JOIN_METTING ->{//家属加入会议失败
+            when (intent.action) {
+                Constants.FAMILY_FAILED_JOIN_METTING -> {//家属加入会议失败
                     //家属已加入 －家属挂断   ／ 家属未加入 人脸失败失败
-                    mPresenter.hangUp(getString(if(FIMALY_IS_JOIN)R.string.video_metting_hangup else R.string.video_metting_failed))
+                    mPresenter.hangUp(getString(if (FIMALY_IS_JOIN) R.string.video_metting_hangup else R.string.video_metting_failed))
                 }
-                Constants.FAMILY_JOIN_METTING ->{//家属加入会议成功
-                    if(mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD,true)){
+                Constants.FAMILY_JOIN_METTING -> {//家属加入会议成功
+                    if (mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD, true)) {
                         //开始录屏
                         mPresenter.startUSBRecord()
                     }
-                    FIMALY_IS_JOIN=true;
+                    FIMALY_IS_JOIN = true
 
                     mTimer.start()
 
-                    if(getIntent().action==Constants.CALL_FREE_ACTION) {
-                        val activityIntent=this@VideoMettingActivity.intent
+                    if (getIntent().action == Constants.CALL_FREE_ACTION) {
+                        val activityIntent = this@VideoMettingActivity.intent
                         //免费呼叫次数更新
                         mPresenter.updateFreeTime()
                         //添加免费会见信息  参数是家属id
-                        if(activityIntent.hasExtra(Constants.EXTRA))
+                        if (activityIntent.hasExtra(Constants.EXTRA))
                             mPresenter.addFreeMeetting(activityIntent.getStringExtra(Constants.EXTRA))
                     }
                 }
-                Constants.PRISION_JOIN_METTING ->{//监狱端进入会见房间
+                Constants.PRISION_JOIN_METTING -> {//监狱端进入会见房间
                     val jsonStr = intent.getStringExtra(Constants.EXTRA)
 
                     if (TextUtils.isEmpty(jsonStr)) {
                         return
                     }
-                    var  e = JSONUtil.getJSONObjectStringValue(JSONObject(jsonStr), "e")
+                    var e = JSONUtil.getJSONObjectStringValue(JSONObject(jsonStr), "e")
                     if (e.isEmpty()) {
                         return
                     }
                     when (e) {
                         "setup_call_calling" -> mText.text = getString(R.string.connecting)
-                        "ring_call" -> mText.text =  getString(R.string.wait_answer)
+                        "ring_call" -> mText.text = getString(R.string.wait_answer)
                         "established_call" -> {
-                            if(!ESTABLISHED_CALL) {
+                            if (!ESTABLISHED_CALL) {
                                 ESTABLISHED_CALL = true
                                 //呼叫建立
                                 mText.visibility = View.INVISIBLE
@@ -447,7 +474,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                                 val jsonObject = JSONUtil.getJSONObject(jsonStr)
                                 var objv = jsonObject.getJSONObject("v")
                                 val reason = objv!!.getString("reason")
-                                if ("Ended by local user" != reason&&!ESTABLISHED_CALL) {
+                                if ("Ended by local user" != reason && !ESTABLISHED_CALL) {
                                     //连接失败 重新连接 切换协议
                                     //                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
                                     val data = Intent()
@@ -466,7 +493,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                         "error" -> {//呼叫错误
                             hangUpSuccess(getString(R.string.call_error))
                         }
-                        "MuteOn" ->{  //关闭了 麦克风
+                        "MuteOn" -> {  //关闭了 麦克风
                             micro(false)
                         }
                         "MuteOff" -> {//打开了麦克风
@@ -481,15 +508,15 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     /**
      * 打开或关闭麦克风
      */
-    private  fun micro(isOpenMicro: Boolean){
-        if(isOpenMicro){
-            cbMicro.isChecked=true
-        }else{
-            if(init){//第一次打开
-                init=false
+    private fun micro(isOpenMicro: Boolean) {
+        if (isOpenMicro) {
+            cbMicro.isChecked = true
+        } else {
+            if (init) {//第一次打开
+                init = false
                 mPresenter.switchMuteStatus()
             }
-            cbMicro.isChecked=false
+            cbMicro.isChecked = false
             setIdleNow(false)
         }
         //释放延迟加载
@@ -505,7 +532,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     }
 
     override fun finish() {
-        if(mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD,true)){
+        if (mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD, true)) {
             //停止录屏
             mPresenter.stopUSBRecord()
         }

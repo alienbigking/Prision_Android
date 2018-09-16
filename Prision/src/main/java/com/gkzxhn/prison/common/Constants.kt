@@ -47,8 +47,9 @@ object Constants {
     val REQUEST_MEETING_LIST_URL = DOMAIN_NAME + "/api/meetings/getMeetingsForPrison"//会见列表
     val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME + "/api/meetings/update"// 取消会见
     val REQUEST_MEETING_DETAIL_URL = DOMAIN_NAME + "/api/families/detail"// 会见详情
+    val REQUEST_MEETING_MEMBERS_URL = DOMAIN_NAME + "/api/jails/meetingMembers"// 查询会见家属
     val REQUEST_VERSION_URL = DOMAIN_NAME + "/api/versions/page"//版本更新
-    val REQUEST_CRASH_LOG_URL = DOMAIN_NAME + "/api/app_loggers/save"//奔溃日志
+    val REQUEST_CRASH_LOG_URL = DOMAIN_NAME + "/app_loggers/save"//奔溃日志
     val REQUEST_MEETING_ROOM = DOMAIN_NAME + "/api/terminals/detail"//会议室信息
 
     val REQUEST_FAMILY_BY_KEY = DOMAIN_NAME + "/api/meetings/getMeetingsFree"//免费会见－根据用户名和手机号码查询家属

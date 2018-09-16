@@ -1,16 +1,12 @@
 package com.gkzxhn.prison.presenter
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Handler
-import android.util.Log
 import android.widget.Toast
-
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
-import com.gkzxhn.prison.activity.VideoMettingActivity
 import com.gkzxhn.prison.async.AsynHelper
+import com.gkzxhn.prison.async.VolleyUtils
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.entity.MeetingEntity
@@ -18,7 +14,6 @@ import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.model.IMainModel
 import com.gkzxhn.prison.model.iml.MainModel
 import com.gkzxhn.prison.view.IMainView
-import com.gkzxhn.prison.async.VolleyUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.netease.nimlib.sdk.NIMClient
@@ -28,8 +23,6 @@ import com.netease.nimlib.sdk.auth.LoginInfo
 import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.util.HttpStatus
 import com.starlight.mobile.android.lib.util.JSONUtil
-
-import org.json.JSONException
 import org.json.JSONObject
 
 /**
@@ -50,13 +43,14 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == 0) {
-                    var isConnected=false
+                    var isConnected = false
                     try {
                         val v = JSONUtil.getJSONObject(response, "v")
                         if (v.getBoolean("connected")) {
                             isConnected = true
                         }
-                    }catch (e:Exception){}
+                    } catch (e: Exception) {
+                    }
                     mView?.startZijingService(isConnected)
                     checkCallStatus()
                     //单元测试，释放延迟加载
@@ -64,7 +58,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                 } else {
                     mHandler.postDelayed(Runnable {
                         requestZijing()
-                    },500)
+                    }, 500)
 
                 }
             }
@@ -72,7 +66,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             override fun onFailed(error: VolleyError) {
                 mHandler.postDelayed(Runnable {
                     requestZijing()
-                },500)
+                }, 500)
             }
         })
     }
@@ -80,11 +74,11 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
     /**
      * 检查是否正在呼叫 是则挂断
      */
-    fun checkCallStatus(){
-        mModel.getCallInfor(object :VolleyUtils.OnFinishedListener<JSONObject>{
+    fun checkCallStatus() {
+        mModel.getCallInfor(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = response.getInt("code")
-                if (code == 0 ) {//正在拨打电话
+                if (code == 0) {//正在拨打电话
                     //挂断
                     mModel.hangUp(null)
                 }
@@ -106,7 +100,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
                     val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(
-                            JSONUtil.getJSONObject(response,"data"), "access_times"))
+                            JSONUtil.getJSONObject(response, "data"), "access_times"))
                     //保存到本地
                     getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME, time).apply()
                     mView?.updateFreeTime(time)
@@ -121,24 +115,24 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
     /**
      * 请求会见列表
      */
-    fun request(isRefresh: Boolean,date: String) {
+    fun request(isRefresh: Boolean, date: String) {
         if (isRefresh) {
             currentPage = FIRST_PAGE
             mView?.startRefreshAnim()
         }
         //单元测试，延迟加载
         mView?.setIdleNow(true)
-        mModel.request(date,currentPage,PAGE_SIZE, object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.request(date, currentPage, PAGE_SIZE, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val view = if (mWeakView == null) null else mWeakView!!.get()
                 view?.stopRefreshAnim()
                 try {
                     val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                     if (code == HttpStatus.SC_OK) {
-                        val resultJson = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"), "meetings")
+                        val resultJson = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response, "data"), "meetings")
                         startAsynTask(Constants.MAIN_TAB, object : AsynHelper.TaskFinishedListener {
                             override fun back(`object`: Any?) {
-                                val mData =`object` as List<MeetingEntity>
+                                val mData = `object` as List<MeetingEntity>
                                 if (mData != null && mData.size > 0) currentPage = currentPage + 1
                                 mView?.updateItems(mData)
                                 mView?.stopRefreshAnim()
@@ -198,12 +192,12 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    val versionsJson=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"),"versions")
-                    val versions= Gson().fromJson<List<VersionEntity>>(versionsJson,
+                    val versionsJson = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response, "data"), "versions")
+                    val versions = Gson().fromJson<List<VersionEntity>>(versionsJson,
                             object : TypeToken<List<VersionEntity>>() {
                             }.type)
-                    for(version in versions){
-                        if(version.id==2){
+                    for (version in versions) {
+                        if (version.id == 2) {
                             mView?.updateVersion(version)
                             break
                         }
@@ -220,15 +214,15 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
      */
     fun checkStatusCode(): StatusCode {
         val code = NIMClient.getStatus()
-        when(code){
-            StatusCode.KICKOUT-> {// 被其他端挤掉
+        when (code) {
+            StatusCode.KICKOUT -> {// 被其他端挤掉
                 Toast.makeText(GKApplication.instance, R.string.kickout, Toast.LENGTH_SHORT).show()
                 GKApplication.instance.loginOff()
             }
-            StatusCode.CONNECTING ->{// 正在连接
+            StatusCode.CONNECTING -> {// 正在连接
                 mView?.showToast(R.string.yunxin_offline)
             }
-            StatusCode.LOGINING-> {// 正在登录
+            StatusCode.LOGINING -> {// 正在登录
                 mView?.showToast(R.string.yunxin_offline)
             }
             StatusCode.NET_BROKEN -> { // 网络连接已断开
@@ -242,7 +236,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                             .setCallback(null)
                 }
             }
-            StatusCode.UNLOGIN-> {// 未登录
+            StatusCode.UNLOGIN -> {// 未登录
                 //系统自动登录云信
                 val username = getSharedPreferences().getString(Constants.USER_ACCOUNT, "")
                 val password = getSharedPreferences().getString(Constants.USER_PASSWORD, "")

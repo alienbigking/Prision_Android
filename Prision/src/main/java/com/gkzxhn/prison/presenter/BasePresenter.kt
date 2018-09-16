@@ -1,22 +1,18 @@
 package com.gkzxhn.prison.presenter
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Build
 import android.widget.Toast
-
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.IBaseModel
-import com.gkzxhn.prison.utils.Utils
 import com.gkzxhn.prison.view.IBaseView
 import com.starlight.mobile.android.lib.util.HttpStatus
-
 import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
 
@@ -41,22 +37,24 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
             mWeakView = WeakReference(it)
         }
     }
+
     fun getSharedPreferences(): SharedPreferences {
         return mModel.sharedPreferences
     }
-    fun getMeettingAccount():String?{
-        val roomNum=getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER,null)
-        if(roomNum==null||roomNum.isEmpty()){
+
+    fun getMeettingAccount(): String? {
+        val roomNum = getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER, null)
+        if (roomNum == null || roomNum.isEmpty()) {
             return null
-        }else{
-            return String.format("%s##%s##%s",getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER,"")
-                    ,getSharedPreferences().getString(Constants.TERMINAL_HOST_PASSWORD,""),
-                    getSharedPreferences().getString(Constants.TERMINAL_GUEST_PASSWORD,""))
+        } else {
+            return String.format("%s##%s##%s", getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER, "")
+                    , getSharedPreferences().getString(Constants.TERMINAL_HOST_PASSWORD, ""),
+                    getSharedPreferences().getString(Constants.TERMINAL_GUEST_PASSWORD, ""))
         }
     }
 
     protected fun unauthorized() {//getRooms has expired
-        if (mContext != null && getSharedPreferences().getBoolean(Constants.USER_IS_UNAUTHORIZED, false)==false) {
+        if (mContext != null && getSharedPreferences().getBoolean(Constants.USER_IS_UNAUTHORIZED, false) == false) {
             Toast.makeText(GKApplication.instance.applicationContext, R.string.user_not_authorized, Toast.LENGTH_SHORT).show()
             GKApplication.instance.loginOff()
             //清除别名
@@ -75,7 +73,7 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
             }
             asynHelper = null
             asynHelper = AsynHelper(TAB)
-            if(taskFinishedListener!=null) {
+            if (taskFinishedListener != null) {
                 asynHelper?.setOnTaskFinishedListener(taskFinishedListener)
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -91,16 +89,16 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
 
     open fun onDestory() {
         asynHelper?.let {
-            if (it.status == AsyncTask.Status.RUNNING)it.cancel(true)
+            if (it.status == AsyncTask.Status.RUNNING) it.cancel(true)
         }
         asynHelper = null
         mModel.stopAllRequest()
     }
 
     var mView: V? = null
-        get() =  mWeakView?.get()
+        get() = mWeakView?.get()
 
-    var mContext: Context?=null
+    var mContext: Context? = null
         get() = mWeakContext?.get()
 
     /**
@@ -110,17 +108,17 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
         var code = -1
         try {
             code = error.networkResponse.statusCode
-            when(code){
-                HttpStatus.SC_REQUEST_TIMEOUT ->{//请求超时
+            when (code) {
+                HttpStatus.SC_REQUEST_TIMEOUT -> {//请求超时
                     stopAnim()
-                    mView?.showToast(R.string.request_timeout_with_try  )
+                    mView?.showToast(R.string.request_timeout_with_try)
                 }
-                HttpStatus.SC_BAD_REQUEST,HttpStatus.SC_BAD_GATEWAY,HttpStatus.SC_SERVICE_UNAVAILABLE,
+                HttpStatus.SC_BAD_REQUEST, HttpStatus.SC_BAD_GATEWAY, HttpStatus.SC_SERVICE_UNAVAILABLE,
                 HttpStatus.SC_INTERNAL_SERVER_ERROR -> {//服务器错误
                     stopAnim()
                     mView?.showToast(R.string.service_not_available)
                 }
-                HttpStatus.SC_UNAUTHORIZED,HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED ->{
+                HttpStatus.SC_UNAUTHORIZED, HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED -> {
                     //401未授权
                     stopAnim()
                     unauthorized()
@@ -132,7 +130,7 @@ open class BasePresenter<M : IBaseModel, V : IBaseView>(context: Context?, prote
             }
         } catch (e: Exception) {
             stopAnim()
-            mView?.showToast(  R.string.request_timeout_with_try  )
+            mView?.showToast(R.string.request_timeout_with_try)
         }
     }
 

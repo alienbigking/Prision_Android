@@ -1,7 +1,5 @@
 package com.gkzxhn.prison.activity
 
-
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,7 +9,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
-
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.CallFreeAdapter
 import com.gkzxhn.prison.common.Constants
@@ -22,40 +19,29 @@ import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.util.CommonHelper
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
 import com.starlight.mobile.android.lib.view.RecycleViewDivider
+import kotlinx.android.synthetic.main.call_free_layout.*
 import kotlinx.android.synthetic.main.common_list_layout.*
+import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_et_phone as etPhone
+import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_iv_clear as ivSearchClear
+import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_tv_leave_time as tvFreeTime
+import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_tv_search as tvSearch
+import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list as mRecylerView
+import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_swipeRefresh as mSwipeRefresh
+import kotlinx.android.synthetic.main.i_common_loading_layout.common_loading_layout_tv_load as tvLoading
+import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_hint as tvNoData
+import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_image as ivNodata
 
-import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_tv_leave_time
-as tvFreeTime
-
-import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_et_phone
-as etPhone
-import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_iv_clear
-as ivSearchClear
-import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_tv_search
-as tvSearch
-
-
-import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list
-as mRecylerView
-import kotlinx.android.synthetic.main.i_common_loading_layout.common_loading_layout_tv_load
-as tvLoading
-import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_image
-as ivNodata
-import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_swipeRefresh
-as mSwipeRefresh
-import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_hint
-as tvNoData
-
-/**免费会见
+/**
+ * 免费会见
  * Created by Raleigh.Luo on 18/3/29.
  */
 
 class CallFreeActivity : SuperActivity(), ICallFreeView {
     //请求
-    private lateinit  var   mPresenter: CallFreePresenter
+    private lateinit var mPresenter: CallFreePresenter
     //免费呼叫次数
     private var mCallFreeTime = 0
-    private lateinit var adapter:CallFreeAdapter
+    private lateinit var adapter: CallFreeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +49,7 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
         common_list_layout_fl_root.setBackgroundResource(android.R.color.transparent)
         stopRefreshAnim()
         mPresenter = CallFreePresenter(this, this)
-        adapter= CallFreeAdapter(this)
+        adapter = CallFreeAdapter(this)
         adapter.setOnItemClickListener(onItemClickListener)
         //设置加载模式，为只顶部上啦刷新
         mSwipeRefresh.setMode(CusSwipeRefreshLayout.Mode.DISABLED)
@@ -95,25 +81,35 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
                 false
             }
         }
+
+        call_free_layout_tv_leave_time_title.setOnClickListener {
+            val intent = Intent(this@CallFreeActivity, CallUserActivity::class.java)
+            intent.action = Constants.CALL_FREE_ACTION
+            intent.putExtra(Constants.EXTRA, "719")
+            intent.putExtra(Constants.EXTRAS, "719")
+            intent.putExtra(Constants.EXTRA_TAB, "谭燕权")
+            startActivity(intent)
+        }
     }
+
     private val onItemClickListener = object : OnItemClickListener {
         override fun onClickListener(convertView: View, position: Int) {
             //有免费次数
             if (mCallFreeTime > 0) {
                 //临时保存到本地
-                mPresenter.getSharedPreferences().edit().putString(Constants.FREE_MEETING_PRISON_ID,adapter.getCurrentItem().prisonerId).apply()
+                mPresenter.getSharedPreferences().edit().putString(Constants.FREE_MEETING_PRISON_ID, adapter.getCurrentItem().prisonerId).apply()
                 val intent = Intent(this@CallFreeActivity, CallUserActivity::class.java)
-                intent.action=Constants.CALL_FREE_ACTION
+                intent.action = Constants.CALL_FREE_ACTION
                 intent.putExtra(Constants.EXTRA, "")
-                intent.putExtra(Constants.EXTRAS,adapter.getCurrentItem().id)
-                intent.putExtra(Constants.EXTRA_TAB,adapter.getCurrentItem().prisonerName)
+                intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().id)
+                intent.putExtra(Constants.EXTRA_TAB, adapter.getCurrentItem().prisonerName)
                 startActivity(intent)
             } else {//没有免费次数
                 showToast(R.string.no_call_free_time)
             }
-
         }
     }
+
     /**
      * 初始化［搜索］按钮
      */
@@ -185,7 +181,7 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
     /**
      * 搜索手机号码成功
      */
-    override fun onSuccess(datas:List<FreeFamilyEntity>?) {
+    override fun onSuccess(datas: List<FreeFamilyEntity>?) {
         adapter.updateItems(datas)
     }
 
