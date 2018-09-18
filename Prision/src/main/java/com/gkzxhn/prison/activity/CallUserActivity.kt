@@ -125,7 +125,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 //            有会见ID 根据会见ID请求获取相关家属身份证信息
             mPresenter.requestByMettingID(id)
         }
-
     }
 
     /**
@@ -255,9 +254,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     override fun onSuccess() {
         btnCall.isEnabled = true
         val editor = mPresenter.getSharedPreferences().edit()
-        editor.putString(Constants.OTHER_CARD + 1, mPresenter.meetingMemberEntity?.get(0)?.familyIdCardFront)
-        editor.putString(Constants.OTHER_CARD + 2, mPresenter.meetingMemberEntity?.get(0)?.familyIdCardBack)
-        editor.putString(Constants.OTHER_CARD + 3, mPresenter.meetingMemberEntity?.get(0)?.familyAvatarUrl)
         editor.putString(Constants.EXTRAS, id)
         editor.apply()
         vpCallUser.adapter = mPresenter.meetingMemberEntity?.let { CallUserViewPagerAdapter(it) }
@@ -292,7 +288,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
             })
 
-//            //跳转到视频界面
+////            //跳转到视频界面
 //            val intent = Intent(this, VideoMettingActivity::class.java)
 //            intent.action = getIntent().action
 ////            intent.putExtra(Constants.ZIJING_PASSWORD, hostPassword)
@@ -305,7 +301,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             call_user_layout_iv_left.visibility = View.INVISIBLE
             call_user_layout_iv_right.visibility = View.INVISIBLE
         }
-
     }
 
     /**

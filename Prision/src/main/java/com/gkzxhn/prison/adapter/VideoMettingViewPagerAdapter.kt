@@ -17,7 +17,6 @@ import java.util.*
  * Created on 2018/9/14.
  */
 
-
 class VideoMettingViewPagerAdapter(private val datas: ArrayList<MeetingMemberEntity>) : PagerAdapter() {
 
     override fun getCount(): Int {
@@ -31,9 +30,9 @@ class VideoMettingViewPagerAdapter(private val datas: ArrayList<MeetingMemberEnt
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val data = datas[position]
         val inflate = View.inflate(container.context, R.layout.item_video_metting, null)
-        val ivItemIcon = inflate.findViewById(R.id.item_call_user_iv_1) as ImageView
-        val ivItemFront = inflate.findViewById(R.id.item_call_user_iv_2) as ImageView
-        val ivItemBack = inflate.findViewById(R.id.item_call_user_iv_3) as ImageView
+        val ivItemIcon = inflate.findViewById(R.id.item_video_metting_iv_1) as ImageView
+        val ivItemFront = inflate.findViewById(R.id.item_video_metting_iv_2) as ImageView
+        val ivItemBack = inflate.findViewById(R.id.item_video_metting_iv_3) as ImageView
         ivItemIcon.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyAvatarUrl), ivItemIcon) }
         ivItemFront.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardFront), ivItemFront) }
         ivItemBack.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardBack), ivItemBack) }

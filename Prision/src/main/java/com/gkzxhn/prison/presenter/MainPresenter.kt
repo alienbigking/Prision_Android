@@ -2,6 +2,7 @@ package com.gkzxhn.prison.presenter
 
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
@@ -122,6 +123,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
         }
         //单元测试，延迟加载
         mView?.setIdleNow(true)
+
         mModel.request(date, currentPage, PAGE_SIZE, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val view = if (mWeakView == null) null else mWeakView!!.get()

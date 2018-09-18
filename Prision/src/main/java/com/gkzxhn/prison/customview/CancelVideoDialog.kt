@@ -1,9 +1,7 @@
 package com.gkzxhn.prison.customview
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.AppCompatSpinner
 import android.view.Gravity
@@ -12,19 +10,16 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.TextView
 import com.android.volley.VolleyError
-
 import com.gkzxhn.prison.R
+import com.gkzxhn.prison.async.VolleyUtils
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.model.iml.MainModel
-import com.gkzxhn.prison.async.VolleyUtils
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.CustomNotification
-
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -32,7 +27,7 @@ import org.json.JSONObject
  * Created by Raleigh.Luo on 17/3/29.
  */
 
-class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) : Dialog(context,R.style.update_dialog_style) {
+class CancelVideoDialog(context: Context, private val isCancelVideo: Boolean) : Dialog(context, R.style.update_dialog_style) {
     private lateinit var mSpinner: AppCompatSpinner
     private lateinit var rateArray: Array<String>
     var content: String = ""
@@ -50,11 +45,11 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
                 if (isCancelVideo) R.layout.cancel_video_dialog else R.layout.cancel_meeting_dialog_layout, null)
         setContentView(contentView)
         mSpinner = contentView.findViewById(R.id.cancel_dialog_layout_spinner) as AppCompatSpinner
-        val view=contentView.findViewById(R.id.cancel_dialog_layout_fl_spinner)
-        view.viewTreeObserver.addOnPreDrawListener(object :ViewTreeObserver.OnPreDrawListener {
+        val view = contentView.findViewById(R.id.cancel_dialog_layout_fl_spinner)
+        view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                if( mSpinner.dropDownVerticalOffset==0)
-                    mSpinner.dropDownVerticalOffset=view.measuredHeight
+                if (mSpinner.dropDownVerticalOffset == 0)
+                    mSpinner.dropDownVerticalOffset = view.measuredHeight
                 return true
             }
         })
@@ -82,9 +77,9 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
             dismiss()
         }
         //设置可聚焦  遥控器可左右选择
-        findViewById(R.id.cancel_dialog_layout_tv_cancel).isFocusable=true
-        tvConfirm= findViewById(R.id.cancel_dialog_layout_tv_set) as TextView
-        tvConfirm.isFocusable=true
+        findViewById(R.id.cancel_dialog_layout_tv_cancel).isFocusable = true
+        tvConfirm = findViewById(R.id.cancel_dialog_layout_tv_set) as TextView
+        tvConfirm.isFocusable = true
         tvConfirm.setOnClickListener { view ->
             dismiss()
             onClickListener?.onClick(view)
@@ -117,8 +112,8 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
             // 发送自定义通知
             NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
         }
-        if(!meetingId.isEmpty()) {//meetingid不能为空
-            mModel.requestCancel(meetingId, content, object :VolleyUtils.OnFinishedListener<String>{
+        if (!meetingId.isEmpty()) {//meetingid不能为空
+            mModel.requestCancel(meetingId, content, object : VolleyUtils.OnFinishedListener<String> {
                 override fun onSuccess(response: String) {
                 }
 
@@ -134,7 +129,7 @@ class CancelVideoDialog( context: Context, private val isCancelVideo: Boolean) :
         val m = dialogWindow.windowManager
 
         val d = m.defaultDisplay
-        params.width = d.width/2
+        params.width = d.width / 2
         //	        params.height=d.getHeight();
         dialogWindow.setGravity(Gravity.CENTER)
         dialogWindow.attributes = params

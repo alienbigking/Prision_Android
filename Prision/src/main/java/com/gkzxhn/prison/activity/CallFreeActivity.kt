@@ -82,14 +82,6 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
             }
         }
 
-        call_free_layout_tv_leave_time_title.setOnClickListener {
-            val intent = Intent(this@CallFreeActivity, CallUserActivity::class.java)
-            intent.action = Constants.CALL_FREE_ACTION
-            intent.putExtra(Constants.EXTRA, "719")
-            intent.putExtra(Constants.EXTRAS, "719")
-            intent.putExtra(Constants.EXTRA_TAB, "谭燕权")
-            startActivity(intent)
-        }
     }
 
     private val onItemClickListener = object : OnItemClickListener {

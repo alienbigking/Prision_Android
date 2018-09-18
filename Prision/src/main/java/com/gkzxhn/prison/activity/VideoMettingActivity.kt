@@ -267,22 +267,29 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      * 设置审核身份布局
      */
     private fun setIdCheckData() {
-        //获取信息
+        //获取上个界面传过来的信息
         val meetingMemberEntitys = intent.getSerializableExtra("data") as ArrayList<MeetingMemberEntity>
 
         vp_metting.adapter = VideoMettingViewPagerAdapter(meetingMemberEntitys)
-        vp_metting.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
+        if (meetingMemberEntitys.size > 1) {
+            vp_metting.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {
+                }
 
-            override fun onPageSelected(position: Int) {
-                changeViewPagerLeftAndRight()
-            }
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                }
 
-        })
+                override fun onPageSelected(position: Int) {
+                    changeViewPagerLeftAndRight()
+                }
+
+            })
+        } else {
+//            隐藏左右划动的按扭
+            video_metting_layout_iv_left.visibility = View.INVISIBLE
+            video_metting_layout_iv_right.visibility = View.INVISIBLE
+        }
 
     }
 
@@ -297,7 +304,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_gary)
                 video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
             }
-            vp_metting.currentItem == vp_metting.childCount -1 -> {
+            vp_metting.currentItem == vp_metting.childCount - 1 -> {
                 video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
                 video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_gary)
             }
@@ -382,7 +389,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         val sharedPreferences = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
         val account = mPresenter.getMeettingAccount()
         val time = sharedPreferences.getLong(Constants.TIME_LIMIT, 20)
-        if (account != null && account.length > 0) {
+        if (account != null && account.isNotEmpty()) {
             //发送云信消息，检测家属端是否已经准备好可以呼叫
             val notification = CustomNotification()
             val accid = sharedPreferences

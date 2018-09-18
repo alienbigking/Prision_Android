@@ -1,5 +1,6 @@
 package com.gkzxhn.prison.model.iml
 
+import android.util.Log
 import com.android.volley.AuthFailureError
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
@@ -56,10 +57,12 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
                 status=Constants.MEETTING_FINISHED
             }
             val params = HashMap<String, String>()
-            params.put("remark", reason)
-            params.put("id", id)
-            params.put("status", status)
+            params["remark"] = reason
+            params["id"] = id
+            params["status"] = status
             volleyUtils.post( Constants.REQUEST_CANCEL_MEETING_URL, params, REQUEST_TAG, onFinishedListener)
+
+            Log.d("xiaowu", "请求取消会见...")
         } catch (authFailureError: AuthFailureError) {
             authFailureError.printStackTrace()
         }

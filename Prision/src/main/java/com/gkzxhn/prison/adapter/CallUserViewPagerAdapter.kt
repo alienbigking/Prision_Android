@@ -1,6 +1,7 @@
 package com.gkzxhn.prison.adapter
 
 import android.support.v4.view.PagerAdapter
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
