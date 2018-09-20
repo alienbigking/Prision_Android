@@ -5,11 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.gkzxhn.prison.R
-import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.entity.MeetingMemberEntity
+import com.gkzxhn.prison.utils.Utils.getImageUrl
 import com.nostra13.universalimageloader.core.ImageLoader
 import java.util.*
-
 
 /**
  * Explanation：
@@ -33,9 +32,9 @@ class VideoMettingViewPagerAdapter(private val datas: ArrayList<MeetingMemberEnt
         val ivItemIcon = inflate.findViewById(R.id.item_video_metting_iv_1) as ImageView
         val ivItemFront = inflate.findViewById(R.id.item_video_metting_iv_2) as ImageView
         val ivItemBack = inflate.findViewById(R.id.item_video_metting_iv_3) as ImageView
-        ivItemIcon.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyAvatarUrl), ivItemIcon) }
-        ivItemFront.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardFront), ivItemFront) }
-        ivItemBack.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardBack), ivItemBack) }
+        ivItemIcon.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyAvatarUrl.toString()), ivItemIcon) }
+        ivItemFront.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardFront.toString()), ivItemFront) }
+        ivItemBack.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardBack.toString()), ivItemBack) }
         container.addView(inflate)
         return inflate
     }
@@ -43,13 +42,5 @@ class VideoMettingViewPagerAdapter(private val datas: ArrayList<MeetingMemberEnt
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         //注意这里要移除object
         container.removeView(`object` as View)
-    }
-
-    private fun getImageUrl(url: String?): String {
-        return when {
-            url == null -> ""
-            url.contains("http") -> url
-            else -> Constants.DOMAIN_NAME + url
-        }
     }
 }

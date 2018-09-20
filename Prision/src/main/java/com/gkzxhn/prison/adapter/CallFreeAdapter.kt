@@ -59,13 +59,13 @@ class CallFreeAdapter(private val mContext: Context) : RecyclerView.Adapter<View
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder.itemView){
-            val entity=mDatas.get(position)
-            tvFamilyName.setText(entity.name)
+            val entity= mDatas[position]
+            tvFamilyName.text = entity.name
 //            tvPhone.setText(entity.phone)
-            tvPrisionName.setText(entity.prisonerName)
-            tvPrisionNumber.setText(entity.prisonerNumber)
-            tvRelationShip.setText(entity.relationship)
-            holder.itemView.setOnClickListener(View.OnClickListener {
+            tvPrisionName.text = entity.prisonerName
+            tvPrisionNumber.text = entity.prisonerNumber
+            tvRelationShip.text = entity.relationship
+            holder.itemView.setOnClickListener({
                 mCurrentIndex=position
                 onItemClickListener?.onClickListener(this,position)
             })

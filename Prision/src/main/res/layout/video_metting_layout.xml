@@ -39,6 +39,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
     <LinearLayout
         android:id="@+id/video_metting_layout_ll_check_id"
         android:layout_width="0dip"
@@ -55,46 +56,14 @@
         app:layout_constraintStart_toEndOf="@+id/video_metting_layout_tv_call_zijing"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!--<com.starlight.mobile.android.lib.view.EqualImageView-->
-        <!--android:id="@+id/video_metting_layout_iv_avatar"-->
-        <!--android:layout_width="100dip"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:visibility="gone"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:scaleType="fitXY"-->
-        <!--android:layout_marginBottom="5dip"-->
-        <!--android:src="@color/common_line_color" />-->
-
-        <!--<com.gkzxhn.prison.customview.CardWImageView-->
-        <!--android:id="@+id/video_metting_layout_iv_id_card_font"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_margin="5dip"-->
-        <!--android:background="@drawable/id_card_shape"-->
-        <!--android:visibility="gone"-->
-        <!--android:scaleType="fitXY"-->
-        <!--android:src="@color/common_line_color" />-->
-
-        <!--<com.gkzxhn.prison.customview.CardWImageView-->
-        <!--android:id="@+id/video_metting_layout_iv_id_card_back"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_margin="5dip"-->
-        <!--android:background="@drawable/id_card_shape"-->
-        <!--android:visibility="gone"-->
-        <!--android:scaleType="fitXY"-->
-        <!--android:src="@color/common_line_color" />-->
-
-
         <ImageView
             android:id="@+id/video_metting_layout_iv_left"
             android:layout_width="58dp"
             android:layout_height="58dp"
             android:layout_marginLeft="36dp"
             android:layout_marginRight="30dp"
-            android:background="@drawable/shape_call_user_pint_gary"
+            android:background="@drawable/shape_call_user_point_gary_select"
             android:onClick="onClickListener"
-            android:padding="10dp"
             android:paddingBottom="14dp"
             android:paddingEnd="21dp"
             android:paddingStart="21dp"
@@ -116,7 +85,7 @@
             android:layout_height="58dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="36dp"
-            android:background="@drawable/shape_call_user_pint_blue"
+            android:background="@drawable/shape_call_user_point_blue_select"
             android:onClick="onClickListener"
             android:paddingBottom="14dp"
             android:paddingEnd="21dp"

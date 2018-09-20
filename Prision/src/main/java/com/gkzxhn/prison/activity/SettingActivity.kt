@@ -9,10 +9,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.widget.RadioGroup
-
 import com.gkzxhn.prison.R
-import com.gkzxhn.prison.async.AsynHelper
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.customview.CustomDialog
@@ -30,8 +27,8 @@ as tvCurrentVersion
  * Created by Raleigh.Luo on 17/4/12.
  */
 
-class SettingActivity : SuperActivity(),ISettingView {
-        //请求presenter
+class SettingActivity : SuperActivity(), ISettingView {
+    //请求presenter
     private lateinit var mPresenter: SettingPresenter
     //app更新对话框
     private lateinit var updateDialog: UpdateDialog
@@ -58,13 +55,13 @@ class SettingActivity : SuperActivity(),ISettingView {
         // 初始化退出对话框
         mExitDialog = CustomDialog(this)
         //设置显示内容
-        mExitDialog.content=getString(R.string.exit_account_hint)
+        mExitDialog.content = getString(R.string.exit_account_hint)
         //设置取消文字
-        mExitDialog.cancelText= getString(R.string.cancel)
+        mExitDialog.cancelText = getString(R.string.cancel)
         //设置确定文字
-        mExitDialog.confirmText= getString(R.string.ok)
+        mExitDialog.confirmText = getString(R.string.ok)
         //设置监听器
-        mExitDialog.onClickListener=View.OnClickListener { view ->
+        mExitDialog.onClickListener = View.OnClickListener { view ->
             if (view.id == R.id.custom_dialog_layout_tv_confirm) {
                 //退出
                 GKApplication.instance.loginOff()
@@ -93,18 +90,18 @@ class SettingActivity : SuperActivity(),ISettingView {
                 //请求更新
                 mPresenter.requestVersion()
             }
-            R.id.setting_layout_v_exit ->{ //退出账号
+            R.id.setting_layout_v_exit -> { //退出账号
                 if (!mExitDialog.isShowing)
                     mExitDialog.show()
             }
             R.id.common_head_layout_iv_left -> { //返回
                 finish()
             }
-            R.id.setting_layout_v_free_video ->{//免费会见
+            R.id.setting_layout_v_free_video -> {//免费会见
                 startActivityForResult(Intent(this, CallFreeActivity::class.java), Constants.EXTRAS_CODE)
             }
-            R.id.setting_layout_v_check_network ->{//检查网络
-                startActivity(Intent(this,NetworkActivity::class.java))
+            R.id.setting_layout_v_check_network -> {//检查网络
+                startActivity(Intent(this, NetworkActivity::class.java))
             }
         }
     }
@@ -121,22 +118,24 @@ class SettingActivity : SuperActivity(),ISettingView {
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         try {
-            if(resultCode == Activity.RESULT_OK ){
-                if (requestCode == Constants.EXTRA_CODE ) {//修改终端信息成功
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == Constants.EXTRA_CODE) {//修改终端信息成功
                     showToast(R.string.alter_terminal_account_success)
                 }
             }
 
-        }catch (e:Exception){}
+        } catch (e: Exception) {
+        }
     }
 
     /**
      * 成功获取版本信息
      */
     override fun updateVersion(version: VersionEntity?) {
-        if(version!=null) {
+        if (version != null) {
             //新版本
             val newVersion = version.versionCode
             val pm = packageManager
@@ -152,8 +151,9 @@ class SettingActivity : SuperActivity(),ISettingView {
                     // 下载地址
                     val downloadUrl = version.downloadUrl
                     //是否强制更新
-                    updateDialog.setForceUpdate(version.isForce==1)
-                    updateDialog.setDownloadInfor(versionName ?: "", newVersion, downloadUrl ?: "",version.description?:"")
+                    updateDialog.setForceUpdate(version.isForce == 1)
+                    updateDialog.setDownloadInfor(versionName ?: "", newVersion, downloadUrl
+                            ?: "", version.description ?: "")
                     updateDialog.show()//显示对话框
                     tvCheckUpdateHint.text = getString(R.string.new_version_colon) + versionName
                 } else {//无版本更新
@@ -162,7 +162,7 @@ class SettingActivity : SuperActivity(),ISettingView {
             } catch (e: PackageManager.NameNotFoundException) {
                 e.printStackTrace()
             }
-        }else{//无版本更新
+        } else {//无版本更新
             tvCheckUpdateHint.setText(R.string.has_last_version)
         }
 
@@ -180,7 +180,7 @@ class SettingActivity : SuperActivity(),ISettingView {
     override fun onDestroy() {
         mPresenter.onDestory()
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
-        if ( mExitDialog.isShowing) mExitDialog.dismiss()
+        if (mExitDialog.isShowing) mExitDialog.dismiss()
         if (updateDialog.isShowing) updateDialog.dismiss()
         super.onDestroy()
     }
@@ -193,6 +193,7 @@ class SettingActivity : SuperActivity(),ISettingView {
         intentFilter.addAction(Constants.NIM_KIT_OUT)
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
+
     override fun networkStatus(isConnected: Boolean) {
     }
 

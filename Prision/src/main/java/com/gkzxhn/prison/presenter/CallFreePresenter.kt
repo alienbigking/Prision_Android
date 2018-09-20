@@ -26,6 +26,7 @@ import org.json.JSONObject
  */
 
 class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<ICallUserModel, ICallFreeView>(context, CallUserModel(), view) {
+
     var entity: MeetingDetailEntity? = null//搜索到的家属信息
     /**
      *  清空家属实体
@@ -39,18 +40,19 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
      */
     fun requestFreeTime() {
         //关闭GUI
-        startAsynTask(Constants.CLOSE_GUI_TAB,null)
-        mModel.requestFreeTime(object : VolleyUtils.OnFinishedListener<JSONObject>{
+        startAsynTask(Constants.CLOSE_GUI_TAB, null)
+        mModel.requestFreeTime(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
                     val time = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(
-                            JSONUtil.getJSONObject(response,"data"), "access_times"))
+                            JSONUtil.getJSONObject(response, "data"), "access_times"))
                     mView?.updateFreeTime(time)
                     //保存到sharepreferences
-                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME,time).apply()
+                    getSharedPreferences().edit().putInt(Constants.CALL_FREE_TIME, time).apply()
                 }
             }
+
             override fun onFailed(error: VolleyError) {
             }
         })
@@ -69,28 +71,28 @@ class CallFreePresenter(context: Context, view: ICallFreeView) : BasePresenter<I
 
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
-                    val familyJson=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response,"data"), "infos")
-                    val familys= Gson().fromJson<List<FreeFamilyEntity>>(familyJson,
+                    val familyJson = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(response, "data"), "infos")
+                    val familys = Gson().fromJson<List<FreeFamilyEntity>>(familyJson,
                             object : TypeToken<List<FreeFamilyEntity>>() {}.type)
-                    if(familys!=null&&familys.size>0){//有数据
+                    if (familys != null && familys.isNotEmpty()) {//有数据
                         mView?.onSuccess(familys)
                         //单元测试 释放延迟加载
                         mView?.setIdleNow(false)
-                    }else{
+                    } else {
                         //单元测试 释放延迟加载
                         mView?.setIdleNow(false)
-                        if(Utils.isPhoneNumber(key)){//查询手机号报错
+                        if (Utils.isPhoneNumber(key)) {//查询手机号报错
                             mView?.showToast(R.string.query_phone_is_error)
-                        }else{//查询姓名报错
+                        } else {//查询姓名报错
                             mView?.showToast(R.string.query_name_is_error)
                         }
                     }
                 } else {
                     //单元测试 释放延迟加载
                     mView?.setIdleNow(false)
-                    if(Utils.isPhoneNumber(key)){//查询手机号报错
+                    if (Utils.isPhoneNumber(key)) {//查询手机号报错
                         mView?.showToast(R.string.query_phone_is_error)
-                    }else{//查询姓名报错
+                    } else {//查询姓名报错
                         mView?.showToast(R.string.query_name_is_error)
                     }
                 }

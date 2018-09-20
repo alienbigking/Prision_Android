@@ -11,9 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
-
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.MainAdapter
 import com.gkzxhn.prison.common.Constants
@@ -31,28 +29,18 @@ import com.gkzxhn.prison.view.IMainView
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
-import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_service_hint
-as tvServiceConnectHint
-import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_month
-as tvMonth
-import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_year
-as tvYear
-import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_vp_calendar
-as mViewPager
-import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list
-as mRecylerView
-import kotlinx.android.synthetic.main.i_common_loading_layout.common_loading_layout_tv_load
-as tvLoading
-import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_image
-as ivNodata
-import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_swipeRefresh
-as mSwipeRefresh
-import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_hint
-as tvNoData
-import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_free_time
-as tvFreeTime
+import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list as mRecylerView
+import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_swipeRefresh as mSwipeRefresh
+import kotlinx.android.synthetic.main.i_common_loading_layout.common_loading_layout_tv_load as tvLoading
+import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_hint as tvNoData
+import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_image as ivNodata
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_free_time as tvFreeTime
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_month as tvMonth
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_service_hint as tvServiceConnectHint
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_year as tvYear
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_vp_calendar as mViewPager
 
-class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener,CusSwipeRefreshLayout.OnLoadListener{
+class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener, CusSwipeRefreshLayout.OnLoadListener {
     //当前选择日期
     private var mDate: CustomDate? = null
     //列表适配器
@@ -64,24 +52,25 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     //取消会见对话框
     private lateinit var mCancelVideoDialog: CancelVideoDialog
     //版本更新对话框
-    private var updateDialog: UpdateDialog?=null
+    private var updateDialog: UpdateDialog? = null
     //配置终端提示对话框
-    private  var mShowTerminalDialog: CustomDialog?=null
+    private var mShowTerminalDialog: CustomDialog? = null
     //是否已经连接了紫荆服务
     private var isConnectZijing = false
     //所有月份
-    private lateinit var months:Array<String>
+    private lateinit var months: Array<String>
     //上一个月，中文月份
-    private var mLastMonth=0
+    private var mLastMonth = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isConnectZijing = false
         setContentView(R.layout.main_layout)
-        months=resources.getStringArray(R.array.month_text)
+        months = resources.getStringArray(R.array.month_text)
         init()
         registerReceiver()
     }
+
     override fun onResume() {
         super.onResume()
         //更新免费会见次数
@@ -103,8 +92,8 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         }
 
         override fun changeDate(date: CustomDate) {
-            tvYear.text=date.getYear().toString() + getString(R.string.year)
-            tvMonth.text =  months[date.getMonth()-1]
+            tvYear.text = date.getYear().toString() + getString(R.string.year)
+            tvMonth.text = months[date.getMonth() - 1]
         }
     }
     /**
@@ -114,12 +103,12 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         override fun onClickListener(convertView: View, position: Int) {
             when (convertView.id) {
 
-                R.id.main_item_layout_iv_cancel ->{ //取消会见
+                R.id.main_item_layout_iv_cancel -> { //取消会见
                     if (mCancelVideoDialog != null && !mCancelVideoDialog.isShowing) mCancelVideoDialog.show()
                 }
                 else -> if (isConnectZijing) {//点击项，进入详情，必须已连接视频服务器
                     val intent = Intent(this@MainActivity, CallUserActivity::class.java)
-                    intent.action=Constants.CALL_DEFUALT_ACTION
+                    intent.action = Constants.CALL_DEFUALT_ACTION
                     intent.putExtra(Constants.EXTRA, adapter.getCurrentItem().id)
                     intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().familyId)
                     startActivityForResult(intent, Constants.EXTRA_CODE)
@@ -142,7 +131,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     }
 
 
-
     private fun init() {
         tvNoData.setText(R.string.no_meeting_data)
         initCalander()
@@ -154,9 +142,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mSwipeRefresh.setMode(CusSwipeRefreshLayout.Mode.BOTH)
         mSwipeRefresh.setLoadNoFull(false)
         mSwipeRefresh.onRefreshListener = this
-        mSwipeRefresh.onLoadListener=this
+        mSwipeRefresh.onLoadListener = this
         mRecylerView.adapter = adapter
-        mRecylerView.setPadding(0,resources.getDimensionPixelSize(R.dimen.margin_half),0,0)
+        mRecylerView.setPadding(0, resources.getDimensionPixelSize(R.dimen.margin_half), 0, 0)
 //        val sizeMenu = resources.getDimensionPixelSize(R.dimen.recycler_view_line_height)
 //        mRecylerView.addItemDecoration(RecycleViewDivider(
 //                this, LinearLayoutManager.HORIZONTAL, sizeMenu, resources.getColor(R.color.common_hint_text_color)))
@@ -168,10 +156,10 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 
         dismissProgress()
         mCancelVideoDialog = CancelVideoDialog(this, false)
-        mCancelVideoDialog.onClickListener=View.OnClickListener {
+        mCancelVideoDialog.onClickListener = View.OnClickListener {
             val reason = mCancelVideoDialog.content
             mCancelVideoDialog.dismiss()
-            mPresenter.requestCancel(adapter.getCurrentItem().id?:"", reason)
+            mPresenter.requestCancel(adapter.getCurrentItem().id ?: "", reason)
         }
 
 
@@ -184,19 +172,20 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         //请求免费呼叫次数
         mPresenter.requestFreeTime()
     }
+
     /**
      * 配置好终端提示对话框
      */
-    private fun initTerminalDialog(){
-        if(mShowTerminalDialog==null) {
+    private fun initTerminalDialog() {
+        if (mShowTerminalDialog == null) {
             mShowTerminalDialog = CustomDialog(this)
-            with(mShowTerminalDialog!!){
+            with(mShowTerminalDialog!!) {
                 this.title = getString(R.string.hint)
                 this.content = getString(R.string.please_set_terminal_infor)
                 this.confirmText = getString(R.string.to_setting)
                 this.cancelText = getString(R.string.cancel)
-                this.onClickListener= View.OnClickListener { v->
-                    if(v.id==R.id.custom_dialog_layout_tv_confirm)//去设置
+                this.onClickListener = View.OnClickListener { v ->
+                    if (v.id == R.id.custom_dialog_layout_tv_confirm)//去设置
                         startActivity(Intent(context, ConfigActivity::class.java))
                 }
             }
@@ -216,7 +205,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         mViewPager.adapter = adapter
         mViewPager.currentItem = adapter.currentIndex
         mViewPager.addOnPageChangeListener(adapter.onPageChangeListener)
-        mLastMonth=mDate?.month?:0
+        mLastMonth = mDate?.month ?: 0
     }
 
     /**
@@ -242,15 +231,15 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     override fun onRefresh() {
         //检查云信推送状态
         mPresenter.checkStatusCode()
-        if (mPresenter.checkStatusCode() == StatusCode.LOGINED||mPresenter.checkStatusCode() == StatusCode.NET_BROKEN) {
+        if (mPresenter.checkStatusCode() == StatusCode.LOGINED || mPresenter.checkStatusCode() == StatusCode.NET_BROKEN) {
             //云信为已经登录状态
             //没有设置终端，则提示用户设置终端
-            if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER, "").length == 0) {
+            if (mPresenter.getSharedPreferences().getString(Constants.TERMINAL_ROOM_NUMBER, "").isEmpty()) {
                 stopRefreshAnim()
                 initTerminalDialog()
-                if (!(mShowTerminalDialog?.isShowing?:false)) mShowTerminalDialog?.show()
+                if (mShowTerminalDialog?.isShowing != true) mShowTerminalDialog?.show()
             } else {
-                mPresenter.request(true,mDate.toString())
+                mPresenter.request(true, mDate.toString())
             }
         } else {
             stopRefreshAnim()
@@ -261,7 +250,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
      * 列表下拉加载
      */
     override fun onLoad() {
-        mPresenter.request(false,mDate.toString())
+        mPresenter.request(false, mDate.toString())
     }
 
     /**
@@ -311,7 +300,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             val currentVersion = packageInfo.versionCode//当前App版本
             val lastIgnoreVersion = mPresenter.getSharedPreferences().getInt(Constants.LAST_IGNORE_VERSION, 0)
             var isIgoreVersion = lastIgnoreVersion == newVersion//若是已忽略的版本，则不弹出升级对话框
-            if (version.isForce==1) isIgoreVersion = false
+            if (version.isForce == 1) isIgoreVersion = false
             if (newVersion > currentVersion && !isIgoreVersion) {//新版本大于当前版本，则弹出更新下载到对话框
                 //版本名
                 val versionName = version.versionName
@@ -320,8 +309,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
                 //是否强制更新
                 val isForceUpdate = version.isForce
                 if (updateDialog == null) updateDialog = UpdateDialog(this)
-                updateDialog?.setForceUpdate(isForceUpdate==1)
-                updateDialog?.setDownloadInfor(versionName?:"", newVersion, downloadUrl?:"",version.description?:"")
+                updateDialog?.setForceUpdate(isForceUpdate == 1)
+                updateDialog?.setDownloadInfor(versionName ?: "", newVersion, downloadUrl
+                        ?: "", version.description ?: "")
                 updateDialog?.show()//显示对话框
             }
 
@@ -334,17 +324,17 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     /**
      * 开启紫荆视频服务
      */
-    override fun startZijingService(isNetworkConnected:Boolean) {
+    override fun startZijingService(isNetworkConnected: Boolean) {
         if (!isConnectZijing) {
             isConnectZijing = true
             dismissProgress()
             val mService = Intent(this, EReportService::class.java)
             startService(mService)
         }
-        if(isNetworkConnected){
+        if (isNetworkConnected) {
             tvServiceConnectHint.setText(R.string.video_service_connect_success)
             tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_success))
-        }else{
+        } else {
 //                "0040xf609"
             tvServiceConnectHint.setText(R.string.video_service_connect_failed)
             tvServiceConnectHint.setTextColor(resources.getColor(R.color.connect_failed))
@@ -364,7 +354,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
      * 更新免费次数
      */
     override fun updateFreeTime(freeTime: Int) {
-        tvFreeTime.setText(String.format("%s  %s%s",getString(R.string.call_free),freeTime,getString(R.string.time)))
+        tvFreeTime.setText(String.format("%s  %s%s", getString(R.string.call_free), freeTime, getString(R.string.time)))
     }
 
     /**
@@ -373,6 +363,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     override fun startRefreshAnim() {
         handler.sendEmptyMessage(Constants.START_REFRESH_UI)
     }
+
     /**
      * 停止列表刷新动画
      */
@@ -381,18 +372,16 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     }
 
 
-
-
     override fun onDestroy() {
         //停止所有请求
         mPresenter.onDestory()
         //注销广播监听器
         unregisterReceiver(mBroadcastReceiver)
         //关闭窗口，避免窗口溢出
-        if(mProgress.isShowing)mProgress.dismiss()
-        if ( mShowTerminalDialog?.isShowing?:false) mShowTerminalDialog?.dismiss()
-        if (  mCancelVideoDialog.isShowing) mCancelVideoDialog.dismiss()
-        if ( updateDialog?.isShowing?:false) updateDialog?.dismiss()
+        if (mProgress.isShowing) mProgress.dismiss()
+        if (mShowTerminalDialog?.isShowing ?: false) mShowTerminalDialog?.dismiss()
+        if (mCancelVideoDialog.isShowing) mCancelVideoDialog.dismiss()
+        if (updateDialog?.isShowing ?: false) updateDialog?.dismiss()
         super.onDestroy()
     }
 
@@ -404,6 +393,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         intentFilter.addAction(Constants.NIM_KIT_OUT)
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
+
     /**
      * 刷新动画加载
      */

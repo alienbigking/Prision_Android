@@ -7,7 +7,6 @@ import android.support.v7.widget.AppCompatSpinner
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -33,26 +32,20 @@ class CancelVideoDialog(context: Context, private val isCancelVideo: Boolean) : 
     var content: String = ""
     var onClickListener: View.OnClickListener? = null
     private lateinit var tvConfirm: TextView
-    private val mModel: MainModel
-
-    init {
-        mModel = MainModel()
-    }
+    private val mModel: MainModel = MainModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val contentView = LayoutInflater.from(getContext()).inflate(
+        val contentView = LayoutInflater.from(context).inflate(
                 if (isCancelVideo) R.layout.cancel_video_dialog else R.layout.cancel_meeting_dialog_layout, null)
         setContentView(contentView)
         mSpinner = contentView.findViewById(R.id.cancel_dialog_layout_spinner) as AppCompatSpinner
         val view = contentView.findViewById(R.id.cancel_dialog_layout_fl_spinner)
-        view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                if (mSpinner.dropDownVerticalOffset == 0)
-                    mSpinner.dropDownVerticalOffset = view.measuredHeight
-                return true
-            }
-        })
+        view.viewTreeObserver.addOnPreDrawListener {
+            if (mSpinner.dropDownVerticalOffset == 0)
+                mSpinner.dropDownVerticalOffset = view.measuredHeight
+            true
+        }
         init()
         measureWindow()
     }

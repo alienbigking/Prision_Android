@@ -2,7 +2,6 @@ package com.gkzxhn.prison.entity
 
 import java.io.Serializable
 
-
 /**
  * Explanation:
  * @author LSX

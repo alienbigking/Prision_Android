@@ -19,7 +19,6 @@ import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.util.CommonHelper
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
 import com.starlight.mobile.android.lib.view.RecycleViewDivider
-import kotlinx.android.synthetic.main.call_free_layout.*
 import kotlinx.android.synthetic.main.common_list_layout.*
 import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_et_phone as etPhone
 import kotlinx.android.synthetic.main.call_free_layout.call_free_layout_iv_clear as ivSearchClear
@@ -65,7 +64,7 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
 //        etPhone.setText("18670075445")
         //设置输入框监听器
         etPhone.addTextChangedListener(mTextWatcher)
-        etPhone.setOnEditorActionListener { v, actionId, event ->
+        etPhone.setOnEditorActionListener { _, actionId, _ ->
             //点击搜索键
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if (mCallFreeTime > 0) {//有免费次数才可进行搜索
@@ -96,7 +95,8 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
                 intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().id)
                 intent.putExtra(Constants.EXTRA_TAB, adapter.getCurrentItem().prisonerName)
                 startActivity(intent)
-            } else {//没有免费次数
+            } else {
+                //没有免费次数
                 showToast(R.string.no_call_free_time)
             }
         }
@@ -213,7 +213,7 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
 
         override fun afterTextChanged(s: Editable) {
             //清除按钮 是否显示
-            ivSearchClear.visibility = if (etPhone.text.length > 0) View.VISIBLE else View.GONE
+            ivSearchClear.visibility = if (etPhone.text.isNotEmpty()) View.VISIBLE else View.GONE
         }
     }
     /**

@@ -11,26 +11,22 @@ import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.presenter.SettingPresenter
 import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.view.ISettingView
-import kotlinx.android.synthetic.main.network_layout.network_layout_tv_enable_gui_hint
-as tvEnableGuiHint
-import kotlinx.android.synthetic.main.network_layout.network_layout_tv_disable_gui_hint
-as tvDisableGuiHint
-import kotlinx.android.synthetic.main.network_layout.network_layout_tv_check_network_hint
-as tvCheckNetworkHint
-
-import kotlinx.android.synthetic.main.network_layout.network_layout_btn_enable_gui
-as btnEnableGui
-import kotlinx.android.synthetic.main.network_layout.network_layout_btn_disable_gui
-as btnDisableGui
 import kotlinx.android.synthetic.main.network_layout.network_layout_btn_check_network
 as btnCheckNetwork
+import kotlinx.android.synthetic.main.network_layout.network_layout_btn_disable_gui as btnDisableGui
+import kotlinx.android.synthetic.main.network_layout.network_layout_btn_enable_gui as btnEnableGui
+import kotlinx.android.synthetic.main.network_layout.network_layout_tv_check_network_hint as tvCheckNetworkHint
+import kotlinx.android.synthetic.main.network_layout.network_layout_tv_disable_gui_hint as tvDisableGuiHint
+import kotlinx.android.synthetic.main.network_layout.network_layout_tv_enable_gui_hint as tvEnableGuiHint
+
 /**检查网络
  * Created by Raleigh.Luo on 18/5/8.
  */
 
-class NetworkActivity: SuperActivity(), ISettingView {
+class NetworkActivity : SuperActivity(), ISettingView {
     //请求presenter
     private lateinit var mPresenter: SettingPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.network_layout)
@@ -41,25 +37,25 @@ class NetworkActivity: SuperActivity(), ISettingView {
     /**
      * 页面所有点击事件
      */
-    fun onClickListener(view: View){
-        when(view.id){
-            R.id.common_head_layout_iv_left ->{
+    fun onClickListener(view: View) {
+        when (view.id) {
+            R.id.common_head_layout_iv_left -> {
                 finish()
             }
-            R.id.network_layout_btn_enable_gui ->{//启用Gui
+            R.id.network_layout_btn_enable_gui -> {//启用Gui
                 tvEnableGuiHint.setText(R.string.start_gui_ing)
                 //单元测试 延迟加载
                 setIdleNow(true)
-                btnEnableGui.isEnabled=false
+                btnEnableGui.isEnabled = false
                 // adb shell pm enable cn.com.rocware.c9gui
-                mPresenter.startAsynTask(Constants.OPEN_GUI_TAB,object : AsynHelper.TaskFinishedListener{
+                mPresenter.startAsynTask(Constants.OPEN_GUI_TAB, object : AsynHelper.TaskFinishedListener {
                     override fun back(`object`: Any?) {
-                        btnEnableGui.isEnabled=true
-                        val i=`object` as Int
-                        if(i==0){//启用成功
+                        btnEnableGui.isEnabled = true
+                        val i = `object` as Int
+                        if (i == 0) {//启用成功
                             tvEnableGuiHint.setText(R.string.start_gui_success)
                             tvDisableGuiHint.setText(R.string.stop_gui_hint)
-                        }else{
+                        } else {
                             tvEnableGuiHint.setText(R.string.start_gui_failed)
                         }
                         //单元测试 释放延迟加载
@@ -69,26 +65,26 @@ class NetworkActivity: SuperActivity(), ISettingView {
                 })
 
             }
-            R.id.network_layout_btn_disable_gui ->{//关闭Gui
-                btnDisableGui.isEnabled=false
+            R.id.network_layout_btn_disable_gui -> {//关闭Gui
+                btnDisableGui.isEnabled = false
                 tvDisableGuiHint.setText(R.string.stop_gui_ing)
                 //单元测试 延迟加载
                 setIdleNow(true)
                 //adb shell pm disable cn.com.rocware.c9gui
-                mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB,object : AsynHelper.TaskFinishedListener{
+                mPresenter.startAsynTask(Constants.CLOSE_GUI_TAB, object : AsynHelper.TaskFinishedListener {
                     override fun back(`object`: Any?) {
-                        btnDisableGui.isEnabled=true
-                        val i=`object` as Int
-                        if(i==0){//禁用用成功
+                        btnDisableGui.isEnabled = true
+                        val i = `object` as Int
+                        if (i == 0) {//禁用用成功
                             tvDisableGuiHint.setText(R.string.stop_gui_success)
                             tvEnableGuiHint.setText(R.string.start_gui_hint)
                             stopService(Intent(this@NetworkActivity, EReportService::class.java))
                             val preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
-                            if (preferences.getString(Constants.USER_ACCOUNT, "").length >0) {//登录 重启服务
+                            if (preferences.getString(Constants.USER_ACCOUNT, "").length > 0) {//登录 重启服务
                                 val mService = Intent(this@NetworkActivity, EReportService::class.java)
                                 startService(mService)
                             }
-                        }else{
+                        } else {
                             tvDisableGuiHint.setText(R.string.stop_gui_failed)
                         }
                         //单元测试 释放延迟加载
@@ -96,10 +92,10 @@ class NetworkActivity: SuperActivity(), ISettingView {
                     }
                 })
             }
-            R.id.network_layout_btn_check_network ->{//检查网络
+            R.id.network_layout_btn_check_network -> {//检查网络
                 tvCheckNetworkHint.setText(R.string.check_network_ing)
                 //按钮不可点击
-                btnCheckNetwork.isEnabled=false
+                btnCheckNetwork.isEnabled = false
                 //关闭GUI
                 mPresenter.checkNetworkStatus()
             }
@@ -112,11 +108,11 @@ class NetworkActivity: SuperActivity(), ISettingView {
      */
     override fun networkStatus(isConnected: Boolean) {
         //按钮可点击
-        btnCheckNetwork.isEnabled=true
-        if(isConnected){
+        btnCheckNetwork.isEnabled = true
+        if (isConnected) {
             tvCheckNetworkHint.setTextColor(resources.getColor(R.color.connect_success))
             tvCheckNetworkHint.setText(R.string.check_network_normal)
-        }else{
+        } else {
             tvCheckNetworkHint.setTextColor(resources.getColor(R.color.red_text))
             tvCheckNetworkHint.setText(R.string.check_network_innormal)
         }

@@ -158,10 +158,12 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                 setIdleNow(true)
                 online()
             }
+//            向左的箭头
             R.id.call_user_layout_iv_left -> {
                 vpCallUser.currentItem = vpCallUser.currentItem - 1
                 changeViewPagerLeftAndRight()
             }
+//            向右的箭头
             R.id.call_user_layout_iv_right -> {
                 vpCallUser.currentItem = vpCallUser.currentItem + 1
                 changeViewPagerLeftAndRight()
@@ -177,16 +179,16 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     private fun changeViewPagerLeftAndRight() {
         when {
             vpCallUser.currentItem == 0 -> {
-                call_user_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_gary)
-                call_user_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
+                call_user_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_point_gary_select)
+                call_user_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_point_blue_select)
             }
-            vpCallUser.currentItem == vpCallUser.childCount - 1 -> {
-                call_user_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
-                call_user_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_gary)
+            vpCallUser.currentItem == vpCallUser.adapter.count - 1 -> {
+                call_user_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_point_blue_select)
+                call_user_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_point_gary_select)
             }
             else -> {
-                call_user_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
-                call_user_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
+                call_user_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_point_blue_select)
+                call_user_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_point_blue_select)
             }
         }
     }
@@ -241,7 +243,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                 setIdleNow(false)
                 initTerminalDialog()
                 //显示设置终端对话框
-                if (!(mShowTerminalDialog?.isShowing ?: false)) {
+                if (mShowTerminalDialog?.isShowing != true) {
                     mShowTerminalDialog?.show()
                 }
             }
@@ -288,16 +290,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
             })
 
-////            //跳转到视频界面
-//            val intent = Intent(this, VideoMettingActivity::class.java)
-//            intent.action = getIntent().action
-////            intent.putExtra(Constants.ZIJING_PASSWORD, hostPassword)
-//            intent.putExtra(Constants.EXTRAS, mFamilyId)//家属id
-//            intent.putExtra(Constants.EXTRA, id)//会见id
-//            intent.putExtra("data", mPresenter.meetingMemberEntity)
-//            startActivityForResult(intent, mCallRequestCode)
-
         } else {
+            //
             call_user_layout_iv_left.visibility = View.INVISIBLE
             call_user_layout_iv_right.visibility = View.INVISIBLE
         }
@@ -410,7 +404,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
         //关闭窗口，避免窗口溢出
         if (mCustomDialog.isShowing) mCustomDialog.dismiss()
-        if (mShowTerminalDialog?.isShowing ?: false) mShowTerminalDialog?.dismiss()
+        if (mShowTerminalDialog?.isShowing == true) mShowTerminalDialog?.dismiss()
         if (mProgress.isShowing) mProgress.dismiss()
         super.onDestroy()
     }
@@ -475,7 +469,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         override fun onTick(millisUntilFinished: Long) {
             if (!btnCall.isEnabled) {//呼叫等待10秒的倒计时
                 val second = millisUntilFinished / 1000
-                tvNextCallHint.setText(String.format("%s%sS", getString(R.string.next_call_hint), second))
+                tvNextCallHint.text = String.format("%s%sS", getString(R.string.next_call_hint), second)
             }
         }
 

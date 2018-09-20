@@ -2,14 +2,11 @@ package com.gkzxhn.prison.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.widget.TextView
-
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 
@@ -18,7 +15,8 @@ import com.gkzxhn.prison.common.Constants
  */
 
 class SplashActivity : Activity() {
-    private val DELAY_TIME=1000L
+
+    private val DELAY_TIME = 1000L
 
     /**
      * Handler:跳转到不同界面
@@ -67,10 +65,10 @@ class SplashActivity : Activity() {
         tvVersionName.text = getString(R.string.app_v) + versionName
 
         val preferences = getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
-        if (preferences.getString(Constants.USER_ACCOUNT, "").length == 0) {//未登录 未认证
-            mHandler.sendEmptyMessageDelayed(1,DELAY_TIME)
+        if (preferences.getString(Constants.USER_ACCOUNT, "").isEmpty()) {//未登录 未认证
+            mHandler.sendEmptyMessageDelayed(1, DELAY_TIME)
         } else {//已登录
-            mHandler.sendEmptyMessageDelayed(2,DELAY_TIME)
+            mHandler.sendEmptyMessageDelayed(2, DELAY_TIME)
         }
     }
 

@@ -135,7 +135,7 @@ class MainPresenter(context: Context, view: IMainView) : BasePresenter<IMainMode
                         startAsynTask(Constants.MAIN_TAB, object : AsynHelper.TaskFinishedListener {
                             override fun back(`object`: Any?) {
                                 val mData = `object` as List<MeetingEntity>
-                                if (mData != null && mData.size > 0) currentPage = currentPage + 1
+                                if (mData != null && mData.isNotEmpty()) currentPage += 1
                                 mView?.updateItems(mData)
                                 mView?.stopRefreshAnim()
                             }

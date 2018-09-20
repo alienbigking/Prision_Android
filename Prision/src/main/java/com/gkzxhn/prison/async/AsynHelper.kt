@@ -90,9 +90,9 @@ class AsynHelper(private val TAB: Int) : AsyncTask<Any, Int, Any>() {
         var process: Process? = null
         var os: DataOutputStream? = null
         try {
-            val cmd = if(isEnable) "pm enable " + packageName
-            else "pm disable " + packageName
-            Runtime.getRuntime().exec("adb shell "+cmd).waitFor()
+            val cmd = if(isEnable) "pm enable $packageName"
+            else "pm disable $packageName"
+            Runtime.getRuntime().exec("adb shell $cmd").waitFor()
             result=0
         } catch (e: Exception) {
             e.printStackTrace()

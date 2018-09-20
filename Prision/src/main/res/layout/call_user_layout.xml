@@ -43,13 +43,11 @@
             android:layout_height="58dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="30dp"
-            android:background="@drawable/shape_call_user_pint_gary"
+            android:background="@drawable/shape_call_user_point_gary_select"
+
             android:onClick="onClickListener"
-            android:padding="10dp"
-            android:paddingBottom="14dp"
-            android:paddingEnd="21dp"
-            android:paddingStart="21dp"
-            android:paddingTop="14dp"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
             android:src="@mipmap/ic_arrow_left_white"
         />
 
@@ -67,12 +65,10 @@
             android:layout_height="58dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="40dp"
-            android:background="@drawable/shape_call_user_pint_blue"
+            android:background="@drawable/shape_call_user_point_blue_select"
             android:onClick="onClickListener"
-            android:paddingBottom="14dp"
-            android:paddingEnd="21dp"
-            android:paddingStart="21dp"
-            android:paddingTop="14dp"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
             android:src="@mipmap/ic_arrow_right_white"
         />
     </LinearLayout>
@@ -133,4 +129,3 @@
         mAttr:layout_constraintBottom_toBottomOf="parent"
         mAttr:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>
-

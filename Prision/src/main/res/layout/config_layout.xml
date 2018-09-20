@@ -4,21 +4,21 @@
     xmlns:mAttr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/common_bg_color"
-    >
+    android:orientation="vertical"
+>
     <com.starlight.mobile.android.lib.view.CusHeadView
         android:id="@+id/config_layout_ch_head"
         style="@style/common_head_blue_style"
         mAttr:chHead_leftImg="@mipmap/ic_back"
         mAttr:chHead_title="@string/end_setting"
-        mAttr:chHead_title_padding_left="0dip" />
+        mAttr:chHead_title_padding_left="0dip"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
         android:fillViewport="true"
-        >
+        android:scrollbars="none"
+    >
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -31,304 +31,304 @@
                     android:id="@+id/config_layout_iv_left"
                     android:layout_width="0dip"
                     android:layout_height="0dip"
-                    mAttr:layout_constraintHorizontal_weight="1"
-                    mAttr:layout_constraintHorizontal_chainStyle="spread"
-                    android:background="@mipmap/check_item_bg"
-                    android:layout_marginRight="10dip"
                     android:layout_marginLeft="@dimen/margin"
-                    mAttr:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginRight="10dip"
+                    android:background="@mipmap/check_item_bg"
                     mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_v_bottom"
-                    mAttr:layout_constraintRight_toLeftOf="@+id/config_layout_iv_right"
+                    mAttr:layout_constraintHorizontal_chainStyle="spread"
+                    mAttr:layout_constraintHorizontal_weight="1"
                     mAttr:layout_constraintLeft_toLeftOf="parent"
-                    />
+                    mAttr:layout_constraintRight_toLeftOf="@+id/config_layout_iv_right"
+                    mAttr:layout_constraintTop_toTopOf="parent"
+                />
 
                 <ImageView
                     android:id="@+id/config_layout_iv_right"
                     android:layout_width="0dip"
                     android:layout_height="0dip"
-                    mAttr:layout_constraintHorizontal_weight="1"
                     android:layout_marginLeft="10dip"
-                    mAttr:layout_constraintTop_toTopOf="parent"
                     android:layout_marginRight="@dimen/margin"
                     android:background="@mipmap/check_item_bg"
                     mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_v_bottom"
-                    mAttr:layout_constraintRight_toRightOf="parent"
+                    mAttr:layout_constraintHorizontal_weight="1"
                     mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_iv_left"
-                    />
+                    mAttr:layout_constraintRight_toRightOf="parent"
+                    mAttr:layout_constraintTop_toTopOf="parent"
+                />
 
                 <TextView
                     android:id="@+id/config_layout_tv_account"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="40dip"
                     android:layout_marginTop="@dimen/margin"
                     android:background="@drawable/config_account_bg"
-                    android:layout_marginRight="40dip"
                     android:text="9999"
-                    mAttr:layout_constraintRight_toRightOf="@+id/config_layout_iv_left"
                     android:textColor="@android:color/white"
                     android:textSize="24sp"
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_iv_left" />
+                    mAttr:layout_constraintRight_toRightOf="@+id/config_layout_iv_left"
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_iv_left"/>
                 <!--＊＊＊＊会议室号码＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊-->
                 <TextView
                     android:id="@+id/config_layout_tv_meeting_number"
                     style="@style/config_title_style"
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_et_meeting_number"
-                    android:text="@string/meetting_number"
                     android:layout_marginLeft="40dip"
+                    android:text="@string/meetting_number"
+                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_et_meeting_number"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_iv_left"
-                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_et_meeting_number" />
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_et_meeting_number"/>
                 <EditText
                     android:id="@+id/config_layout_et_meeting_number"
                     style="@style/config_edittext_style"
+                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_meeting_number"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_tv_account"
                     mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_tv_account"
-                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_meeting_number"
-                    />
+                />
                 <View
                     android:id="@+id/config_layout_v_meeting_number"
                     style="@style/config_et_line_style"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_et_meeting_number"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_et_meeting_number"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_et_meeting_number"
-                    />
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_et_meeting_number"
+                />
 
                 <!--＊＊＊＊主持人密码＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊-->
                 <TextView
                     android:id="@+id/config_layout_tv_host_password"
                     style="@style/config_title_style"
                     android:text="@string/host_password"
-                    mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_meeting_number"
                     android:textColor="@color/common_gray_title_color"
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_et_host_password"
-                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_et_host_password" />
+                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_et_host_password"
+                    mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_meeting_number"
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_et_host_password"/>
                 <EditText
                     android:id="@+id/config_layout_et_host_password"
                     style="@style/config_edittext_style"
                     android:inputType="textPassword"
+                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_host_password"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_tv_account"
                     mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_meeting_number"
-                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_host_password"
-                    />
+                />
                 <View
                     android:id="@+id/config_layout_v_host_password"
                     style="@style/config_et_line_style"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_et_host_password"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_et_host_password"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_et_host_password"
-                    />
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_et_host_password"
+                />
 
                 <!--＊＊＊＊参会密码＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊-->
                 <TextView
                     android:id="@+id/config_layout_tv_guest_password"
                     style="@style/config_title_style"
                     android:text="@string/guest_password"
+                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_et_guest_password"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_meeting_number"
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_et_guest_password"
-                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_et_guest_password" />
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_et_guest_password"/>
                 <EditText
                     android:id="@+id/config_layout_et_guest_password"
                     style="@style/config_edittext_style"
                     android:inputType="textPassword"
+                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_host_password"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_tv_account"
                     mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_host_password"
-                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_host_password"
-                    />
+                />
                 <View
                     android:id="@+id/config_layout_v_guest_password"
                     style="@style/config_et_line_style"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_et_guest_password"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_et_guest_password"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_et_guest_password"
-                    />
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_et_guest_password"
+                />
                 <!--＊＊＊＊通话时长＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊-->
                 <TextView
                     android:id="@+id/config_layout_tv_config_time"
                     style="@style/config_title_style"
                     android:layout_marginLeft="40dip"
-                    mAttr:layout_constraintLeft_toLeftOf="@id/config_layout_iv_right"
                     android:text="@string/config_time"
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_et_config_time"
                     mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_et_config_time"
-                    />
+                    mAttr:layout_constraintLeft_toLeftOf="@id/config_layout_iv_right"
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_et_config_time"
+                />
 
                 <EditText
                     android:id="@+id/config_layout_et_config_time"
                     style="@style/config_edittext_style"
-                    android:text="20"
-                    mAttr:layout_constraintRight_toLeftOf="@+id/config_layout_tv_minute_unit"
-                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_config_time"
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_tv_account"
                     android:inputType="number"
-                    />
+                    android:text="20"
+                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_config_time"
+                    mAttr:layout_constraintRight_toLeftOf="@+id/config_layout_tv_minute_unit"
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_tv_account"
+                />
 
                 <TextView
+                    android:id="@+id/config_layout_tv_minute_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:layout_marginRight="55dip"
                     android:gravity="center"
+                    android:inputType="number"
+                    android:text="分钟"
+                    android:textColor="@color/common_gray_title_color"
                     android:textSize="22sp"
                     mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_et_config_time"
-                    android:id="@+id/config_layout_tv_minute_unit"
-                    android:text="分钟"
-                    android:layout_marginBottom="10dip"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_iv_right"
-                    android:layout_marginRight="55dip"
-                    android:inputType="number"
-                    android:textColor="@color/common_gray_title_color"
-                    />
+                />
                 <View
                     android:id="@+id/config_layout_v_config_time"
                     style="@style/config_et_line_style"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_et_config_time"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_et_config_time"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_tv_minute_unit"
-                    />
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_et_config_time"
+                />
                 <!--＊＊＊＊码率＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊-->
                 <TextView
                     android:id="@+id/config_layout_tv_rate_title"
                     style="@style/config_title_style"
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_sp_rate"
+                    android:text="@string/rate_colon"
                     mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_sp_rate"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_config_time"
-                    android:text="@string/rate_colon"
-                    />
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_sp_rate"
+                />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/config_layout_sp_rate"
-                    android:spinnerMode="dropdown"
-                    android:overlapAnchor="false"
-                    android:padding="10dip"
-                    android:layout_marginTop="30dip"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_config_time"
-                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_rate_title"
-                    mAttr:layout_constraintRight_toRightOf="@+id/config_layout_tv_minute_unit"
                     android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dip"
                     android:background="@null"
                     android:entries="@array/rate_array"
+                    android:overlapAnchor="false"
+                    android:padding="10dip"
+                    android:spinnerMode="dropdown"
                     android:theme="@style/common_spinner"
-                    android:layout_height="wrap_content"/>
+                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_rate_title"
+                    mAttr:layout_constraintRight_toRightOf="@+id/config_layout_tv_minute_unit"
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_config_time"/>
                 <com.gkzxhn.prison.customview.EqualHeightImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minWidth="20dip"
                     android:minHeight="20dip"
+                    android:minWidth="20dip"
+                    android:src="@mipmap/down"
+                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_sp_rate"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_sp_rate"
                     mAttr:layout_constraintTop_toTopOf="@+id/config_layout_sp_rate"
-                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_sp_rate"
-                    android:src="@mipmap/down"
-                    />
+                />
                 <View
                     android:id="@+id/config_layout_v_rate"
                     style="@style/config_et_line_style"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_sp_rate"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_sp_rate"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_sp_rate"
-                    />
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_sp_rate"
+                />
                 <!--＊＊＊＊ 协议＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊-->
 
                 <TextView
                     android:id="@+id/config_layout_tv_protocol"
-                    mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_config_time"
                     style="@style/config_title_style"
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_sp_protocol"
-                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_sp_protocol"
                     android:text="@string/protocol"
-                    />
+                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_sp_protocol"
+                    mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_config_time"
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_sp_protocol"
+                />
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/config_layout_sp_protocol"
-                    android:spinnerMode="dropdown"
-                    android:layout_marginTop="30dip"
-                    android:padding="10dip"
-                    mAttr:layout_constraintRight_toRightOf="@+id/config_layout_sp_rate"
-                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_protocol"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_rate"
-                    android:overlapAnchor="false"
                     android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dip"
                     android:background="@android:color/white"
                     android:entries="@array/protocol"
+                    android:overlapAnchor="false"
+                    android:padding="10dip"
+                    android:spinnerMode="dropdown"
                     android:theme="@style/common_spinner"
-                    android:layout_height="wrap_content"/>
+                    mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_protocol"
+                    mAttr:layout_constraintRight_toRightOf="@+id/config_layout_sp_rate"
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_rate"/>
                 <com.gkzxhn.prison.customview.EqualHeightImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="20dip"
+                    android:minWidth="20dip"
+                    android:src="@mipmap/down"
+                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_sp_protocol"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_sp_rate"
                     mAttr:layout_constraintTop_toTopOf="@+id/config_layout_sp_protocol"
-                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_sp_protocol"
-                    android:minWidth="20dip"
-                    android:minHeight="20dip"
-                    android:src="@mipmap/down"
-                    />
+                />
                 <View
                     android:id="@+id/config_layout_v_protocol"
                     style="@style/config_et_line_style"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_sp_protocol"
                     mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_sp_protocol"
                     mAttr:layout_constraintRight_toRightOf="@+id/config_layout_sp_protocol"
-                    />
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_sp_protocol"
+                />
                 <!--＊＊＊＊ USB录制＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊-->
                 <TextView
                     android:id="@+id/config_layout_tv_usb"
-                    mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_config_time"
                     style="@style/config_title_style"
-
-                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_rg_usb"
-                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_rg_usb"
                     android:text="@string/usb_setting"
-                    />
+
+                    mAttr:layout_constraintBottom_toBottomOf="@+id/config_layout_rg_usb"
+                    mAttr:layout_constraintLeft_toLeftOf="@+id/config_layout_tv_config_time"
+                    mAttr:layout_constraintTop_toTopOf="@+id/config_layout_rg_usb"
+                />
                 <RadioGroup
                     android:id="@+id/config_layout_rg_usb"
                     android:layout_width="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="40dip"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="20dip"
+                    android:layout_marginTop="40dip"
+                    android:orientation="horizontal"
                     mAttr:layout_constraintLeft_toRightOf="@+id/config_layout_tv_usb"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_protocol"
-                    android:layout_height="wrap_content">
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_protocol">
                     <RadioButton
                         android:id="@+id/config_layout_rb_usb_open"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/common_text_color"
-                        android:textSize="22sp"
                         android:checked="true"
                         android:text="@string/open"
-                        />
+                        android:textColor="@color/common_text_color"
+                        android:textSize="22sp"
+                    />
                     <RadioButton
                         android:id="@+id/config_layout_rb_usb_close"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/close"
                         android:layout_marginLeft="@dimen/margin"
+                        android:text="@string/close"
                         android:textColor="@color/common_text_color"
                         android:textSize="22sp"
-                        />
+                    />
                 </RadioGroup>
                 <View
                     android:id="@+id/config_layout_v_bottom"
                     android:layout_width="0dip"
+                    android:layout_height="100dip"
                     mAttr:layout_constraintLeft_toLeftOf="parent"
                     mAttr:layout_constraintRight_toRightOf="parent"
                     mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_rg_usb"
-                    android:layout_height="100dip"
-                    />
+                />
                 <Button
                     android:id="@+id/config_layout_btn_save"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="@dimen/margin_half"
+                    android:background="@drawable/common_blue_btn_selector"
+                    android:onClick="onClickListener"
+                    android:paddingBottom="10dip"
+                    android:paddingTop="10dip"
                     android:text="@string/save"
-                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_bottom"
+                    android:textColor="@android:color/white"
+                    android:textSize="26sp"
+                    mAttr:layout_constraintDimensionRatio="5:1"
                     mAttr:layout_constraintLeft_toLeftOf="parent"
                     mAttr:layout_constraintRight_toRightOf="parent"
-                    mAttr:layout_constraintDimensionRatio="5:1"
-                    android:layout_centerHorizontal="true"
-                    android:layout_width="0dip"
-                    android:layout_marginTop="@dimen/margin_half"
-                    android:layout_gravity="bottom"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/common_blue_btn_selector"
-                    android:textSize="26sp"
-                    android:paddingTop="10dip"
-                    android:paddingBottom="10dip"
-                    android:onClick="onClickListener"
-                    android:textColor="@android:color/white"
-                    />
+                    mAttr:layout_constraintTop_toBottomOf="@+id/config_layout_v_bottom"
+                />
 
             </android.support.constraint.ConstraintLayout>
         </FrameLayout>

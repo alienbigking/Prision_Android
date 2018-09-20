@@ -5,15 +5,11 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import com.android.volley.VolleyError
-
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.activity.LoginActivity
 import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.utils.CrashHandler
 import com.gkzxhn.prison.utils.NimInitUtil
-import com.gkzxhn.prison.utils.XtHttpUtil
-import com.gkzxhn.prison.async.VolleyUtils
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.AuthService
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
@@ -24,10 +20,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
-import com.starlight.mobile.android.lib.util.JSONUtil
-import org.json.JSONObject
-
-import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 
@@ -39,7 +31,7 @@ class GKApplication : Application() {
     private val imageLoader = ImageLoader.getInstance()
     private var config: ImageLoaderConfiguration? = null
     //所有Activity
-    private val mActivityList=ArrayList<Activity>()
+    private val mActivityList = ArrayList<Activity>()
 
     /**获取文件的缓存工具类
      * 通过url地址获取本地图片文件，通过文件就可以得到文件的路径 imageLoadCache.get(imageUri)
@@ -59,6 +51,7 @@ class GKApplication : Application() {
             val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
             return sharedPreferences.getInt(Constants.TERMINAL_RATE, 512)
         }
+
     override fun onCreate() {
         super.onCreate()
         instance = this
@@ -71,16 +64,17 @@ class GKApplication : Application() {
     /**
      * 加入activity
      */
-    fun pushActivity(activity:Activity){
-        mActivityList.add(activity);
+    fun pushActivity(activity: Activity) {
+        mActivityList.add(activity)
     }
 
     /**
      * 移除activity
      */
-    fun popActivity(activity:Activity){
-        mActivityList.remove(activity);
+    fun popActivity(activity: Activity) {
+        mActivityList.remove(activity)
     }
+
     private fun initImageLoader() {
         config = ImageLoaderConfiguration.Builder(applicationContext)
                 .memoryCacheExtraOptions(600, 800)// max width, max height，即保存的每个缓存文件的最大长宽
@@ -88,7 +82,7 @@ class GKApplication : Application() {
                 // .discCacheExtraOptions(480, 800, CompressFormat.JPEG, 75) //
                 // Can slow ImageLoader, use it carefully (Better don't use it)
                 .threadPoolSize(3).////线程池内加载的数量
-                threadPriority(Thread.NORM_PRIORITY - 2)
+                        threadPriority(Thread.NORM_PRIORITY - 2)
                 .denyCacheImageMultipleSizesInMemory()
                 .memoryCache(UsingFreqLimitedMemoryCache(2 * 1024 * 1024))
                 ////任务线程的执行方式  后进先出法
@@ -126,19 +120,22 @@ class GKApplication : Application() {
             for (activity in mActivityList) {
                 activity.finish()
             }
-        }catch (e:Exception){}
+        } catch (e: Exception) {
+        }
         //调整到登录界面
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
 
     }
-    fun clearSharedPreferences(){
+
+    fun clearSharedPreferences() {
         val sharedPreferences = getSharedPreferences(Constants.USER_TABLE, Context.MODE_PRIVATE)
         val edit = sharedPreferences.edit()
         edit.clear()
         edit.apply()
     }
+
     /**
      * 图片下载 添加Header auth认证
      */

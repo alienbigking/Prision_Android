@@ -54,7 +54,7 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
      */
     fun updateItems(mDatas: List<MeetingEntity>?) {
         this.mDatas.clear()
-        if (mDatas != null && mDatas.size > 0) {
+        if (mDatas != null && mDatas.isNotEmpty()) {
             this.mDatas.addAll(mDatas)
         }
         notifyDataSetChanged()
@@ -82,8 +82,6 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
                 mCurrentIndex = position
                 onItemClickListener?.onClickListener(v, position)
             }
-
-//
         }
 
     }

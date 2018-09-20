@@ -59,6 +59,7 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                     edit.putString(Constants.EXTRA, entity?.accessToken)
                     edit.apply()
                     accessToken= entity?.accessToken.toString()
+
                     val meetingMemberEntity1 = MeetingMemberEntity()
                     meetingMemberEntity1.familyId=entity?.id
                     meetingMemberEntity1.familyIdCardFront=entity?.idCardFront
@@ -202,7 +203,7 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                         mView?.dialSuccess(getSharedPreferences().getString(Constants.TERMINAL_HOST_PASSWORD, ""))
                     } else {
                         mView?.dialFailed()
-                        Log.i(TAG, "onResponse: 参数无效 code:  " + code)
+                        Log.i(TAG, "onResponse: 参数无效 code:  $code")
                     }
                 } catch (e: JSONException) {
                     mView?.dialFailed()

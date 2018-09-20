@@ -5,14 +5,11 @@ import android.os.Build
 import android.os.Handler
 import android.os.Message
 import android.util.Log
-
 import com.gkzxhn.prison.common.Constants
 import com.starlight.mobile.android.lib.util.HttpStatus
-
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors

@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.support.v4.view.ViewPager
 import android.text.TextUtils
 import android.util.Log
@@ -158,7 +159,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         val sharedPreferences = mPresenter.getSharedPreferences()
         val otherAccount = sharedPreferences.getString(Constants.EXTRA, "")//对方云信帐号
         val meetingId = sharedPreferences.getString(Constants.EXTRAS, "")//记录ID
-        if (otherAccount != null && otherAccount.length > 0) {
+        if (otherAccount != null && otherAccount.isNotEmpty()) {
             //// 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
             //            NIMClient.getService(MsgService.class).sendMessage(message, false);
             // 构造自定义通知，指定接收者
@@ -267,30 +268,33 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      * 设置审核身份布局
      */
     private fun setIdCheckData() {
-        //获取上个界面传过来的信息
-        val meetingMemberEntitys = intent.getSerializableExtra("data") as ArrayList<MeetingMemberEntity>
+        val handler = Handler()
+        //延迟执行Runnable中的run方法
+        handler.postDelayed({
+            //获取上个界面传过来的信息
+            val meetingMemberEntitys = intent.getSerializableExtra("data") as ArrayList<MeetingMemberEntity>
 
-        vp_metting.adapter = VideoMettingViewPagerAdapter(meetingMemberEntitys)
+            vp_metting.adapter = VideoMettingViewPagerAdapter(meetingMemberEntitys)
 
-        if (meetingMemberEntitys.size > 1) {
-            vp_metting.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrollStateChanged(state: Int) {
-                }
+            if (meetingMemberEntitys.size > 1) {
+                vp_metting.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {
+                    }
 
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                }
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                    }
 
-                override fun onPageSelected(position: Int) {
-                    changeViewPagerLeftAndRight()
-                }
+                    override fun onPageSelected(position: Int) {
+                        changeViewPagerLeftAndRight()
+                    }
 
-            })
-        } else {
+                })
+            } else {
 //            隐藏左右划动的按扭
-            video_metting_layout_iv_left.visibility = View.INVISIBLE
-            video_metting_layout_iv_right.visibility = View.INVISIBLE
-        }
-
+                video_metting_layout_iv_left.visibility = View.INVISIBLE
+                video_metting_layout_iv_right.visibility = View.INVISIBLE
+            }
+        }, 500)
     }
 
     /**
@@ -301,16 +305,16 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     private fun changeViewPagerLeftAndRight() {
         when {
             vp_metting.currentItem == 0 -> {
-                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_gary)
-                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
+                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_point_gary_select)
+                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_point_blue_select)
             }
-            vp_metting.currentItem == vp_metting.childCount - 1 -> {
-                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
-                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_gary)
+            vp_metting.currentItem == vp_metting.adapter.count - 1 -> {
+                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_point_blue_select)
+                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_point_gary_select)
             }
             else -> {
-                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
-                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_pint_blue)
+                video_metting_layout_iv_left.setBackgroundResource(R.drawable.shape_call_user_point_blue_select)
+                video_metting_layout_iv_right.setBackgroundResource(R.drawable.shape_call_user_point_blue_select)
             }
         }
     }
@@ -392,8 +396,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         if (account != null && account.isNotEmpty()) {
             //发送云信消息，检测家属端是否已经准备好可以呼叫
             val notification = CustomNotification()
-            val accid = sharedPreferences
-                    .getString(Constants.ACCID, "")
+            val accid = sharedPreferences.getString(Constants.ACCID, "")
             notification.sessionId = accid
             notification.sessionType = SessionTypeEnum.P2P
             // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
@@ -483,7 +486,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                                 val reason = objv!!.getString("reason")
                                 if ("Ended by local user" != reason && !ESTABLISHED_CALL) {
                                     //连接失败 重新连接 切换协议
-                                    //                            if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
+                                    //   if ("Remote host offline".equals(reason) || "No common capabilities".equals(reason)) {
                                     val data = Intent()
                                     data.putExtra(Constants.CALL_AGAIN, true)
                                     data.putExtra(Constants.END_REASON, reason)

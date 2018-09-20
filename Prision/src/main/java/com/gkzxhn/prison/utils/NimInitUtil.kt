@@ -4,27 +4,19 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.text.TextUtils
 import android.widget.Toast
-
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.activity.MainActivity
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
-import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.Observer
-import com.netease.nimlib.sdk.SDKOptions
-import com.netease.nimlib.sdk.StatusBarNotificationConfig
-import com.netease.nimlib.sdk.StatusCode
+import com.netease.nimlib.sdk.*
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.msg.MsgServiceObserve
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
-import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider
-
 import org.json.JSONObject
 
 /**
@@ -39,15 +31,19 @@ import org.json.JSONObject
 
 class NimInitUtil {
     //单例
-    private object Holder { val INSTANCE = NimInitUtil() }
+    private object Holder {
+        val INSTANCE = NimInitUtil()
+    }
+
     companion object {
 
         //CrashHandler实例
         /** 获取CrashHandler实例 ,单例模式  */
-        val instance :NimInitUtil by lazy {
+        val instance: NimInitUtil by lazy {
             Holder.INSTANCE
         }
     }
+
     private val TAG = NimInitUtil::class.java.name
 
     /**
@@ -61,6 +57,7 @@ class NimInitUtil {
                     observer, true)
         }
     }
+
     /**
      * 观察者
      * @return
@@ -74,7 +71,7 @@ class NimInitUtil {
                 }
                 StatusCode.NET_BROKEN -> {
                     val preferences = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
-                    if(!preferences.getString(Constants.USER_ACCOUNT, "").isEmpty()){
+                    if (!preferences.getString(Constants.USER_ACCOUNT, "").isEmpty()) {
                         //已登录才提示
                         Toast.makeText(GKApplication.instance, R.string.network_error, Toast.LENGTH_SHORT).show()
                     }
@@ -123,7 +120,7 @@ class NimInitUtil {
     // ActivityManager
     // go home
     // take a rest and again
-    fun getProcessName(): String?{
+    fun getProcessName(): String? {
         var processName: String? = null
         val am = GKApplication.instance.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         while (true) {
@@ -144,6 +141,7 @@ class NimInitUtil {
 
         }
     }
+
     // 如果返回值为 null，则全部使用默认参数。
     private fun options(): SDKOptions {
         val options = SDKOptions()
