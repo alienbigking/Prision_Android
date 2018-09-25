@@ -86,7 +86,7 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
     /**
      * 根据会见ID请求获取相关家属身份证信息
      */
-    fun requestByMettingID(mettingId: String) {
+    fun requestByMettingID(mettingId: String,familyId: String) {
         //单元测试 延迟加载
         mView?.setIdleNow(true)
         mView?.startRefreshAnim()
@@ -106,7 +106,13 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                     edit.putString(Constants.EXTRA, token)
                     edit.apply()
                     accessToken=token
-                    mView?.onSuccess()
+                    if(meetingMemberEntity==null||meetingMemberEntity?.size==0){
+                        //旧数据，无图片信息，请求家属信息接口
+                        request(familyId)
+                    }else{
+                        //请求成功，数据获取成功
+                        mView?.onSuccess()
+                    }
                 }
                 //单元测试 释放延迟加载
                 mView?.setIdleNow(false)

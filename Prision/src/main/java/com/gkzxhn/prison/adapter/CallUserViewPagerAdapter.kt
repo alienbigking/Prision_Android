@@ -1,6 +1,7 @@
 package com.gkzxhn.prison.adapter
 
 import android.support.v4.view.PagerAdapter
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -32,8 +33,12 @@ class CallUserViewPagerAdapter(private val datas: ArrayList<MeetingMemberEntity>
         val inflate = View.inflate(container.context, R.layout.item_call_user, null)
         val ivItemFront = inflate.findViewById(R.id.item_call_user_iv_1) as ImageView
         val ivItemBack = inflate.findViewById(R.id.item_call_user_iv_2) as ImageView
-        ivItemFront.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardFront.toString()), ivItemFront) }
-        ivItemBack.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardBack.toString()), ivItemBack) }
+        ivItemFront.post {
+            Log.e("raleigh_test","1")
+            ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardFront.toString()), ivItemFront) }
+        ivItemBack.post {
+            Log.e("raleigh_test","2")
+            ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardBack.toString()), ivItemBack) }
         container.addView(inflate)
         return inflate
     }
@@ -42,5 +47,7 @@ class CallUserViewPagerAdapter(private val datas: ArrayList<MeetingMemberEntity>
         //注意这里要移除object
         container.removeView(`object` as View)
     }
-
+    override fun getItemPosition(`object`: Any?): Int {
+        return PagerAdapter.POSITION_NONE
+    }
 }

@@ -1,6 +1,7 @@
 package com.gkzxhn.prison.adapter
 
 import android.support.v4.view.PagerAdapter
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -32,9 +33,15 @@ class VideoMettingViewPagerAdapter(private val datas: ArrayList<MeetingMemberEnt
         val ivItemIcon = inflate.findViewById(R.id.item_video_metting_iv_1) as ImageView
         val ivItemFront = inflate.findViewById(R.id.item_video_metting_iv_2) as ImageView
         val ivItemBack = inflate.findViewById(R.id.item_video_metting_iv_3) as ImageView
-        ivItemIcon.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyAvatarUrl.toString()), ivItemIcon) }
-        ivItemFront.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardFront.toString()), ivItemFront) }
-        ivItemBack.post { ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardBack.toString()), ivItemBack) }
+        ivItemIcon.post {
+            Log.e("raleigh_test","1")
+            ImageLoader.getInstance().displayImage(getImageUrl(data.familyAvatarUrl.toString()), ivItemIcon) }
+        ivItemFront.post {
+            Log.e("raleigh_test","2")
+            ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardFront.toString()), ivItemFront) }
+        ivItemBack.post {
+            Log.e("raleigh_test","3")
+            ImageLoader.getInstance().displayImage(getImageUrl(data.familyIdCardBack.toString()), ivItemBack) }
         container.addView(inflate)
         return inflate
     }
@@ -42,5 +49,8 @@ class VideoMettingViewPagerAdapter(private val datas: ArrayList<MeetingMemberEnt
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         //注意这里要移除object
         container.removeView(`object` as View)
+    }
+    override fun getItemPosition(`object`: Any?): Int {
+        return PagerAdapter.POSITION_NONE
     }
 }

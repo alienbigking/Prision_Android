@@ -272,8 +272,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         //延迟执行Runnable中的run方法
         handler.postDelayed({
             //获取上个界面传过来的信息
-            val meetingMemberEntitys = intent.getSerializableExtra("data") as ArrayList<MeetingMemberEntity>
-
+            val meetingMemberEntitys = intent.getSerializableExtra(Constants.EXTRA_ENTITY) as ArrayList<MeetingMemberEntity>
             vp_metting.adapter = VideoMettingViewPagerAdapter(meetingMemberEntitys)
 
             if (meetingMemberEntitys.size > 1) {

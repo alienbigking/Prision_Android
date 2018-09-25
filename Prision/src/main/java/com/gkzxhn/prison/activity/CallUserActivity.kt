@@ -123,7 +123,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
             mPresenter.request(mFamilyId)
         } else {
 //            有会见ID 根据会见ID请求获取相关家属身份证信息
-            mPresenter.requestByMettingID(id)
+            mPresenter.requestByMettingID(id,mFamilyId)
         }
     }
 
@@ -258,9 +258,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         val editor = mPresenter.getSharedPreferences().edit()
         editor.putString(Constants.EXTRAS, id)
         editor.apply()
-        vpCallUser.adapter = mPresenter.meetingMemberEntity?.let { CallUserViewPagerAdapter(it) }
-
-        if (mPresenter.meetingMemberEntity?.size!! > 1) {
+        mPresenter.meetingMemberEntity?.let {
+            vpCallUser.adapter = CallUserViewPagerAdapter(it)
+        }
+        if (mPresenter.meetingMemberEntity?.size?:0 > 1) {
             initDots()
             // 设置ViewPager的监听
             vpCallUser.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -343,7 +344,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         intent.putExtra(Constants.ZIJING_PASSWORD, hostPassword)
         intent.putExtra(Constants.EXTRAS, mFamilyId)//家属id
         intent.putExtra(Constants.EXTRA, id)//会见id
-        intent.putExtra("data", mPresenter.meetingMemberEntity)
+        intent.putExtra(Constants.EXTRA_ENTITY, mPresenter.meetingMemberEntity)
         startActivityForResult(intent, mCallRequestCode)
         //关闭显示进度条
         stopProgress()
