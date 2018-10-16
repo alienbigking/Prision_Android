@@ -144,7 +144,7 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan"
             />
-
+        <!--免费会见-->
         <activity android:name="com.gkzxhn.prison.activity.CallFreeActivity"
             android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize"

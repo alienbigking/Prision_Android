@@ -42,7 +42,7 @@ object Constants {
     val RELEASE_DOMAIN = "https://www.yuwugongkai.com/ywgk-app"//新发布正式环境
     val DEMO_DOMAIN = "http://120.78.190.101:8084/ywgk-app-demo"//演示环境
     val DEV_DOMAIN = "http://120.78.190.101:8086/ywgk-app-auth"//开发环境
-    val DOMAIN_NAME = RELEASE_DOMAIN
+    val DOMAIN_NAME = DEV_DOMAIN
 
     val REQUEST_MEETING_LIST_URL = DOMAIN_NAME + "/api/meetings/getMeetingsForPrison"//会见列表
     val REQUEST_CANCEL_MEETING_URL = DOMAIN_NAME + "/api/meetings/update"// 取消会见
@@ -59,6 +59,7 @@ object Constants {
 
     val ADD_FREE_MEETING = DOMAIN_NAME + "/api/free_meetings/add"//记录免费会见信息
     val UPDATE_FREE_MEETING = DOMAIN_NAME + "/api/free_meetings/updateDuration"//更新免费会见时长
+    val UPDATE_MEETING_DURATION = DOMAIN_NAME + "/api/meetings/updateDuration"//更新远程会见时长
 
     /*-------------------------------msg what-------------------------------------------------*/
     val START_REFRESH_UI = 1
@@ -69,6 +70,11 @@ object Constants {
     val EXTRAS = "extras"
     val EXTRA_ENTITY = "extra_entity"
     val EXTRA_POSITION = "extra_position"
+
+    //总会见时长
+    val TOTAL_CALL_DURATION = "total_call_duration"
+    //已通话时长
+    val LAST_CALL_DURATION = "last_call_duration"
     val EXTRA_CODE = 0x001
     val PREVIEW_PHOTO_CODE = 0x102
     val SELECT_PHOTO_CODE = 0x103
@@ -109,6 +115,7 @@ object Constants {
     val ZIJING_PASSWORD = "zijing_password"
     val ACCID = "accid"
     val PROTOCOL = "protocol"
+    //时间限制
     val TIME_LIMIT = "time_limit"
     val CALL_AGAIN = "call_again"
     val END_REASON = "end_reason"

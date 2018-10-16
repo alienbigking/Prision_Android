@@ -12,6 +12,10 @@ interface ICallZijingModel : IBaseModel {
      * 更新免费会见时长
      */
     fun  updateFreeMeetting(meettingId: String, meettingSecond: Long,onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+    /**
+     * 更新远程会见时长
+     */
+    fun  updateMeetting(meettingId: String, meettingSecond: Long,onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
 
     /**
      * 记录免费会见

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.text.Html
 import android.view.View
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.MainAdapter
@@ -28,6 +29,7 @@ import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.view.IMainView
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
+import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
 import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list as mRecylerView
 import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_swipeRefresh as mSwipeRefresh
@@ -109,8 +111,12 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
                 else -> if (isConnectZijing) {//点击项，进入详情，必须已连接视频服务器
                     val intent = Intent(this@MainActivity, CallUserActivity::class.java)
                     intent.action = Constants.CALL_DEFUALT_ACTION
+                    //会见ID
                     intent.putExtra(Constants.EXTRA, adapter.getCurrentItem().id)
+                    //家属ID
                     intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().familyId)
+                    //已通话时长
+                    intent.putExtra(Constants.TOTAL_CALL_DURATION, adapter.getCurrentTimeLength())
                     startActivityForResult(intent, Constants.EXTRA_CODE)
                 } else {
                     showToast(R.string.video_service_is_error)

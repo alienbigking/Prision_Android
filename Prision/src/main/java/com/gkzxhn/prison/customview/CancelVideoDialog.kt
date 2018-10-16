@@ -105,6 +105,7 @@ class CancelVideoDialog(context: Context, private val isCancelVideo: Boolean) : 
             // 发送自定义通知
             NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
         }
+        onFinishListener?.checkFinishStatus(content)
         if (!meetingId.isEmpty()) {//meetingid不能为空
             mModel.requestCancel(meetingId, content, object : VolleyUtils.OnFinishedListener<String> {
                 override fun onSuccess(response: String) {
@@ -114,6 +115,13 @@ class CancelVideoDialog(context: Context, private val isCancelVideo: Boolean) : 
                 }
             })
         }
+    }
+    private var onFinishListener:FinishListener?=null
+    fun setFinishListener(onFinishListener:FinishListener){
+        this.onFinishListener=onFinishListener
+    }
+    interface FinishListener {
+        fun checkFinishStatus(reason:String)
     }
 
     fun measureWindow() {

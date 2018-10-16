@@ -9,4 +9,5 @@ import com.gkzxhn.prison.model.IBaseModel
 interface ICallZijingView : IBaseView {
     fun setSpeakerUi(quiet: Boolean)
     fun hangUpSuccess( hint:String)
+    fun checkFinishStatus(reason:String)
 }

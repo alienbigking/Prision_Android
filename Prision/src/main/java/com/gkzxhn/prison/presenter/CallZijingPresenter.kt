@@ -26,12 +26,28 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     private val TAG = CallZijingPresenter::class.java.simpleName
     //免费会见id
     private var mFreeMeetingId:String?=null
-    //开始会见的时间戳
+    //开始会见的时间戳,单位毫秒
     private var mStartMeetingTime:Long=0L
+    //结束会见的时间戳,单位毫秒
+    private var mEndMeetingTime:Long=0L
+    //已经会见时长，单位秒
+    private var mLastCallDuration:Long=0L
+
+    fun setLastCallDuration(duration:Long){
+        this.mLastCallDuration=duration
+    }
+
+    /**
+     * 初始化会见开始时间，家属进入会议室算起
+     */
+    fun initStartMeetingTime(){
+        mStartMeetingTime=System.currentTimeMillis()
+    }
     /**
      *  取消会见
      */
     fun requestCancel(id: String, reason: String) {
+        mView?.checkFinishStatus(reason)
         mModel.requestCancel(id, reason,object :VolleyUtils.OnFinishedListener<String>{
             override fun onSuccess(response: String) {
 
@@ -41,31 +57,52 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
             }
         })
     }
+
     /**
-     *  更新会见时长
+     * 获取总会见时长
+     */
+    fun getCallDuration():Long{
+        if(mStartMeetingTime==0L)mStartMeetingTime=mEndMeetingTime
+        //通话时长转成秒＋上次通话时长
+        val meettingSecond=(mEndMeetingTime-mStartMeetingTime)/1000+mLastCallDuration
+        return meettingSecond
+    }
+    /**
+     *  更新免费会见时长
      */
     fun updateFreeMeetting() {
         mFreeMeetingId?.let {
-            val endMeetingTime=System.currentTimeMillis()
+            if(mEndMeetingTime==0L)mEndMeetingTime=System.currentTimeMillis()
+            if(mStartMeetingTime==0L)mStartMeetingTime=mEndMeetingTime
             //通话时长转成秒
-            val meettingSecond=(endMeetingTime-mStartMeetingTime)/1000
+            val meettingSecond=(mEndMeetingTime-mStartMeetingTime)/1000
             mModel.updateFreeMeetting(it,meettingSecond,object :VolleyUtils.OnFinishedListener<String>{
                 override fun onSuccess(response: String) {
-                    Log.e("raleigh_test","response"+response)
                 }
 
                 override fun onFailed(error: VolleyError) {
-                    Log.e("raleigh_test","error"+String(error.networkResponse.data))
                 }
             })
         }
+    }
+    /**
+     *  更新远程会见时长
+     */
+    fun updateMeetting(mettingId: String) {
+        if(mEndMeetingTime==0L)mEndMeetingTime=System.currentTimeMillis()
+        //通话时长转成秒＋上次通话时长
+        mModel.updateMeetting(mettingId,getCallDuration(),object :VolleyUtils.OnFinishedListener<String>{
+            override fun onSuccess(response: String) {
+            }
 
+            override fun onFailed(error: VolleyError) {
+            }
+        })
     }
     /**
      *  添加免费会见
      */
     fun addFreeMeetting(familyId: String) {
-        mStartMeetingTime=System.currentTimeMillis()
         mModel.addFreeMeetting(familyId,object :VolleyUtils.OnFinishedListener<String>{
             override fun onSuccess(response: String) {
                 val json=JSONUtil.getJSONObject(response)
@@ -113,11 +150,15 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     /**
      *  挂断
      */
-    fun hangUp(reason: String) {
+    fun hangUp(reason: String,mettingId: String) {
         //单元测试 延迟加载
         mView?.setIdleNow(true)
-        //更新免费会见时长
-        if(mFreeMeetingId!=null)updateFreeMeetting()
+        if(mFreeMeetingId!=null){
+            //更新免费会见时长
+            updateFreeMeetting()
+        } else {//更新远程会见时长
+            updateMeetting(mettingId)
+        }
         //挂断
         mModel.hangUp(object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {

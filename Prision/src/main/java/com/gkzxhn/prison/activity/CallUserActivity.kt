@@ -51,8 +51,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     private var preferences: SharedPreferences? = null
     //家属id
     private lateinit var mFamilyId: String
-    //昵称
-    private lateinit var nickName: String
     //会见id
     private lateinit var id: String
     //是否正在连线
@@ -62,6 +60,8 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     //用户账号
     private var mIDWidth: Int = 0
     private var mCallRequestCode = Constants.EXTRA_CODE
+    //总会见时长
+    private var mTotalCallDuration=0L
     //呼叫云信等待时间
     private val DOWN_TIME: Long = 15000//倒计时 15秒
     // 下一次呼叫间隔时间
@@ -97,7 +97,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         //获取传递过来时的数据
         id = intent.getStringExtra(Constants.EXTRA) ?: ""
         mFamilyId = intent.getStringExtra(Constants.EXTRAS) ?: ""
-        nickName = intent.getStringExtra(Constants.EXTRA_TAB) ?: ""
+        mTotalCallDuration=intent.getLongExtra(Constants.TOTAL_CALL_DURATION,0L)
         mProgress = ProgressDialog.show(this, null, getString(R.string.check_other_status))
         mProgress.setCanceledOnTouchOutside(true)
         mProgress.setCancelable(true)
@@ -117,13 +117,25 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                 online()
             }
         }
-
-        if (id.isEmpty()) {
+        if (isFreeMetting()) {
 //            没有会见ID 根据家属id请求获取家属身份证信息
             mPresenter.request(mFamilyId)
-        } else {
-//            有会见ID 根据会见ID请求获取相关家属身份证信息
+        }else{
+            //远程会见 根据会见ID请求获取相关家属身份证信息
             mPresenter.requestByMettingID(id,mFamilyId)
+        }
+    }
+    fun isFreeMetting():Boolean{
+        return id.isEmpty()
+    }
+    override fun onResume() {
+        super.onResume()
+        isVideoMetting = false
+        //检查是否正在通话，有就挂断
+        mPresenter.checkCallStatus()
+        if (!btnCall.isEnabled) {
+            tvNextCallHint.visibility = View.VISIBLE
+            mNextCallTimer.start()
         }
     }
 
@@ -215,7 +227,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                     json.put("code", -1)
                     //会见记录id
                     json.put("meetingId", id)
-
+                    //本次会见时长，callDuration大于等于0,免费会见callDuration＝－1
+                    var callDuration=mTotalCallDuration-mPresenter.lastCallDuration
+                    callDuration=if(callDuration>0)callDuration else 0
+                    json.put("callDuration",if(id.isEmpty())-1L else callDuration)
                     //  json.put("msg", account);
                     notification.content = json.toString()
                     NIMClient.getService(MsgService::class.java).sendCustomNotification(notification).setCallback(object : RequestCallback<Void> {
@@ -288,7 +303,6 @@ class CallUserActivity : SuperActivity(), ICallUserView {
 
                     }
                 }
-
             })
 
         } else {
@@ -345,6 +359,10 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         intent.putExtra(Constants.EXTRAS, mFamilyId)//家属id
         intent.putExtra(Constants.EXTRA, id)//会见id
         intent.putExtra(Constants.EXTRA_ENTITY, mPresenter.meetingMemberEntity)
+        //总会见时长
+        intent.putExtra(Constants.TOTAL_CALL_DURATION,mTotalCallDuration)
+        //上次通话时长
+        intent.putExtra(Constants.LAST_CALL_DURATION,mPresenter.lastCallDuration)
         startActivityForResult(intent, mCallRequestCode)
         //关闭显示进度条
         stopProgress()
@@ -378,16 +396,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
         if (mProgress.isShowing) mProgress.dismiss()
     }
 
-    override fun onResume() {
-        super.onResume()
-        isVideoMetting = false
-        //检查是否正在通话，有就挂断
-        mPresenter.checkCallStatus()
-        if (!btnCall.isEnabled) {
-            tvNextCallHint.visibility = View.VISIBLE
-            mNextCallTimer.start()
-        }
-    }
+
 
 
     /**
@@ -440,11 +449,17 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                         mPresenter.dial()
                     }
                 } else if (resultCode == Activity.RESULT_CANCELED) {
-                    //对方挂断
+                    //对方挂断或终端挂断
+                    //更新上次会见时长
+                    mPresenter.lastCallDuration=data.getLongExtra(Constants.LAST_CALL_DURATION,0L)
+                    //显示提示
                     val hint = data.getStringExtra(Constants.EXTRA)
                     if (!hint.isEmpty()) {
                         showToast(hint)
                     }
+                }else if(resultCode==Activity.RESULT_OK){
+                    //会见正常结束，关闭此界面
+                    finish()
                 }
 
             }

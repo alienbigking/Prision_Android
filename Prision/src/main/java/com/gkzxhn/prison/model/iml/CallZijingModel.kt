@@ -29,6 +29,20 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
         }
     }
 
+    /**
+     *
+     */
+    override fun updateMeetting(meettingId: String, meettingSecond: Long, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
+        try {
+            val params = HashMap<String, String>()
+            params.put("id", meettingId)
+            params.put("duration", meettingSecond.toString())
+            volleyUtils.post( Constants.UPDATE_MEETING_DURATION, params, REQUEST_TAG, onFinishedListener)
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+    }
+
     override fun addFreeMeetting(familyId: String,  onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
         try {
             val params = HashMap<String, String>()

@@ -92,8 +92,8 @@ class CallFreeActivity : SuperActivity(), ICallFreeView {
                 val intent = Intent(this@CallFreeActivity, CallUserActivity::class.java)
                 intent.action = Constants.CALL_FREE_ACTION
                 intent.putExtra(Constants.EXTRA, "")
+                //家属ID
                 intent.putExtra(Constants.EXTRAS, adapter.getCurrentItem().id)
-                intent.putExtra(Constants.EXTRA_TAB, adapter.getCurrentItem().prisonerName)
                 startActivity(intent)
             } else {
                 //没有免费次数

@@ -62,17 +62,24 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     //会见id
     private lateinit var id: String
     //倒计时
-    private lateinit var mTimer: CountDownTimer
+    private var mTimer: CountDownTimer?=null
     private var FIMALY_IS_JOIN = false//家属是否已经加入会议室
     private var ESTABLISHED_CALL = false//监狱端已经建立连接
     private var init = true
+    private var mTotalCallDuration = 0L
+    private var mLastCallDuration = 0L
+    //结束页面返回resultCode
+    private var mFinishResult=Activity.RESULT_CANCELED
+    //正计时秒数
+    private var mSecond=0L
+    //正计时使用线程
+    private var mHandler = Handler()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.video_metting_layout)
         //初始化Present
         mPresenter = CallZijingPresenter(this, this)
-        //初始化倒计时时间 必须presenter初始化后
-        initCountDownTimer()
+
         //遥控器控制器
         mPresenter.cameraControl("direct")
         //打开扬声器
@@ -81,19 +88,96 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         mPresenter.switchMuteStatus()
         //获取传递过来时的数据
         id = intent.getStringExtra(Constants.EXTRA) ?: ""
+        mTotalCallDuration=intent.getLongExtra(Constants.TOTAL_CALL_DURATION,0L)
+        mLastCallDuration=intent.getLongExtra(Constants.LAST_CALL_DURATION,0L)
+        mPresenter.setLastCallDuration(mLastCallDuration)
+        //初始化倒计时时间 必须presenter初始化后
+        initCountDownTimer()
         //初始化挂断对话框
         initHangUpDialog()
         setIdCheckData()
         registerReceiver()
     }
+    /**
+     * 开始倒计时-远程会见
+     */
+    private fun startCountDownTimer(){
+        //本次会见时长
+        var duration = mTotalCallDuration-mLastCallDuration
+        if(duration>0){
+            //还有通话时间，开始倒计时
+            mTimer?.start()
+        }else{
+            //没有通话时间，开始正计时
+            startTimer()
+        }
+    }
+    /**
+     * 停止倒计时-远程会见
+     */
+    private fun stopCountDownTimer(){
+        mTimer?.cancel()
+    }
+    /**
+     * 开始正计时
+     */
+    private fun startTimer(){
+        mSecond=0
+        mHandler.postDelayed(mRunnable,1000)
+    }
+
+    /**
+     * 停止正计时
+     */
+    private fun stopTimer(){
+        mHandler.removeCallbacks(mRunnable)
+    }
+
+    /**
+     * 是否为免费会见
+     */
+    private fun isFreeMetting():Boolean{
+        return id.isEmpty()
+    }
+
+    private val mRunnable=object :Runnable {
+        override fun run() {
+            mSecond++
+            //分钟
+            if(isFreeMetting()){//免费会见，显示"已通话：xxxx秒"
+                tvHeaderCountDown.text = getString(R.string.has_called_colon) + getShowTime(mSecond)
+            }else{//远程会见，显示"已超时：xxxx秒"
+                tvHeaderCountDown.text = getString(R.string.has_time_out_colon) + getShowTime(mSecond)
+            }
+            mHandler.postDelayed(this,1000)
+        }
+    }
+    private fun getShowTime(totalSecond: Long):String{
+        var minute = totalSecond / 60
+        var time=""
+        if(minute<60){
+            val seconds = totalSecond % 60
+            if(minute==0L){
+                time = seconds.toString() + getString(R.string.second)
+            }else{
+                time = minute.toString() + getString(R.string.minute) + seconds.toString() + getString(R.string.second)
+            }
+        }else{
+            val hour = minute / 60
+            minute = minute % 60
+            val seconds = totalSecond - hour * 3600 - minute * 60
+            time = minute.toString() + getString(R.string.minute) + seconds.toString() + getString(R.string.second)
+        }
+        return time
+    }
+
 
     /**
      * 初始化倒计时时间
      */
     private fun initCountDownTimer() {
-        val time = mPresenter.getSharedPreferences().getLong(Constants.TIME_LIMIT, 20)
-        //倒计时time分钟
-        var DOWN_TIME = time * 60 * 1000//倒计时
+        var DOWN_TIME = mTotalCallDuration-mLastCallDuration
+        DOWN_TIME=if(DOWN_TIME>0)DOWN_TIME*1000 else 0
         /**
          * 延迟time秒执行 倒计时
          */
@@ -105,15 +189,13 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                         tvHeaderCountDown.setTextColor(resources.getColor(R.color.red_text))
                     }
                 }
-                //分钟
-                val min = second / 60
-                val seconds = second - min * 60
-                val time = min.toString() + getString(R.string.minute) + seconds.toString() + getString(R.string.second)
-                tvHeaderCountDown.text = getString(R.string.the_leave_time) + time
+                tvHeaderCountDown.text = getString(R.string.the_leave_time) + getShowTime(second)
             }
 
             override fun onFinish() {
                 tvHeaderCountDown.text = getString(R.string.the_leave_time) + getString(R.string.metting_has_time_out)
+                //开始正计时
+                startTimer()
                 //倒计时完成
                 if (!mHintDialog.isShowing) mHintDialog.show()
             }
@@ -130,8 +212,13 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             //发送挂断消息给对方
             sendHangupMessage()
             //挂断
-            mPresenter.hangUp("")
+            mPresenter.hangUp("",id)
         }
+        mCloseVideoDialog.setFinishListener(object :CancelVideoDialog.FinishListener{
+            override fun checkFinishStatus(reason: String) {
+                this@VideoMettingActivity.checkFinishStatus(reason)
+            }
+        })
         //提示通话时间已到
         mHintDialog = CustomDialog(this)
         mHintDialog.title = getString(R.string.hint)
@@ -143,7 +230,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 //发送挂断消息给对方
                 sendHangupMessage()
                 //挂断
-                mPresenter.hangUp("")
+                mPresenter.hangUp("",id)
                 //时间到了，挂断
                 timeOutHangUp()
             }
@@ -185,6 +272,16 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         }
     }
 
+    /**
+     *  检查会见为是否正常结束（包括免费会见）
+     */
+    override fun checkFinishStatus(reason:String){
+        val finishResons=GKApplication.instance.resources.getStringArray(R.array.cancel_video_reason)
+        if(finishResons[0]==reason||finishResons[1]==reason||finishResons[2]==reason){
+            //会见正常结束finsh,提醒上一个页面自动关闭
+            mFinishResult=Activity.RESULT_OK
+        }
+    }
     override fun onDestroy() {
         mPresenter.onDestory()
         //关闭窗口，避免窗口溢出
@@ -192,7 +289,9 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         if (mHintDialog.isShowing) mHintDialog.dismiss()
         unregisterReceiver(mBroadcastReceiver)//注销广播监听器
         //停止倒计时
-        mTimer.cancel()
+        stopCountDownTimer()
+        //停止正计时
+        stopTimer()
         super.onDestroy()
     }
 
@@ -379,7 +478,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             //发送挂断消息给对方
             sendHangupMessage()
             //挂断
-            mPresenter.hangUp("")
+            mPresenter.hangUp("",id)
             //时间到了，挂断
             timeOutHangUp()
         }
@@ -408,6 +507,10 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 json.put("limit_time", time)
                 json.put("jail", jailId)
                 json.put("meetingId", id)//会见id
+                //本次会见时长，callDuration大于等于0,免费会见callDuration＝－1
+                var callDuration=mTotalCallDuration-mLastCallDuration
+                callDuration=if(callDuration>0)callDuration else 0
+                json.put("callDuration",if(isFreeMetting())-1L else callDuration)
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
@@ -424,7 +527,8 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     override fun hangUpSuccess(hint: String) {
         val intent = Intent()
         intent.putExtra(Constants.EXTRA, hint)
-        setResult(Activity.RESULT_CANCELED, intent)
+        intent.putExtra(Constants.LAST_CALL_DURATION, mPresenter.getCallDuration())
+        setResult(mFinishResult, intent)
         finish()
     }
 
@@ -436,17 +540,22 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             when (intent.action) {
                 Constants.FAMILY_FAILED_JOIN_METTING -> {//家属加入会议失败
                     //家属已加入 －家属挂断   ／ 家属未加入 人脸失败失败
-                    mPresenter.hangUp(getString(if (FIMALY_IS_JOIN) R.string.video_metting_hangup else R.string.video_metting_failed))
+                    mPresenter.hangUp(getString(if (FIMALY_IS_JOIN) R.string.video_metting_hangup else R.string.video_metting_failed),id)
                 }
                 Constants.FAMILY_JOIN_METTING -> {//家属加入会议成功
+                    mPresenter.initStartMeetingTime()
                     if (mPresenter.getSharedPreferences().getBoolean(Constants.IS_OPEN_USB_RECORD, true)) {
                         //开始录屏
                         mPresenter.startUSBRecord()
                     }
                     FIMALY_IS_JOIN = true
-
-                    mTimer.start()
-
+                    if(isFreeMetting()){
+                        //免费会见，开始正计时
+                        startTimer()
+                    }else{
+                        //远程开始倒计时
+                        startCountDownTimer()
+                    }
                     if (getIntent().action == Constants.CALL_FREE_ACTION) {
                         val activityIntent = this@VideoMettingActivity.intent
                         //免费呼叫次数更新

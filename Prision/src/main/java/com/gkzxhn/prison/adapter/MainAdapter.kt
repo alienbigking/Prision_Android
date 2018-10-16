@@ -10,6 +10,7 @@ import com.gkzxhn.prison.R
 import com.gkzxhn.prison.entity.MeetingEntity
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.adapter.ViewHolder
+import com.starlight.mobile.android.lib.util.ConvertUtil
 
 import java.util.ArrayList
 import kotlinx.android.synthetic.main.main_item_layout.view.main_item_layout_tv_time
@@ -39,6 +40,32 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
     }
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
         this.onItemClickListener = onItemClickListener
+    }
+
+    /**
+     * 获取当前时长
+     */
+    fun getCurrentTimeLength():Long{
+        var timeLenth=0L
+        try {
+            //解析会见时间段2017-08-03 19:00-19:30 获取会见时长
+            val meetingTime = mDatas[mCurrentIndex].time
+            var time = "-"
+            meetingTime?.let {
+                time = if (it.length > 10) it.substring(10, it.length) else "-"
+            }
+            val array = time.split("-")
+            if (array.size > 0) {
+                val mDate1 = ConvertUtil.stringToDate(array[0].trim(), "HH:mm")
+                val mDate2 = ConvertUtil.stringToDate(array[1].trim(), "HH:mm")
+                val t2=mDate2?.time?:0
+                val t1=mDate1?.time?:0
+                //获取相差的毫秒数，单位转为秒
+                timeLenth=(t2-t1)/1000
+            }
+        }catch (e:Exception){}
+
+        return timeLenth
     }
 
     /**

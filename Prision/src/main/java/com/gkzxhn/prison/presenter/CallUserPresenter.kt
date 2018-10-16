@@ -31,7 +31,11 @@ import org.json.JSONObject
 
 class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<ICallUserModel, ICallUserView>(context, CallUserModel(), view) {
 //    var entity: MeetingDetailEntity? = null
+    //云信Token
     var accessToken:String=""
+    //已通话时长
+    var lastCallDuration=0L
+    //家属图片信息
     var meetingMemberEntity: ArrayList<MeetingMemberEntity>? = null
     private val TAG = CallUserPresenter::class.java.simpleName
 
@@ -106,6 +110,8 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                     edit.putString(Constants.EXTRA, token)
                     edit.apply()
                     accessToken=token
+                    var duration=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(data, "meeting"),"duration")
+                    lastCallDuration=if(duration!=null&&ConvertUtil.isNum(duration))duration.toLong() else 0L
                     if(meetingMemberEntity==null||meetingMemberEntity?.size==0){
                         //旧数据，无图片信息，请求家属信息接口
                         request(familyId)

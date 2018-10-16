@@ -14,7 +14,6 @@ import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.starlight.mobile.android.lib.util.CommonHelper
-import kotlinx.android.synthetic.main.config_layout.config_layout_et_config_time as etTime
 import kotlinx.android.synthetic.main.config_layout.config_layout_et_guest_password as etGuestPassword
 import kotlinx.android.synthetic.main.config_layout.config_layout_et_host_password as etHostPassword
 import kotlinx.android.synthetic.main.config_layout.config_layout_et_meeting_number as etMeettingNumber
@@ -37,8 +36,6 @@ class ConfigActivity : SuperActivity() {
     //协议 h323／sip
     private var protocol: String? = null
     private lateinit var preferences: SharedPreferences
-    //限制的时间
-    private var mTimeLimit: Long = 0
     //是否开启USB录制
     private var isOpenUsb = false
     private val mBroadcastReceiver = object : BroadcastReceiver() {
@@ -67,13 +64,10 @@ class ConfigActivity : SuperActivity() {
         //设置USB录播选择监听器
         rgUSB.setOnCheckedChangeListener(mOnCheckedChangeListener)
         //显示已设置的USB录播
-        isOpenUsb = preferences.getBoolean(Constants.IS_OPEN_USB_RECORD, true)
+        isOpenUsb = preferences.getBoolean(Constants.IS_OPEN_USB_RECORD, false)
         rgUSB.check(if (isOpenUsb) R.id.config_layout_rb_usb_open else R.id.config_layout_rb_usb_close)
         //显示当前终端号
         tvAccount.text = preferences.getString(Constants.USER_ACCOUNT, "")
-        //获取
-        mTimeLimit = preferences.getLong(Constants.TIME_LIMIT, 20L)
-        etTime.setText(mTimeLimit.toString())
         //默认都显示*
         etGuestPassword.setText(preferences.getString(Constants.TERMINAL_GUEST_PASSWORD, ""))
         etHostPassword.setText(preferences.getString(Constants.TERMINAL_HOST_PASSWORD, ""))
@@ -170,7 +164,6 @@ class ConfigActivity : SuperActivity() {
                 val hostPassword = etHostPassword.text.toString().trim()
                 val guestPassword = etGuestPassword.text.toString().trim()
 
-                val timeStr = etTime.text.toString().trim()
                 if (TextUtils.isEmpty(meettingNumber)) {
                     showToast(R.string.please_input_meeting_numbers)
                 } else if (TextUtils.isEmpty(hostPassword)) {
@@ -187,7 +180,6 @@ class ConfigActivity : SuperActivity() {
                     editor.putString(Constants.TERMINAL_GUEST_PASSWORD, guestPassword)
                     editor.putInt(Constants.TERMINAL_RATE, Integer.valueOf(mRate))
                     editor.putString(Constants.PROTOCOL, protocol)
-                    editor.putLong(Constants.TIME_LIMIT, timeStr.toLong())
                     editor.putBoolean(Constants.IS_OPEN_USB_RECORD, isOpenUsb)
                     editor.apply()
                     //单元测试 释放延迟加载
