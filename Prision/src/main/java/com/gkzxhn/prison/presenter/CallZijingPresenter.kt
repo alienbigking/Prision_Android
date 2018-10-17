@@ -61,10 +61,18 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     /**
      * 获取总会见时长
      */
-    fun getCallDuration():Long{
+    fun getCallDuration(){
+        getCallDuration(mLastCallDuration)
+    }
+
+    /**
+     * 获取总会见时长
+     */
+    private fun getCallDuration(lastcallDuration:Long):Long{
+        if(mEndMeetingTime==0L)mEndMeetingTime=System.currentTimeMillis()
         if(mStartMeetingTime==0L)mStartMeetingTime=mEndMeetingTime
         //通话时长转成秒＋上次通话时长
-        val meettingSecond=(mEndMeetingTime-mStartMeetingTime)/1000+mLastCallDuration
+        val meettingSecond=(mEndMeetingTime-mStartMeetingTime)/1000+lastcallDuration
         return meettingSecond
     }
     /**
@@ -72,11 +80,8 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
      */
     fun updateFreeMeetting() {
         mFreeMeetingId?.let {
-            if(mEndMeetingTime==0L)mEndMeetingTime=System.currentTimeMillis()
-            if(mStartMeetingTime==0L)mStartMeetingTime=mEndMeetingTime
-            //通话时长转成秒
-            val meettingSecond=(mEndMeetingTime-mStartMeetingTime)/1000
-            mModel.updateFreeMeetting(it,meettingSecond,object :VolleyUtils.OnFinishedListener<String>{
+            //免费会见不需累计上次通话时间
+            mModel.updateFreeMeetting(it,getCallDuration(0),object :VolleyUtils.OnFinishedListener<String>{
                 override fun onSuccess(response: String) {
                 }
 
@@ -89,9 +94,8 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
      *  更新远程会见时长
      */
     fun updateMeetting(mettingId: String) {
-        if(mEndMeetingTime==0L)mEndMeetingTime=System.currentTimeMillis()
-        //通话时长转成秒＋上次通话时长
-        mModel.updateMeetting(mettingId,getCallDuration(),object :VolleyUtils.OnFinishedListener<String>{
+
+        mModel.updateMeetting(mettingId,getCallDuration(mLastCallDuration),object :VolleyUtils.OnFinishedListener<String>{
             override fun onSuccess(response: String) {
             }
 
@@ -132,20 +136,6 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
         })
     }
 
-    /** 查询视频会见信息 无会见code=-1
-     *
-     */
-    fun getCallInfor(){
-        mModel.getCallInfor(object :VolleyUtils.OnFinishedListener<JSONObject>{
-            override fun onSuccess(response: JSONObject) {
-                mView?.showToast(response.toString())
-            }
-
-            override fun onFailed(error: VolleyError) {
-            }
-
-        })
-    }
 
     /**
      *  挂断
