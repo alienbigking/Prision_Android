@@ -49,18 +49,7 @@ class AlarmClockPopWindow(val context: Context) : PopupWindow(context) {
         tvClose.setOnClickListener {
             dismiss()
         }
-        //铃声
-        mMediaPlayer = MediaPlayer()
 
-//        var  file = context.getResources().openRawResourceFd(R.raw.alarm);
-//        try {
-//            mMediaPlayer?.setDataSource(file.getFileDescriptor(), file.getStartOffset(),
-//                    file.getLength());
-//            mMediaPlayer?.prepare();
-//            file.close();
-//        } catch (e:Exception) {
-//            e.printStackTrace();
-//        }
     }
 
     override fun showAtLocation(parent: View?, gravity: Int, x: Int, y: Int) {
@@ -72,6 +61,7 @@ class AlarmClockPopWindow(val context: Context) : PopupWindow(context) {
             val drawable = ivClock.drawable as AnimationDrawable
             drawable.start()
             try{
+                //C9系统无法响铃
                 mMediaPlayer=MediaPlayer.create(context,R.raw.alarm)
                 mMediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mMediaPlayer?.prepare();

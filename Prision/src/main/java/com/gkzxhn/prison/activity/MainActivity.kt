@@ -79,7 +79,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         //启动凌晨闹钟
         createSystemAlarmClock()
         registerReceiver()
-        createAlarmClock(System.currentTimeMillis()+1000)
 
     }
 
@@ -269,7 +268,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 //            R.id.main_layout_btn_next//下一个月
 //            -> mViewPager.currentItem = mViewPager.currentItem + 1
             R.id.main_layout_tv_setting ->{
-                createAlarmClock(System.currentTimeMillis()+1000)
                 startActivity(Intent(this, SettingActivity::class.java))
             }//设置
             R.id.main_layout_ll_service_hint//视频连接服务
@@ -337,18 +335,18 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     override fun updateItems(datas: List<MeetingEntity>?) {
         adapter.updateItems(datas)
         //闹钟，第一次启动初始化一次；以后每天凌晨0点初始化一次，原则为每天提醒狱警第一个会见即将开始
-        if(mFirstAlarmTime==0L)initAlarmClock()
+//        if(mFirstAlarmTime==0L)initAlarmClock()
     }
 
     /**
      * 初始化闹钟
      */
     private fun initAlarmClock(){
-        //获取到第一个闹钟时间戳
-        mFirstAlarmTime=adapter.getFirstTime()
-        if(mFirstAlarmTime!=0L){
-            createAlarmClock(mFirstAlarmTime)
-        }
+//        //获取到第一个闹钟时间戳
+//        mFirstAlarmTime=adapter.getFirstTime()
+//        if(mFirstAlarmTime!=0L){
+//            createAlarmClock(mFirstAlarmTime)
+//        }
     }
 
 
