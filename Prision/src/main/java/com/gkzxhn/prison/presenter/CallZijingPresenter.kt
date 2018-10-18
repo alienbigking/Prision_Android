@@ -107,7 +107,6 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
      *  添加免费会见
      */
     fun addFreeMeetting(familyId: String) {
-        Log.e("raleigh_test","familyId="+familyId)
         mModel.addFreeMeetting(familyId,object :VolleyUtils.OnFinishedListener<String>{
             override fun onSuccess(response: String) {
                 val json=JSONUtil.getJSONObject(response)
@@ -116,7 +115,6 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
                     val meettingJson=JSONUtil.getJSONObject(JSONUtil.getJSONObject(json,"data"),"freeMeeting")
                     mFreeMeetingId=JSONUtil.getJSONObjectStringValue(meettingJson, "id")
                 }
-                Log.e("raleigh_test","onSuccess")
             }
 
             override fun onFailed(error: VolleyError) {
