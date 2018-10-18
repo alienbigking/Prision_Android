@@ -29,7 +29,6 @@ import com.gkzxhn.prison.service.EReportService
 import com.gkzxhn.prison.view.IMainView
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
-import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
 import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list as mRecylerView
 import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_swipeRefresh as mSwipeRefresh
@@ -41,6 +40,10 @@ import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_month 
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_service_hint as tvServiceConnectHint
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_year as tvYear
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_vp_calendar as mViewPager
+import android.app.AlarmManager
+import android.app.PendingIntent
+import java.util.*
+
 
 class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener, CusSwipeRefreshLayout.OnLoadListener {
     //当前选择日期
@@ -63,6 +66,9 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     private lateinit var months: Array<String>
     //上一个月，中文月份
     private var mLastMonth = 0
+    //第一个闹钟时间戳，默认为0
+    private var mFirstAlarmTime=0L
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +76,11 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         setContentView(R.layout.main_layout)
         months = resources.getStringArray(R.array.month_text)
         init()
+        //启动凌晨闹钟
+        createSystemAlarmClock()
         registerReceiver()
+        createAlarmClock(System.currentTimeMillis()+1000)
+
     }
 
     override fun onResume() {
@@ -83,6 +93,114 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         onRefresh()
     }
 
+
+
+    private fun init() {
+        tvNoData.setText(R.string.no_meeting_data)
+        initCalander()
+        adapter = MainAdapter(this)
+        adapter.setOnItemClickListener(onItemClickListener)
+        mSwipeRefresh.setColor(R.color.holo_blue_bright, R.color.holo_green_light,
+                R.color.holo_orange_light, R.color.holo_red_light)
+        //设置加载模式，为只顶部上啦刷新
+        mSwipeRefresh.setMode(CusSwipeRefreshLayout.Mode.BOTH)
+        mSwipeRefresh.setLoadNoFull(false)
+        mSwipeRefresh.onRefreshListener = this
+        mSwipeRefresh.onLoadListener = this
+        mRecylerView.adapter = adapter
+        mRecylerView.setPadding(0, resources.getDimensionPixelSize(R.dimen.margin_half), 0, 0)
+//        val sizeMenu = resources.getDimensionPixelSize(R.dimen.recycler_view_line_height)
+//        mRecylerView.addItemDecoration(RecycleViewDivider(
+//                this, LinearLayoutManager.HORIZONTAL, sizeMenu, resources.getColor(R.color.common_hint_text_color)))
+
+        //初始化进度条
+        mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
+        mProgress.setCanceledOnTouchOutside(true)
+        mProgress.setCancelable(true)
+
+        dismissProgress()
+        mCancelVideoDialog = CancelVideoDialog(this, false)
+        mCancelVideoDialog.onClickListener = View.OnClickListener {
+            val reason = mCancelVideoDialog.content
+            mCancelVideoDialog.dismiss()
+            mPresenter.requestCancel(adapter.getCurrentItem().id ?: "", reason)
+        }
+        //请求数据
+        mPresenter = MainPresenter(this, this)
+        //请求连接紫荆服务器
+        mPresenter.requestZijing()
+        mProgress.setMessage(getString(R.string.video_service_connecting))
+        mProgress.show()
+        //请求免费呼叫次数
+        mPresenter.requestFreeTime()
+    }
+
+    /**
+     * 配置好终端提示对话框
+     */
+    private fun initTerminalDialog() {
+        if (mShowTerminalDialog == null) {
+            mShowTerminalDialog = CustomDialog(this)
+            with(mShowTerminalDialog!!) {
+                this.title = getString(R.string.hint)
+                this.content = getString(R.string.please_set_terminal_infor)
+                this.confirmText = getString(R.string.to_setting)
+                this.cancelText = getString(R.string.cancel)
+                this.onClickListener = View.OnClickListener { v ->
+                    if (v.id == R.id.custom_dialog_layout_tv_confirm)//去设置
+                        startActivity(Intent(context, ConfigActivity::class.java))
+                }
+            }
+        }
+    }
+
+    /**
+     * 初始化日历
+     */
+    private fun initCalander() {
+        val views = arrayOfNulls<CalendarCard>(3)
+        for (i in 0..2) {
+            views[i] = CalendarCard(this, onCellClickListener)
+        }
+        val adapter = CalendarViewAdapter(views)
+        mDate = CalendarCard.mShowDate
+        mViewPager.adapter = adapter
+        mViewPager.currentItem = adapter.currentIndex
+        mViewPager.addOnPageChangeListener(adapter.onPageChangeListener)
+        mLastMonth = mDate?.month ?: 0
+    }
+
+    /**
+     * 每天凌晨1点系统重复闹钟
+     */
+    fun createSystemAlarmClock(){
+//        //一次性闹钟,自定义action
+        val intent = Intent(Constants.SYSTEM_ALARM_CLOCK)
+        //PendingIntent.FLAG_UPDATE_CURRENT
+        val sender = PendingIntent.getBroadcast(this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
+        //定义一个PendingIntent对象，PendingIntent.getBroadcast包含了sendBroadcast的动作。
+        // Schedule the alarm!
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val cal=Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY,1)
+        cal.set(Calendar.MINUTE,0)
+        cal.set(Calendar.SECOND,0)
+        //第二天开始
+        cal.add(Calendar.DAY_OF_YEAR,1)
+        // 时间间隔为1天
+        val intervalMillis=24*60*60*1000L
+        am.setRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis,intervalMillis, sender)
+    }
+    fun cancelSystemAlarmClock(){
+        //一次性闹钟,自定义action
+        val intent = Intent(Constants.SYSTEM_ALARM_CLOCK)
+        //PendingIntent.FLAG_UPDATE_CURRENT
+        val sender = PendingIntent.getBroadcast(this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
+        //定义一个PendingIntent对象，PendingIntent.getBroadcast包含了sendBroadcast的动作。
+        // Schedule the alarm!
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        am.cancel(sender)
+    }
     /**
      * 日历点击监听器
      */
@@ -132,86 +250,13 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == Constants.NIM_KIT_OUT) {
                 finish()
+            }else if(intent.action == Constants.SYSTEM_ALARM_CLOCK) {
+                finish()
+                //重新进入主页
+                startActivity(Intent(this@MainActivity, MainActivity::class.java))
+
             }
         }
-    }
-
-
-    private fun init() {
-        tvNoData.setText(R.string.no_meeting_data)
-        initCalander()
-        adapter = MainAdapter(this)
-        adapter.setOnItemClickListener(onItemClickListener)
-        mSwipeRefresh.setColor(R.color.holo_blue_bright, R.color.holo_green_light,
-                R.color.holo_orange_light, R.color.holo_red_light)
-        //设置加载模式，为只顶部上啦刷新
-        mSwipeRefresh.setMode(CusSwipeRefreshLayout.Mode.BOTH)
-        mSwipeRefresh.setLoadNoFull(false)
-        mSwipeRefresh.onRefreshListener = this
-        mSwipeRefresh.onLoadListener = this
-        mRecylerView.adapter = adapter
-        mRecylerView.setPadding(0, resources.getDimensionPixelSize(R.dimen.margin_half), 0, 0)
-//        val sizeMenu = resources.getDimensionPixelSize(R.dimen.recycler_view_line_height)
-//        mRecylerView.addItemDecoration(RecycleViewDivider(
-//                this, LinearLayoutManager.HORIZONTAL, sizeMenu, resources.getColor(R.color.common_hint_text_color)))
-
-        //初始化进度条
-        mProgress = ProgressDialog.show(this, null, getString(R.string.please_waiting))
-        mProgress.setCanceledOnTouchOutside(true)
-        mProgress.setCancelable(true)
-
-        dismissProgress()
-        mCancelVideoDialog = CancelVideoDialog(this, false)
-        mCancelVideoDialog.onClickListener = View.OnClickListener {
-            val reason = mCancelVideoDialog.content
-            mCancelVideoDialog.dismiss()
-            mPresenter.requestCancel(adapter.getCurrentItem().id ?: "", reason)
-        }
-
-
-        //请求数据
-        mPresenter = MainPresenter(this, this)
-        //请求连接紫荆服务器
-        mPresenter.requestZijing()
-        mProgress.setMessage(getString(R.string.video_service_connecting))
-        mProgress.show()
-        //请求免费呼叫次数
-        mPresenter.requestFreeTime()
-    }
-
-    /**
-     * 配置好终端提示对话框
-     */
-    private fun initTerminalDialog() {
-        if (mShowTerminalDialog == null) {
-            mShowTerminalDialog = CustomDialog(this)
-            with(mShowTerminalDialog!!) {
-                this.title = getString(R.string.hint)
-                this.content = getString(R.string.please_set_terminal_infor)
-                this.confirmText = getString(R.string.to_setting)
-                this.cancelText = getString(R.string.cancel)
-                this.onClickListener = View.OnClickListener { v ->
-                    if (v.id == R.id.custom_dialog_layout_tv_confirm)//去设置
-                        startActivity(Intent(context, ConfigActivity::class.java))
-                }
-            }
-        }
-    }
-
-    /**
-     * 初始化日历
-     */
-    private fun initCalander() {
-        val views = arrayOfNulls<CalendarCard>(3)
-        for (i in 0..2) {
-            views[i] = CalendarCard(this, onCellClickListener)
-        }
-        val adapter = CalendarViewAdapter(views)
-        mDate = CalendarCard.mShowDate
-        mViewPager.adapter = adapter
-        mViewPager.currentItem = adapter.currentIndex
-        mViewPager.addOnPageChangeListener(adapter.onPageChangeListener)
-        mLastMonth = mDate?.month ?: 0
     }
 
     /**
@@ -223,8 +268,10 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 //            ->mViewPager.currentItem = mViewPager.currentItem - 1
 //            R.id.main_layout_btn_next//下一个月
 //            -> mViewPager.currentItem = mViewPager.currentItem + 1
-            R.id.main_layout_tv_setting ->//设置
+            R.id.main_layout_tv_setting ->{
+                createAlarmClock(System.currentTimeMillis()+1000)
                 startActivity(Intent(this, SettingActivity::class.java))
+            }//设置
             R.id.main_layout_ll_service_hint//视频连接服务
             -> reConnextZijing()
 
@@ -289,7 +336,22 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
      */
     override fun updateItems(datas: List<MeetingEntity>?) {
         adapter.updateItems(datas)
+        //闹钟，第一次启动初始化一次；以后每天凌晨0点初始化一次，原则为每天提醒狱警第一个会见即将开始
+        if(mFirstAlarmTime==0L)initAlarmClock()
     }
+
+    /**
+     * 初始化闹钟
+     */
+    private fun initAlarmClock(){
+        //获取到第一个闹钟时间戳
+        mFirstAlarmTime=adapter.getFirstTime()
+        if(mFirstAlarmTime!=0L){
+            createAlarmClock(mFirstAlarmTime)
+        }
+    }
+
+
 
     override fun onCanceled() {
         adapter.removeCurrentItem()
@@ -397,6 +459,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     private fun registerReceiver() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Constants.NIM_KIT_OUT)
+        intentFilter.addAction(Constants.SYSTEM_ALARM_CLOCK)
         registerReceiver(mBroadcastReceiver, intentFilter)
     }
 
@@ -435,4 +498,5 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             }
         }
     }
+
 }

@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import android.view.View
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.common.Constants
@@ -67,6 +69,8 @@ class LoginActivity : SuperActivity(), ILoginView {
         init()
         //清除下信息
         GKApplication.instance.clearSharedPreferences()
+        //取消闹铃
+        cancelAlarmClock()
     }
 
     override fun onResume() {

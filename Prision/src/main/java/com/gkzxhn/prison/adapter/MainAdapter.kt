@@ -2,6 +2,7 @@ package com.gkzxhn.prison.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -11,8 +12,9 @@ import com.gkzxhn.prison.entity.MeetingEntity
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.adapter.ViewHolder
 import com.starlight.mobile.android.lib.util.ConvertUtil
+import java.util.*
+import kotlin.math.max
 
-import java.util.ArrayList
 import kotlinx.android.synthetic.main.main_item_layout.view.main_item_layout_tv_time
 as tvTime
 import kotlinx.android.synthetic.main.main_item_layout.view.main_item_layout_tv_name
@@ -67,7 +69,44 @@ class MainAdapter(private val mContext: Context) : RecyclerView.Adapter<ViewHold
 
         return timeLenth
     }
+    /**
+     * 获取当前时长
+     */
+    fun getFirstTime():Long{
+        var timeInMillis=0L
+        try {
+            if(itemCount>0){//取第一条数据的时分
+                //解析会见时间段2017-08-03 19:00-19:30 获取会见时长
+                val meetingTime = mDatas[0].time
+                var time = "-"
+                meetingTime?.let {
+                    time = if (it.length > 10) it.substring(10, it.length) else "-"
+                }
+                val array = time.split("-")
+                if (array.size > 0) {
+                    val mDate = ConvertUtil.stringToDate(array[0].trim(), "HH:mm")
+                    mDate?.let {
+                        val cal=Calendar.getInstance()
+                        cal.set(Calendar.HOUR_OF_DAY,it.hours)
+                        cal.set(Calendar.MINUTE,it.minutes)
+                        cal.set(Calendar.SECOND,0)
 
+                        val currentCal=Calendar.getInstance()
+                        Log.e("raleigh_test","firstTime="+ConvertUtil.getSystemLongDateFormat(cal.timeInMillis))
+                        if(currentCal.timeInMillis<cal.timeInMillis){
+                            //会见时间必须大于当前时间，才提醒
+                            //前10分钟,分钟减去10
+                            cal.add(Calendar.MINUTE,-10)
+                            //取最大
+                            timeInMillis= Math.max(cal.timeInMillis,currentCal.timeInMillis)
+                        }
+                    }
+                }
+            }
+        }catch (e:Exception){}
+
+        return timeInMillis
+    }
     /**
      *  移除当前操作项
      */

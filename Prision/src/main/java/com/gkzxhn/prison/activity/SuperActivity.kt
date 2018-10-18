@@ -1,10 +1,17 @@
 package com.gkzxhn.prison.activity
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.ProgressDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.test.espresso.IdlingResource
 import android.support.v7.app.AppCompatActivity
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
@@ -12,7 +19,9 @@ import android.widget.Toast
 import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.async.VolleyUtils
+import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
+import com.gkzxhn.prison.customview.AlarmClockPopWindow
 import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.idlingregistry.SimpleIdlingResource
 import com.gkzxhn.prison.model.iml.CallZijingModel
@@ -33,7 +42,9 @@ open class SuperActivity : AppCompatActivity() {
     private lateinit var mTurnOffProgress: ProgressDialog
     private lateinit var mTurnOffDialog: CustomDialog
     private lateinit var mCallZijingModel: CallZijingModel
-
+    lateinit var mAlarmClockPopWindow: AlarmClockPopWindow
+    //是否在前台
+    private var isFont=true
     //自动化测试使用
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +79,43 @@ open class SuperActivity : AppCompatActivity() {
                 }
             }
         }
+        //注册闹钟广播
+        registerMettingAlarmReceiver()
+        //初始化闹钟铃声界面
+        mAlarmClockPopWindow= AlarmClockPopWindow(this)
+//        mAlarmClockPopWindow.setOnDismissListener {
+//            //窗口关闭时，取消闹钟
+//            cancelAlarmClock()
+//        }
 
+    }
+
+    /**
+     * 取消闹钟
+     */
+    fun cancelAlarmClock(){
+//        //闹钟取消
+        val intent = Intent(Constants.ALARM_CLOCK)
+        val sender = PendingIntent.getBroadcast(this, 0, intent, 0)
+        // And cancel the alarm.
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        am.cancel(sender)
+
+    }
+
+    /**
+     * 会见开始前提醒一次性闹钟
+     */
+    fun createAlarmClock(timeInMilli:Long){
+        //一次性闹钟,自定义action
+        val intent = Intent(Constants.ALARM_CLOCK)
+        //PendingIntent.FLAG_UPDATE_CURRENT
+        val sender = PendingIntent.getBroadcast(this, 0, intent,0)
+        //定义一个PendingIntent对象，PendingIntent.getBroadcast包含了sendBroadcast的动作。
+        // Schedule the alarm!
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        //set 设置一次性闹钟，第一个参数表示闹钟类型，第二个参数表示闹钟执行时间，第三个参数表示闹钟响应动作。
+        am.set(AlarmManager.RTC_WAKEUP, timeInMilli, sender)
     }
 
     /**
@@ -119,8 +166,12 @@ open class SuperActivity : AppCompatActivity() {
         mCallZijingModel.stopAllRequest()
         if (mTurnOffDialog.isShowing) mTurnOffDialog.dismiss()
         if (mTurnOffProgress.isShowing) mTurnOffProgress.dismiss()
+
+        //注销广播
+        unregisterReceiver(mMettingAlarmReceiver)
         super.onDestroy()
     }
+
 
     override fun finish() {
         cancelToast()
@@ -140,5 +191,34 @@ open class SuperActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    override fun onPause() {
+        isFont=false
+        if(mAlarmClockPopWindow.isShowing)mAlarmClockPopWindow.dismiss()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isFont=true
+    }
+
+    /**
+     * 注册会见闹钟广播
+     */
+    private fun registerMettingAlarmReceiver(){
+        val intentFilter = IntentFilter()
+        // 2. 设置接收广播的类型
+        intentFilter.addAction(Constants.ALARM_CLOCK)
+        // 3. 动态注册：调用Context的registerReceiver（）方法
+        registerReceiver(mMettingAlarmReceiver, intentFilter)
+
+    }
+    private var mMettingAlarmReceiver=object :BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+//            if(isFont)//Activity在前台显示
+//                mAlarmClockPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER,0,0)
+        }
     }
 }

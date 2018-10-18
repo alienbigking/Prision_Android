@@ -104,7 +104,10 @@ object Constants {
     //免费会见
     val CALL_FREE_ACTION = "com.gkzxhn.prison.CALL_FREE_ACTION"
     val CALL_DEFUALT_ACTION = "com.gkzxhn.prison.CALL_DEFUALT_ACTION"
-
+    //会见时间闹钟提醒
+    val ALARM_CLOCK = "com.gkzxhn.prison.ALARM.CLOCK"
+    //系统凌晨闹钟提醒
+    val SYSTEM_ALARM_CLOCK = "com.gkzxhn.prison.SYSTEM.ALARM.CLOCK"
     //家属加入会议失败
     val FAMILY_FAILED_JOIN_METTING = "com.gkzxhn.prison.CALL_HANG_UP"
     //家属加入会议

@@ -61,8 +61,8 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     /**
      * 获取总会见时长
      */
-    fun getCallDuration(){
-        getCallDuration(mLastCallDuration)
+    fun getCallDuration():Long{
+       return getCallDuration(mLastCallDuration)
     }
 
     /**
@@ -183,18 +183,18 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     /**
      * 设置是否静音
      */
-    fun setIsQuite(isOpenYSQ: Boolean) {
+    fun setIsQuite(quiet: Boolean) {
         //单元测试 延迟加载
         mView?.setIdleNow(true)
         //设置静音状态  true表示设置成静音
-        mModel.setIsQuite(isOpenYSQ, object : VolleyUtils.OnFinishedListener<JSONObject> {
+        mModel.setIsQuite(quiet, object : VolleyUtils.OnFinishedListener<JSONObject> {
             override fun onSuccess(response: JSONObject) {
                 Log.d(TAG, "DIAL" + response.toString())
                 try {
                     val code = response.getInt("code")
                     if (code == 0) {
                         //设置成功
-                        mView?.setSpeakerUi(isOpenYSQ)
+                        mView?.setSpeakerUi(quiet)
                     } else {
                         Log.i(TAG, "onResponse: 参数无效 code:  " + code)
                     }

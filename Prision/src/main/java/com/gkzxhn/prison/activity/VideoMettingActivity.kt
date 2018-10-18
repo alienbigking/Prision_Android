@@ -53,8 +53,8 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     private lateinit var mPresenter: CallZijingPresenter
     //关闭视频会见对话框
     private lateinit var mCloseVideoDialog: CancelVideoDialog
-    //是否开启扬声器
-    private var isOpenYSQ: Boolean = true
+    //是否已经开启扬声器
+    private var isOpenedYSQ: Boolean = true
     //审核界面是否已缩放
     private var isScaled = false
     //提示通话时间已到 对话框
@@ -83,7 +83,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         //遥控器控制器
         mPresenter.cameraControl("direct")
         //打开扬声器
-        mPresenter.setIsQuite(isOpenYSQ)
+        mPresenter.setIsQuite(isOpenedYSQ)
         //打开麦克风
         mPresenter.switchMuteStatus()
         //获取传递过来时的数据
@@ -319,7 +319,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             }
             R.id.video_metting_layout_cb_speaker ->  //扬声器
             {
-                mPresenter.setIsQuite(!isOpenYSQ)
+                mPresenter.setIsQuite(!isOpenedYSQ)
             }
             R.id.video_metting_layout_iv_hang_up ->  //挂断
                 showHangup()
@@ -342,8 +342,8 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
      * @param quiet
      */
     override fun setSpeakerUi(mIsOpenYSQ: Boolean) {
-        isOpenYSQ = mIsOpenYSQ
-        cbSpeaker.isChecked = isOpenYSQ
+        isOpenedYSQ = mIsOpenYSQ
+        cbSpeaker.isChecked = isOpenedYSQ
     }
 
 
@@ -461,7 +461,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                 return true
             }
             218 -> {//静音
-                mPresenter.setIsQuite(!isOpenYSQ)
+                mPresenter.setIsQuite(!isOpenedYSQ)
                 return true
             }
         }
