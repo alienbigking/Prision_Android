@@ -69,8 +69,8 @@ class LoginActivity : SuperActivity(), ILoginView {
         init()
         //清除下信息
         GKApplication.instance.clearSharedPreferences()
-        //取消闹铃
-        cancelAlarmClock()
+        //取消 系统凌晨闹铃
+        cancelSystemAlarmClock()
     }
 
     override fun onResume() {

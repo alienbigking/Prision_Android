@@ -89,34 +89,47 @@ open class SuperActivity : AppCompatActivity() {
 //        }
 
     }
+    /**
+     * 会见开始前提醒一次性闹钟
+     */
+    fun createAlarmClock(timeInMilli:Long){
+//        //一次性闹钟,自定义action
+//        val intent = Intent(Constants.ALARM_CLOCK)
+//        //PendingIntent.FLAG_UPDATE_CURRENT
+//        val sender = PendingIntent.getBroadcast(this, 0, intent,0)
+//        //定义一个PendingIntent对象，PendingIntent.getBroadcast包含了sendBroadcast的动作。
+//        // Schedule the alarm!
+//        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        //set 设置一次性闹钟，第一个参数表示闹钟类型，第二个参数表示闹钟执行时间，第三个参数表示闹钟响应动作。
+//        am.set(AlarmManager.RTC_WAKEUP, timeInMilli, sender)
+    }
 
     /**
      * 取消闹钟
      */
     fun cancelAlarmClock(){
-//        //闹钟取消
-        val intent = Intent(Constants.ALARM_CLOCK)
-        val sender = PendingIntent.getBroadcast(this, 0, intent, 0)
-        // And cancel the alarm.
-        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        am.cancel(sender)
+////        //闹钟取消
+//        val intent = Intent(Constants.ALARM_CLOCK)
+//        val sender = PendingIntent.getBroadcast(this, 0, intent, 0)
+//        // And cancel the alarm.
+//        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        am.cancel(sender)
 
     }
-
     /**
-     * 会见开始前提醒一次性闹钟
+     * 取消 系统凌晨闹钟
      */
-    fun createAlarmClock(timeInMilli:Long){
+    fun cancelSystemAlarmClock(){
         //一次性闹钟,自定义action
-        val intent = Intent(Constants.ALARM_CLOCK)
+        val intent = Intent(Constants.SYSTEM_ALARM_CLOCK)
         //PendingIntent.FLAG_UPDATE_CURRENT
-        val sender = PendingIntent.getBroadcast(this, 0, intent,0)
+        val sender = PendingIntent.getBroadcast(this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
         //定义一个PendingIntent对象，PendingIntent.getBroadcast包含了sendBroadcast的动作。
         // Schedule the alarm!
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        //set 设置一次性闹钟，第一个参数表示闹钟类型，第二个参数表示闹钟执行时间，第三个参数表示闹钟响应动作。
-        am.set(AlarmManager.RTC_WAKEUP, timeInMilli, sender)
+        am.cancel(sender)
     }
+
 
     /**
      * Espresso 自动化测试延迟操作

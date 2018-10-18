@@ -190,16 +190,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         val intervalMillis=24*60*60*1000L
         am.setRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis,intervalMillis, sender)
     }
-    fun cancelSystemAlarmClock(){
-        //一次性闹钟,自定义action
-        val intent = Intent(Constants.SYSTEM_ALARM_CLOCK)
-        //PendingIntent.FLAG_UPDATE_CURRENT
-        val sender = PendingIntent.getBroadcast(this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
-        //定义一个PendingIntent对象，PendingIntent.getBroadcast包含了sendBroadcast的动作。
-        // Schedule the alarm!
-        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        am.cancel(sender)
-    }
+
     /**
      * 日历点击监听器
      */
