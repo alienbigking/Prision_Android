@@ -561,8 +561,8 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
                         //免费呼叫次数更新
                         mPresenter.updateFreeTime()
                         //添加免费会见信息  参数是家属id
-                        if (activityIntent.hasExtra(Constants.EXTRA))
-                            mPresenter.addFreeMeetting(activityIntent.getStringExtra(Constants.EXTRA))
+                        if (activityIntent.hasExtra(Constants.EXTRAS))
+                            mPresenter.addFreeMeetting(activityIntent.getStringExtra(Constants.EXTRAS))
                     }
                 }
                 Constants.PRISION_JOIN_METTING -> {//监狱端进入会见房间

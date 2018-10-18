@@ -44,7 +44,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import java.util.*
 
-
+/**
+ * 主页
+ */
 class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefreshListener, CusSwipeRefreshLayout.OnLoadListener {
     //当前选择日期
     private var mDate: CustomDate? = null
