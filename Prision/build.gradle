@@ -18,8 +18,8 @@ android {
         applicationId 'com.gkzxhn.prison'
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 18
-        versionName '1.1.8'
+        versionCode 19
+        versionName '1.1.9'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
