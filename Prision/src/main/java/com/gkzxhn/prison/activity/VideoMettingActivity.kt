@@ -67,7 +67,10 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
     private var ESTABLISHED_CALL = false//监狱端已经建立连接
     private var init = true
     private var mTotalCallDuration = 0L
+    //上一次会见时长
     private var mLastCallDuration = 0L
+    //临时会见时长
+    private var mTempLastCallDuration=0L
     //结束页面返回resultCode
     private var mFinishResult=Activity.RESULT_CANCELED
     //正计时秒数
@@ -90,6 +93,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
         id = intent.getStringExtra(Constants.EXTRA) ?: ""
         mTotalCallDuration=intent.getLongExtra(Constants.TOTAL_CALL_DURATION,0L)
         mLastCallDuration=intent.getLongExtra(Constants.LAST_CALL_DURATION,0L)
+        mTempLastCallDuration=mLastCallDuration
         mPresenter.setLastCallDuration(mLastCallDuration)
         //初始化倒计时时间 必须presenter初始化后
         initCountDownTimer()
@@ -147,7 +151,9 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             if(isFreeMetting()){//免费会见，显示"已通话：xxxx秒"
                 tvHeaderCountDown.text = getString(R.string.has_called_colon) + getShowTime(mSecond)
             }else{//远程会见，显示"已超时：xxxx秒"
-                tvHeaderCountDown.text = getString(R.string.has_time_out_colon) + getShowTime(mSecond)
+                //相差会见时长
+                var disDuration=Math.abs(mTotalCallDuration-mTempLastCallDuration)
+                tvHeaderCountDown.text = getString(R.string.has_time_out_colon) + getShowTime(mSecond+disDuration)
             }
             mHandler.postDelayed(this,1000)
         }
@@ -166,7 +172,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             val hour = minute / 60
             minute = minute % 60
             val seconds = totalSecond - hour * 3600 - minute * 60
-            time = minute.toString() + getString(R.string.minute) + seconds.toString() + getString(R.string.second)
+            time =  hour.toString() + getString(R.string.hour)+minute.toString() + getString(R.string.minute) + seconds.toString() + getString(R.string.second)
         }
         return time
     }
@@ -193,6 +199,7 @@ class VideoMettingActivity : SuperActivity(), ICallZijingView {
             }
 
             override fun onFinish() {
+                mTempLastCallDuration=mTotalCallDuration
                 tvHeaderCountDown.text = getString(R.string.the_leave_time) + getString(R.string.metting_has_time_out)
                 //开始正计时
                 startTimer()

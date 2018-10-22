@@ -95,6 +95,7 @@
     <!--Dialog-->
     <string name="hint">提示</string>
     <string name="minute">分</string>
+    <string name="hour">小时</string>
     <string name="second">秒</string>
     <string name="call_time_has_arrived">通话时间已到,是否结束通话?</string>
     <string name="please_set_terminal_infor">请先设置终端信息</string>
