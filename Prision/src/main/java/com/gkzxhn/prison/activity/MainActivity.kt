@@ -201,6 +201,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             //每点击了一个日历，获取新数据列表
             mDate = date
             onRefresh()
+
         }
 
         override fun changeDate(date: CustomDate) {
@@ -241,12 +242,12 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     private val mBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == Constants.NIM_KIT_OUT) {
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                 finish()
             }else if(intent.action == Constants.SYSTEM_ALARM_CLOCK) {
-                finish()
                 //重新进入主页
-                startActivity(Intent(this@MainActivity, MainActivity::class.java))
-
+                startActivity(Intent(this@MainActivity, SplashActivity::class.java))
+                finish()
             }
         }
     }

@@ -60,17 +60,16 @@ class AlarmClockPopWindow(val context: Context) : PopupWindow(context) {
             mTimer.start()
             val drawable = ivClock.drawable as AnimationDrawable
             drawable.start()
-            try{
-                //C9系统无法响铃
-                mMediaPlayer=MediaPlayer.create(context,R.raw.alarm)
-                mMediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mMediaPlayer?.prepare();
-            }catch (e:Exception){
-                mMediaPlayer=null
-                e.printStackTrace()
-            }
+//            try{
+//                //C9系统无法响铃
+//                mMediaPlayer=MediaPlayer.create(context,R.raw.alarm)
+//                mMediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                mMediaPlayer?.prepare();
+//            }catch (e:Exception){
+//                mMediaPlayer=null
+//                e.printStackTrace()
+//            }
 
-//            mMediaPlayer?.reset()
             mMediaPlayer?.setVolume(1f,1f)
             mMediaPlayer?.start();
             mMediaPlayer?.setLooping(true); //循环播放

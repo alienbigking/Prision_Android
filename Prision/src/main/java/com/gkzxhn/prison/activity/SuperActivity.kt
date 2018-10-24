@@ -42,7 +42,7 @@ open class SuperActivity : AppCompatActivity() {
     private lateinit var mTurnOffProgress: ProgressDialog
     private lateinit var mTurnOffDialog: CustomDialog
     private lateinit var mCallZijingModel: CallZijingModel
-    lateinit var mAlarmClockPopWindow: AlarmClockPopWindow
+//    lateinit var mAlarmClockPopWindow: AlarmClockPopWindow
     //是否在前台
     private var isFont=true
     //自动化测试使用
@@ -82,7 +82,7 @@ open class SuperActivity : AppCompatActivity() {
         //注册闹钟广播
         registerMettingAlarmReceiver()
         //初始化闹钟铃声界面
-        mAlarmClockPopWindow= AlarmClockPopWindow(this)
+//        mAlarmClockPopWindow= AlarmClockPopWindow(this)
 //        mAlarmClockPopWindow.setOnDismissListener {
 //            //窗口关闭时，取消闹钟
 //            cancelAlarmClock()
@@ -179,7 +179,7 @@ open class SuperActivity : AppCompatActivity() {
         mCallZijingModel.stopAllRequest()
         if (mTurnOffDialog.isShowing) mTurnOffDialog.dismiss()
         if (mTurnOffProgress.isShowing) mTurnOffProgress.dismiss()
-
+//        if(mAlarmClockPopWindow.isShowing)mAlarmClockPopWindow.dismiss()
         //注销广播
         unregisterReceiver(mMettingAlarmReceiver)
         super.onDestroy()
@@ -208,7 +208,7 @@ open class SuperActivity : AppCompatActivity() {
 
     override fun onPause() {
         isFont=false
-        if(mAlarmClockPopWindow.isShowing)mAlarmClockPopWindow.dismiss()
+//        if(mAlarmClockPopWindow.isShowing)mAlarmClockPopWindow.dismiss()
         super.onPause()
     }
 
