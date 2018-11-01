@@ -17,14 +17,14 @@ class CrashModel:CallZijingModel(),ICrashModel {
      */
     override fun uploadLog(message: String, versionCode:Int,onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?) {
         try {
-            val params = JSONObject()
+            val params = HashMap<String,String>()
             params.put("phone", sharedPreferences.getString(Constants.USER_ACCOUNT, ""))
             params.put("contents", message)
             params.put("deviceName", android.os.Build.MODEL)
             params.put("sysVersion", "Android")
             params.put("deviceType", Build.VERSION.SDK_INT.toString())
-            params.put("appVersion", versionCode)
-            volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL, JSONObject().put("logger", params),null,onFinishedListener)
+            params.put("appVersion", versionCode.toString())
+            volleyUtils.post(Constants.REQUEST_CRASH_LOG_URL, params,null,onFinishedListener)
         }catch (e:Exception){}
     }
 }
