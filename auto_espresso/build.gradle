@@ -30,16 +30,16 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:25.4.0'
     compile 'junit:junit:4.12'
     compile 'com.android.support.test:runner:1.0.1'
-    compile 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'com.android.support.test.espresso.idling:idling-concurrent:3.0.1'
     compile('com.android.support.test:runner:1.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    //Espresso  延迟加载
+    compile 'com.android.support.test.espresso.idling:idling-concurrent:3.0.1'
     //Espresso Intent
     compile 'com.android.support.test.espresso:espresso-intents:3.0.1'
     //Espresso WebView
     compile 'com.android.support.test.espresso:espresso-web:3.0.1'
-    //单元测试
+    //Espresso 高级组件
     compile('com.android.support.test.espresso:espresso-contrib:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'appcompat'
@@ -48,7 +48,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude module: 'recyclerview-v7'
     })
-    //Espresso UI测试
+    //Espresso UI测试核心库
     compile('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
