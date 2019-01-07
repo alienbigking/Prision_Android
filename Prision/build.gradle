@@ -32,11 +32,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    //单元测试类库中，读取excel中poi编译报错问题
-    packagingOptions {
-        exclude 'META-INF/*'
-    }
-
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']

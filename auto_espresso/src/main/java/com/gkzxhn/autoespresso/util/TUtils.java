@@ -156,7 +156,6 @@ public class TUtils {
         return result;
 
     }
-
     public static int getInputType(String inputType){
         int mInputType=0;
         switch (inputType){
@@ -256,5 +255,4 @@ public class TUtils {
         }
         return mInputType;
     }
-
 }
