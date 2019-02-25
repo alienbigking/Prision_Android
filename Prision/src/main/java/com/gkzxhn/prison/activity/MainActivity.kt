@@ -1,6 +1,8 @@
 package com.gkzxhn.prison.activity
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.ProgressDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,7 +13,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.text.Html
 import android.view.View
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.MainAdapter
@@ -26,10 +27,12 @@ import com.gkzxhn.prison.entity.MeetingEntity
 import com.gkzxhn.prison.entity.VersionEntity
 import com.gkzxhn.prison.presenter.MainPresenter
 import com.gkzxhn.prison.service.EReportService
+import com.gkzxhn.prison.utils.PackageUtils
 import com.gkzxhn.prison.view.IMainView
 import com.netease.nimlib.sdk.StatusCode
 import com.starlight.mobile.android.lib.adapter.OnItemClickListener
 import com.starlight.mobile.android.lib.view.CusSwipeRefreshLayout
+import java.util.*
 import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_rv_list as mRecylerView
 import kotlinx.android.synthetic.main.common_list_layout.common_list_layout_swipeRefresh as mSwipeRefresh
 import kotlinx.android.synthetic.main.i_common_loading_layout.common_loading_layout_tv_load as tvLoading
@@ -37,12 +40,10 @@ import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_lay
 import kotlinx.android.synthetic.main.i_common_no_data_layout.common_no_data_layout_iv_image as ivNodata
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_free_time as tvFreeTime
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_month as tvMonth
+import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_restart as tvRestart
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_service_hint as tvServiceConnectHint
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_tv_year as tvYear
 import kotlinx.android.synthetic.main.i_main_center_layout.main_layout_vp_calendar as mViewPager
-import android.app.AlarmManager
-import android.app.PendingIntent
-import java.util.*
 
 /**
  * 主页
@@ -69,7 +70,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     //上一个月，中文月份
     private var mLastMonth = 0
     //第一个闹钟时间戳，默认为0
-    private var mFirstAlarmTime=0L
+    private var mFirstAlarmTime = 0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +94,6 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
         //开始请求列表数据
         onRefresh()
     }
-
 
 
     private fun init() {
@@ -174,23 +174,23 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     /**
      * 每天凌晨1点系统重复闹钟
      */
-    fun createSystemAlarmClock(){
+    fun createSystemAlarmClock() {
 //        //一次性闹钟,自定义action
         val intent = Intent(Constants.SYSTEM_ALARM_CLOCK)
         //PendingIntent.FLAG_UPDATE_CURRENT
-        val sender = PendingIntent.getBroadcast(this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
+        val sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         //定义一个PendingIntent对象，PendingIntent.getBroadcast包含了sendBroadcast的动作。
         // Schedule the alarm!
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val cal=Calendar.getInstance()
-        cal.set(Calendar.HOUR_OF_DAY,1)
-        cal.set(Calendar.MINUTE,0)
-        cal.set(Calendar.SECOND,0)
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, 1)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
         //第二天开始
-        cal.add(Calendar.DAY_OF_YEAR,1)
+        cal.add(Calendar.DAY_OF_YEAR, 1)
         // 时间间隔为1天
-        val intervalMillis=24*60*60*1000L
-        am.setRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis,intervalMillis, sender)
+        val intervalMillis = 24 * 60 * 60 * 1000L
+        am.setRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis, intervalMillis, sender)
     }
 
     /**
@@ -244,7 +244,7 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
             if (intent.action == Constants.NIM_KIT_OUT) {
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                 finish()
-            }else if(intent.action == Constants.SYSTEM_ALARM_CLOCK) {
+            } else if (intent.action == Constants.SYSTEM_ALARM_CLOCK) {
                 //重新进入主页
                 startActivity(Intent(this@MainActivity, SplashActivity::class.java))
                 finish()
@@ -261,11 +261,13 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
 //            ->mViewPager.currentItem = mViewPager.currentItem - 1
 //            R.id.main_layout_btn_next//下一个月
 //            -> mViewPager.currentItem = mViewPager.currentItem + 1
-            R.id.main_layout_tv_setting ->{
+            R.id.main_layout_tv_setting -> {
                 startActivity(Intent(this, SettingActivity::class.java))
             }//设置
-            R.id.main_layout_ll_service_hint//视频连接服务
+            R.id.main_layout_tv_service_hint_title, R.id.main_layout_tv_service_hint//视频连接服务
             -> reConnextZijing()
+            R.id.main_layout_tv_restart
+            -> PackageUtils.restartApp(this)
 
         }
     }
@@ -335,14 +337,13 @@ class MainActivity : SuperActivity(), IMainView, CusSwipeRefreshLayout.OnRefresh
     /**
      * 初始化闹钟
      */
-    private fun initAlarmClock(){
+    private fun initAlarmClock() {
 //        //获取到第一个闹钟时间戳
 //        mFirstAlarmTime=adapter.getFirstTime()
 //        if(mFirstAlarmTime!=0L){
 //            createAlarmClock(mFirstAlarmTime)
 //        }
     }
-
 
 
     override fun onCanceled() {
