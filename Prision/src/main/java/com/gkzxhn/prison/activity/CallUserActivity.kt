@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import com.gkzxhn.prison.R
 import com.gkzxhn.prison.adapter.CallUserViewPagerAdapter
 import com.gkzxhn.prison.common.Constants
+import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.customview.CustomDialog
 import com.gkzxhn.prison.presenter.CallUserPresenter
 import com.gkzxhn.prison.utils.Utils
@@ -221,6 +222,15 @@ class CallUserActivity : SuperActivity(), ICallUserView {
                     val accid = mPresenter.accessToken
                     notification.sessionId = accid
                     notification.sessionType = SessionTypeEnum.P2P
+                    //IOS推送
+                    notification.isSendToOnlineUserOnly = false
+                    notification.fromAccount = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE).getString(Constants.USER_ACCOUNT, "")
+                    val jailName = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE).getString(Constants.TERMINAL_JIAL_NAME, "")
+                    notification.apnsText = "${jailName}邀请您视频通话"
+                    val pushPayload = hashMapOf<String, Any>()
+                    pushPayload["sound"] = "cnwav.aac.mp3"
+                    pushPayload["save"] = 2
+                    notification.pushPayload =pushPayload
                     // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
                     // 这里以类型 “1” 作为“正在输入”的状态通知。
                     val json = JSONObject()
@@ -469,7 +479,7 @@ class CallUserActivity : SuperActivity(), ICallUserView {
     /**
      * 倒计时
      */
-    private val mTimer = object : CountDownTimer(DOWN_TIME, 1000) {
+    private val mTimer = object : CountDownTimer(DOWN_TIME, 1500) {
         override fun onTick(millisUntilFinished: Long) {
         }
 
