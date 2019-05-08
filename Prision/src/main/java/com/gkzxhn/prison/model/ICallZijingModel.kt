@@ -11,25 +11,28 @@ interface ICallZijingModel : IBaseModel {
     /**
      * 更新免费会见时长
      */
-    fun  updateFreeMeetting(meettingId: String, meettingSecond: Long,onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+    fun updateFreeMeetting(meettingId: String, meettingSecond: Long, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+
     /**
      * 更新远程会见时长
      */
-    fun  updateMeetting(meettingId: String, meettingSecond: Long,onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+    fun updateMeetting(meettingId: String, meettingSecond: Long, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
 
     /**
      * 记录免费会见
      */
-    fun  addFreeMeetting(familyId: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+    fun addFreeMeetting(familyId: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
 
     /**
      * 取消／结束会见
      */
-    fun  requestCancel(id: String, reason: String,onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+    fun requestCancel(id: String, reason: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
+
     /**
      * 关机
      */
     fun turnOff(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
     /**
      * 请求网络信息
      */
@@ -74,7 +77,7 @@ interface ICallZijingModel : IBaseModel {
     /**
      * 遥控器
      */
-    fun cameraControl(v: String,onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+    fun cameraControl(v: String, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
 
     /**
      * 挂断
@@ -85,10 +88,19 @@ interface ICallZijingModel : IBaseModel {
      * 设置静音
      */
     fun setIsQuite(quiet: Boolean, onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
+
     /**
      * 修改哑音状态
      */
     fun switchMuteStatus(onFinishedListener: VolleyUtils.OnFinishedListener<JSONObject>?)
 
+    /**
+     * 新增会话通话记录
+     */
+    fun addCommunicateRecords(meetingId: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
 
+    /**
+     * 更新(结束)通话记录
+     */
+    fun updateCommunicateRecords(sequence: String, remarks: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?)
 }

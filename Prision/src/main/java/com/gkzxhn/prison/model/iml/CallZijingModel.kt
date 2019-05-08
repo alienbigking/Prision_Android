@@ -2,23 +2,22 @@ package com.gkzxhn.prison.model.iml
 
 import android.util.Log
 import com.android.volley.AuthFailureError
-import com.android.volley.VolleyError
 import com.gkzxhn.prison.R
+import com.gkzxhn.prison.async.VolleyUtils
 import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.ICallZijingModel
 import com.gkzxhn.prison.utils.XtHttpUtil
-import com.gkzxhn.prison.async.VolleyUtils
-
 import org.json.JSONObject
-import java.util.HashMap
+import java.util.*
 
 /**
  * Created by Raleigh.Luo on 18/3/30.
  */
 
 open class CallZijingModel : BaseModel(), ICallZijingModel {
-    override fun updateFreeMeetting(meettingId: String, meettingSecond: Long, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
+
+       override fun updateFreeMeetting(meettingId: String, meettingSecond: Long, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
         try {
             val params = HashMap<String, String>()
             params.put("id", meettingId)
@@ -223,4 +222,29 @@ open class CallZijingModel : BaseModel(), ICallZijingModel {
         }
 
     }
+
+    override fun addCommunicateRecords(meetingId: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
+        try {
+            val params = HashMap<String, String>()
+            params.put("meeting_id", meetingId)
+            volleyUtils.post( Constants.ADD_COMMUNICATE_RECORDS, params, REQUEST_TAG, onFinishedListener)
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+
+    }
+
+    override fun updateCommunicateRecords(sequence: String, remarks: String, onFinishedListener: VolleyUtils.OnFinishedListener<String>?) {
+        try {
+            val params = HashMap<String, String>()
+            params.put("sequence", sequence)
+            params.put("remarks", remarks)
+            volleyUtils.post( Constants.UPDATE_COMMUNICATE_RECORDS, params, REQUEST_TAG, onFinishedListener)
+        } catch (authFailureError: AuthFailureError) {
+            authFailureError.printStackTrace()
+        }
+
+    }
+
+
 }

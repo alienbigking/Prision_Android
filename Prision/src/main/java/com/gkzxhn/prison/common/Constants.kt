@@ -59,7 +59,10 @@ object Constants {
 
     val ADD_FREE_MEETING = DOMAIN_NAME + "/api/free_meetings/add"//记录免费会见信息
     val UPDATE_FREE_MEETING = DOMAIN_NAME + "/api/free_meetings/updateDuration"//更新免费会见时长
-    val UPDATE_MEETING_DURATION = DOMAIN_NAME + "/api/meetings/updateDuration"//更新远程会见时长
+    val UPDATE_MEETING_DURATION = DOMAIN_NAME + "/api/meetings/updateDuration"//更新远程会见时长(该接口已关闭)
+
+    val ADD_COMMUNICATE_RECORDS = DOMAIN_NAME + "/api/meetings/addMeetingCallRecords"//新增会见通话记录
+    val UPDATE_COMMUNICATE_RECORDS = DOMAIN_NAME + "/api/meetings/updateMeetingCallRecords"//更新(结束)会见通话记录
 
     /*-------------------------------msg what-------------------------------------------------*/
     val START_REFRESH_UI = 1
