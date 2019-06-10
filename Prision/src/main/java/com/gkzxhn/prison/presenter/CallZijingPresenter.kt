@@ -1,5 +1,6 @@
 package com.gkzxhn.prison.presenter
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.android.volley.VolleyError
@@ -9,7 +10,12 @@ import com.gkzxhn.prison.common.Constants
 import com.gkzxhn.prison.common.GKApplication
 import com.gkzxhn.prison.model.ICallZijingModel
 import com.gkzxhn.prison.model.iml.CallZijingModel
+import com.gkzxhn.prison.utils.NimInitUtil
 import com.gkzxhn.prison.view.ICallZijingView
+import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.msg.MsgService
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
+import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.starlight.mobile.android.lib.util.ConvertUtil
 import com.starlight.mobile.android.lib.util.HttpStatus
 import com.starlight.mobile.android.lib.util.JSONUtil
@@ -111,11 +117,15 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
     fun addFreeMeetting(familyId: String) {
         mModel.addFreeMeetting(familyId, object : VolleyUtils.OnFinishedListener<String> {
             override fun onSuccess(response: String) {
-                val json = JSONUtil.getJSONObject(response)
-                val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(json, "code"))
-                if (code == HttpStatus.SC_OK) {
-                    val meettingJson = JSONUtil.getJSONObject(JSONUtil.getJSONObject(json, "data"), "freeMeeting")
-                    mFreeMeetingId = JSONUtil.getJSONObjectStringValue(meettingJson, "id")
+                try {
+                    val json = JSONUtil.getJSONObject(response)
+                    val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(json, "code"))
+                    if (code == HttpStatus.SC_OK) {
+                        val meettingJson = JSONUtil.getJSONObject(JSONUtil.getJSONObject(json, "data"), "freeMeeting")
+                        mFreeMeetingId = JSONUtil.getJSONObjectStringValue(meettingJson, "id")
+                        mFreeMeetingId?.let { notifyClientMeetingId(NimInitUtil.NOTIFICATION_FREE_LOCATION, it) }
+                    }
+                } catch (e: Exception) {
                 }
             }
 
@@ -301,16 +311,25 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
         })
     }
 
+    /**
+     * 添加普通会见通话记录
+     */
     var sequence: String? = null
+
     fun addCommunicateRecords(meetingId: String) {
         mModel.addCommunicateRecords(meetingId, object : VolleyUtils.OnFinishedListener<String> {
             override fun onSuccess(response: String) {
-                val json = JSONUtil.getJSONObject(response)
-                val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(json, "code"))
-                if (code == HttpStatus.SC_OK) {
-                    sequence = JSONUtil.getJSONObjectStringValue(json,
-                            "data")
-                    Log.w(TAG, "$meetingId sequence send success:  " + sequence)
+                try {
+                    val json = JSONUtil.getJSONObject(response)
+                    val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(json, "code"))
+                    if (code == HttpStatus.SC_OK) {
+                        sequence = JSONUtil.getJSONObjectStringValue(json,
+                                "data")
+                        Log.w(TAG, "$meetingId sequence send success:  " + sequence)
+                        notifyClientMeetingId(NimInitUtil.NOTIFICATION_LOCATION, meetingId)
+                    }
+                } catch (e: Exception) {
+
                 }
             }
 
@@ -334,4 +353,31 @@ class CallZijingPresenter(context: Context, view: ICallZijingView) : BasePresent
             })
         }
     }
+
+    /**
+     * 发送消息通知客户端进行定位并上传数据
+     */
+    private fun notifyClientMeetingId(code: Int, meetingId: String) {
+        val sharedPreferences = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE)
+        //发送云信消息，检测家属端是否已经准备好可以呼叫
+        val notification = CustomNotification()
+        val accid = sharedPreferences.getString(Constants.ACCID, "")
+        notification.sessionId = accid
+        notification.sessionType = SessionTypeEnum.P2P
+        // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
+        // 这里以类型 “1” 作为“正在输入”的状态通知。
+        val jailId = GKApplication.instance.getSharedPreferences(Constants.USER_TABLE, Activity.MODE_PRIVATE).getString(Constants.TERMINAL_JIAL_ID, "")
+        val json = JSONObject()
+        try {
+            json.put("code", code)
+            json.put("meetingId", meetingId)//会见id
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        notification.content = json.toString()
+        //发送云信消息
+        NIMClient.getService(MsgService::class.java).sendCustomNotification(notification)
+    }
+
 }

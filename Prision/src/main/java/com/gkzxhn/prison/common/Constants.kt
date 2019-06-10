@@ -40,7 +40,7 @@ object Constants {
     val IS_TEST_MODEL=true //是否为自动化测试模式，发布时需设置为false
 
     val RELEASE_DOMAIN = "https://www.yuwugongkai.com/ywgk-app"//新发布正式环境
-    val DEMO_DOMAIN = "http://120.78.190.101:8084/ywgk-app-demo"//演示环境
+    val DEMO_DOMAIN = "http://120.79.251.238:8022/ywgk-app" //"http://120.78.190.101:8084/ywgk-app-demo"//演示环境
     val DEV_DOMAIN = "http://120.78.190.101:8086/ywgk-app-auth"//开发环境
     val DOMAIN_NAME = DEMO_DOMAIN
 

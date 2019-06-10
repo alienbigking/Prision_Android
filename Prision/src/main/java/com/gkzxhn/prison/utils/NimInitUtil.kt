@@ -36,6 +36,8 @@ class NimInitUtil {
     }
 
     companion object {
+        val NOTIFICATION_LOCATION = -3
+        val NOTIFICATION_FREE_LOCATION = -4
 
         //CrashHandler实例
         /** 获取CrashHandler实例 ,单例模式  */

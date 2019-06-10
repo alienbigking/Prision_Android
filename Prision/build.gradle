@@ -13,13 +13,13 @@ android {
         }
     }
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId 'com.gkzxhn.prison'
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 20
-        versionName '1.2.0'
+        versionCode 21
+        versionName '1.2.1'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

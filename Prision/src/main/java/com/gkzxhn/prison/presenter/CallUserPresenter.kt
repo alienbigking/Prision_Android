@@ -30,11 +30,11 @@ import org.json.JSONObject
  */
 
 class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<ICallUserModel, ICallUserView>(context, CallUserModel(), view) {
-//    var entity: MeetingDetailEntity? = null
+    //    var entity: MeetingDetailEntity? = null
     //云信Token
-    var accessToken:String=""
+    var accessToken: String = ""
     //已通话时长
-    var lastCallDuration=0L
+    var lastCallDuration = 0L
     //家属图片信息
     var meetingMemberEntity: ArrayList<MeetingMemberEntity>? = null
     private val TAG = CallUserPresenter::class.java.simpleName
@@ -56,21 +56,21 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                 val code = ConvertUtil.strToInt(JSONUtil.getJSONObjectStringValue(response, "code"))
                 if (code == HttpStatus.SC_OK) {
                     val data = JSONUtil.getJSONObject(response, "data")
-                  var   entity = Gson().fromJson(JSONUtil.getJSONObjectStringValue(data, "family"), MeetingDetailEntity::class.java)
+                    var entity = Gson().fromJson(JSONUtil.getJSONObjectStringValue(data, "family"), MeetingDetailEntity::class.java)
                     entity?.phone = familyId
                     val edit = getSharedPreferences().edit()
                     edit.putString(Constants.ACCID, entity?.accessToken)
                     edit.putString(Constants.EXTRA, entity?.accessToken)
                     edit.apply()
-                    accessToken= entity?.accessToken.toString()
+                    accessToken = entity?.accessToken.toString()
 
                     val meetingMemberEntity1 = MeetingMemberEntity()
-                    meetingMemberEntity1.familyId=entity?.id
-                    meetingMemberEntity1.familyIdCardFront=entity?.idCardFront
-                    meetingMemberEntity1.familyIdCardBack=entity?.idCardBack
-                    meetingMemberEntity1.familyAvatarUrl=entity?.avatarUrl
+                    meetingMemberEntity1.familyId = entity?.id
+                    meetingMemberEntity1.familyIdCardFront = entity?.idCardFront
+                    meetingMemberEntity1.familyIdCardBack = entity?.idCardBack
+                    meetingMemberEntity1.familyAvatarUrl = entity?.avatarUrl
 
-                    meetingMemberEntity=ArrayList()
+                    meetingMemberEntity = ArrayList()
                     meetingMemberEntity?.add(meetingMemberEntity1)
 
                     mView?.onSuccess()
@@ -90,7 +90,7 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
     /**
      * 根据会见ID请求获取相关家属身份证信息
      */
-    fun requestByMettingID(mettingId: String,familyId: String) {
+    fun requestByMettingID(mettingId: String, familyId: String) {
         //单元测试 延迟加载
         mView?.setIdleNow(true)
         mView?.startRefreshAnim()
@@ -102,20 +102,20 @@ class CallUserPresenter(context: Context, view: ICallUserView) : BasePresenter<I
                     val data = JSONUtil.getJSONObject(response, "data")
                     var jsonObjectStringValue = JSONUtil.getJSONObjectStringValue(data, "meetingMembers")
                     meetingMemberEntity = Gson().fromJson<List<MeetingMemberEntity>>(jsonObjectStringValue,
-                             object : TypeToken<List<MeetingMemberEntity>>() {
-                             }.type) as ArrayList<MeetingMemberEntity>?
+                            object : TypeToken<List<MeetingMemberEntity>>() {
+                            }.type) as ArrayList<MeetingMemberEntity>?
                     val edit = getSharedPreferences().edit()
                     val token = JSONUtil.getJSONObjectStringValue(data, "token")
                     edit.putString(Constants.ACCID, token)
                     edit.putString(Constants.EXTRA, token)
                     edit.apply()
-                    accessToken=token
-                    var duration=JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(data, "meeting"),"duration")
-                    lastCallDuration=if(duration!=null&&ConvertUtil.isNum(duration))duration.toLong() else 0L
-                    if(meetingMemberEntity==null||meetingMemberEntity?.size==0){
+                    accessToken = token
+                    var duration = JSONUtil.getJSONObjectStringValue(JSONUtil.getJSONObject(data, "meeting"), "duration")
+                    lastCallDuration = if (duration != null && ConvertUtil.isNum(duration)) duration.toLong() else 0L
+                    if (meetingMemberEntity == null || meetingMemberEntity?.size == 0) {
                         //旧数据，无图片信息，请求家属信息接口
                         request(familyId)
-                    }else{
+                    } else {
                         //请求成功，数据获取成功
                         mView?.onSuccess()
                     }
